@@ -1,39 +1,59 @@
+/* Container principal da página */
 .home {
-    display: flex;
-    margin-left: 300px;
-  }
-/* header */  
-  .header {
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    flex-grow: 1; /* Permite que o header ocupe o restante da largura disponível */
-  }
-  h1{
-    font-weight: 300;
-  }
-  .userName {
-    padding-left: 0px;
-    font-size:xx-large;
-    color: #007bff;
-    font-weight:400;
-    display: inline;
-  }
+  display: flex;
+  margin-left: 300px;
+}
 
-/* subHeader */
-.subHeader{
-    background-color: #f4f4f4;
-    display: flex;
-    margin-left: 50px;
-    margin-top: 15px;
+/* Header */
+.header {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  flex-grow: 1; /* Ocupa o restante da largura disponível */
 }
-.iconHeader{
-    width: 30px;
+
+/* Título do Header */
+h1 {
+  font-weight: 300;
 }
-.pHeader{
-    margin-left: 10px;
+
+.userName {
+  padding-left: 0;
+  font-size: xx-large;
+  color: #E17A05;
+  font-weight: 400;
+  display: inline;
 }
-.sHeader{
-    color: #007bff;
-    display: inline;
+
+/* SubHeader */
+.subHeader {
+  background-color: #F8F8F8;
+  display: flex;
+  border-radius: 8px;
+  justify-content: space-between;
+  margin-top: 15px;
+  margin-left: 25px;
+  margin-right: 25px;
+  align-items: center; /* Alinha o conteúdo verticalmente */
+  padding-right: 12px; /* Padding à direita para o botão */
+}
+
+/* Estilos do saldo */
+.headerSaldo {
+  display: flex;
+  margin-left: 30px;
+  align-items: center; /* Alinha a imagem e o texto verticalmente */
+}
+
+.iconHeader {
+  width: 30px;
+}
+
+.pHeader {
+  margin-left: 10px;
+}
+
+.sHeader {
+  color: #E17A05;
+  display: inline;
 }
