@@ -28,6 +28,32 @@ function Home() {
           <AddButton texto="Adicionar Transação" />
         </div>
       </header>
+      <body className={styles.body}>
+        <div className={styles.cards1}>
+          <div className={styles.cardSaldo}>
+              <h3>Saldo bancario</h3>
+                <div className={styles.linebanks}>
+                <img
+                    src="/assets/nubank.svg"
+                    alt="Ícone Nubank"
+                    className={styles.iconNubank}
+                  />
+                  <p>Nubank: R$ 1400,00</p>
+                </div>
+                <div className={styles.linebanks}>
+                <img
+                    src="/assets/bradesco.svg"
+                    alt="Ícone Bradesco"
+                    className={styles.iconBrades}
+                  />
+                  <p>Bradesco R$ 116,00</p>
+                </div>
+          </div>
+          <div className="historico">
+
+          </div>
+        </div>
+      </body>
     </div>
   );
 }

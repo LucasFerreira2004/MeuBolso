@@ -1,6 +1,7 @@
 /* Container principal da página */
 .home {
   display: flex;
+  flex-direction: column;
   margin-left: 300px;
 }
 
@@ -57,3 +58,29 @@ h1 {
   color: #E17A05;
   display: inline;
 }
+
+/*Estilizaçao do Body*/
+.body{
+  display: flex;
+}
+.cards1{
+  display: flex;
+}
+/*estilizacao do card saldo*/
+.cardSaldo{
+  display: flex;
+  flex-direction: column;
+  width: 288px;
+  height: 232px;
+  margin-top: 30px;
+  margin-left: 25px;
+  padding-left: 17px;
+  border-radius: 8px;
+  border: 0.2px solid #000;
+}
+.linebanks{
+  display: flex;
+  gap: 23px;
+}
+
+/*estilizacao do card historico*/
