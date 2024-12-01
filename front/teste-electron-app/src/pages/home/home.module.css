@@ -1,0 +1,39 @@
+.home {
+    display: flex;
+    margin-left: 300px;
+  }
+/* header */  
+  .header {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    flex-grow: 1; /* Permite que o header ocupe o restante da largura disponível */
+  }
+  h1{
+    font-weight: 300;
+  }
+  .userName {
+    padding-left: 0px;
+    font-size:xx-large;
+    color: #007bff;
+    font-weight:400;
+    display: inline;
+  }
+
+/* subHeader */
+.subHeader{
+    background-color: #f4f4f4;
+    display: flex;
+    margin-left: 50px;
+    margin-top: 15px;
+}
+.iconHeader{
+    width: 30px;
+}
+.pHeader{
+    margin-left: 10px;
+}
+.sHeader{
+    color: #007bff;
+    display: inline;
+}
