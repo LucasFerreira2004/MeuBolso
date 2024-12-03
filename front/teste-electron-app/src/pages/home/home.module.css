@@ -59,28 +59,65 @@ h1 {
   display: inline;
 }
 
-/*Estilizaçao do Body*/
-.body{
+/* Estilização do container principal */
+.body {
   display: flex;
-}
-.cards1{
-  display: flex;
-}
-/*estilizacao do card saldo*/
-.cardSaldo{
-  display: flex;
-  flex-direction: column;
-  width: 288px;
-  height: 232px;
-  margin-top: 30px;
-  margin-left: 25px;
-  padding-left: 17px;
-  border-radius: 8px;
-  border: 0.2px solid #000;
-}
-.linebanks{
-  display: flex;
-  gap: 23px;
+  justify-content: space-around; /* Centraliza os cards */
+  padding: 20px; /* Espaçamento interno no topo e nas laterais */
 }
 
-/*estilizacao do card historico*/
+.cards1 {
+  display: flex;
+  justify-content: space-between; /* Espaçamento entre os cards */
+  gap: 20px; /* Espaçamento adicional entre os cards */
+  width: 100%; /* Ocupa toda a largura disponível */
+  max-width: 1200px; /* Define um limite máximo de largura */
+}
+
+/* Estilização do card de saldo */
+.cardSaldo {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Faz os cards crescerem igualmente */
+  max-width: 30%; /* Limita o card a 30% da largura total */
+  padding: 20px; /* Espaçamento interno */
+  border-radius: 8px;
+  background-color: #fff; /* Fundo branco */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+  border: 1px solid #ddd; /* Borda leve */
+}
+.hTitulo{
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+}
+
+/* Estilização do card de histórico */
+.cardHistorico {
+  display: flex;
+  font-size: small;
+  flex-direction: column;
+  flex: 3; /* Faz o card histórico ocupar mais espaço */
+  max-width: 65%; /* Limita o card a 65% da largura total */
+  padding: 20px; /* Espaçamento interno */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+  border: 1px solid #ddd; /* Borda leve */
+}
+
+/* Estilização das linhas internas */
+.linebanks,
+.linesHistorico {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espaçamento entre ícone e texto */
+  margin-bottom: 10px; /* Espaço inferior entre as linhas */
+}
+
+/* Ícones */
+.iconNubank,
+.iconBrades,
+.iconH {
+  width: 24px; /* Tamanho fixo dos ícones */
+  height: 24px;
+}

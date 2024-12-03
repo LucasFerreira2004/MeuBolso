@@ -6,6 +6,7 @@ function Home() {
   return (
     <div className={styles.home}>
       <SideBar />
+
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <h1>
@@ -28,32 +29,59 @@ function Home() {
           <AddButton texto="Adicionar Transação" />
         </div>
       </header>
-      <body className={styles.body}>
+
+      <main className={styles.body}>
         <div className={styles.cards1}>
           <div className={styles.cardSaldo}>
-              <h3>Saldo bancario</h3>
-                <div className={styles.linebanks}>
-                <img
-                    src="/assets/nubank.svg"
-                    alt="Ícone Nubank"
-                    className={styles.iconNubank}
-                  />
-                  <p>Nubank: R$ 1400,00</p>
-                </div>
-                <div className={styles.linebanks}>
-                <img
-                    src="/assets/bradesco.svg"
-                    alt="Ícone Bradesco"
-                    className={styles.iconBrades}
-                  />
-                  <p>Bradesco R$ 116,00</p>
-                </div>
+            <h3>Saldo bancário</h3>
+            <div className={styles.linebanks}>
+              <img
+                src="/assets/nubank.svg"
+                alt="Ícone Nubank"
+                className={styles.iconNubank}
+              />
+              <p>Nubank: R$ 1400,00</p>
+            </div>
+            <div className={styles.linebanks}>
+              <img
+                src="/assets/bradesco.svg"
+                alt="Ícone Bradesco"
+                className={styles.iconBrades}
+              />
+              <p>Bradesco: R$ 116,00</p>
+            </div>
           </div>
-          <div className="historico">
 
+          <div className={styles.cardHistorico}>
+            <h3>Histórico de Últimas Transações</h3>
+            {/* parte 1 */}
+            <div className={styles.hTitulo}>
+              <img
+                src="/assets/Hblue.svg"
+                alt="Ícone Hblue"
+                className={styles.iconH}
+              />
+              <p>Dom, 10 de Novembro</p>
+            </div>
+            <div className={styles.linesHistorico}>
+              <img
+                src="/assets/Hred.svg"
+                alt="Ícone Hred"
+                className={styles.iconH}
+              />
+              <p className={styles.pred}>Mototaxi/ o trabalho</p>
+            </div>
+            <div className={styles.linesHistorico}>
+              <img
+                src="/assets/Hgreen.svg"
+                alt="Ícone Hgreen"
+                className={styles.iconH}
+              />
+              <p className={styles.pgreen}>Salário mensal</p>
+            </div>
           </div>
         </div>
-      </body>
+      </main>
     </div>
   );
 }

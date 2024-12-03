@@ -1,11 +1,11 @@
-import Home from "./pages/home/home";
 import styles from "./App.module.css"
+import Login from "./pages/Login/login";
 function App() {
 
   return (
     <>
     <div className={styles.app}>
-      <Home/>
+      <Login/>
     </div>
     </>
   );
