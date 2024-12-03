@@ -5,7 +5,7 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;    /* Centraliza no eixo horizontal */
-    padding-top: 50px;
+    padding-top: 20px;
     margin-left: auto;
     border-radius: 15px;
     margin-right: auto;
@@ -17,8 +17,8 @@ body{
 .containerInput{
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    padding-top: 24px;
+    gap: 7px;
+    padding-top: 5px;
 }
 
 .iconLogo{

@@ -1,11 +1,12 @@
 import styles from "./App.module.css"
-import Login from "./pages/Login/login";
+import Cadastro from "./pages/Cadastro/cadastro";
+
 function App() {
 
   return (
     <>
     <div className={styles.app}>
-      <Login/>
+      <Cadastro/>
     </div>
     </>
   );
