@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './side-bar.module.css';
 
 function SideBar() {
@@ -11,7 +12,7 @@ function SideBar() {
               alt="Ícone de Perfil"
               className={styles.icon}
             />
-            <span>Perfil</span>
+            <Link to ="/perfil">Perfil</Link>
           </li>
           <li className={styles.navItem}>
             <img
@@ -19,7 +20,7 @@ function SideBar() {
               alt="Ícone de Contas Bancárias"
               className={styles.icon}
             />
-            <span>Contas Bancárias</span>
+            <Link to="/contas">Contas Bancarias</Link>
           </li>
           <li className={styles.navItem}>
             <img
@@ -27,7 +28,7 @@ function SideBar() {
               alt="Ícone de Transações"
               className={styles.icon}
             />
-            <span>Transações</span>
+            <Link to="/transacoes">transações</Link>
           </li>
           <li className={styles.navItem}>
             <img
@@ -35,7 +36,7 @@ function SideBar() {
               alt="Ícone de Metas"
               className={styles.icon}
             />
-            <span>Metas</span>
+            <Link to="/Metas">Metas</Link>
           </li>
           <li className={styles.navItem}>
             <img
@@ -43,7 +44,7 @@ function SideBar() {
               alt="Ícone de Relatórios"
               className={styles.icon}
             />
-            <span>Relatórios</span>
+            <Link to="/Relatorios">Relatorios</Link>
           </li>
           <li className={styles.navItem}>
             <img
@@ -51,7 +52,7 @@ function SideBar() {
               alt="Ícone de Categorias"
               className={styles.icon}
             />
-            <span>Categorias</span>
+            <Link to="/categorias">Categorias</Link>
           </li>
         </ul>
       </nav>

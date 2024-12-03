@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./login.module.css";
 
 function Login() {
@@ -28,7 +29,7 @@ function Login() {
       <p>Crie uma conta</p>
 
       {/*botao*/}
-      <button>Entrar</button>
+      <Link to="/home"><button>Entrar</button></Link>
     </div>
     
   );

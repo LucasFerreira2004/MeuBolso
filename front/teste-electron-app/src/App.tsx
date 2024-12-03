@@ -1,12 +1,14 @@
+import { Outlet } from "react-router-dom";
 import styles from "./App.module.css"
-import Cadastro from "./pages/Cadastro/cadastro";
+import SideBar from "./components/SideBar/side-bar";
 
 function App() {
-
   return (
     <>
     <div className={styles.app}>
-      <Cadastro/>
+      <SideBar/>
+      <Outlet/>
+
     </div>
     </>
   );
