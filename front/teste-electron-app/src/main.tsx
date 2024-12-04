@@ -5,11 +5,16 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Login from './pages/Login/login.tsx'
 import Home from './pages/Home/home.tsx'
+import Cadastro from './pages/Cadastro/cadastro.tsx'
 
 const router = createBrowserRouter([
   {
   path: "/",
   element:<Login/>
+  },
+  {
+    path:"/cadastro",
+    element:<Cadastro/>
   },
   {
     path: "/",

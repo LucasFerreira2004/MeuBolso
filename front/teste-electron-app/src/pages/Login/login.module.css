@@ -1,60 +1,73 @@
-body{
-    background-color: #E17A05;
-}
-.mainContainer {
+/* Classe para aplicar fundo laranja na tela de login */
+.pageBackground {
+    background-color: #E17A05; /* Cor de fundo laranja */
+    min-height: 100vh; /* Garantir que a tela ocupe toda a altura */
+    display: flex;
+  }
+  
+  /* Estilos para o container principal */
+  .mainContainer {
     display: flex;
     flex-direction: column;
-    align-items: center;    /* Centraliza no eixo horizontal */
+    align-items: center;
     padding-top: 50px;
     margin-left: auto;
     border-radius: 15px;
     margin-right: auto;
-    margin-top: 120px;
+    margin-top: 80px;
     width: 458px;
     height: 383px;
-    background-color: #fff;
-}
-.containerInput{
+    background-color: #fff; /* Cor de fundo branco para o formulário */
+  }
+  
+  .containerInput {
     display: flex;
     flex-direction: column;
     gap: 18px;
     padding-top: 24px;
-}
-
-.iconLogo{
+  }
+  
+  .iconLogo {
     width: 175px;
-}
-.input{
+  }
+  
+  .input {
     width: 280px;
     height: 30px;
     border: 0.2px solid #b9b9b9;
     border-radius: 5px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2); /* Borda borrada ao redor */
-}
-button{
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2); /* Borda borrada */
+  }
+  
+  .buttonC {
     margin-top: 20px;
     width: 180px;
     height: 35px;
     border: none;
     border-radius: 7px;
-    font-size: large ;
+    font-size: large;
     background-color: #E17A05;
-}
-button:hover{
+  }
+  
+  .buttonC:hover {
     background-color: #FFA238;
     cursor: pointer;
-}
-h3{
-    font-size:smaller;
-}
-p{
+  }
+  
+  .containerInput > h3 {
+    font-size: smaller;
+  }
+  
+  .plogin {
     font-size: 10px;
     color: #E17A05;
     text-decoration: underline;
     cursor: pointer;
     padding-left: 213px;
-}
-p:hover{
+  }
+  
+  .plogin:hover {
     color: #FFA238;
     cursor: pointer;
-}
+  }
+  
