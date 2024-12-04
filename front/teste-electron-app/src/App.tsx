@@ -8,7 +8,7 @@ function App() {
     <div className={styles.app}>
       <SideBar/>
       <Outlet/>
-
+      
     </div>
     </>
   );

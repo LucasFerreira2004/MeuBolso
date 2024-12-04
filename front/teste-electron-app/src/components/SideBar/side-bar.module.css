@@ -1,68 +1,73 @@
-/* src/components/sidebar/side-bar.module.css */
+/* side-bar.module.css */
 
-/* Estilos da sidebar */
 .sidebar {
-  width: 250px;
-  height: 100vh;
-  background-color: #2d2d2d; /* Cor de fundo escura */
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   position: fixed;
   top: 0;
   left: 0;
-  color: white;
+  width: 250px; /* Largura da sidebar */
+  height: 100vh; /* Ocupa toda a altura da tela */
+  background-color: #FFFFFF; /* Cor de fundo da sidebar */
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* Sombra para dar destaque */
+  z-index: 100; /* Para garantir que fique acima de outros conteúdos */
+}
+
+.divlogo {
+  display: flex;
+  justify-content: center; /* Alinha o logo ao centro */
+  padding-top: 10px ; /* Ajuste o padding para garantir o alinhamento com os itens da navegação */
+  padding-right: 15px;
+  cursor: pointer;
+}
+
+.iconLogo {
+  width: 140px;
 }
 
 .navList {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
-  margin: 0; /* Removendo margens adicionais */
+  margin: 0;
+}
+nav{
+  padding-top: 10px;
 }
 
-.navItem {
+.navItem, .navIIcon {
   display: flex;
-  align-items: center;  /* Alinha o ícone e o texto no centro */
-  margin-bottom: 20px;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  align-items: center;
+  padding: 10px 20px; /* Ajuste o padding para garantir que o hover afete a caixa inteira */
+  transition: background-color 0.3s ease; /* Transição suave no hover */
 }
 
-.navItem:hover {
-  background-color: #3b3b3b; /* Efeito de hover para destacar */
+.navItem:hover, .navIIcon:hover {
+  background-color: #f2f2f2; /* Cor de fundo ao passar o mouse */
 }
 
-.icon {
-  margin-right: 10px; /* Espaço entre o ícone e o texto */
-  width: 24px; /* Tamanho fixo para os ícones */
-  height: 24px; /* Tamanho fixo para os ícones */
+.navItem img, .navIIcon img {
+  width: 24px; /* Tamanho do ícone */
+  height: 24px;
+  margin-right: 15px; /* Espaçamento entre o ícone e o texto */
 }
 
-span {
-  font-size: 18px;
-  display: block; /* Faz o texto ocupar uma linha inteira */
+.navItem a, .navIIcon a {
+  color: #000000; /* Cor do texto */
+  text-decoration: none;
+  font-size: 18px; /* Tamanho do texto */
+  font-weight: normal;
+  transition: color 0.3s ease;
 }
 
+.navItem:hover{
+  background-color: #E17A05; /* Cor de destaque ao passar o mouse no texto */
+}
+
+/* Responsividade - Ajustes para telas menores */
 @media (max-width: 768px) {
   .sidebar {
     width: 200px;
   }
-}
 
-@media (max-width: 480px) {
-  .sidebar {
-    width: 150px;
-  }
-
-  .navItem {
-    font-size: 14px; /* Reduzir o tamanho da fonte em telas pequenas */
-  }
-
-  .icon {
-    width: 20px; /* Ajusta o tamanho dos ícones em telas pequenas */
-    height: 20px;
+  .navItem a, .navIIcon a {
+    font-size: 16px;
   }
 }

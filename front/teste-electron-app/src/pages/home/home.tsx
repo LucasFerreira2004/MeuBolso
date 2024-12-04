@@ -1,12 +1,9 @@
-import SideBar from "../../components/SideBar/side-bar";
 import styles from "./home.module.css";
 import AddButton from "../../components/AddButton/add-button";
 
 function Home() {
   return (
     <div className={styles.home}>
-      <SideBar />
-
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <h1>
