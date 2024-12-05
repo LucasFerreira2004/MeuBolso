@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class TransacaoService {
     @Autowired
@@ -14,6 +17,11 @@ public class TransacaoService {
     public TransacaoDTO findTransacaoById(Long id){
         Transacao transacao = transacaoRepository.findById(id).get();
         return new TransacaoDTO(transacao);
+    }
+    @Transactional(readOnly = true)
+    public List<TransacaoDTO> findTransacoes(){
+        List<Transacao> transacoes = transacaoRepository.findAll();
+        return transacoes.stream().map(TransacaoDTO::new).toList();
     }
 
 }
