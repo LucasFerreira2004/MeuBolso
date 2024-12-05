@@ -14,7 +14,7 @@ public class TransacaoService {
 
     @Transactional(readOnly = true)
     public TransacaoDTO findTransacaoById(Long id){
-        Transacao transacao = transacaoRepository.findById(id).get();
+        Transacao transacao = transacaoRepository.findById(id).get(); //mudar essa linha pra colocar o .orElse(null)
         return new TransacaoDTO(transacao);
     }
     @Transactional(readOnly = true)
