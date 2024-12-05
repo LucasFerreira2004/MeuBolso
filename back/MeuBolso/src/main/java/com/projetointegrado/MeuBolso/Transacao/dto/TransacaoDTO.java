@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.Transacao.dto;
 
+import com.projetointegrado.MeuBolso.Transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.Transacao.Transacao;
 import org.springframework.beans.BeanUtils;
 
@@ -10,8 +11,7 @@ public class TransacaoDTO {
     private Long id;
     private BigDecimal valor;
     private Date data_transacao;
-    private Boolean e_fixo;
-    private Integer qtd_repeticao;
+    private TipoTransacao tipo;
     private String comentario;
     private String descricao;
 
@@ -43,22 +43,6 @@ public class TransacaoDTO {
 
     public void setData_transacao(Date data_transacao) {
         this.data_transacao = data_transacao;
-    }
-
-    public Boolean getE_fixo() {
-        return e_fixo;
-    }
-
-    public void setE_fixo(Boolean e_fixo) {
-        this.e_fixo = e_fixo;
-    }
-
-    public Integer getQtd_repeticao() {
-        return qtd_repeticao;
-    }
-
-    public void setQtd_repeticao(Integer qtd_repeticao) {
-        this.qtd_repeticao = qtd_repeticao;
     }
 
     public String getComentario() {

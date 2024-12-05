@@ -11,29 +11,29 @@ public class Transacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private BigDecimal valor;
+    @Column(columnDefinition = "DATE")
     private Date data_transacao;
-    private Boolean e_fixo;
-    private Integer qtd_repeticao;
+    @Enumerated(EnumType.STRING)
+    private TipoTransacao tipo;
     @Column(columnDefinition = "TEXT")
     private String comentario;
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
-    public Transacao(Long id, BigDecimal valor, Date data_transacao, Boolean e_fixo, Integer qtd_repeticao, String comentario, String descricao) {
+    public Transacao(Long id, BigDecimal valor, Date data_transacao, TipoTransacao tipo, String comentario, String descricao) {
         this.id = id;
         this.valor = valor;
-        this.e_fixo = e_fixo;
-        this.qtd_repeticao = qtd_repeticao;
+        this.data_transacao = data_transacao;
+        this.tipo = tipo;
         this.comentario = comentario;
         this.descricao = descricao;
-        this.data_transacao = data_transacao;
     }
     public Transacao(Long id, BigDecimal valor, Date data_transacao, Boolean e_fixo, String descricao) {
         this.id = id;
         this.valor = valor;
-        this.e_fixo = e_fixo;
-        this.descricao = descricao;
+        this.tipo = tipo;
         this.data_transacao = data_transacao;
+        this.descricao = descricao;
     }
     public Transacao() {}
 
@@ -49,24 +49,9 @@ public class Transacao {
     public BigDecimal getValor() {
         return valor;
     }
+
     public void setValor(BigDecimal valor) {
         this.valor = valor;
-    }
-
-    public Boolean getE_fixo() {
-        return e_fixo;
-    }
-
-    public void setE_fixo(Boolean e_fixo) {
-        this.e_fixo = e_fixo;
-    }
-
-    public Integer getQtd_repeticao() {
-        return qtd_repeticao;
-    }
-
-    public void setQtd_repeticao(Integer qtd_repeticao) {
-        this.qtd_repeticao = qtd_repeticao;
     }
 
     public String getComentario() {
