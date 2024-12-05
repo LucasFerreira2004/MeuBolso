@@ -1,9 +1,9 @@
 /*TIPO CONTA*/
-insert into tipo_conta(id, tipo_conta) values (1, 'conta_corrente');
-insert into tipo_conta(id, tipo_conta) values (2, 'carteira');
-insert into tipo_conta(id, tipo_conta) values (3, 'poupanca');
-insert into tipo_conta(id, tipo_conta) values (4, 'investimentos');
-insert into tipo_conta(id, tipo_conta) values (5, 'outro');
+insert into tipo_conta(id, tipo_conta) values ('1', 'conta_corrente');
+insert into tipo_conta(id, tipo_conta) values ('2', 'carteira');
+insert into tipo_conta(id, tipo_conta) values ('3', 'poupanca');
+insert into tipo_conta(id, tipo_conta) values ('4', 'investimentos');
+insert into tipo_conta(id, tipo_conta) values ('5', 'outro');
 
 /*CONTA*/
 insert into conta(saldo, tipo_conta, nome_banco) values ('1412', '1', 'bradesco');
