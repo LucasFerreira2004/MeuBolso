@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.Transacao;
+package com.projetointegrado.MeuBolso.transacao;
 
 public enum TipoTransacao {
     RECEITA, DESPESA;

@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.Transacao;
+package com.projetointegrado.MeuBolso.transacao;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

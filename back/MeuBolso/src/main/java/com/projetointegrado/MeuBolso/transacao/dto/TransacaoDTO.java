@@ -1,7 +1,7 @@
-package com.projetointegrado.MeuBolso.Transacao.dto;
+package com.projetointegrado.MeuBolso.transacao.dto;
 
-import com.projetointegrado.MeuBolso.Transacao.TipoTransacao;
-import com.projetointegrado.MeuBolso.Transacao.Transacao;
+import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
+import com.projetointegrado.MeuBolso.transacao.Transacao;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
