@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.transacao.dto;
 
+import com.projetointegrado.MeuBolso.conta.Conta;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import org.springframework.beans.BeanUtils;
@@ -12,6 +13,7 @@ public class TransacaoDTO {
     private BigDecimal valor;
     private Date data_transacao;
     private TipoTransacao tipo;
+    private Conta conta;
     private String comentario;
     private String descricao;
 
@@ -59,5 +61,21 @@ public class TransacaoDTO {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public TipoTransacao getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoTransacao tipo) {
+        this.tipo = tipo;
+    }
+
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
     }
 }

@@ -1,6 +1,6 @@
 package com.projetointegrado.MeuBolso.conta;
 
-import com.projetointegrado.MeuBolso.Transacao.dto.TransacaoDTO;
+import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

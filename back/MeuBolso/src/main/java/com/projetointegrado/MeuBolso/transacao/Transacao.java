@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.transacao;
 
+import com.projetointegrado.MeuBolso.conta.Conta;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -17,6 +18,9 @@ public class Transacao {
     private Date data_transacao;
     @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
+    @ManyToOne
+    @JoinColumn(name = "conta_origem")
+    private Conta conta;
     @Column(columnDefinition = "TEXT")
     private String comentario;
     @NotBlank
@@ -79,5 +83,21 @@ public class Transacao {
 
     public void setData_transacao(Date data_transacao) {
         this.data_transacao = data_transacao;
+    }
+
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+
+    public TipoTransacao getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoTransacao tipo) {
+        this.tipo = tipo;
     }
 }
