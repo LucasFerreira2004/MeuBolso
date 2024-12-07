@@ -4,6 +4,10 @@
   flex-direction: column;
   margin-left: 300px;
 }
+.body{
+  display: flex;
+  flex-direction: column;
+}
 
 /* Header */
 .header {
@@ -28,22 +32,20 @@ h1 {
 
 /* SubHeader */
 .subHeader {
-  background-color: #F8F8F8;
   display: flex;
-  border-radius: 8px;
-  justify-content: space-between;
-  margin-top: 15px;
-  margin-left: 25px;
-  margin-right: 25px;
   align-items: center; /* Alinha o conteúdo verticalmente */
+  justify-content: space-between;
+  background-color: #F8F8F8;
+  border-radius: 8px;
+  margin: 15px 25px 0 25px; /* Top, lateral direita/esquerda */
   padding-right: 12px; /* Padding à direita para o botão */
 }
 
 /* Estilos do saldo */
 .headerSaldo {
   display: flex;
-  margin-left: 30px;
   align-items: center; /* Alinha a imagem e o texto verticalmente */
+  margin-left: 30px;
 }
 
 .iconHeader {
@@ -59,55 +61,69 @@ h1 {
   display: inline;
 }
 
-/* Estilização do container principal */
+/* Corpo principal */
 .body {
   display: flex;
   justify-content: space-around; /* Centraliza os cards */
   padding: 20px; /* Espaçamento interno no topo e nas laterais */
 }
 
+/* estilizacao cards1 */
+/* #region */
 .cards1 {
   display: flex;
   justify-content: space-between; /* Espaçamento entre os cards */
   gap: 20px; /* Espaçamento adicional entre os cards */
   width: 100%; /* Ocupa toda a largura disponível */
-  max-width: 1200px; /* Define um limite máximo de largura */
+  max-width: 1300px; /* Define um limite máximo de largura */
 }
 
-/* Estilização do card de saldo */
+/* Card de saldo */
 .cardSaldo {
   display: flex;
   flex-direction: column;
   flex: 1; /* Faz os cards crescerem igualmente */
   max-width: 30%; /* Limita o card a 30% da largura total */
   padding: 20px; /* Espaçamento interno */
+  background-color: #fff;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: #fff; /* Fundo branco */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
-  border: 1px solid #ddd; /* Borda leve */
 }
-.hTitulo{
+
+/* Título do card */
+.hTitulo {
   display: flex;
   flex-direction: row;
   justify-items: center;
 }
 
-/* Estilização do card de histórico */
+/* Card de histórico */
 .cardHistorico {
   display: flex;
-  font-size: small;
   flex-direction: column;
+  font-size: small;
   flex: 3; /* Faz o card histórico ocupar mais espaço */
   max-width: 65%; /* Limita o card a 65% da largura total */
   padding: 20px; /* Espaçamento interno */
+  border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
-  border: 1px solid #ddd; /* Borda leve */
 }
 
-/* Estilização das linhas internas */
+.titulotransacoes {
+  display: flex;
+  justify-content: space-between;
+}
+
+.titulotransacoes p {
+  font-weight: 600;
+  font-size: medium;
+}
+
+/* Linhas internas */
 .linebanks,
-.linesHistorico {
+.linesTransacoes {
   display: flex;
   align-items: center;
   gap: 10px; /* Espaçamento entre ícone e texto */
@@ -118,6 +134,31 @@ h1 {
 .iconNubank,
 .iconBrades,
 .iconH {
-  width: 24px; /* Tamanho fixo dos ícones */
+  width: 24px;
   height: 24px;
 }
+
+/* Estilização específica para cores */
+.spanRed span {
+  color: #E63946;
+  font-weight: 700;
+}
+
+.spanGreen span {
+  color: #2A9D8F;
+  font-weight: 700;
+}
+/* #endregion */
+
+/* estilizacao cards2*/
+/* #region */
+
+
+
+
+
+
+
+
+
+/* #endregion */

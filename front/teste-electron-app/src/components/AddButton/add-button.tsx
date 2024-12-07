@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './addButton.module.css';
+import style from './addButton.module.css';
 
 interface AddButtonProps {
   texto: string;
@@ -7,11 +7,11 @@ interface AddButtonProps {
 
 const AddButton: React.FC<AddButtonProps> = ({ texto }) => {
   return (
-    <button className={styles.addButton}>
+    <button className={style.addButton}>
       <img
         src="/assets/plus.svg"
         alt="Ícone de adicionar"
-        className={styles.iconPlus}
+        className={style.iconPlus}
       />
       {texto}
     </button>

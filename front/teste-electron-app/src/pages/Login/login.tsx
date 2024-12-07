@@ -1,36 +1,36 @@
 import { Link } from "react-router-dom";
-import styles from "./login.module.css";
+import style from "./login.module.css";
 
 function Login() {
   return (
-    <div className={styles.pageBackground}> {/* Aplica fundo laranja à tela de login */}
-      <div className={styles.mainContainer}>
+    <div className={style.pageBackground}> {/* Aplica fundo laranja à tela de login */}
+      <div className={style.mainContainer}>
         {/* Logo Section */}
-        <div className={styles.containerLogo}>
+        <div className={style.containerLogo}>
           <img
             src="/assets/logo-meuBolso.svg"
             alt="Ícone meuBolso"
-            className={styles.iconLogo}
+            className={style.iconLogo}
           />
         </div>
 
         {/* Form Section */}
-        <div className={styles.containerInput}>
-          <div className={styles.inputEmail}>
-            <h3 className={styles.hC}>Email</h3>
-            <input type="text" placeholder="user@gmail.com" className={styles.input}/>
+        <div className={style.containerInput}>
+          <div className={style.inputEmail}>
+            <h3 className={style.hC}>Email</h3>
+            <input type="text" placeholder="user@gmail.com" className={style.input}/>
           </div>
-          <div className={styles.inputPassword}>
-            <h3 className={styles.hC}>Digite sua Senha</h3>
-            <input type="password" placeholder="*******" className={styles.input}/>
+          <div className={style.inputPassword}>
+            <h3 className={style.hC}>Digite sua Senha</h3>
+            <input type="password" placeholder="*******" className={style.input}/>
           </div>
         </div>
 
         {/* Link para criar conta */}
-        <Link to="/cadastro"><p className={styles.plogin}>Crie uma conta</p></Link>
+        <Link to="/cadastro"><p className={style.plogin}>Crie uma conta</p></Link>
 
         {/* Botão para entrar */}
-        <Link to="/home"><button className={styles.buttonC}>Entrar</button></Link>
+        <Link to="/home"><button className={style.buttonC}>Entrar</button></Link>
       </div>
     </div>
   );

@@ -1,0 +1,25 @@
+/* Estilo geral do card */
+.cardContainer {
+    background-color: #fff;
+    margin-top: 40px;
+    padding: 5px;
+    width: 250px;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #E17A05;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Estilo para o conteúdo do card */
+  .cardContent {
+    padding-bottom: 25px;
+  }
+  
+  /* Estilo da imagem dentro do conteúdo */
+  .cardContent img {
+    width: 100%; 
+    height: auto; 
+    border-radius: 8px;
+  }
+  
