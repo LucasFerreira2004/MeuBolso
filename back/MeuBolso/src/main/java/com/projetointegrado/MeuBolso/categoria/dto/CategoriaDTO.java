@@ -2,21 +2,18 @@ package com.projetointegrado.MeuBolso.categoria.dto;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.categoria.TipoCategoria;
+import com.projetointegrado.MeuBolso.transacao.Transacao;
+import org.springframework.beans.BeanUtils;
 
 public class CategoriaDTO {
     private Long id;
     private String nome;
     private TipoCategoria tipo;
-    private String cor;
 
-    public CategoriaDTO() {
-    }
-
-    public CategoriaDTO(Categoria entity) {
-        this.id = entity.getId();
-        this.nome = entity.getNome();
-        this.tipo = entity.getTipo();
-        this.cor = entity.getCor();
+    public CategoriaDTO(Categoria categoria) {
+        this.id = categoria.getId();
+        this.nome = categoria.getNome();
+        this.tipo = categoria.getTipo();
     }
 
     public Long getId() {
@@ -41,13 +38,5 @@ public class CategoriaDTO {
 
     public void setTipo(TipoCategoria tipo) {
         this.tipo = tipo;
-    }
-
-    public String getCor() {
-        return cor;
-    }
-
-    public void setCor(String cor) {
-        this.cor = cor;
     }
 }

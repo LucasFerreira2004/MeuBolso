@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.transacao.dto;
 
+import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
@@ -13,6 +14,7 @@ public class TransacaoDTO {
     private BigDecimal valor;
     private Date data_transacao;
     private TipoTransacao tipo;
+    private Categoria categoria;
     private Conta conta;
     private String comentario;
     private String descricao;
@@ -69,6 +71,14 @@ public class TransacaoDTO {
 
     public void setTipo(TipoTransacao tipo) {
         this.tipo = tipo;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
     public Conta getConta() {
