@@ -1,26 +1,28 @@
-import style from "./home.module.css";
+import styles from "./home.module.css";
 import AddButton from "../../components/AddButton/add-button";
 import CardMetas from "../../components/CardMetas/card-metas";
 
 function Home() {
   return (
-    <div className={style.home}>
-      <header className={style.header}>
-        <div className={style.headerContent}>
+    <div className={styles.home}>
+      
+      {/* ==================== Header ==================== */}
+      <header className={styles.header}>
+        <div className={styles.headerContent}>
           <h1>
-            Bem-vindo <span className={style.userName}>Antonio</span>
+            Bem-vindo <span className={styles.userName}>Antonio</span>
           </h1>
         </div>
 
-        <div className={style.subHeader}>
-          <div className={style.headerSaldo}>
+        <div className={styles.subHeader}>
+          <div className={styles.headerSaldo}>
             <img
               src="/assets/money-home.svg"
               alt="Ícone de Estimativa de Saldo"
-              className={style.iconHeader}
+              className={styles.iconHeader}
             />
-            <p className={style.pHeader}>
-              <span className={style.sHeader}>Estimativa de Saldo: </span>
+            <p className={styles.pHeader}>
+              <span className={styles.sHeader}>Estimativa de Saldo: </span>
               R$ 1516,00
             </p>
           </div>
@@ -28,72 +30,82 @@ function Home() {
         </div>
       </header>
 
-      <main className={style.body}>
-        <div className={style.cards1}>
-          <div className={style.cardSaldo}>
-            <h3>Saldo bancário</h3>
-            <div className={style.linebanks}>
-              <img
-                src="/assets/nubank.svg"
-                alt="Ícone Nubank"
-                className={style.iconNubank}
-              />
-              <p>Nubank: R$ 1400,00</p>
+      {/* ==================== Corpo Principal ==================== */}
+      <main className={styles.body}>
+        <div className={styles.cards}>
+          
+          {/* ==================== Cards de Saldo e Histórico ==================== */}
+          <div className={styles.cards1}>
+            {/* Card de Saldo Bancário */}
+            <div className={styles.cardSaldo}>
+              <h3>Saldo bancário</h3>
+              <div className={styles.linebanks}>
+                <img
+                  src="/assets/nubank.svg"
+                  alt="Ícone Nubank"
+                  className={styles.iconNubank}
+                />
+                <p>Nubank: R$ 1400,00</p>
+              </div>
+              <div className={styles.linebanks}>
+                <img
+                  src="/assets/bradesco.svg"
+                  alt="Ícone Bradesco"
+                  className={styles.iconBrades}
+                />
+                <p>Bradesco: R$ 116,00</p>
+              </div>
             </div>
-            <div className={style.linebanks}>
-              <img
-                src="/assets/bradesco.svg"
-                alt="Ícone Bradesco"
-                className={style.iconBrades}
-              />
-              <p>Bradesco: R$ 116,00</p>
+
+            {/* Card de Histórico de Transações */}
+            <div className={styles.cardHistorico}>
+              <div className={styles.titulotransacoes}>
+                <h3>Visão geral de transações</h3>
+                <p>Dez., 24</p>
+              </div>
+              
+              {/* Transações do Dia e Mês */}
+              <div className={styles.linesTransacoes}>
+                <img
+                  src="/assets/Hred.svg"
+                  alt="Ícone Hred"
+                  className={styles.iconH}
+                />
+                <p className={styles.spanRed}>
+                  <span>Gastos do dia: </span> R$ 54,00
+                </p>
+                <hr />
+              </div>
+
+              <div className={styles.linesTransacoes}>
+                <img
+                  src="/assets/Hred.svg"
+                  alt="Ícone Hred"
+                  className={styles.iconH}
+                />
+                <p className={styles.spanRed}>
+                  <span>Despesas mês: </span> R$ 1136,00
+                </p>
+              </div>
+
+              <div className={styles.linesTransacoes}>
+                <img
+                  src="/assets/Hgreen.svg"
+                  alt="Ícone Hgreen"
+                  className={styles.iconH}
+                />
+                <p className={styles.spanGreen}>
+                  <span>Receitas do mês: </span> R$ 2652,00
+                </p>
+              </div>
             </div>
           </div>
 
-          <div className={style.cardHistorico}>
-            <div className={style.titulotransacoes}>
-              <h3>Visão geral de transações</h3>
-              <p>Dez., 24</p>
-            </div>
-            
-            {/* Parte 1 */}
-            <div className={style.linesTransacoes}>
-              <img
-                src="/assets/Hred.svg"
-                alt="Ícone Hred"
-                className={style.iconH}
-              />
-              <p className={style.spanRed}>
-                <span>Gastos do dia: </span> R$ 54,00
-              </p>
-              <hr />
-            </div>
-            <div className={style.linesTransacoes}>
-              <img
-                src="/assets/Hred.svg"
-                alt="Ícone Hred"
-                className={style.iconH}
-              />
-              <p className={style.spanRed}>
-                <span>Despesas mês: </span> R$ 1136,00
-              </p>
-            </div>
-            <div className={style.linesTransacoes}>
-              <img
-                src="/assets/Hgreen.svg"
-                alt="Ícone Hgreen"
-                className={style.iconH}
-              />
-              <p className={style.spanGreen}>
-                <span>Receitas do mês: </span> R$ 2652,00
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className={style.cards2}>
-          <div className={style.cardMetas}>
+          {/* ==================== Card de Meta ==================== */}
+          <div className={styles.cards2}>
             <CardMetas imagem="/assets/moto.svg" texto="Meta para moto"/>
           </div>
+          
         </div>
       </main>
     </div>

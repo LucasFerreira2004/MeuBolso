@@ -1,15 +1,11 @@
-/* Container principal da página */
+/* ==================== Container principal ==================== */
 .home {
   display: flex;
   flex-direction: column;
   margin-left: 300px;
 }
-.body{
-  display: flex;
-  flex-direction: column;
-}
 
-/* Header */
+/* ==================== Header ==================== */
 .header {
   display: flex;
   flex-direction: column;
@@ -30,7 +26,7 @@ h1 {
   display: inline;
 }
 
-/* SubHeader */
+/* ==================== SubHeader ==================== */
 .subHeader {
   display: flex;
   align-items: center; /* Alinha o conteúdo verticalmente */
@@ -61,30 +57,47 @@ h1 {
   display: inline;
 }
 
-/* Corpo principal */
+/* ==================== Corpo principal ==================== */
 .body {
   display: flex;
   justify-content: space-around; /* Centraliza os cards */
   padding: 20px; /* Espaçamento interno no topo e nas laterais */
 }
 
-/* estilizacao cards1 */
-/* #region */
-.cards1 {
+/* ==================== Cards (estrutura geral) ==================== */
+/* Cards Container */
+.cards {
   display: flex;
-  justify-content: space-between; /* Espaçamento entre os cards */
-  gap: 20px; /* Espaçamento adicional entre os cards */
+  flex-direction: column;
+  gap: 20px;
   width: 100%; /* Ocupa toda a largura disponível */
   max-width: 1300px; /* Define um limite máximo de largura */
 }
 
-/* Card de saldo */
+.cards1 {
+  display: flex;
+  justify-content: space-between; /* Espaçamento entre os cards */
+  gap: 20px; /* Espaçamento adicional entre os cards */
+}
+
+.cards2 {
+  display: flex;
+  gap: 20px;
+  flex: 1; /* Faz os cards crescerem igualmente */
+  padding: 10px; /* Espaçamento interno */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+/* ==================== Card de saldo ==================== */
 .cardSaldo {
   display: flex;
   flex-direction: column;
   flex: 1; /* Faz os cards crescerem igualmente */
   max-width: 30%; /* Limita o card a 30% da largura total */
-  padding: 20px; /* Espaçamento interno */
+  padding: 10px; /* Espaçamento interno */
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -98,14 +111,14 @@ h1 {
   justify-items: center;
 }
 
-/* Card de histórico */
+/* ==================== Card de histórico ==================== */
 .cardHistorico {
   display: flex;
   flex-direction: column;
   font-size: small;
   flex: 3; /* Faz o card histórico ocupar mais espaço */
   max-width: 65%; /* Limita o card a 65% da largura total */
-  padding: 20px; /* Espaçamento interno */
+  padding: 10px; /* Espaçamento interno */
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
@@ -121,7 +134,7 @@ h1 {
   font-size: medium;
 }
 
-/* Linhas internas */
+/* ==================== Linhas internas ==================== */
 .linebanks,
 .linesTransacoes {
   display: flex;
@@ -130,7 +143,7 @@ h1 {
   margin-bottom: 10px; /* Espaço inferior entre as linhas */
 }
 
-/* Ícones */
+/* ==================== Ícones ==================== */
 .iconNubank,
 .iconBrades,
 .iconH {
@@ -138,7 +151,7 @@ h1 {
   height: 24px;
 }
 
-/* Estilização específica para cores */
+/* ==================== Estilização específica para cores ==================== */
 .spanRed span {
   color: #E63946;
   font-weight: 700;
@@ -148,17 +161,3 @@ h1 {
   color: #2A9D8F;
   font-weight: 700;
 }
-/* #endregion */
-
-/* estilizacao cards2*/
-/* #region */
-
-
-
-
-
-
-
-
-
-/* #endregion */
