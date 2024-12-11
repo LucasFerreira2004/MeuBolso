@@ -82,7 +82,20 @@ h1 {
 
 .cards2 {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  flex: 1; /* Faz os cards crescerem igualmente */
+  padding: 10px; /* Espaçamento interno */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+.cards2 h2{
+  margin-top: 0px;
+}
+.cards3 {
+  display: flex;
+  flex-direction: column;
   flex: 1; /* Faz os cards crescerem igualmente */
   padding: 10px; /* Espaçamento interno */
   background-color: #fff;

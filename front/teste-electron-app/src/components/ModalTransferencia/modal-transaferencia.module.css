@@ -1,0 +1,31 @@
+.containerModal {
+    display: flex;
+    flex-direction: column;
+    padding-right: 20px;
+    padding-left: 20px;
+    position: fixed; /* Torna o modal fixo na tela */
+    top: 50%; /* Posiciona verticalmente no meio */
+    left: 50%; /* Posiciona horizontalmente no meio */
+    transform: translate(-50%, -50%); /* Ajusta para garantir que o modal esteja centralizado */
+    width: 400px;
+    background-color: blueviolet;
+    z-index: 999;
+  }
+  
+  .headerModal {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 8px;
+    font-size: x-small;
+    width: 100%;
+  }
+  
+  .headerModal h1 {
+    font-weight: bold;
+  }
+  
+  .iconLogo {
+    width: 15px;
+    cursor: pointer;
+  }
+  
