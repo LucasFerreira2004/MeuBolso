@@ -1,7 +1,7 @@
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-transaferencia.module.css";
 
-function Modal() {
+function ModalTransferencia() {
   return (
     <div className={style.containerModal}>
       <div className={style.headerModal}>
@@ -50,4 +50,4 @@ function Modal() {
   );
 }
 
-export default Modal;
+export default ModalTransferencia;

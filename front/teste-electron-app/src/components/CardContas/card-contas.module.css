@@ -1,0 +1,72 @@
+.cardContas {
+    display: flex;
+    justify-content: space-between;
+    flex: 1; /* Faz os cards crescerem igualmente */
+    margin-top: 20px;
+    margin-right: 30px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+.parteInfo {
+    display: flex;
+    font-size: large;
+    font-weight: 500;
+}
+
+.infoText{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 15px;
+    padding-left: 10px;
+}
+
+.parteInfo div p{
+    margin: 0px;
+}
+
+.parteInfo div h3{
+    margin: 0px;
+}
+
+.infoText span{
+    color: #2A9D8F;
+}
+
+.imagemContainer {
+    display: flex;
+}
+
+.imagemContainer img {
+    object-fit: cover; /* Faz a imagem cobrir toda a altura da div */
+    height: 100%;
+    border-radius: 8px 0 0 8px;
+}
+
+.estado {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.editar{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin: 10PX;
+}
+.editar button{ 
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+}
+.editar img{
+    width: 35px;   
+}
+.editar .img2{
+    width: 25px;   
+}
