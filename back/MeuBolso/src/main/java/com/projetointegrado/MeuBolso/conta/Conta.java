@@ -1,7 +1,9 @@
 package com.projetointegrado.MeuBolso.conta;
 
+import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
 import com.projetointegrado.MeuBolso.conta.tipoConta.TipoConta;
 import jakarta.persistence.*;
+import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 
@@ -23,7 +25,9 @@ public class Conta {
         this.nome_banco = nome_banco;
         this.tipo_conta = tipo_conta;
     }
-
+    public Conta(ContaDTO contaDTO) {
+        BeanUtils.copyProperties(contaDTO, this);
+    }
     public Conta() {}
 
     //getters e setters

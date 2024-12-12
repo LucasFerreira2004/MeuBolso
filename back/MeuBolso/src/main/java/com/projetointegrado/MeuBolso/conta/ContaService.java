@@ -22,4 +22,8 @@ public class ContaService {
         List<Conta> result = contaRepository.findAll();
         return result.stream().map(ContaDTO::new).toList();
     }
+
+    public Conta saveConta(Conta conta) {
+        return contaRepository.save(conta);
+    }
 }
