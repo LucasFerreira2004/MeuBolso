@@ -4,10 +4,12 @@ insert into tipo_conta(id, tipo_conta) values ('2', 'carteira');
 insert into tipo_conta(id, tipo_conta) values ('3', 'poupanca');
 insert into tipo_conta(id, tipo_conta) values ('4', 'investimentos');
 insert into tipo_conta(id, tipo_conta) values ('5', 'outro');
-
+/*BANCO*/
+insert into banco (nome, icone_url) values ('Bradesco', 'url');
+insert into banco (nome, icone_url) values ('Banco do Brasil', 'url');
 /*CONTA*/
-insert into conta(saldo, tipo_conta, nome_banco) values ('1412', '1', 'bradesco');
-insert into conta(saldo, tipo_conta, nome_banco) values ('2000.50', '3', 'banco do brasil');
+insert into conta(saldo, tipo_conta, banco) values ('1412', '1', '1');
+insert into conta(saldo, tipo_conta, banco) values ('2000.50', '3', '1');
 
 /*CATEGORIAS*/
 insert into categoria (nome, tipo_categoria, cor) values ('casa', 'despesa', '8755BC');             /*1*/

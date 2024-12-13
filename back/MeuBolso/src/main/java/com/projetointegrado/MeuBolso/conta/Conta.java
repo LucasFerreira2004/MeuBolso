@@ -14,7 +14,6 @@ public class Conta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private BigDecimal saldo;
-    private String nome_banco;
     @ManyToOne
     @JoinColumn(name = "tipo_conta")
     private TipoConta tipo_conta;
@@ -22,11 +21,11 @@ public class Conta {
     @JoinColumn(name = "banco")
     private Banco banco;
 
-    public Conta(Long id, BigDecimal saldo, String nome_banco, TipoConta tipo_conta, Banco banco) {
+    public Conta(Long id, BigDecimal saldo, TipoConta tipo_conta, Banco banco) {
         this.id = id;
         this.saldo = saldo;
-        this.nome_banco = nome_banco;
         this.tipo_conta = tipo_conta;
+        this.banco = banco;
     }
     public Conta(ContaDTO contaDTO) {
         BeanUtils.copyProperties(contaDTO, this);
@@ -48,14 +47,6 @@ public class Conta {
 
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
-    }
-
-    public String getNome_banco() {
-        return nome_banco;
-    }
-
-    public void setNome_banco(String nome_banco) {
-        this.nome_banco = nome_banco;
     }
 
     public TipoConta getTipo_conta() {
