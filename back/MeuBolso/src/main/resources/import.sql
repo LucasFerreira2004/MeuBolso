@@ -5,6 +5,9 @@ insert into tipo_conta(id, tipo_conta) values ('3', 'poupanca');
 insert into tipo_conta(id, tipo_conta) values ('4', 'investimentos');
 insert into tipo_conta(id, tipo_conta) values ('5', 'outro');
 
+/*USUARIO*/
+insert into usuario(nome, email, senha) values ('Maria do Rosario Oliveira', 'mariarosariooli@gmail.com', 'oi2u243i');
+
 /*CONTA*/
 insert into conta(saldo, tipo_conta, nome_banco) values ('1412', '1', 'bradesco');
 insert into conta(saldo, tipo_conta, nome_banco) values ('2000.50', '3', 'banco do brasil');
