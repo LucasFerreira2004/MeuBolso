@@ -7,8 +7,9 @@ insert into tipo_conta(id, tipo_conta) values ('5', 'outro');
 /*BANCO*/
 insert into banco (nome, icone_url) values ('Bradesco', 'url');
 insert into banco (nome, icone_url) values ('Banco do Brasil', 'url');
+insert into banco (nome, icone_url) values ('Nubank', 'https://t.ctcdn.com.br/DIEw0gGtQl_GNhWXJwgrRmuGpIk=/i624750.png');
 /*CONTA*/
-insert into conta(saldo, tipo_conta, banco) values ('1412', '1', '1');
+insert into conta(saldo, tipo_conta, banco) values ('1412', '1', '3');
 insert into conta(saldo, tipo_conta, banco) values ('2000.50', '3', '1');
 
 /*CATEGORIAS*/
