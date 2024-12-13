@@ -1,12 +1,11 @@
 package com.projetointegrado.MeuBolso.banco;
 
+import com.projetointegrado.MeuBolso.banco.dto.BancoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController("/bancos")
 public class BancoController {

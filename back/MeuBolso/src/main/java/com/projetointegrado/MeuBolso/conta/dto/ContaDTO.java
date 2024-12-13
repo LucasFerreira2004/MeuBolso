@@ -44,4 +44,12 @@ public class ContaDTO {
     public void setTipo_conta(TipoConta tipo_conta) {
         this.tipo_conta = tipo_conta;
     }
+
+    public Banco getBanco() {
+        return banco;
+    }
+
+    public void setBanco(Banco banco) {
+        this.banco = banco;
+    }
 }

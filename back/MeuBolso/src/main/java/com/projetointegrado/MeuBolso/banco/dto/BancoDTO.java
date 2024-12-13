@@ -1,5 +1,6 @@
-package com.projetointegrado.MeuBolso.banco;
+package com.projetointegrado.MeuBolso.banco.dto;
 
+import com.projetointegrado.MeuBolso.banco.Banco;
 import org.springframework.beans.BeanUtils;
 
 public class BancoDTO {
