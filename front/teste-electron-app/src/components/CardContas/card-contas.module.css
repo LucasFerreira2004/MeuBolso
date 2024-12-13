@@ -38,29 +38,36 @@
 
 .imagemContainer {
     display: flex;
-}
-
-.imagemContainer img {
-    object-fit: cover; /* Faz a imagem cobrir toda a altura da div */
-    height: 100%;
+    width: 170px; /* Definido um tamanho fixo para o ícone do banco */
+    height: 170px; /* Definido um tamanho fixo para o ícone do banco */
+    overflow: hidden; /* Garante que a imagem não saia do contêiner */
     border-radius: 8px 0 0 8px;
 }
 
-.editar{
+.imagemContainer img {
+    object-fit: cover; /* Faz a imagem cobrir toda a altura e largura da div */
+    width: 100%; /* A imagem ocupa toda a largura do contêiner */
+    height: 100%; /* A imagem ocupa toda a altura do contêiner */
+}
+
+.editar {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 5px;
     margin: 10px;
 }
-.editar button{ 
+
+.editar button { 
     background-color: #fff;
     border: none;
     cursor: pointer;
 }
-.editar img{
-    width: 35px;   
+
+.editar img {
+    width: 35px;
 }
-.editar .img2{
-    width: 25px;   
+
+.editar .img2 {
+    width: 25px;
 }
