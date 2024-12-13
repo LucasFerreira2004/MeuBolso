@@ -19,7 +19,7 @@
 .infoText{
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
     padding-top: 15px;
     padding-left: 10px;
 }
@@ -46,18 +46,12 @@
     border-radius: 8px 0 0 8px;
 }
 
-.estado {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-}
-
 .editar{
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 5px;
-    margin: 10PX;
+    margin: 10px;
 }
 .editar button{ 
     background-color: #fff;
