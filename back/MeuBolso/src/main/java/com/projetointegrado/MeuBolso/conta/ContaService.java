@@ -4,6 +4,7 @@ import com.projetointegrado.MeuBolso.banco.Banco;
 import com.projetointegrado.MeuBolso.banco.BancoRepository;
 import com.projetointegrado.MeuBolso.banco.BancoService;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
+import com.projetointegrado.MeuBolso.conta.dto.ContaMinDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaPostDTO;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaRepository;
@@ -35,7 +36,11 @@ public class ContaService {
         List<Conta> result = contaRepository.findAll();
         return result.stream().map(ContaDTO::new).toList();
     }
-
+//    @Transactional(readOnly = true)
+//    public List<ContaMinDTO> findAllMin(){
+//
+//    }
+    @Transactional
     public Conta saveConta(ContaPostDTO dto) {
         //tratar erros de ids que não existem!.
         TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
