@@ -5,7 +5,16 @@ html, body {
   padding: 0;
   box-sizing: border-box;
   font-family: 'Inter', sans-serif; 
-  overflow: hidden;
   width: 100%;
   height: 100%;
+  overflow-y: scroll; /* Mantém a rolagem funcional */
+  scrollbar-width: none; /* Firefox: esconde a barra */
 }
+:root {
+  --main-color: #E17A05;
+  --main-color-light: #FFA238;
+  --gray: #F8F8F8;
+  --vibrant-red: #E63946;
+  --vibrant-green: #2A9D8F;
+}
+

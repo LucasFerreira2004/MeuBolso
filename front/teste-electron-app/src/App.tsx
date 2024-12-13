@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
-import styles from "./App.module.css"
+import style from "./App.module.css"
 import SideBar from "./components/SideBar/side-bar";
 
 function App() {
   return (
     <>
-    <div className={styles.app}>
+    <div className={style.app}>
       <SideBar/>
       <Outlet/>
       

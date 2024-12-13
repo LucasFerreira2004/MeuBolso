@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Login from './pages/Login/login.tsx'
 import Home from './pages/Home/home.tsx'
 import Cadastro from './pages/Cadastro/cadastro.tsx'
+import ContasBancarias from './pages/ContasBancarias/contas-bancarias.tsx'
 
 const router = createBrowserRouter([
   {
@@ -25,8 +26,8 @@ const router = createBrowserRouter([
         element: <Home/>
       },
       {
-        path: "/home",
-        element: <Home/>
+        path: "/contas",
+        element: <ContasBancarias/>
       },
       {
         path: "/home",

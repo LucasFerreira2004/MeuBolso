@@ -36,7 +36,7 @@ nav{
   display: flex;
   align-items: center;
   padding: 10px 20px; /* Ajuste o padding para garantir que o hover afete a caixa inteira */
-  transition: background-color 0.3s ease; /* Transição suave no hover */
+  transition: background-color 0.2s ease; /* Transição suave no hover */
 }
 
 .navItem:hover, .navIIcon:hover {
@@ -58,7 +58,7 @@ nav{
 }
 
 .navItem:hover{
-  background-color: #E17A05; /* Cor de destaque ao passar o mouse no texto */
+  background-color: var(--main-color-light); /* Cor de destaque ao passar o mouse no texto */
 }
 
 /* Responsividade - Ajustes para telas menores */
