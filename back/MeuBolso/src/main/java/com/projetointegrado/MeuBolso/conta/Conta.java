@@ -1,7 +1,8 @@
 package com.projetointegrado.MeuBolso.conta;
 
+import com.projetointegrado.MeuBolso.banco.Banco;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
-import com.projetointegrado.MeuBolso.conta.tipoConta.TipoConta;
+import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import jakarta.persistence.*;
 import org.springframework.beans.BeanUtils;
 
@@ -14,12 +15,14 @@ public class Conta {
     private Long id;
     private BigDecimal saldo;
     private String nome_banco;
-
     @ManyToOne
     @JoinColumn(name = "tipo_conta")
     private TipoConta tipo_conta;
+    @ManyToOne
+    @JoinColumn(name = "banco")
+    private Banco banco;
 
-    public Conta(Long id, BigDecimal saldo, String nome_banco, TipoConta tipo_conta) {
+    public Conta(Long id, BigDecimal saldo, String nome_banco, TipoConta tipo_conta, Banco banco) {
         this.id = id;
         this.saldo = saldo;
         this.nome_banco = nome_banco;
@@ -61,5 +64,13 @@ public class Conta {
 
     public void setTipo_conta(TipoConta tipo_conta) {
         this.tipo_conta = tipo_conta;
+    }
+
+    public Banco getBanco() {
+        return banco;
+    }
+
+    public void setBanco(Banco banco) {
+        this.banco = banco;
     }
 }

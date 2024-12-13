@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.conta.tipoConta;
+package com.projetointegrado.MeuBolso.tipoConta;
 
 import jakarta.persistence.*;
 

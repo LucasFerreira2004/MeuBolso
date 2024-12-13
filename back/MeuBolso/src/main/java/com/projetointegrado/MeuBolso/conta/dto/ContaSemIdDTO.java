@@ -1,7 +1,7 @@
 package com.projetointegrado.MeuBolso.conta.dto;
 
 import com.projetointegrado.MeuBolso.conta.Conta;
-import com.projetointegrado.MeuBolso.conta.tipoConta.TipoConta;
+import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 
 import java.math.BigDecimal;
 
