@@ -10,7 +10,7 @@
     display: flex;
     width: 90px; /* Largura da barra */
     height: 10px; /* Altura da barra */
-    background-color: #dddddd;
+    background-color: var(gray);
     border-radius: 8px;
     overflow: hidden; /* Garante que o conteúdo não ultrapasse os limites */
     position: relative;
@@ -19,7 +19,7 @@
   /* Estilo do progresso */
   .progresso {
     height: 100%;
-    background-color: #e17a05;
+    background-color: var(--main-color);
     border-radius: 8px; /* Deixa as bordas arredondadas */
     transition: width 0.3s ease; /* Animação suave ao alterar o progresso */
   }

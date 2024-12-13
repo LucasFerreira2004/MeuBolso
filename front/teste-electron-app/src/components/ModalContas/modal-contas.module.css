@@ -33,7 +33,7 @@
     margin-bottom: 17px;
 }
 .formModalContas .inputValor::placeholder{
-    color: #E17A05;
+    color: var(--main-color);
     font-weight: 900;
     font-size: medium;
 }
@@ -41,7 +41,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #E17A05;
+    background-color: var(--main-color);
     width: 100px;
     border: none;
     padding: 6px;
@@ -54,7 +54,7 @@
     cursor: pointer;
 }
 .buttonSalvar:hover{
-    background-color: #FFA238;
+    background-color: var(--main-color-light);
 }
 .iconClose{
     cursor: pointer;

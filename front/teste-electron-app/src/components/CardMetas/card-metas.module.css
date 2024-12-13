@@ -5,7 +5,7 @@
     width: 200px;
     height: auto;
     border-radius: 8px;
-    border: 1px solid #E17A05;
+    border: 1px solid var(--main-color);
     display: flex;
     flex-direction: column;
   }

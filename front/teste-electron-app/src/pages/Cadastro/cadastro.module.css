@@ -1,6 +1,6 @@
   /* Classe que aplica o fundo específico apenas para esta tela */
   .pageBackground {
-    background-color: #E17A05; /* Cor de fundo laranja */
+    background-color: var(--main-color); /* Cor de fundo laranja */
     min-height: 100vh; /* Garantir que a tela ocupe toda a altura */
     display: flex;
     justify-content: center; /* Centraliza o conteúdo horizontalmente */
@@ -47,11 +47,11 @@
     border: none;
     border-radius: 7px;
     font-size: large;
-    background-color: #E17A05;
+    background-color: var(--main-color);
   }
   
   .buttonC:hover {
-    background-color: #FFA238;
+    background-color: var(--main-color-light);
     cursor: pointer;
   }
   

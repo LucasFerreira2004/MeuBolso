@@ -33,7 +33,7 @@
 }
 
 .infoText span{
-    color: #2A9D8F;
+    color: var(--vibrant-green);
 }
 
 .imagemContainer {

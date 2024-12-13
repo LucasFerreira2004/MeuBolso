@@ -1,6 +1,6 @@
 /* Classe para aplicar fundo laranja na tela de login */
 .pageBackground {
-    background-color: #E17A05; /* Cor de fundo laranja */
+    background-color: var(--main-color); /* Cor de fundo laranja */
     min-height: 100vh; /* Garantir que a tela ocupe toda a altura */
     display: flex;
   }
@@ -34,7 +34,7 @@
   .input {
     width: 280px;
     height: 30px;
-    border: 0.2px solid #b9b9b9;
+    border: 0.2px solid var(--gray);
     border-radius: 5px;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.2); /* Borda borrada */
   }
@@ -46,11 +46,11 @@
     border: none;
     border-radius: 7px;
     font-size: large;
-    background-color: #E17A05;
+    background-color: var(--main-color);
   }
   
   .buttonC:hover {
-    background-color: #FFA238;
+    background-color: var(--main-color-light);
     cursor: pointer;
   }
   

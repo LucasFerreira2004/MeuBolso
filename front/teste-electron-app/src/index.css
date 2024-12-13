@@ -10,4 +10,11 @@ html, body {
   overflow-y: scroll; /* Mantém a rolagem funcional */
   scrollbar-width: none; /* Firefox: esconde a barra */
 }
+:root {
+  --main-color: #E17A05;
+  --main-color-light: #FFA238;
+  --gray: #F8F8F8;
+  --vibrant-red: #E63946;
+  --vibrant-green: #2A9D8F;
+}
 

@@ -31,7 +31,7 @@ h1 {
   display: flex;
   align-items: center; /* Alinha o conteúdo verticalmente */
   justify-content: space-between;
-  background-color: #F8F8F8;
+  background-color: var(--gray);
   border-radius: 8px;
   margin: 15px 25px 0 25px; /* Top, lateral direita/esquerda */
   padding-right: 12px; /* Padding à direita para o botão */
@@ -53,7 +53,7 @@ h1 {
 }
 
 .sHeader {
-  color: #E17A05;
+  color: var(--main-color);
   display: inline;
 }
 
@@ -166,11 +166,11 @@ h1 {
 
 /* ==================== Estilização específica para cores ==================== */
 .spanRed span {
-  color: #E63946;
+  color: var(--vibrant-red);
   font-weight: 700;
 }
 
 .spanGreen span {
-  color: #2A9D8F;
+  color: var(--vibrant-grenn);
   font-weight: 700;
 }

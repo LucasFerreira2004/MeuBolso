@@ -19,7 +19,7 @@
   }
   
   .inputsTransferencia input:focus {
-    border-color: #007bff; /* Cor da borda ao focar no input */
+    border-color: var(--main-color-light); /* Cor da borda ao focar no input */
     outline: none; /* Remove o contorno padrão */
   }
   
