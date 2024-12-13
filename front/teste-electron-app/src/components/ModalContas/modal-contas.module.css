@@ -1,0 +1,76 @@
+.containerModalContas {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-25%, -50%);
+    width: 400px;
+    background-color: #fff;
+    z-index: 999;
+    border: 1px solid black;
+    border-radius: 8px; /* Cantos arredondados */
+}
+
+.headerModalContas {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Garante que ocupe toda a largura do modal */
+    font-size: 1rem; /* Aumenta o tamanho da fonte */
+    font-weight: bold; /* Deixa o texto em negrito */
+    color: #333; /* Cor do texto */
+    padding-bottom: 10px; /* Espaçamento interno no cabeçalho */
+}
+.headerModalContas p{
+    margin: 10px;
+}
+.headerModalContas img{
+    margin: 10px;
+}
+.formModalContas .inputValor{
+    margin-left: 7px;
+    border: none;
+    margin-bottom: 17px;
+}
+.formModalContas .inputValor::placeholder{
+    color: #E17A05;
+    font-weight: 900;
+    font-size: medium;
+}
+.buttonSalvar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E17A05;
+    width: 100px;
+    border: none;
+    padding: 6px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: medium;
+    font-weight: 500;
+    margin-left: 290px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.buttonSalvar:hover{
+    background-color: #FFA238;
+}
+.iconClose{
+    cursor: pointer;
+}
+
+/* Overlay que cobre toda a tela */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Cor escura com opacidade */
+    z-index: 998; /* Coloca o overlay atrás do modal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  

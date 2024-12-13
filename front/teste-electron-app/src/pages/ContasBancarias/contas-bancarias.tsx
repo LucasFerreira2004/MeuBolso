@@ -3,6 +3,7 @@ import axios from "axios";
 import CardContas from "../../components/CardContas/card-contas";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./contas-bancarias.module.css";
+import ModalContas from "../../components/ModalContas/modal-contas";
 
 interface Conta {
   id: number;
@@ -15,6 +16,7 @@ interface Conta {
 
 function ContasBancarias() {
   const [contas, setContas] = useState<Conta[]>([]);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     axios
@@ -33,9 +35,13 @@ function ContasBancarias() {
       <header className={style.headerContas}>
         <h1>Contas Bancárias</h1>
         <div>
-          <AddButton texto="Adicionar Conta" />
+          <AddButton texto="Adicionar Conta" onClick={() => setOpen(!open)} />
         </div>
       </header>
+      
+      {/* Exibindo ModalContas apenas se open for true */}
+      {open && <ModalContas closeModal={() => setOpen(false)} />}
+
       <main className={style.cardsContas}>
         {contas.length === 0 ? (
           <p>Não há contas disponíveis.</p>
