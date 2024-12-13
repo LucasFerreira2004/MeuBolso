@@ -1,22 +1,23 @@
 package com.projetointegrado.MeuBolso.conta.dto;
 
+import com.projetointegrado.MeuBolso.banco.Banco;
 import com.projetointegrado.MeuBolso.conta.Conta;
-import com.projetointegrado.MeuBolso.conta.tipoConta.TipoConta;
-import org.springframework.beans.BeanUtils;
+import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 
 import java.math.BigDecimal;
 
 public class ContaDTO {
     private Long id;
     private BigDecimal saldo;
-    private String nome_banco;
+
     private TipoConta tipo_conta;
+    private Banco banco;
 
     public ContaDTO(Conta conta) {
         this.id = conta.getId();
         this.saldo = conta.getSaldo();
-        this.nome_banco = conta.getNome_banco();
         this.tipo_conta = conta.getTipo_conta();
+        this.banco = conta.getBanco();
     }
 
     //getters e setters
@@ -34,14 +35,6 @@ public class ContaDTO {
 
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
-    }
-
-    public String getNome_banco() {
-        return nome_banco;
-    }
-
-    public void setNome_banco(String nome_banco) {
-        this.nome_banco = nome_banco;
     }
 
     public TipoConta getTipo_conta() {

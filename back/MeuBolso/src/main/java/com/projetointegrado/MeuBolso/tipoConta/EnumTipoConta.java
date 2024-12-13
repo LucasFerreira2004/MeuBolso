@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.conta.tipoConta;
+package com.projetointegrado.MeuBolso.tipoConta;
 
 public enum EnumTipoConta {
     CONTA_CORRENTE,

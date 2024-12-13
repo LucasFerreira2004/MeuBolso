@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.conta;
 
+import com.projetointegrado.MeuBolso.conta.dto.ContaPostDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,7 @@ public class ContaController {
         return contaService.findById(id);
     }
     @PostMapping
-    public ResponseEntity<Conta> save(@RequestBody Conta conta){
-        Conta contaSalva = contaService.saveConta(conta);
-        return ResponseEntity.created(URI.create("/usuarios/" + conta.getId())).body(contaSalva);
+    public void save(@RequestBody ContaPostDTO contaPostDTO){
+        Conta contaSalva = contaService.saveConta(contaPostDTO);
     }
 }
