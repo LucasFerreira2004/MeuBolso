@@ -9,7 +9,7 @@ insert into tipo_conta(id, tipo_conta) values ('5', 'outro');
 insert into usuario(nome, email, senha) values ('Maria do Rosario Oliveira', 'mariarosariooli@gmail.com', 'oi2u243i');
 
 /*BANCO*/
-insert into banco (nome, icone_url) values ('Bradesco', 'url');
+insert into banco (nome, icone_url) values ('Bradesco', 'https://play-lh.googleusercontent.com/ReQEaxm44OuduIlJEVO_-xs9iZXSyRNdzGKrONYoLSgAdOzyhPKTb1xuuoPXK6tABm0');
 insert into banco (nome, icone_url) values ('Banco do Brasil', 'url');
 insert into banco (nome, icone_url) values ('Nubank', 'https://t.ctcdn.com.br/DIEw0gGtQl_GNhWXJwgrRmuGpIk=/i624750.png');
 /*CONTA*/
