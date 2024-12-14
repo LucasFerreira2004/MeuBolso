@@ -8,7 +8,6 @@ function App() {
     <div className={style.app}>
       <SideBar/>
       <Outlet/>
-      
     </div>
     </>
   );

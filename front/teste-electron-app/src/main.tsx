@@ -7,6 +7,7 @@ import Login from './pages/Login/login.tsx'
 import Home from './pages/Home/home.tsx'
 import Cadastro from './pages/Cadastro/cadastro.tsx'
 import ContasBancarias from './pages/ContasBancarias/contas-bancarias.tsx'
+import Categorias from './pages/Categorias/categorias.tsx'
 
 const router = createBrowserRouter([
   {
@@ -30,8 +31,8 @@ const router = createBrowserRouter([
         element: <ContasBancarias/>
       },
       {
-        path: "/home",
-        element: <Home/>
+        path: "/categorias",
+        element: <Categorias/>
       },
       {
         path: "/home",

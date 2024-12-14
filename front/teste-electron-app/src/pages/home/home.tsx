@@ -26,7 +26,9 @@ function Home() {
               R$ 1516,00
             </p>
           </div>
-          <AddButton texto="Adicionar Transação" />
+          <AddButton texto="Adicionar Transação" onClick={function (): void {
+            throw new Error("Function not implemented.");
+          } } />
         </div>
       </header>
 

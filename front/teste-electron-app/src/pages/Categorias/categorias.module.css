@@ -1,0 +1,51 @@
+.containerCategorias {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Ocupa 100% da altura da tela */
+    margin-left: 300px; /* Remover a margem fixa à esquerda */
+    padding: 20px;
+}
+
+.headerCategorias {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px; /* Adiciona um espaço entre o header e o conteúdo */
+}
+
+.headerCategorias div {
+    padding-top: 80px; /* Ajusta o padding superior */
+    padding-right: 30px;
+}
+
+.containerMain {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Ocupa toda a largura disponível */
+    gap: 20px;
+    padding: 10px;
+}
+
+.cardCategorias {
+    display: flex;
+    flex: 1; /* Faz os cards crescerem igualmente */
+    padding: 10px;
+    background-color: var(--gray);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+    max-width: 100%; /* Agora ocupa 100% da largura disponível */
+    margin: 0 auto; /* Centraliza os cards */
+}
+
+/* Overlay para fundo escuro */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro com opacidade */
+    z-index: 998; /* Fica atrás do modal */
+  }
+  

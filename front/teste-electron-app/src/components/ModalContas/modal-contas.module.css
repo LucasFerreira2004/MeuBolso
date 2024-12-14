@@ -4,7 +4,7 @@
     position: fixed;
     top: 50%; 
     left: 50%;
-    transform: translate(-25%, -50%);
+    transform: translate(-32%, -50%);
     width: 400px;
     background-color: #fff;
     z-index: 999;
