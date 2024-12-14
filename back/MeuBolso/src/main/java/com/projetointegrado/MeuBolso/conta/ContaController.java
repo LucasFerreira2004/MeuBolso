@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.conta;
 
+import com.projetointegrado.MeuBolso.conta.dto.ContaIdDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaMinDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaPostDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
@@ -17,16 +18,16 @@ public class ContaController {
     @Autowired
     private ContaService contaService;
     @GetMapping
-    public List<ContaDTO> findAll(){
-        return contaService.findAll();
+    public List<ContaDTO> findAll(@RequestBody ContaIdDTO contaIdDTO) {
+        return contaService.findAll(contaIdDTO);
     }
     @GetMapping("/{id}")
     public ContaDTO findById(@PathVariable Long id){
         return contaService.findById(id);
     }
     @GetMapping("/min")
-    public List<ContaMinDTO> findMin(){
-        return contaService.findAllMin();
+    public List<ContaMinDTO> findMin(@RequestBody ContaIdDTO contaIdDTO) {
+        return contaService.findAllMin(contaIdDTO);
     }
     @PostMapping
     public void save(@RequestBody ContaPostDTO contaPostDTO){

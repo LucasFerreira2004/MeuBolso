@@ -4,6 +4,7 @@ import com.projetointegrado.MeuBolso.banco.Banco;
 import com.projetointegrado.MeuBolso.banco.BancoRepository;
 import com.projetointegrado.MeuBolso.banco.BancoService;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
+import com.projetointegrado.MeuBolso.conta.dto.ContaIdDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaMinDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaPostDTO;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
@@ -36,14 +37,14 @@ public class ContaService {
         return new ContaDTO(result);
     }
     @Transactional(readOnly = true)
-    public List<ContaDTO> findAll(){
-        List<Conta> result = contaRepository.findAll();
+    public List<ContaDTO> findAll(ContaIdDTO contaIdDTO) {
+        List<Conta> result = contaRepository.findAllByUsuarioId(contaIdDTO.getId());
         return result.stream().map(ContaDTO::new).toList();
     }
     @Transactional(readOnly = true)
-    public List<ContaMinDTO> findAllMin(){
-        List<Conta> contas = contaRepository.findAll();
-        return contas.stream().map(ContaMinDTO::new).toList();
+    public List<ContaMinDTO> findAllMin(ContaIdDTO contaIdDTO) {
+        List<Conta> result = contaRepository.findAllByUsuarioId(contaIdDTO.getId());
+        return result.stream().map(ContaMinDTO::new).toList();
     }
     @Transactional
     public Conta saveConta(ContaPostDTO dto) {
