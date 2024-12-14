@@ -27,4 +27,16 @@ public class CategoriaService {
                 .map(CategoriaDTO::new)
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
     }
+
+    @Transactional
+    public List<CategoriaDTO> findAllByReceita(){
+        List<Categoria> result = categoriaRepository.findAllByReceita();
+        return result.stream().map(CategoriaDTO::new).toList();
+    }
+
+    @Transactional
+    public List<CategoriaDTO> findAllByDespesa(){
+        List<Categoria> result = categoriaRepository.findAllByDespesa();
+        return result.stream().map(CategoriaDTO::new).toList();
+    }
 }

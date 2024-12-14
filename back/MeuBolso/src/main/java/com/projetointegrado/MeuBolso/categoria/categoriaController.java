@@ -27,4 +27,13 @@ public class categoriaController {
         CategoriaDTO result = categoriaService.findCategoriaById(id);
         return result;
     }
+
+    @GetMapping("/receitas")
+    public List<CategoriaDTO> findReceitas() {
+        return categoriaService.findAllByReceita();
+    }
+    @GetMapping("/despesas")
+    public List<CategoriaDTO> findDespesas() {
+        return categoriaService.findAllByDespesa();
+    }
 }
