@@ -18,16 +18,16 @@ public class ContaController {
     @Autowired
     private ContaService contaService;
     @GetMapping
-    public List<ContaDTO> findAll(@RequestBody ContaIdDTO contaIdDTO) {
-        return contaService.findAll(contaIdDTO);
+    public List<ContaDTO> findAll() {
+        return contaService.findAll();
     }
     @GetMapping("/{id}")
     public ContaDTO findById(@PathVariable Long id){
         return contaService.findById(id);
     }
     @GetMapping("/min")
-    public List<ContaMinDTO> findMin(@RequestBody ContaIdDTO contaIdDTO) {
-        return contaService.findAllMin(contaIdDTO);
+    public List<ContaMinDTO> findMin() {
+        return contaService.findAllMin();
     }
     @PostMapping
     public void save(@RequestBody ContaPostDTO contaPostDTO){

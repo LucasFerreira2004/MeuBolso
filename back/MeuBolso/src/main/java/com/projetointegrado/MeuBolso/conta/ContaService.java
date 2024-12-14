@@ -37,13 +37,13 @@ public class ContaService {
         return new ContaDTO(result);
     }
     @Transactional(readOnly = true)
-    public List<ContaDTO> findAll(ContaIdDTO contaIdDTO) {
-        List<Conta> result = contaRepository.findAllByUsuarioId(contaIdDTO.getId());
+    public List<ContaDTO> findAll() {
+        List<Conta> result = contaRepository.findAll();
         return result.stream().map(ContaDTO::new).toList();
     }
     @Transactional(readOnly = true)
-    public List<ContaMinDTO> findAllMin(ContaIdDTO contaIdDTO) {
-        List<Conta> result = contaRepository.findAllByUsuarioId(contaIdDTO.getId());
+    public List<ContaMinDTO> findAllMin() {
+        List<Conta> result = contaRepository.findAll();
         return result.stream().map(ContaMinDTO::new).toList();
     }
     @Transactional
