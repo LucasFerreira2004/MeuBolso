@@ -6,8 +6,10 @@ import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 import org.springframework.beans.BeanUtils;
+import com.projetointegrado.MeuBolso.transacao.Transacao;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 public class Conta {
@@ -21,6 +23,9 @@ public class Conta {
     private Banco banco;
     @ManyToOne
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.REMOVE)
+    private List<Transacao> transacoes;
 
     public Conta(Long id, BigDecimal saldo, TipoConta tipo_conta, Banco banco, Usuario usuario) {
         this.id = id;

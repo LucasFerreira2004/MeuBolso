@@ -2,9 +2,7 @@ package com.projetointegrado.MeuBolso.conta;
 
 import com.projetointegrado.MeuBolso.banco.Banco;
 import com.projetointegrado.MeuBolso.banco.BancoRepository;
-import com.projetointegrado.MeuBolso.banco.BancoService;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
-import com.projetointegrado.MeuBolso.conta.dto.ContaIdDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaMinDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaPostDTO;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
@@ -55,5 +53,13 @@ public class ContaService {
 
         Conta conta = new Conta(null, dto.getSaldo(), tipo, banco, usuario);
         return contaRepository.save(conta);
+    }
+
+    @Transactional
+    public Conta deleteConta(Long id) {
+        //tratar erro de id null
+        Conta conta = contaRepository.findById(id).orElse(null);
+        contaRepository.delete(conta);
+        return conta;
     }
 }
