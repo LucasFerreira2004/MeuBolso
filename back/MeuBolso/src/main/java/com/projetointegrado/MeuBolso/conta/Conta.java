@@ -3,6 +3,7 @@ package com.projetointegrado.MeuBolso.conta;
 import com.projetointegrado.MeuBolso.banco.Banco;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
+import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 import org.springframework.beans.BeanUtils;
 
@@ -15,17 +16,18 @@ public class Conta {
     private Long id;
     private BigDecimal saldo;
     @ManyToOne
-    @JoinColumn(name = "tipo_conta")
     private TipoConta tipo_conta;
     @ManyToOne
-    @JoinColumn(name = "banco")
     private Banco banco;
+    @ManyToOne
+    private Usuario usuario;
 
-    public Conta(Long id, BigDecimal saldo, TipoConta tipo_conta, Banco banco) {
+    public Conta(Long id, BigDecimal saldo, TipoConta tipo_conta, Banco banco, Usuario usuario) {
         this.id = id;
         this.saldo = saldo;
         this.tipo_conta = tipo_conta;
         this.banco = banco;
+        this.usuario = usuario;
     }
     public Conta(ContaDTO contaDTO) {
         BeanUtils.copyProperties(contaDTO, this);
@@ -63,5 +65,13 @@ public class Conta {
 
     public void setBanco(Banco banco) {
         this.banco = banco;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

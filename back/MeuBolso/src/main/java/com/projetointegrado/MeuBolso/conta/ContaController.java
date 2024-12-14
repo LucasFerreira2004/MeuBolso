@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.conta;
 
+import com.projetointegrado.MeuBolso.conta.dto.ContaMinDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaPostDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
@@ -22,6 +23,10 @@ public class ContaController {
     @GetMapping("/{id}")
     public ContaDTO findById(@PathVariable Long id){
         return contaService.findById(id);
+    }
+    @GetMapping("/min")
+    public List<ContaMinDTO> findMin(){
+        return contaService.findAllMin();
     }
     @PostMapping
     public void save(@RequestBody ContaPostDTO contaPostDTO){

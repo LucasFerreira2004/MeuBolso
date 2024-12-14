@@ -9,6 +9,8 @@ import com.projetointegrado.MeuBolso.conta.dto.ContaPostDTO;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaRepository;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaService;
+import com.projetointegrado.MeuBolso.usuario.Usuario;
+import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,8 @@ public class ContaService {
     private BancoRepository bancoRepository;
     @Autowired
     private TipoContaRepository tipoContaRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Transactional(readOnly = true)
     public ContaDTO findById(Long id) {
@@ -36,16 +40,19 @@ public class ContaService {
         List<Conta> result = contaRepository.findAll();
         return result.stream().map(ContaDTO::new).toList();
     }
-//    @Transactional(readOnly = true)
-//    public List<ContaMinDTO> findAllMin(){
-//
-//    }
+    @Transactional(readOnly = true)
+    public List<ContaMinDTO> findAllMin(){
+        List<Conta> contas = contaRepository.findAll();
+        return contas.stream().map(ContaMinDTO::new).toList();
+    }
     @Transactional
     public Conta saveConta(ContaPostDTO dto) {
         //tratar erros de ids que não existem!.
         TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
-        Conta conta = new Conta(null, dto.getSaldo(), tipo, banco);
+        Usuario usuario = usuarioRepository.findById(dto.getId_usuario()).orElse(null);
+
+        Conta conta = new Conta(null, dto.getSaldo(), tipo, banco, usuario);
         return contaRepository.save(conta);
     }
 }

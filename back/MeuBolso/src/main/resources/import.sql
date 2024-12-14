@@ -13,8 +13,8 @@ insert into banco (nome, icone_url) values ('Bradesco', 'url');
 insert into banco (nome, icone_url) values ('Banco do Brasil', 'url');
 insert into banco (nome, icone_url) values ('Nubank', 'https://t.ctcdn.com.br/DIEw0gGtQl_GNhWXJwgrRmuGpIk=/i624750.png');
 /*CONTA*/
-insert into conta(saldo, tipo_conta, banco) values ('1412', '1', '3');
-insert into conta(saldo, tipo_conta, banco) values ('2000.50', '3', '1');
+insert into conta(saldo, tipo_conta_id, banco_id, usuario_id) values ('1412', '1', '3', '1');
+insert into conta(saldo, tipo_conta_id, banco_id, usuario_id) values ('2000.50', '3', '1', '1');
 
 /*CATEGORIAS*/
 insert into categoria (nome, tipo_categoria, cor) values ('casa', 'despesa', '8755BC');             /*1*/
