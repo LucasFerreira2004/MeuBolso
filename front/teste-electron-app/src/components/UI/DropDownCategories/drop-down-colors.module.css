@@ -1,0 +1,51 @@
+.containerDropDownCategories {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  border: 1px solid black;
+  position: absolute;
+  margin-left: 450px;
+  background-color: #fff;
+  height: auto; /* Permite que o container cresça conforme os elementos */
+  width: 170px;
+  padding: 8px;
+  border-radius: 8px;
+  box-sizing: border-box; /* Para garantir que o padding não afete o tamanho total */
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+}
+
+.header img{
+  cursor: pointer;
+}
+.containerDropDownCategories h3{
+  margin: 0px;
+}
+
+.linhacor {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px; /* Ajuste do espaçamento entre as imagens */
+  flex-grow: 1; /* Faz com que as linhas cresçam proporcionalmente */
+}
+
+.linhacor img {
+  width: 33px;
+  height: 33px;
+  object-fit: cover; /* Ajusta as imagens sem distorcer */
+  border-radius: 50%; /* Torna as imagens circulares */
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.linhacor img:hover {
+  transform: scale(1.1); /* Efeito de aumento ao passar o mouse */
+  filter: brightness(1.2); /* Aumenta o brilho ao passar o mouse */
+}
+
+.linhacor img:active {
+  transform: scale(0.95); /* Efeito de "pressionamento" ao clicar */
+}
