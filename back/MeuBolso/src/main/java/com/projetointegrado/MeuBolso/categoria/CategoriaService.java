@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.categoria;
 
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
+import com.projetointegrado.MeuBolso.categoria.dto.CategoriaPostDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,12 @@ public class CategoriaService {
     public List<CategoriaDTO> findAllByDespesa(){
         List<Categoria> result = categoriaRepository.findAllByDespesa();
         return result.stream().map(CategoriaDTO::new).toList();
+    }
+
+    @Transactional
+    public CategoriaDTO save(CategoriaPostDTO dto) {
+        if (categoriaRepository.findByName(dto.getNome()) != null) throw new RuntimeException("nome já cadastrado");
+        Categoria categoria = new Categoria(null, dto.getNome(), dto.getTipo(), dto.getCor());
+        return new CategoriaDTO(categoriaRepository.save(categoria));
     }
 }

@@ -14,4 +14,8 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
         select * from categoria where tipo_categoria = 'despesa'
     """)
     List<Categoria> findAllByDespesa();
+    @Query(nativeQuery = true, value = """
+        select * from categoria where LOWER(nome) like :nome
+    """)
+    Categoria findByName(String nome);
 }

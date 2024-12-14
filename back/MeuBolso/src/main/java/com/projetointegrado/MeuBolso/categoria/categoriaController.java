@@ -1,11 +1,9 @@
 package com.projetointegrado.MeuBolso.categoria;
 
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
+import com.projetointegrado.MeuBolso.categoria.dto.CategoriaPostDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,5 +33,10 @@ public class categoriaController {
     @GetMapping("/despesas")
     public List<CategoriaDTO> findDespesas() {
         return categoriaService.findAllByDespesa();
+    }
+
+    @PostMapping
+    public CategoriaDTO save(@RequestBody CategoriaPostDTO categoriaPostDTO) {
+        return categoriaService.save(categoriaPostDTO);
     }
 }
