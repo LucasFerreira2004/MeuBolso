@@ -3,6 +3,8 @@
     background-color: var(--main-color); /* Cor de fundo laranja */
     min-height: 100vh; /* Garantir que a tela ocupe toda a altura */
     display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
   }
   
   /* Estilos para o container principal */
@@ -14,7 +16,6 @@
     margin-left: auto;
     border-radius: 15px;
     margin-right: auto;
-    margin-top: 80px;
     width: 458px;
     height: 383px;
     background-color: #fff; /* Cor de fundo branco para o formulário */
@@ -34,7 +35,7 @@
   .input {
     width: 280px;
     height: 30px;
-    border: 0.2px solid var(--gray);
+    border: 0.2px solid #b9b9b9;
     border-radius: 5px;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.2); /* Borda borrada */
   }
