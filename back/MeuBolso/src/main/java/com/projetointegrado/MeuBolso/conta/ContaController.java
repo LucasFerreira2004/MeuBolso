@@ -3,6 +3,7 @@ package com.projetointegrado.MeuBolso.conta;
 import com.projetointegrado.MeuBolso.conta.dto.ContaMinDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaPostDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
+import com.projetointegrado.MeuBolso.conta.dto.ContaPutDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,10 @@ public class ContaController {
     @PostMapping
     public void save(@RequestBody ContaPostDTO contaPostDTO){
         Conta contaSalva = contaService.saveConta(contaPostDTO);
+    }
+    @PutMapping("/{id}")
+    public void update(@PathVariable Long id, @RequestBody ContaPutDTO contaPostDTO){
+        contaService.updateConta(id, contaPostDTO);
     }
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){

@@ -5,6 +5,7 @@ import com.projetointegrado.MeuBolso.banco.BancoRepository;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaMinDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaPostDTO;
+import com.projetointegrado.MeuBolso.conta.dto.ContaPutDTO;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaRepository;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaService;
@@ -61,5 +62,18 @@ public class ContaService {
         Conta conta = contaRepository.findById(id).orElse(null);
         contaRepository.delete(conta);
         return conta;
+    }
+
+    @Transactional
+    public Conta updateConta (Long id, ContaPutDTO dto) {
+        //tratar caso seja nulo!
+        TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
+        Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
+
+        Conta conta = contaRepository.findById(id).orElse(null);
+        conta.setSaldo(dto.getSaldo());
+        conta.setTipo_conta(tipo);
+        conta.setBanco(banco);
+        return contaRepository.save(conta);
     }
 }
