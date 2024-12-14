@@ -9,11 +9,12 @@ public class CategoriaDTO {
     private Long id;
     private String nome;
     private TipoCategoria tipo;
-
+    private String cor;
     public CategoriaDTO(Categoria categoria) {
         this.id = categoria.getId();
         this.nome = categoria.getNome();
         this.tipo = categoria.getTipo();
+        this.cor = categoria.getCor();
     }
 
     public Long getId() {
@@ -38,5 +39,13 @@ public class CategoriaDTO {
 
     public void setTipo(TipoCategoria tipo) {
         this.tipo = tipo;
+    }
+
+    public String getCor() {
+        return cor;
+    }
+
+    public void setCor(String cor) {
+        this.cor = cor;
     }
 }
