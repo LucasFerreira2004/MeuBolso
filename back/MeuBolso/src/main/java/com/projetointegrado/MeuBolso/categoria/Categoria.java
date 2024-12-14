@@ -1,13 +1,14 @@
 package com.projetointegrado.MeuBolso.categoria;
 
 import jakarta.persistence.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String nome;
     @Enumerated(EnumType.STRING)
     private TipoCategoria tipoCategoria;
