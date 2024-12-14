@@ -43,7 +43,7 @@ public class CategoriaService {
 
     @Transactional
     public CategoriaDTO save(CategoriaPostDTO dto) {
-        if (categoriaRepository.findByName(dto.getNome()) != null) throw new RuntimeException("nome já cadastrado");
+        if (categoriaRepository.findByNameAndCategoria(dto.getNome(), dto.getTipo().toString()) != null) throw new RuntimeException("nome já cadastrado");
         Categoria categoria = new Categoria(null, dto.getNome(), dto.getTipo(), dto.getCor());
         return new CategoriaDTO(categoriaRepository.save(categoria));
     }
