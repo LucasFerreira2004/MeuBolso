@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     @Query(nativeQuery = true, value = """
-        select * from categoria where tipo_categoria = 'receita'
+        select * from categoria where tipo_categoria = 'receita' AND ativa = true
     """)
     List<Categoria> findAllByReceita();
 
     @Query(nativeQuery = true, value = """
-        select * from categoria where tipo_categoria = 'despesa'
+        select * from categoria where tipo_categoria = 'despesa' and ativa = true
     """)
     List<Categoria> findAllByDespesa();
 

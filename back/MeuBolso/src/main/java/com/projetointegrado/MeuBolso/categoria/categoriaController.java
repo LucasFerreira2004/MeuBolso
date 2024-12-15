@@ -39,4 +39,12 @@ public class categoriaController {
     public CategoriaDTO save(@RequestBody CategoriaSaveDTO categoriaSaveDTO) {
         return categoriaService.save(categoriaSaveDTO);
     }
+    @PutMapping("{id}")
+    public CategoriaDTO update(@PathVariable Long id, @RequestBody CategoriaSaveDTO categoriaSaveDTO) {
+        return categoriaService.update(id, categoriaSaveDTO);
+    }
+    @DeleteMapping("{id}")
+    public void delete(@PathVariable Long id) {
+        categoriaService.delete(id);
+    }
 }

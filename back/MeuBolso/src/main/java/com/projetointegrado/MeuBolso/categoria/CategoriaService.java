@@ -41,14 +41,24 @@ public class CategoriaService {
 
     @Transactional
     public CategoriaDTO save(CategoriaSaveDTO dto) {
+        //tratar exceção e null
         if (categoriaRepository.findByName(dto.getNome()) != null) throw new RuntimeException("nome já cadastrado");
 
-        Categoria categoria = new Categoria(null, dto.getNome(), dto.getTipo(), dto.getCor());
+        Categoria categoria = new Categoria(null, dto.getNome(), dto.getTipo(), dto.getCor(), true);
         return new CategoriaDTO(categoriaRepository.save(categoria));
     }
 
     @Transactional
-    public void update(Long id, CategoriaSaveDTO dto) {
+    public CategoriaDTO update(Long id, CategoriaSaveDTO dto) {
+        if (categoriaRepository.findById(id) == null) throw new RuntimeException("id não encontrado");
+        Categoria categira = new Categoria(id, dto.getNome(), dto.getTipo(), dto.getCor(), true);
+        categoriaRepository.save(categira);
+        return new CategoriaDTO(categira);
+    }
 
+    @Transactional
+    public void delete(Long id) {
+        if (categoriaRepository.findById(id) == null) { throw new RuntimeException("id não encontrado");}
+        categoriaRepository.deleteById(id);
     }
 }
