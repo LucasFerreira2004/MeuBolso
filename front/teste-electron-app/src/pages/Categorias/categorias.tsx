@@ -1,10 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ModalAddCategoria from "../../components/ModalAddCategoria/modal-add-categoria";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./categorias.module.css";
+import InputCategorias from "../../components/UI/InputCategorias/input-categorias";
 
-function Categorias () {
+// Defina o tipo para a categoria
+interface Categoria {
+  id: number;
+  nome: string;
+  tipo: string;
+  cor: string;
+}
+
+function Categorias() {
   const [open, setOpen] = useState(false);
+  const [categorias, setCategorias] = useState<Categoria[]>([]); 
+  const [loading, setLoading] = useState<boolean>(true); 
+
+  useEffect(() => {
+    // Função para buscar as categorias da API
+    const fetchCategorias = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/categorias"); // Substitua pela URL da sua API
+        const data: Categoria[] = await response.json();
+        setCategorias(data); // Atualiza o estado com as categorias recebidas
+      } catch (error) {
+        console.error("Erro ao buscar categorias:", error);
+      } finally {
+        setLoading(false); // Define o carregamento como falso
+      }
+    };
+
+    fetchCategorias();
+  }, []);
+
+  if (loading) {
+    return <p>Carregando categorias...</p>; 
+  }
 
   return (
     <div className={style.containerCategorias}>
@@ -25,8 +57,39 @@ function Categorias () {
 
       <main className={style.containerMain}>
         <div className={style.cardCategorias}>
-          <div className={style.cardDespesa}></div>
-          <div className={style.cardReceita}></div>
+          {/* Renderizando categorias de despesas */}
+          <div className={style.cardDespesa}>
+            <h3>Despesas</h3>
+            <hr />
+            {categorias
+              .filter((categoria) => categoria.tipo === "DESPESA")
+              .map((categoria) => (
+                <InputCategorias
+                  key={categoria.id}
+                  id={categoria.id}
+                  nome={categoria.nome}
+                  tipo={categoria.tipo}
+                  cor={categoria.cor}
+                />
+              ))}
+          </div>
+          
+          {/* Renderizando categorias de receitas */}
+          <div className={style.cardReceita}>
+            <h3>Receitas</h3>
+            <hr />
+            {categorias
+              .filter((categoria) => categoria.tipo === "RECEITA")
+              .map((categoria) => (
+                <InputCategorias
+                  key={categoria.id}
+                  id={categoria.id}
+                  nome={categoria.nome}
+                  tipo={categoria.tipo}
+                  cor={categoria.cor}
+                />
+              ))}
+          </div>
         </div>
       </main>
     </div>
