@@ -16,7 +16,7 @@ public class CategoriaService {
 
     @Transactional(readOnly = true)
     public List<CategoriaDTO> findCategoria() {
-        List<Categoria> result = categoriaRepository.findAll();
+        List<Categoria> result = categoriaRepository.findAllAtivas();
         return result.stream().map(CategoriaDTO::new).toList();
     }
 
@@ -57,8 +57,8 @@ public class CategoriaService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void arquivar(Long id) {
         if (categoriaRepository.findById(id) == null) { throw new RuntimeException("id não encontrado");}
-        categoriaRepository.deleteById(id);
+        categoriaRepository.arquivarById(id);
     }
 }
