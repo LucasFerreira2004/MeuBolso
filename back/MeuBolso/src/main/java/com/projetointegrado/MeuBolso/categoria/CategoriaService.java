@@ -1,14 +1,12 @@
 package com.projetointegrado.MeuBolso.categoria;
 
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
-import com.projetointegrado.MeuBolso.categoria.dto.CategoriaPostDTO;
+import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoriaService {
@@ -42,9 +40,25 @@ public class CategoriaService {
     }
 
     @Transactional
-    public CategoriaDTO save(CategoriaPostDTO dto) {
-        if (categoriaRepository.findByNameAndCategoria(dto.getNome(), dto.getTipo().toString()) != null) throw new RuntimeException("nome já cadastrado");
-        Categoria categoria = new Categoria(null, dto.getNome(), dto.getTipo(), dto.getCor());
+    public CategoriaDTO save(CategoriaSaveDTO dto) {
+        //tratar exceção e null
+        if (categoriaRepository.findByName(dto.getNome()) != null) throw new RuntimeException("nome já cadastrado");
+
+        Categoria categoria = new Categoria(null, dto.getNome(), dto.getTipo(), dto.getCor(), true);
         return new CategoriaDTO(categoriaRepository.save(categoria));
+    }
+
+    @Transactional
+    public CategoriaDTO update(Long id, CategoriaSaveDTO dto) {
+        if (categoriaRepository.findById(id) == null) throw new RuntimeException("id não encontrado");
+        Categoria categira = new Categoria(id, dto.getNome(), dto.getTipo(), dto.getCor(), true);
+        categoriaRepository.save(categira);
+        return new CategoriaDTO(categira);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        if (categoriaRepository.findById(id) == null) { throw new RuntimeException("id não encontrado");}
+        categoriaRepository.deleteById(id);
     }
 }
