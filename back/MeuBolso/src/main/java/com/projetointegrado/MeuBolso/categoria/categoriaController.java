@@ -1,7 +1,7 @@
 package com.projetointegrado.MeuBolso.categoria;
 
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
-import com.projetointegrado.MeuBolso.categoria.dto.CategoriaPostDTO;
+import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +36,7 @@ public class categoriaController {
     }
 
     @PostMapping
-    public CategoriaDTO save(@RequestBody CategoriaPostDTO categoriaPostDTO) {
-        return categoriaService.save(categoriaPostDTO);
+    public CategoriaDTO save(@RequestBody CategoriaSaveDTO categoriaSaveDTO) {
+        return categoriaService.save(categoriaSaveDTO);
     }
 }

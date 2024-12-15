@@ -2,7 +2,7 @@ package com.projetointegrado.MeuBolso.categoria.dto;
 
 import com.projetointegrado.MeuBolso.categoria.TipoCategoria;
 
-public class CategoriaPostDTO {
+public class CategoriaSaveDTO {
     private String cor;
     private String nome;
     private TipoCategoria tipo;

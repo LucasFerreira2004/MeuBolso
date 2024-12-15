@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
+//@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"nome", "tipo_categoria"}) })
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
