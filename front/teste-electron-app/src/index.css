@@ -18,3 +18,12 @@ html, body {
   --vibrant-green: #2A9D8F;
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"]:focus + label {
+  display: none;
+}

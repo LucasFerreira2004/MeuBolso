@@ -1,4 +1,3 @@
-import React from 'react';
 import style from './InputWithIcon.module.css';
 
 interface InputWithIconProps {
@@ -11,12 +10,15 @@ interface InputWithIconProps {
 const InputWithIcon: React.FC<InputWithIconProps> = ({ label, iconSrc, ...props }) => {
   return (
     <div className={style.inputsTransferencia}>
+      {/* Ícone à esquerda */}
       <img
         src={iconSrc}
         alt="Ícone de descrição"
         className={style.iconLogo}
       />
+      {/* Rótulo */}
       <label>{label}</label>
+      {/* Input */}
       <input type="text" {...props} />
     </div>
   );
