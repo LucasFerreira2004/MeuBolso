@@ -43,8 +43,9 @@ public class categoriaController {
     public CategoriaDTO update(@PathVariable Long id, @RequestBody CategoriaSaveDTO categoriaSaveDTO) {
         return categoriaService.update(id, categoriaSaveDTO);
     }
-    @DeleteMapping("{id}")
-    public void delete(@PathVariable Long id) {
-        categoriaService.delete(id);
+
+    @PutMapping("/arquivadas/{id}")
+    public void arquivar(@PathVariable Long id) {
+        categoriaService.arquivar(id);
     }
 }
