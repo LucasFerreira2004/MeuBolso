@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.categoria;
 
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
+import com.projetointegrado.MeuBolso.categoria.exceptions.NomeCadastradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,8 +42,8 @@ public class CategoriaService {
 
     @Transactional
     public CategoriaDTO save(CategoriaSaveDTO dto) {
-        //tratar exceção e null
-        if (categoriaRepository.findByName(dto.getNome()) != null) throw new RuntimeException("nome já cadastrado");
+        if (categoriaRepository.findByName(dto.getNome()) != null)
+            throw new NomeCadastradoException();
 
         Categoria categoria = new Categoria(null, dto.getNome(), dto.getTipo(), dto.getCor(), true);
         return new CategoriaDTO(categoriaRepository.save(categoria));
