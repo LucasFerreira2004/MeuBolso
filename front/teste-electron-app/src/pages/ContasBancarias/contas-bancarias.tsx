@@ -1,66 +1,90 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import CardContas from "../../components/CardContas/card-contas";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./contas-bancarias.module.css";
-import ModalContas from "../../components/ModalContas/modal-contas";
-import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-conta";  // Importando o ModalDeleteConta
+import ModalEditContas from "../../components/ModalEditContas/modal-edit-contas";
+import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-conta";
+import ModalContas from "../../components/ModalContas/modal-contas"; // Importando o ModalContas
 
 interface Conta {
   id: number;
   saldo: number;
   banco: {
     nome: string;
-    iconeUrl: string;  // Campo para o ícone
+    iconeUrl: string;
   };
   tipo_conta: {
     tipoConta: string;
   };
+  id_banco: number;
+  id_tipo_conta: number;
+  id_usuario: number;
 }
+
+
 
 function ContasBancarias() {
   const [contas, setContas] = useState<Conta[]>([]);
   const [open, setOpen] = useState(false);
+  const [selectedConta, setSelectedConta] = useState<Conta | null>(null); 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [accountToDelete, setAccountToDelete] = useState<number | null>(null); // Armazena a conta a ser excluída
+  const [selectedContaToDelete, setSelectedContaToDelete] = useState<Conta | null>(null);
+  const [openAddModal, setOpenAddModal] = useState(false); // Modal de adição de conta
 
   // Requisição à API para pegar as contas bancárias e seus ícones
   useEffect(() => {
     axios
-      .get<Conta[]>("http://localhost:8080/contas")  // Substitua pelo endpoint correto
+      .get<Conta[]>("http://localhost:8080/contas")
       .then((response) => {
-        console.log("Dados da API:", response.data);  // Verifica os dados no console
-        setContas(response.data); // Atualiza o estado com os dados da API
+        setContas(response.data);
       })
       .catch((error) => {
         console.error("Erro ao buscar as contas:", error);
       });
   }, []);
 
-  // Função para excluir a conta
-  const handleDelete = (id: number) => {
-    // Excluindo a conta via API
-    axios
-      .delete(`http://localhost:8080/contas/${id}`)  // Substitua pelo endpoint correto de exclusão
-      .then(() => {
-        setContas(contas.filter((conta) => conta.id !== id)); // Remove a conta do estado
-        setOpenDeleteModal(false);  // Fecha o modal de exclusão
-      })
-      .catch((error) => {
-        console.error("Erro ao excluir a conta:", error);
-      });
+  const handleEditClick = (conta: Conta) => {
+    setSelectedConta(conta); 
+    setOpen(true);
   };
 
-  // Função para abrir o modal de exclusão
-  const handleOpenDeleteModal = (id: number) => {
-    setAccountToDelete(id);
+  const handleDeleteClick = (conta: Conta) => {
+    setSelectedContaToDelete(conta);
     setOpenDeleteModal(true);
   };
 
-  // Função para fechar o modal de exclusão
-  const handleCloseDeleteModal = () => {
+  const handleCloseModal = () => {
+    setOpen(false);
+    setSelectedConta(null); 
+  };
+
+  const closeDeleteModal = () => {
     setOpenDeleteModal(false);
-    setAccountToDelete(null);
+    setSelectedContaToDelete(null); 
+  };
+
+  const closeAddModal = () => {
+    setOpenAddModal(false);
+  };
+
+  const handleAddConta = (novaConta: Conta) => {
+    setContas((prevContas) => [...prevContas, novaConta]); // Adiciona a nova conta ao estado local
+    closeAddModal(); // Fecha o modal após adicionar
+  };
+
+  const handleConfirmDelete = async (conta: Conta) => {
+    try {
+      const response = await axios.delete(`http://localhost:8080/contas/${conta.id}`);
+      if (response.status === 200) {
+        setContas((prevContas) => prevContas.filter((item) => item.id !== conta.id));
+        closeDeleteModal();
+      } else {
+        console.error("Erro ao excluir a conta");
+      }
+    } catch (error) {
+      console.error("Erro ao excluir a conta:", error);
+    }
   };
 
   return (
@@ -68,18 +92,25 @@ function ContasBancarias() {
       <header className={style.headerContas}>
         <h1>Contas Bancárias</h1>
         <div>
-          <AddButton texto="Adicionar Conta" onClick={() => setOpen(!open)} />
+          <AddButton texto="Adicionar Conta" onClick={() => setOpenAddModal(true)} />
         </div>
       </header>
-      {/* Exibindo ModalContas apenas se open for true */}
-      {open && <ModalContas closeModal={() => setOpen(false)} />}
-      {/* Exibindo ModalDeleteConta apenas se openDeleteModal for true */}
-      {openDeleteModal && accountToDelete && (
+
+      {open && selectedConta && (
+        <ModalEditContas closeModal={handleCloseModal} conta={selectedConta} />
+      )}
+
+      {openDeleteModal && selectedContaToDelete && (
         <ModalDeleteConta
-          onClose={handleCloseDeleteModal}
-          onConfirmDelete={() => handleDelete(accountToDelete)}
+          onClose={closeDeleteModal}
+          onConfirmDelete={() => handleConfirmDelete(selectedContaToDelete)}
         />
       )}
+
+      {openAddModal && (
+        <ModalContas closeModal={closeAddModal} onAddConta={handleAddConta} />
+      )}
+
       <main className={style.cardsContas}>
         {contas.length === 0 ? (
           <p>Não há contas disponíveis.</p>
@@ -87,12 +118,13 @@ function ContasBancarias() {
           contas.map((conta) => (
             <CardContas
               key={conta.id}
-              titulo={conta.banco.nome}  // Acesso ao nome do banco
-              tipo={conta.tipo_conta.tipoConta.replace('_', ' ')}  // Exibe o tipo de conta com espaços
+              titulo={conta.banco.nome}
+              tipo={conta.tipo_conta.tipoConta.replace('_', ' ')}
               saldo={conta.saldo}
-              banco={conta.banco.iconeUrl || '/assets/iconsContas/default.svg'}  // Acesso à URL do ícone
+              banco={conta.banco.iconeUrl || '/assets/iconsContas/default.svg'}
               altBanco={`Banco ${conta.banco.nome}`}
-              onDelete={() => handleOpenDeleteModal(conta.id)} // Passa o id da conta para o modal
+              onDelete={() => handleDeleteClick(conta)}
+              onEdit={() => handleEditClick(conta)} 
             />
           ))
         )}

@@ -6,10 +6,11 @@ interface CardContasProps {
   saldo: number;
   banco: string;
   altBanco: string;
-  onDelete: () => void;  // Não precisa do 'id' aqui
+  onDelete: () => void;
+  onEdit: () => void; // Nova função para editar
 }
 
-const CardContas: React.FC<CardContasProps> = ({ titulo, tipo, saldo, banco, altBanco, onDelete }) => {
+const CardContas: React.FC<CardContasProps> = ({ titulo, tipo, saldo, banco, altBanco, onDelete, onEdit }) => {
   const formatarSaldo = (valor: number) => {
     return valor.toLocaleString("pt-BR", {
       style: "currency",
@@ -30,14 +31,13 @@ const CardContas: React.FC<CardContasProps> = ({ titulo, tipo, saldo, banco, alt
         </div>
       </div>
       <div className={style.editar}>
-        <button>
+        <button onClick={onEdit}>
           <img
             src="/assets/iconsContas/editar.svg"
             alt="icon editar"
-            onClick={() => console.log('clicou')}
           />
         </button>
-        <button onClick={onDelete}>  {/* Chama a função de exclusão */}
+        <button onClick={onDelete}>
           <img
             src="/assets/iconsContas/excluir.svg"
             alt="icon excluir"

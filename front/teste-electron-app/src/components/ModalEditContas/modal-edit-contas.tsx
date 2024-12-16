@@ -1,39 +1,31 @@
 import { useState } from "react";
 import InputWithIcon from "../UI/InputsModal/input-modal";
-import style from "./modal-contas.module.css";
+import style from "./modal-edit-contas.module.css";
 import DropDownBancos from "../UI/DropDownBancos/drop-down-bancos";
-import DropDownTipoConta from "../UI/DropDownTipoContas/drop-down-tipo-conta"; 
+import DropDownTipoConta from "../UI/DropDownTipoContas/drop-down-tipo-conta"; // Importando o DropDownTipoConta
 
-// Definindo a interface para a Conta com todos os campos necessários
+interface ModalEditContasProps {
+    closeModal: () => void;
+    conta: Conta; // A conta precisa ter id_banco e id_tipo_conta
+  }
+  
+
 interface Conta {
   id: number;
   saldo: number;
-  banco: {
-    nome: string;
-    iconeUrl: string;
-  };
-  tipo_conta: {
-    tipoConta: string;
-  };
   id_banco: number;
   id_tipo_conta: number;
-  id_usuario: number;
-}
-
-interface ModalContasProps {
-  closeModal: () => void;
-  onAddConta: (novaConta: Conta) => void; // Função que será chamada no componente pai para adicionar a conta
 }
 
 const sendData = async ({
+  id,
   saldo,
   id_banco,
   id_tipo_conta,
-  id_usuario,
 }: Conta) => {
   try {
-    const response = await fetch("http://localhost:8080/contas", {
-      method: "POST",
+    const response = await fetch(`http://localhost:8080/contas/${id}`, {
+      method: "PUT",  // Alteração para PUT
       headers: {
         "Content-Type": "application/json",
       },
@@ -41,7 +33,6 @@ const sendData = async ({
         saldo,
         id_banco,
         id_tipo_conta,
-        id_usuario,
       }),
     });
 
@@ -57,14 +48,14 @@ const sendData = async ({
   }
 };
 
-function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
-  const [openBancos, setOpenBancos] = useState(false);
-  const [openTipoConta, setOpenTipoConta] = useState(false);
+function ModalEditContas({ closeModal, conta }: ModalEditContasProps) {
+  const [openBancos, setOpenBancos] = useState(false); // Inicializando como fechado
+  const [openTipoConta, setOpenTipoConta] = useState(false); // Inicializando como fechado
   const [isRotatedBancos, setIsRotatedBancos] = useState(false);
   const [isRotatedTipoConta, setIsRotatedTipoConta] = useState(false);
-  const [saldo, setSaldo] = useState<number | string>("");
-  const [selectedBanco, setSelectedBanco] = useState<number | null>(null);
-  const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(null);
+  const [saldo, setSaldo] = useState<number | string>(conta.saldo); // Valor do saldo inicializado com o valor da conta
+  const [selectedBanco, setSelectedBanco] = useState<number | null>(conta.id_banco); // ID do banco da conta
+  const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(conta.id_tipo_conta); // ID do tipo de conta da conta
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Função para alternar a visibilidade do dropdown de bancos
@@ -90,39 +81,31 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
+    // Verificar se todos os campos obrigatórios estão preenchidos
     if (!saldo || !selectedBanco || !selectedTipoConta) {
       setErrorMessage("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
-    const id_usuario = 1; // ID do usuário (isso pode vir de algum contexto ou estado global)
-
-    // Criar uma nova conta com todos os campos necessários
-    const novaConta: Conta = {
-      id: 0, // A API provavelmente vai gerar esse ID, ou você pode deixar como 0
-      saldo: parseFloat(saldo.toString()), // Converte o saldo para um número
-      banco: { nome: "Banco Exemplo", iconeUrl: "/path/to/icon" }, // Substitua com dados reais
-      tipo_conta: { tipoConta: "Tipo de Conta Exemplo" }, // Substitua com dados reais
-      id_banco: selectedBanco,
-      id_tipo_conta: selectedTipoConta,
-      id_usuario, // Defina o ID do usuário
-    };
-
-    const result = await sendData(novaConta);
+    const result = await sendData({
+      id: conta.id,  // Enviando o id da conta para o PUT
+      saldo: parseFloat(saldo.toString()), // Convertendo para float
+      id_banco: selectedBanco!,
+      id_tipo_conta: selectedTipoConta!,
+    });
 
     if (result.success) {
-      onAddConta(result.data); // Adiciona a nova conta ao componente pai
-      closeModal(); // Fecha o modal
+      closeModal(); // Fechar o modal após sucesso
     } else {
-      setErrorMessage(result.error?.message || "Erro ao criar a conta.");
+      setErrorMessage(result.error?.message || "Erro ao atualizar a conta.");
     }
   };
 
   return (
     <div className={style.overlay} onClick={closeModal}>
-      <div className={style.containerModalContas} onClick={(e) => e.stopPropagation()}>
-        <div className={style.headerModalContas}>
-          <p>Conta bancária</p>
+      <div className={style.containerModalEditContas} onClick={(e) => e.stopPropagation()}>
+        <div className={style.headerModalEditContas}>
+          <p>Editar Conta Bancária</p>
           <img
             src="/assets/iconsModal/iconX.svg"
             alt="Fechar"
@@ -130,7 +113,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             onClick={closeModal}
           />
         </div>
-        <form className={style.formModalContas} onSubmit={handleSubmit}>
+        <form className={style.formModalEditContas} onSubmit={handleSubmit}>
           <div className={style.formGroup}>
             <label htmlFor="saldo">Saldo: </label>
             <input
@@ -146,7 +129,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             <InputWithIcon
               label="Banco: "
               iconSrc="/assets/iconsModal/notes.svg"
-              placeholder={selectedBanco ? `Banco: ${selectedBanco}` : "Selecione o banco"}
+              placeholder={selectedBanco ? `Banco: ${selectedBanco}` : "Selecione o banco"} // Exibe o banco selecionado
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
@@ -166,7 +149,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             <InputWithIcon
               label="Tipo: "
               iconSrc="/assets/iconsModal/icontag.svg"
-              placeholder={selectedTipoConta ? `Tipo: ${selectedTipoConta}` : "Selecione o tipo"}
+              placeholder={selectedTipoConta ? `Tipo: ${selectedTipoConta}` : "Selecione o tipo"} // Exibe o tipo de conta selecionado
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
@@ -199,4 +182,4 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
   );
 }
 
-export default ModalContas;
+export default ModalEditContas;

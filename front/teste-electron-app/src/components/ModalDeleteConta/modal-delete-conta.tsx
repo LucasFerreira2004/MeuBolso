@@ -8,7 +8,7 @@ interface ModalDeleteContaProps {
 function ModalDeleteConta({ onClose, onConfirmDelete }: ModalDeleteContaProps) {
   return (
     <div className={style.containerDelete}>
-      <h3>Deseja excluir esses dados?</h3>
+      <h3>Deseja excluir esta conta?</h3>
       <div className={style.divButton}>
         <button className={style.buttonNao} onClick={onClose}>
           Não
