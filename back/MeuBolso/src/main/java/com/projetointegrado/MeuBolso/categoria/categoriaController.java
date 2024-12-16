@@ -45,7 +45,7 @@ public class categoriaController {
     }
 
     @PutMapping("/arquivadas/{id}")
-    public void arquivar(@PathVariable Long id) {
-        categoriaService.arquivar(id);
+    public CategoriaDTO arquivar(@PathVariable Long id) {
+        return categoriaService.arquivar(id);
     }
 }

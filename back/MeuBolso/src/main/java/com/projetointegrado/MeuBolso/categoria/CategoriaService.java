@@ -58,8 +58,9 @@ public class CategoriaService {
     }
 
     @Transactional
-    public void arquivar(Long id) {
+    public CategoriaDTO arquivar(Long id) {
         if (categoriaRepository.findById(id) == null) { throw new RuntimeException("id não encontrado");}
         categoriaRepository.arquivarById(id);
+        return new CategoriaDTO(categoriaRepository.findById(id).get());
     }
 }
