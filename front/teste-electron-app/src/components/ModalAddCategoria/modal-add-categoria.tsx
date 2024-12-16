@@ -1,6 +1,6 @@
 import { useState } from "react";
 import style from "./modal-add-categoria.module.css";
-import DropDownColors from "../UI/DropDownCategories/drop-down-colors";
+import DropDownColors from "../UI/DropDownColors/drop-down-colors";
 
 interface ModalAddCategoriaProps {
   closeModal: () => void;

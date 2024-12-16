@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import ModalAddCategoria from "../../components/ModalAddCategoria/modal-add-categoria";
+import ModalEditCategoria from "../../components/ModalEditCategorias/modal-edit-categorias";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./categorias.module.css";
 import InputCategorias from "../../components/UI/InputCategorias/input-categorias";
 
-// Defina o tipo para a categoria
-interface Categoria {
+
+export interface Categoria {
   id: number;
   nome: string;
   tipo: string;
@@ -14,20 +15,21 @@ interface Categoria {
 
 function Categorias() {
   const [open, setOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false); // Para saber se estamos editando ou adicionando
   const [categorias, setCategorias] = useState<Categoria[]>([]); 
   const [loading, setLoading] = useState<boolean>(true); 
+  const [categoriaToEdit, setCategoriaToEdit] = useState<Categoria | null>(null); // Categoria que será editada
 
   useEffect(() => {
-    // Função para buscar as categorias da API
     const fetchCategorias = async () => {
       try {
-        const response = await fetch("http://localhost:8080/categorias"); // Substitua pela URL da sua API
+        const response = await fetch("http://localhost:8080/categorias");
         const data: Categoria[] = await response.json();
-        setCategorias(data); // Atualiza o estado com as categorias recebidas
+        setCategorias(data);
       } catch (error) {
         console.error("Erro ao buscar categorias:", error);
       } finally {
-        setLoading(false); // Define o carregamento como falso
+        setLoading(false);
       }
     };
 
@@ -35,23 +37,42 @@ function Categorias() {
   }, []);
 
   if (loading) {
-    return <p>Carregando categorias...</p>; 
+    return <p>Carregando categorias...</p>;
   }
+
+  const handleEditClick = (categoria: Categoria) => {
+    setCategoriaToEdit(categoria); // Define a categoria a ser editada
+    setEditMode(true); // Modo de edição
+    setOpen(true); // Abre o modal
+  };
+
+  const handleAddClick = () => {
+    setEditMode(false); // Modo de adicionar
+    setCategoriaToEdit(null); // Não há categoria para editar
+    setOpen(true); // Abre o modal
+  };
 
   return (
     <div className={style.containerCategorias}>
       <header className={style.headerCategorias}>
         <h1>Categorias</h1>
         <div>
-          <AddButton texto="Adicionar Categoria" onClick={() => setOpen(true)} />
+          <AddButton texto="Adicionar Categoria" onClick={handleAddClick} />
         </div>
       </header>
 
-      {/* Exibe o modal apenas se 'open' for true */}
+      {/* Exibindo o modal dependendo do estado */}
       {open && (
         <>
-          <div className={style.overlay} onClick={() => setOpen(false)} /> {/* Overlay */}
-          <ModalAddCategoria closeModal={() => setOpen(false)} /> {/* Passa a função de fechar */}
+          <div className={style.overlay} onClick={() => setOpen(false)} />
+          {editMode && categoriaToEdit ? (
+            <ModalEditCategoria
+              closeModal={() => setOpen(false)} 
+              categoria={categoriaToEdit} // Passa a categoria para o modal de edição
+            />
+          ) : (
+            <ModalAddCategoria closeModal={() => setOpen(false)} />
+          )}
         </>
       )}
 
@@ -70,10 +91,11 @@ function Categorias() {
                   nome={categoria.nome}
                   tipo={categoria.tipo}
                   cor={categoria.cor}
+                  onClick={() => handleEditClick(categoria)} // Abre o modal de edição ao clicar
                 />
               ))}
           </div>
-          
+
           {/* Renderizando categorias de receitas */}
           <div className={style.cardReceita}>
             <h3>Receitas</h3>
@@ -87,6 +109,7 @@ function Categorias() {
                   nome={categoria.nome}
                   tipo={categoria.tipo}
                   cor={categoria.cor}
+                  onClick={() => handleEditClick(categoria)} // Abre o modal de edição ao clicar
                 />
               ))}
           </div>
