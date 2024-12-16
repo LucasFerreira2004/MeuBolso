@@ -6,9 +6,13 @@ interface TipoConta {
   id: number;
 }
 
-const DropDownTipoConta = ({ toggleDropdownTipoConta }: { toggleDropdownTipoConta: () => void }) => {
+interface DropDownTipoContaProps {
+  toggleDropdownTipoConta: () => void;
+  setTipoConta: (id: number) => void;  // Função para atualizar o estado no componente pai
+}
+
+const DropDownTipoConta = ({ toggleDropdownTipoConta, setTipoConta }: DropDownTipoContaProps) => {
   const [tiposConta, setTiposConta] = useState<TipoConta[]>([]); // Estado para armazenar os tipos de conta
-  const [isOpen, setIsOpen] = useState(true); // Inicializa como aberto
 
   // Fazendo a requisição GET para pegar os tipos de conta
   useEffect(() => {
@@ -29,9 +33,10 @@ const DropDownTipoConta = ({ toggleDropdownTipoConta }: { toggleDropdownTipoCont
     fetchTiposConta(); // Chama a função de requisição
   }, []); // O array vazio [] significa que o useEffect será chamado apenas uma vez
 
-  // Função para alternar o estado de abertura e fechamento do dropdown
-  const toggleDropdown = () => {
-    setIsOpen((prevState) => !prevState); // Alterna o estado entre verdadeiro e falso
+  // Função para lidar com a seleção do tipo de conta
+  const handleSelectTipoConta = (id: number) => {
+    setTipoConta(id);  // Passa o ID do tipo de conta para o componente pai
+    toggleDropdownTipoConta(); // Fecha o dropdown após a seleção
   };
 
   return (
@@ -42,28 +47,23 @@ const DropDownTipoConta = ({ toggleDropdownTipoConta }: { toggleDropdownTipoCont
           src="/assets/iconsModal/iconX.svg"
           alt="Fechar"
           className={style.iconClose}
-          onClick={() => {
-            toggleDropdown(); // Fecha o dropdown de tipo de conta
-            toggleDropdownTipoConta(); // Chama a função para fechar o dropdown no componente pai
-          }} // Chama a função de alternar
+          onClick={toggleDropdownTipoConta} // Chama a função para fechar o dropdown no componente pai
         />
       </div>
       {/* Se o dropdown estiver aberto, mostra a lista de tipos de conta */}
-      {isOpen && (
-        <div>
-          {tiposConta.length > 0 ? (
-            <ul className={style.dropdownList}>
-              {tiposConta.map((tipo) => (
-                <li key={tipo.id}>
-                  <a href="#">{tipo.tipoConta}</a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>Carregando tipos de conta...</p> // Mensagem exibida enquanto os dados não são carregados
-          )}
-        </div>
-      )}
+      <div>
+        {tiposConta.length > 0 ? (
+          <ul className={style.dropdownList}>
+            {tiposConta.map((tipo) => (
+              <li key={tipo.id} onClick={() => handleSelectTipoConta(tipo.id)}>
+                <a href="#">{tipo.tipoConta}</a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Carregando tipos de conta...</p> // Mensagem exibida enquanto os dados não são carregados
+        )}
+      </div>
     </div>
   );
 };

@@ -9,7 +9,12 @@ interface Banco {
   iconeUrl: string; 
 }
 
-const DropDownBancos = ({ toggleDropdownBancos }: { toggleDropdownBancos: () => void }) => {
+interface DropDownBancosProps {
+  toggleDropdownBancos: () => void;
+  setBanco: (id: number) => void;  // Função para atualizar o estado no componente pai
+}
+
+const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [bancos, setBancos] = useState<Banco[]>([]);
 
@@ -35,6 +40,12 @@ const DropDownBancos = ({ toggleDropdownBancos }: { toggleDropdownBancos: () => 
 
   if (!isOpen) return null;
 
+  // Função para lidar com a seleção do banco
+  const handleSelectBanco = (id: number) => {
+    setBanco(id);  // Passa o ID do banco para o componente pai
+    toggleDropdown(); // Fecha o dropdown após a seleção
+  };
+
   return (
     <div className={style.containerDropDownBancos}>
       <div className={style.header}>
@@ -53,6 +64,7 @@ const DropDownBancos = ({ toggleDropdownBancos }: { toggleDropdownBancos: () => 
             id={banco.id}
             nome={banco.nome}
             iconeUrl={banco.iconeUrl}
+            onClick={() => handleSelectBanco(banco.id)}  // Passa a função onClick corretamente
           />
         ))}
       </ul>

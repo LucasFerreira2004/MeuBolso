@@ -71,7 +71,7 @@
     box-sizing: border-box; /* Inclui o padding e border no cálculo da largura */
   }
   /* Estilo do botão salvar */
-  .buttonSalvar {
+  .saveButton {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -88,7 +88,7 @@
     transition: background-color 0.3s ease;
   }
   
-  .buttonSalvar:hover {
+  .saveButton:hover {
     background-color: var(--main-color-light);
   }
   
@@ -104,5 +104,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .formGroup{
+    display: flex;
+    gap: 8px;
+    margin: 10px;
+    height: 30px;
+  }
+  .formGroup input{
+    border: none;
   }
   
