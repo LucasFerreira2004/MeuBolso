@@ -88,7 +88,7 @@ function Categorias() {
                 <InputCategorias
                   key={categoria.id}
                   id={categoria.id}
-                  nome={categoria.nome}
+                  nome={toTitleCase(categoria.nome)}
                   tipo={categoria.tipo}
                   cor={categoria.cor}
                   onClick={() => handleEditClick(categoria)} // Abre o modal de edição ao clicar
@@ -106,7 +106,7 @@ function Categorias() {
                 <InputCategorias
                   key={categoria.id}
                   id={categoria.id}
-                  nome={categoria.nome}
+                  nome={toTitleCase(categoria.nome)}
                   tipo={categoria.tipo}
                   cor={categoria.cor}
                   onClick={() => handleEditClick(categoria)} // Abre o modal de edição ao clicar
@@ -118,5 +118,10 @@ function Categorias() {
     </div>
   );
 }
+
+function toTitleCase(str: string): string {
+  return str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 
 export default Categorias;
