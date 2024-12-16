@@ -1,0 +1,59 @@
+.containerDelete {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+  }
+  
+  .divButton {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .divButton button {
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+  
+  .buttonSim {
+    color: black;
+    background-color: #d3d3d3; /* Cinza claro */
+  }
+  
+  .buttonSim:hover {
+    transform: scale(1.05);
+    background-color: #b0b0b0; /* Cinza um pouco mais escuro no hover */
+  }
+  
+  .buttonSim:active {
+    background-color: #8f8f8f; /* Cor mais escura no clique */
+  }
+  
+  .buttonNao {
+    color: white;
+    background-color: #E63946; /* Vibrant red */
+  }
+  
+  .buttonNao:hover {
+    transform: scale(1.05);
+    background-color: #c1283d; /* Cor mais escura de vibrant red no hover */
+  }
+  
+  .buttonNao:active {
+    background-color: #9d1f31; /* Cor mais escura no clique */
+  }
+  

@@ -6,10 +6,10 @@ interface CardContasProps {
   saldo: number;
   banco: string;
   altBanco: string;
+  onDelete: () => void;  // Não precisa do 'id' aqui
 }
 
-const CardContas: React.FC<CardContasProps> = ({ titulo, tipo, saldo, banco, altBanco }) => {
-  // Função para formatar o saldo como moeda
+const CardContas: React.FC<CardContasProps> = ({ titulo, tipo, saldo, banco, altBanco, onDelete }) => {
   const formatarSaldo = (valor: number) => {
     return valor.toLocaleString("pt-BR", {
       style: "currency",
@@ -21,12 +21,12 @@ const CardContas: React.FC<CardContasProps> = ({ titulo, tipo, saldo, banco, alt
     <div className={style.cardContas}>
       <div className={style.parteInfo}>
         <div className={style.imagemContainer}>
-          <img src={banco} alt={altBanco} />  {/* Exibe o ícone do banco */}
+          <img src={banco} alt={altBanco} />
         </div>
         <div className={style.infoText}>
           <h3>{titulo}</h3>
           <p>Conta: {tipo}</p>
-          <p>Saldo: <span>{formatarSaldo(saldo)}</span></p>  {/* Exibe o saldo formatado */}
+          <p>Saldo: <span>{formatarSaldo(saldo)}</span></p>
         </div>
       </div>
       <div className={style.editar}>
@@ -37,7 +37,7 @@ const CardContas: React.FC<CardContasProps> = ({ titulo, tipo, saldo, banco, alt
             onClick={() => console.log('clicou')}
           />
         </button>
-        <button>
+        <button onClick={onDelete}>  {/* Chama a função de exclusão */}
           <img
             src="/assets/iconsContas/excluir.svg"
             alt="icon excluir"
