@@ -1,0 +1,61 @@
+/* Estilo para o container do dropdown */
+.containerTipo {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    border: 1px solid black;
+    position: absolute;
+    margin-left: 450px; /* Ajuste a posição conforme necessário */
+    background-color: #fff;
+    height: auto;
+    width: 170px;
+    padding: 8px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    z-index: 100; /* Garante que o dropdown fique acima de outros elementos */
+  }
+  
+  /* Estilo para a lista do dropdown */
+  .dropdownList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dropdownList li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee; /* Borda entre os itens */
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Estilo ao passar o mouse sobre os itens do dropdown */
+  .dropdownList li:hover {
+    background-color: #f5f5f5;
+  }
+  
+  /* Estilo para o texto da opção */
+  .dropdownList li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+  }
+  
+  /* Ajuste do hover do item de lista */
+  .dropdownList li:hover a {
+    color: #007bff; /* Muda a cor do texto ao passar o mouse */
+  }
+  
+  /* Estilo para a mensagem de carregamento */
+  .containerTipo p {
+    padding: 8px;
+    text-align: center;
+    color: #999;
+  }
+  .header{
+    display: flex;
+    justify-content: space-between;
+  }
+  .header h3{
+    margin: 0px;
+  }

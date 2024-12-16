@@ -3,38 +3,36 @@ import axios from "axios";
 import style from "./drop-down-bancos.module.css";
 import InputBancos from "../InputBancos/input-bancos";
 
-// Interface para tipar o banco
 interface Banco {
   id: number;
   nome: string;
-  iconeUrl: string;  // Alteração de 'iconUrl' para 'iconeUrl'
+  iconeUrl: string; 
 }
 
-const DropDownBancos = () => {
-  const [isOpen, setIsOpen] = useState(true); // Estado que controla a visibilidade do dropdown
-  const [bancos, setBancos] = useState<Banco[]>([]); // Estado para armazenar os bancos, tipado com a interface Banco
+const DropDownBancos = ({ toggleDropdownBancos }: { toggleDropdownBancos: () => void }) => {
+  const [isOpen, setIsOpen] = useState(true);
+  const [bancos, setBancos] = useState<Banco[]>([]);
 
   // Função para alternar a visibilidade do dropdown
   const toggleDropdown = () => {
-    setIsOpen(false); // Define como false para fechar o dropdown
+    setIsOpen(false); // Fecha o dropdown internamente
+    toggleDropdownBancos(); // Chama a função do componente pai para fechar também
   };
 
   // Função para buscar dados da API
   const fetchBancos = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/bancos"); // URL da API
-      setBancos(response.data); // Atualiza o estado com os dados da API
+      const response = await axios.get("http://localhost:8080/bancos"); 
+      setBancos(response.data); 
     } catch (err) {
       console.error("Erro ao buscar os dados dos bancos:", err);
     }
   };
 
-  // Carrega os dados dos bancos ao montar o componente
   useEffect(() => {
-    fetchBancos();
-  }, []); // O array vazio [] faz a chamada apenas uma vez após o componente ser montado
+    fetchBancos(); 
+  }, []);
 
-  // Se o dropdown estiver fechado, retorna null (não renderiza nada)
   if (!isOpen) return null;
 
   return (
@@ -45,17 +43,16 @@ const DropDownBancos = () => {
           src="/assets/iconsModal/iconX.svg"
           alt="Fechar"
           className={style.iconClose}
-          onClick={toggleDropdown}
+          onClick={toggleDropdown} 
         />
       </div>
       <ul className={style.listaBancos}>
-        {/* Mapeia os bancos e renderiza cada InputBancos */}
         {bancos.map((banco) => (
           <InputBancos
-            key={banco.id} // Cada item precisa de uma key única
+            key={banco.id}
             id={banco.id}
             nome={banco.nome}
-            iconeUrl={banco.iconeUrl}  // Alteração de 'iconUrl' para 'iconeUrl'
+            iconeUrl={banco.iconeUrl}
           />
         ))}
       </ul>

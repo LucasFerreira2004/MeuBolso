@@ -42,7 +42,6 @@ function ContasBancarias() {
           <AddButton texto="Adicionar Conta" onClick={() => setOpen(!open)} />
         </div>
       </header>
-
       {/* Exibindo ModalContas apenas se open for true */}
       {open && <ModalContas closeModal={() => setOpen(false)} />}
 
