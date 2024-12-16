@@ -2,14 +2,14 @@
     display: flex;
     flex-direction: column;
     height: 100vh; /* Ocupa 100% da altura da tela */
-    margin-left: 300px; /* Remover a margem fixa à esquerda */
+    margin-left: 260px; /* Remover a margem fixa à esquerda */
     padding: 20px;
-}
-
+}   
 .headerCategorias {
     display: flex;
     justify-content: space-between;
     width: 100%;
+
     margin-bottom: 20px; /* Adiciona um espaço entre o header e o conteúdo */
 }
 
@@ -38,14 +38,35 @@
     margin: 0 auto; /* Centraliza os cards */
 }
 
-/* Overlay para fundo escuro */
+.cardDespesa{
+    width: 370px;
+    margin-right: 30px;
+}
+.cardDespesa hr{
+    border: none; 
+    border-top: 2px dotted #000; 
+    margin: 20px 0;
+}
+.cardReceita{
+    width: 360px;
+    margin-left: 30px;
+    margin-right: 20px;
+}
+.cardReceita hr{
+    border: none; 
+    border-top: 2px dotted #000; 
+    margin: 20px 0; 
+}
+.hrCentral{
+    border: 1px solid black;
+}
 .overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro com opacidade */
-    z-index: 998; /* Fica atrás do modal */
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 998; 
   }
   

@@ -95,7 +95,7 @@ function Categorias() {
                 />
               ))}
           </div>
-
+              <hr className={style.hrCentral}/>
           {/* Renderizando categorias de receitas */}
           <div className={style.cardReceita}>
             <h3>Receitas</h3>

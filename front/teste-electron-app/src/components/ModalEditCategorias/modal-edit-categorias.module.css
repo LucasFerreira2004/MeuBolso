@@ -45,7 +45,7 @@
   }
   
   .formGroup button {
-    margin-left: auto; /* Empurra o botão para o final */
+    margin-left: auto; 
     border: none;
     cursor: pointer;
   }
@@ -61,12 +61,11 @@
     height: 30px;
     border: none;
     border-bottom: 1px solid black;
-    box-sizing: border-box; /* Inclui padding e borda no cálculo de largura */
+    box-sizing: border-box;
   }
-  
   .formGroup input:focus {
-    border-color: var(--main-color-light); /* Cor da borda ao focar no input */
-    outline: none; /* Remove o contorno padrão */
+    border-color: var(--main-color-light); 
+    outline: none; 
   }
   
   .radioGroup {
@@ -83,7 +82,7 @@
   }
   
   .radioGroup input {
-    accent-color: var(--primary-color); /* Define a cor do botão de rádio */
+    accent-color: var(--primary-color); 
     cursor: pointer;
   }
   
@@ -99,45 +98,26 @@
     font-size: 1rem;
     font-weight: bold;
     color: #fff;
-    background-color: var(--main-color); /* Cor original do botão de salvar */
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease; /* Efeito de transição para hover e clique */
-  }
-  
-  .saveButton:hover {
-    background-color: var(--main-color-light); /* Cor de fundo mais clara no hover */
-    transform: scale(1.05); /* Efeito de zoom no hover */
-  }
-  
-  .saveButton:active {
-    background-color: darken(var(--main-color), 10%); /* Cor um pouco mais escura quando clicado */
-  }
-  
-  .deleteButton {
-    padding: 7px 20px;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #fff;
-    background-color: #e74c3c; /* Vermelho escuro */
+    background-color: var(--main-color);
     border-radius: 4px;
     border: none;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease;
-    margin-right: 10px; /* Espaço entre os botões */
   }
   
-  .deleteButton:hover {
-    background-color: #c0392b; /* Vermelho mais forte para o hover */
-    transform: scale(1.05); /* Efeito de zoom para destacar no hover */
+  .saveButton:hover {
+    background-color: var(--main-color-light); 
+    transform: scale(1.05);
+  }
+  
+  .saveButton:active {
+    background-color: darken(var(--main-color), 10%);
   }
   
   .deleteButton:active {
-    background-color: #a93226; /* Tom mais escuro no clique */
+    background-color: #a93226;
   }
   
-  /* Novo estilo para o botão de cor */
   .colorButton {
     display: flex;
     align-items: center;
@@ -151,20 +131,19 @@
   }
   
   .colorSet {
-    width: 25px; /* Tamanho da bolinha de cor */
+    width: 25px;
     height: 25px;
     border-radius: 50%;
-    background-color: #000; /* Cor de fundo inicial */
+    background-color: #000; 
     border: 2px solid #ccc;
-    transition: transform 0.2s ease, border-color 0.2s ease; /* Transição para animação */
+    transition: transform 0.2s ease, border-color 0.2s ease; 
   }
   
   .colorSet:hover {
     border-color: var(--main-color-light);
-    transform: scale(1.1); /* Efeito de zoom */
+    transform: scale(1.1);
   }
   
-  /* Estilos do Dropdown de cores */
   .containerDropDownCategories {
     position: absolute;
     top: 50%;
@@ -208,6 +187,6 @@
   
   .colorOption:hover {
     transform: scale(1.1);
-    border-color: var(--main-color-light); /* Adiciona um destaque na borda ao passar o mouse */
+    border-color: var(--main-color-light);
   }
   
