@@ -57,15 +57,15 @@ public class ContaService {
     }
 
     @Transactional
-    public Conta deleteConta(Long id) {
+    public ContaDTO deleteConta(Long id) {
         //tratar erro de id null
         Conta conta = contaRepository.findById(id).orElse(null);
         contaRepository.delete(conta);
-        return conta;
+        return new ContaDTO(conta);
     }
 
     @Transactional
-    public Conta updateConta (Long id, ContaPutDTO dto) {
+    public ContaDTO updateConta (Long id, ContaPutDTO dto) {
         //tratar caso seja nulo!
         TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
@@ -74,6 +74,6 @@ public class ContaService {
         conta.setSaldo(dto.getSaldo());
         conta.setTipo_conta(tipo);
         conta.setBanco(banco);
-        return contaRepository.save(conta);
+        return new ContaDTO(contaRepository.save(conta));
     }
 }

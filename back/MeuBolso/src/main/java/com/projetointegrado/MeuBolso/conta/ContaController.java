@@ -31,12 +31,12 @@ public class ContaController {
         return contaService.saveConta(contaPostDTO);
     }
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id, @RequestBody ContaPutDTO contaPostDTO){
-        contaService.updateConta(id, contaPostDTO);
+    public ContaDTO update(@PathVariable Long id, @RequestBody ContaPutDTO contaPostDTO){
+        return contaService.updateConta(id, contaPostDTO);
     }
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
-        contaService.deleteConta(id);
+    public ContaDTO delete(@PathVariable Long id){
+        return contaService.deleteConta(id);
     }
 
 }
