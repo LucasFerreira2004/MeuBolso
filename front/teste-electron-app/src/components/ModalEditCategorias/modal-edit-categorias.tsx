@@ -6,6 +6,7 @@ import DropDownColors from "../../components/UI/DropDownColors/drop-down-colors"
 interface ModalEditCategoriaProps {
   closeModal: () => void;
   categoria: Categoria;
+  onCategoriaSaved: () => void;  // Função para atualizar a lista de categorias
 }
 
 const sendData = async (categoria: Categoria) => {
@@ -31,7 +32,7 @@ const sendData = async (categoria: Categoria) => {
   }
 };
 
-const ModalEditCategoria: React.FC<ModalEditCategoriaProps> = ({ closeModal, categoria }) => {
+const ModalEditCategoria: React.FC<ModalEditCategoriaProps> = ({ closeModal, categoria, onCategoriaSaved }) => {
   const [nome, setNome] = useState(categoria.nome);
   const [tipo, setTipo] = useState(categoria.tipo);
   const [cor, setCor] = useState(categoria.cor);
@@ -46,7 +47,8 @@ const ModalEditCategoria: React.FC<ModalEditCategoriaProps> = ({ closeModal, cat
 
     if (result.success) {
       console.log("Categoria atualizada com sucesso!");
-      closeModal();
+      onCategoriaSaved();  // Chama a função de atualização da lista de categorias
+      closeModal();        // Fecha o modal
     } else {
       console.error("Erro ao atualizar categoria:", result.error);
     }

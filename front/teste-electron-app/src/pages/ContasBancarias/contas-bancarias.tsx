@@ -72,6 +72,13 @@ function ContasBancarias() {
     setContas((prevContas) => [...prevContas, novaConta]); // Adiciona a nova conta ao estado local
     closeAddModal(); // Fecha o modal após adicionar
   };
+  const handleUpdateConta = (contaAtualizada: Conta) => {
+    setContas((prevContas) =>
+      prevContas.map((conta) =>
+        conta.id === contaAtualizada.id ? contaAtualizada : conta
+      )
+    );
+  };
 
   const handleConfirmDelete = async (conta: Conta) => {
     try {
@@ -97,7 +104,11 @@ function ContasBancarias() {
       </header>
 
       {open && selectedConta && (
-        <ModalEditContas closeModal={handleCloseModal} conta={selectedConta} />
+        <ModalEditContas 
+        closeModal={handleCloseModal} 
+        conta={selectedConta} 
+        onUpdateConta={handleUpdateConta}  // Passando a função de atualização
+        />
       )}
 
       {openDeleteModal && selectedContaToDelete && (

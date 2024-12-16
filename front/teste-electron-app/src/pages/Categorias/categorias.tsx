@@ -5,7 +5,6 @@ import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./categorias.module.css";
 import InputCategorias from "../../components/UI/InputCategorias/input-categorias";
 
-
 export interface Categoria {
   id: number;
   nome: string;
@@ -21,35 +20,41 @@ function Categorias() {
   const [categoriaToEdit, setCategoriaToEdit] = useState<Categoria | null>(null); // Categoria que será editada
 
   useEffect(() => {
-    const fetchCategorias = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/categorias");
-        const data: Categoria[] = await response.json();
-        setCategorias(data);
-      } catch (error) {
-        console.error("Erro ao buscar categorias:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchCategorias();
   }, []);
+
+  const fetchCategorias = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:8080/categorias");
+      const data: Categoria[] = await response.json();
+      setCategorias(data);
+    } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return <p>Carregando categorias...</p>;
   }
 
   const handleEditClick = (categoria: Categoria) => {
-    setCategoriaToEdit(categoria); // Define a categoria a ser editada
-    setEditMode(true); // Modo de edição
-    setOpen(true); // Abre o modal
+    setCategoriaToEdit(categoria); 
+    setEditMode(true); 
+    setOpen(true);
   };
 
   const handleAddClick = () => {
-    setEditMode(false); // Modo de adicionar
-    setCategoriaToEdit(null); // Não há categoria para editar
-    setOpen(true); // Abre o modal
+    setEditMode(false); 
+    setCategoriaToEdit(null); 
+    setOpen(true);
+  };
+
+  const handleCategoriaSaved = () => {
+    fetchCategorias(); 
+    setOpen(false);     
   };
 
   return (
@@ -69,9 +74,13 @@ function Categorias() {
             <ModalEditCategoria
               closeModal={() => setOpen(false)} 
               categoria={categoriaToEdit} // Passa a categoria para o modal de edição
+              onCategoriaSaved={handleCategoriaSaved} // Passa a função de atualização
             />
           ) : (
-            <ModalAddCategoria closeModal={() => setOpen(false)} />
+            <ModalAddCategoria 
+              closeModal={() => setOpen(false)} 
+              onCategoriaSaved={handleCategoriaSaved} // Passa a função de atualização
+            />
           )}
         </>
       )}
@@ -122,6 +131,5 @@ function Categorias() {
 function toTitleCase(str: string): string {
   return str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 }
-
 
 export default Categorias;

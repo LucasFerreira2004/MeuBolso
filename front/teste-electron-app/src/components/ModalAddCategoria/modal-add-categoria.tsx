@@ -4,6 +4,7 @@ import DropDownColors from "../UI/DropDownColors/drop-down-colors";
 
 interface ModalAddCategoriaProps {
   closeModal: () => void;
+  onCategoriaSaved: () => void;  // Função para notificar que a categoria foi salva
 }
 
 interface CategoriaProps {
@@ -34,7 +35,7 @@ const sendData = async ({ cor, nome, tipo }: CategoriaProps) => {
   }
 };
 
-function ModalAddCategoria({ closeModal }: ModalAddCategoriaProps) {
+function ModalAddCategoria({ closeModal, onCategoriaSaved }: ModalAddCategoriaProps) {
   const [openColors, setOpenColors] = useState(false);
   const [name, setName] = useState("");
   const [selectedValue, setSelectedValue] = useState<string>("");
@@ -62,7 +63,8 @@ function ModalAddCategoria({ closeModal }: ModalAddCategoriaProps) {
     });
 
     if (result.success) {
-      closeModal();
+      onCategoriaSaved();  // Chama a função para atualizar a lista de categorias
+      closeModal();  // Fecha o modal após salvar
     } else {
       setErrorMessage(result.error?.message || "Erro ao criar a categoria.");
     }

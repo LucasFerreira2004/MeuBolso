@@ -57,3 +57,16 @@
     background-color: #9d1f31; /* Cor mais escura no clique */
   }
   
+  /* Estilo do overlay */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
