@@ -27,8 +27,8 @@ public class ContaController {
         return contaService.findAllMin();
     }
     @PostMapping
-    public void save(@RequestBody ContaPostDTO contaPostDTO){
-        Conta contaSalva = contaService.saveConta(contaPostDTO);
+    public ContaDTO save(@RequestBody ContaPostDTO contaPostDTO){
+        return contaService.saveConta(contaPostDTO);
     }
     @PutMapping("/{id}")
     public void update(@PathVariable Long id, @RequestBody ContaPutDTO contaPostDTO){

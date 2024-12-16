@@ -46,14 +46,14 @@ public class ContaService {
         return result.stream().map(ContaMinDTO::new).toList();
     }
     @Transactional
-    public Conta saveConta(ContaPostDTO dto) {
+    public ContaDTO saveConta(ContaPostDTO dto) {
         //tratar erros de ids que não existem!.
         TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
         Usuario usuario = usuarioRepository.findById(dto.getId_usuario()).orElse(null);
 
         Conta conta = new Conta(null, dto.getSaldo(), tipo, banco, usuario);
-        return contaRepository.save(conta);
+        return new ContaDTO(contaRepository.save(conta));
     }
 
     @Transactional
