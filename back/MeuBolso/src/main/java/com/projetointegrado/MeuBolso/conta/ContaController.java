@@ -1,12 +1,10 @@
 package com.projetointegrado.MeuBolso.conta;
 
-import com.projetointegrado.MeuBolso.conta.dto.ContaMinDTO;
-import com.projetointegrado.MeuBolso.conta.dto.ContaPostDTO;
-import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
-import com.projetointegrado.MeuBolso.conta.dto.ContaPutDTO;
+import com.projetointegrado.MeuBolso.conta.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -25,6 +23,10 @@ public class ContaController {
     @GetMapping("/min")
     public List<ContaMinDTO> findMin() {
         return contaService.findAllMin();
+    }
+    @GetMapping("/saldoTotal")
+    public SaldoTotalDTO findSaldoTotal() {
+        return contaService.getSaldo();
     }
     @PostMapping
     public ContaDTO save(@RequestBody ContaPostDTO contaPostDTO){
