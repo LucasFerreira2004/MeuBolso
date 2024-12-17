@@ -10,7 +10,7 @@ insert into usuario(nome, email, senha) values ('Maria do Rosario Oliveira', 'ma
 
 /*BANCO*/
 insert into banco (nome, icone_url) values ('Bradesco', 'https://play-lh.googleusercontent.com/ReQEaxm44OuduIlJEVO_-xs9iZXSyRNdzGKrONYoLSgAdOzyhPKTb1xuuoPXK6tABm0');
-insert into banco (nome, icone_url) values ('Banco do Brasil', 'url');
+insert into banco (nome, icone_url) values ('Banco do Brasil', 'https://play-lh.googleusercontent.com/1-aNhsSPNqiVluwNGZar_7F5PbQ4u1zteuJ1jumnArhe8bfYHHaVwu4aVOF5-NAmLaA');
 insert into banco (nome, icone_url) values ('Nubank', 'https://t.ctcdn.com.br/DIEw0gGtQl_GNhWXJwgrRmuGpIk=/i624750.png');
 /*CONTA*/
 insert into conta(saldo, tipo_conta_id, banco_id, usuario_id) values ('1412', '1', '3', '1');

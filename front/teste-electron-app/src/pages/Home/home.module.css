@@ -1,46 +1,40 @@
-/* ==================== Container principal ==================== */
 .home {
   display: flex;
   flex-direction: column;
-  margin-left: 300px;
+  margin-left: 270px;
 }
 
-/* ==================== Header ==================== */
 .header {
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  flex-grow: 1; /* Ocupa o restante da largura disponível */
+  flex-grow: 1;
 }
 
-/* Título do Header */
 h1 {
   font-weight: 300;
 }
 
 .userName {
-  padding-left: 0;
   font-size: xx-large;
   color: #E17A05;
   font-weight: 400;
   display: inline;
 }
 
-/* ==================== SubHeader ==================== */
 .subHeader {
   display: flex;
-  align-items: center; /* Alinha o conteúdo verticalmente */
+  align-items: center;
   justify-content: space-between;
   background-color: var(--gray);
   border-radius: 8px;
-  margin: 15px 25px 0 25px; /* Top, lateral direita/esquerda */
-  padding-right: 12px; /* Padding à direita para o botão */
+  margin: 15px 25px 0 25px;
+  padding-right: 12px;
 }
 
-/* Estilos do saldo */
 .headerSaldo {
   display: flex;
-  align-items: center; /* Alinha a imagem e o texto verticalmente */
+  align-items: center;
   margin-left: 30px;
 }
 
@@ -57,84 +51,68 @@ h1 {
   display: inline;
 }
 
-/* ==================== Corpo principal ==================== */
 .body {
   display: flex;
-  justify-content: space-around; /* Centraliza os cards */
-  padding: 20px; /* Espaçamento interno no topo e nas laterais */
+  justify-content: space-around;
+  padding: 20px;
 }
 
-/* ==================== Cards (estrutura geral) ==================== */
-/* Cards Container */
 .cards {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 100%; /* Ocupa toda a largura disponível */
-  max-width: 1300px; /* Define um limite máximo de largura */
+  width: 100%;
+  max-width: 1300px;
 }
 
 .cards1 {
   display: flex;
-  justify-content: space-between; /* Espaçamento entre os cards */
-  gap: 20px; /* Espaçamento adicional entre os cards */
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .cards2 {
   display: flex;
   flex-direction: column;
-  flex: 1; /* Faz os cards crescerem igualmente */
-  padding: 10px; /* Espaçamento interno */
+  flex: 1;
+  padding: 10px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
-.cards2 h2{
+.cards2 h2 {
   margin-top: 0px;
 }
-.cards3 {
-  display: flex;
-  flex-direction: column;
-  flex: 1; /* Faz os cards crescerem igualmente */
-  padding: 10px; /* Espaçamento interno */
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
-}
 
-/* ==================== Card de saldo ==================== */
 .cardSaldo {
   display: flex;
   flex-direction: column;
-  flex: 1; /* Faz os cards crescerem igualmente */
-  max-width: 30%; /* Limita o card a 30% da largura total */
-  padding: 10px; /* Espaçamento interno */
+  flex: 1;
+  max-width: 30%;
+  padding: 10px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Título do card */
 .hTitulo {
   display: flex;
   flex-direction: row;
   justify-items: center;
 }
 
-/* ==================== Card de histórico ==================== */
 .cardHistorico {
   display: flex;
   flex-direction: column;
   font-size: small;
-  flex: 3; /* Faz o card histórico ocupar mais espaço */
-  max-width: 65%; /* Limita o card a 65% da largura total */
-  padding: 10px; /* Espaçamento interno */
+  flex: 3;
+  max-width: 65%;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .titulotransacoes {
@@ -146,17 +124,24 @@ h1 {
   font-weight: 600;
   font-size: medium;
 }
+.linebanks p{
+  margin: 9px;
+}
+.linebanks img{
+  width: 33px;
+  height: 33px;
+  border-radius: 50%; 
+  object-fit: cover; 
+}
 
-/* ==================== Linhas internas ==================== */
 .linebanks,
 .linesTransacoes {
   display: flex;
   align-items: center;
-  gap: 10px; /* Espaçamento entre ícone e texto */
-  margin-bottom: 10px; /* Espaço inferior entre as linhas */
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
-/* ==================== Ícones ==================== */
 .iconNubank,
 .iconBrades,
 .iconH {
@@ -164,13 +149,12 @@ h1 {
   height: 24px;
 }
 
-/* ==================== Estilização específica para cores ==================== */
 .spanRed span {
   color: var(--vibrant-red);
   font-weight: 700;
 }
 
 .spanGreen span {
-  color: var(--vibrant-grenn);
+  color: var(--vibrant-green);
   font-weight: 700;
 }
