@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import style from "./home.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
 import CardMetas from "../../components/CardMetas/card-metas";
+import Example from "../../components/UI/Mycharts/my-charts";
 
 interface Banco {
   iconeUrl: string;
@@ -144,7 +145,9 @@ function Home() {
           </div>
 
           <div className={style.cards3}>
-            <div className={style.graphic}></div>
+            <div className={style.graphic}>
+              <Example/>
+            </div>
           </div>
         </div>
       </main>
