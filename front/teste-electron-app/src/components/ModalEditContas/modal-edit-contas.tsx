@@ -2,13 +2,13 @@ import { useState } from "react";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-edit-contas.module.css";
 import DropDownBancos from "../UI/DropDownBancos/drop-down-bancos";
-import DropDownTipoConta from "../UI/DropDownTipoContas/drop-down-tipo-conta"; // Importando o DropDownTipoConta
+import DropDownTipoConta from "../UI/DropDownTipoContas/drop-down-tipo-conta";
 
 interface ModalEditContasProps {
     closeModal: () => void;
-    conta: Conta; // A conta precisa ter id_banco e id_tipo_conta
-  }
-  
+    conta: Conta; 
+    refreshContas: () => void;  // Nova propriedade para refrescar a lista de contas
+}
 
 interface Conta {
   id: number;
@@ -25,7 +25,7 @@ const sendData = async ({
 }: Conta) => {
   try {
     const response = await fetch(`http://localhost:8080/contas/${id}`, {
-      method: "PUT",  // Alteração para PUT
+      method: "PUT",  
       headers: {
         "Content-Type": "application/json",
       },
@@ -48,17 +48,16 @@ const sendData = async ({
   }
 };
 
-function ModalEditContas({ closeModal, conta }: ModalEditContasProps) {
-  const [openBancos, setOpenBancos] = useState(false); // Inicializando como fechado
-  const [openTipoConta, setOpenTipoConta] = useState(false); // Inicializando como fechado
+function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasProps) {
+  const [openBancos, setOpenBancos] = useState(false); 
+  const [openTipoConta, setOpenTipoConta] = useState(false); 
   const [isRotatedBancos, setIsRotatedBancos] = useState(false);
   const [isRotatedTipoConta, setIsRotatedTipoConta] = useState(false);
-  const [saldo, setSaldo] = useState<number | string>(conta.saldo); // Valor do saldo inicializado com o valor da conta
-  const [selectedBanco, setSelectedBanco] = useState<number | null>(conta.id_banco); // ID do banco da conta
-  const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(conta.id_tipo_conta); // ID do tipo de conta da conta
+  const [saldo, setSaldo] = useState<number | string>(conta.saldo); 
+  const [selectedBanco, setSelectedBanco] = useState<number | null>(conta.id_banco); 
+  const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(conta.id_tipo_conta);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Função para alternar a visibilidade do dropdown de bancos
   const toggleDropdownBancos = () => {
     if (openTipoConta) {
       setOpenTipoConta(false);
@@ -68,7 +67,6 @@ function ModalEditContas({ closeModal, conta }: ModalEditContasProps) {
     setIsRotatedBancos(!isRotatedBancos);
   };
 
-  // Função para alternar a visibilidade do dropdown de tipo de conta
   const toggleDropdownTipoConta = () => {
     if (openBancos) {
       setOpenBancos(false);
@@ -81,21 +79,21 @@ function ModalEditContas({ closeModal, conta }: ModalEditContasProps) {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Verificar se todos os campos obrigatórios estão preenchidos
     if (!saldo || !selectedBanco || !selectedTipoConta) {
       setErrorMessage("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
     const result = await sendData({
-      id: conta.id,  // Enviando o id da conta para o PUT
-      saldo: parseFloat(saldo.toString()), // Convertendo para float
+      id: conta.id, 
+      saldo: parseFloat(saldo.toString()),
       id_banco: selectedBanco!,
       id_tipo_conta: selectedTipoConta!,
     });
 
     if (result.success) {
-      closeModal(); // Fechar o modal após sucesso
+      closeModal();
+      refreshContas();  // Atualiza a lista de contas após salvar as alterações
     } else {
       setErrorMessage(result.error?.message || "Erro ao atualizar a conta.");
     }
@@ -149,7 +147,7 @@ function ModalEditContas({ closeModal, conta }: ModalEditContasProps) {
             <InputWithIcon
               label="Tipo: "
               iconSrc="/assets/iconsModal/icontag.svg"
-              placeholder={selectedTipoConta ? `Tipo: ${selectedTipoConta}` : "Selecione o tipo"} // Exibe o tipo de conta selecionado
+              placeholder={selectedTipoConta ? `Tipo: ${selectedTipoConta}` : "Selecione o tipo"} 
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"

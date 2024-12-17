@@ -22,18 +22,15 @@ interface Conta {
   id_usuario: number;
 }
 
-
-
 function ContasBancarias() {
   const [contas, setContas] = useState<Conta[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedConta, setSelectedConta] = useState<Conta | null>(null); 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedContaToDelete, setSelectedContaToDelete] = useState<Conta | null>(null);
-  const [openAddModal, setOpenAddModal] = useState(false); // Modal de adição de conta
+  const [openAddModal, setOpenAddModal] = useState(false);
 
-  // Requisição à API para pegar as contas bancárias e seus ícones
-  useEffect(() => {
+  const fetchContas = () => {
     axios
       .get<Conta[]>("http://localhost:8080/contas")
       .then((response) => {
@@ -42,6 +39,10 @@ function ContasBancarias() {
       .catch((error) => {
         console.error("Erro ao buscar as contas:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchContas();
   }, []);
 
   const handleEditClick = (conta: Conta) => {
@@ -57,11 +58,13 @@ function ContasBancarias() {
   const handleCloseModal = () => {
     setOpen(false);
     setSelectedConta(null); 
+    fetchContas(); // Atualiza a lista de contas após fechar o modal de edição
   };
 
   const closeDeleteModal = () => {
     setOpenDeleteModal(false);
     setSelectedContaToDelete(null); 
+    fetchContas(); // Atualiza a lista de contas após fechar o modal de exclusão
   };
 
   const closeAddModal = () => {
@@ -69,8 +72,9 @@ function ContasBancarias() {
   };
 
   const handleAddConta = (novaConta: Conta) => {
-    setContas((prevContas) => [...prevContas, novaConta]); // Adiciona a nova conta ao estado local
-    closeAddModal(); // Fecha o modal após adicionar
+    setContas((prevContas) => [...prevContas, novaConta]); 
+    closeAddModal();
+    fetchContas(); // Atualiza a lista de contas após adicionar uma nova conta
   };
 
   const handleConfirmDelete = async (conta: Conta) => {
@@ -97,7 +101,7 @@ function ContasBancarias() {
       </header>
 
       {open && selectedConta && (
-        <ModalEditContas closeModal={handleCloseModal} conta={selectedConta} />
+        <ModalEditContas closeModal={handleCloseModal} conta={selectedConta} refreshContas={fetchContas} />
       )}
 
       {openDeleteModal && selectedContaToDelete && (

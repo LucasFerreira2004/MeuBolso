@@ -8,6 +8,7 @@ import Home from './pages/Home/home.tsx'
 import Cadastro from './pages/Cadastro/cadastro.tsx'
 import ContasBancarias from './pages/ContasBancarias/contas-bancarias.tsx'
 import Categorias from './pages/Categorias/categorias.tsx'
+import PageTeste from './pages/PageTeste/page-teste.tsx'
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
         element: <Home/>
       },
       {
+        path: "/perfil",
+        element: <PageTeste/>
+      },
+      {
         path: "/contas",
         element: <ContasBancarias/>
       },
@@ -35,8 +40,20 @@ const router = createBrowserRouter([
         element: <Categorias/>
       },
       {
-        path: "/home",
-        element: <Home/>
+        path: "/transacoes",
+        element: <PageTeste/>
+      },
+      {
+        path: "/metas",
+        element: <PageTeste/>
+      },
+      {
+        path: "/relatorios",
+        element: <PageTeste/>
+      },
+      {
+        path: "/profile",
+        element: <PageTeste/>
       },
 
     ],
