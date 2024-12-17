@@ -1,74 +1,87 @@
-/* Classe para aplicar fundo laranja na tela de login */
 .pageBackground {
-    background-color: var(--main-color); /* Cor de fundo laranja */
-    min-height: 100vh; /* Garantir que a tela ocupe toda a altura */
-    display: flex;
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
-  }
-  
-  /* Estilos para o container principal */
-  .mainContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 50px;
-    margin-left: auto;
-    border-radius: 15px;
-    margin-right: auto;
-    width: 458px;
-    height: 383px;
-    background-color: #fff; /* Cor de fundo branco para o formulário */
-  }
-  
-  .containerInput {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    padding-top: 24px;
-  }
-  
-  .iconLogo {
-    width: 175px;
-  }
-  
-  .input {
-    width: 280px;
-    height: 30px;
-    border: 0.2px solid #b9b9b9;
-    border-radius: 5px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2); /* Borda borrada */
-  }
-  
-  .buttonC {
-    margin-top: 20px;
-    width: 180px;
-    height: 35px;
-    border: none;
-    border-radius: 7px;
-    font-size: large;
-    background-color: var(--main-color);
-  }
-  
-  .buttonC:hover {
-    background-color: var(--main-color-light);
-    cursor: pointer;
-  }
-  
-  .containerInput > h3 {
-    font-size: smaller;
-  }
-  
-  .plogin {
-    font-size: 10px;
-    color: #E17A05;
-    text-decoration: underline;
-    cursor: pointer;
-    padding-left: 213px;
-  }
-  
-  .plogin:hover {
-    color: #FFA238;
-    cursor: pointer;
-  }
-  
+  background-color: #f4a261; /* Fundo laranja */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainContainer {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 400px;
+  max-width: 100%;
+}
+
+.containerLogo {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.iconLogo {
+  width: 100px;
+  height: auto;
+}
+
+.containerInput {
+  margin-bottom: 20px;
+}
+
+.inputEmail, .inputPassword {
+  margin-bottom: 15px;
+}
+
+.hC {
+  margin: 0 0 5px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #333;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.plogin {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 20px;
+  text-align: end;
+  cursor: pointer;
+}
+
+.plogin:hover {
+  text-decoration: underline;
+}
+
+.buttonC {
+  background-color: var(--main-color);
+  width: 300px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 0 auto; 
+  display: block; 
+}
+
+.buttonC:hover {
+  background-color: var(--main-color-light);
+}
