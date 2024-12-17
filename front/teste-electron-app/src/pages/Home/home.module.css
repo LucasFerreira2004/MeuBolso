@@ -1,0 +1,176 @@
+/* ==================== Container principal ==================== */
+.home {
+  display: flex;
+  flex-direction: column;
+  margin-left: 300px;
+}
+
+/* ==================== Header ==================== */
+.header {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  flex-grow: 1; /* Ocupa o restante da largura disponível */
+}
+
+/* Título do Header */
+h1 {
+  font-weight: 300;
+}
+
+.userName {
+  padding-left: 0;
+  font-size: xx-large;
+  color: #E17A05;
+  font-weight: 400;
+  display: inline;
+}
+
+/* ==================== SubHeader ==================== */
+.subHeader {
+  display: flex;
+  align-items: center; /* Alinha o conteúdo verticalmente */
+  justify-content: space-between;
+  background-color: var(--gray);
+  border-radius: 8px;
+  margin: 15px 25px 0 25px; /* Top, lateral direita/esquerda */
+  padding-right: 12px; /* Padding à direita para o botão */
+}
+
+/* Estilos do saldo */
+.headerSaldo {
+  display: flex;
+  align-items: center; /* Alinha a imagem e o texto verticalmente */
+  margin-left: 30px;
+}
+
+.iconHeader {
+  width: 30px;
+}
+
+.pHeader {
+  margin-left: 10px;
+}
+
+.sHeader {
+  color: var(--main-color);
+  display: inline;
+}
+
+/* ==================== Corpo principal ==================== */
+.body {
+  display: flex;
+  justify-content: space-around; /* Centraliza os cards */
+  padding: 20px; /* Espaçamento interno no topo e nas laterais */
+}
+
+/* ==================== Cards (estrutura geral) ==================== */
+/* Cards Container */
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%; /* Ocupa toda a largura disponível */
+  max-width: 1300px; /* Define um limite máximo de largura */
+}
+
+.cards1 {
+  display: flex;
+  justify-content: space-between; /* Espaçamento entre os cards */
+  gap: 20px; /* Espaçamento adicional entre os cards */
+}
+
+.cards2 {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Faz os cards crescerem igualmente */
+  padding: 10px; /* Espaçamento interno */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+.cards2 h2{
+  margin-top: 0px;
+}
+.cards3 {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Faz os cards crescerem igualmente */
+  padding: 10px; /* Espaçamento interno */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+/* ==================== Card de saldo ==================== */
+.cardSaldo {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Faz os cards crescerem igualmente */
+  max-width: 30%; /* Limita o card a 30% da largura total */
+  padding: 10px; /* Espaçamento interno */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+/* Título do card */
+.hTitulo {
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+}
+
+/* ==================== Card de histórico ==================== */
+.cardHistorico {
+  display: flex;
+  flex-direction: column;
+  font-size: small;
+  flex: 3; /* Faz o card histórico ocupar mais espaço */
+  max-width: 65%; /* Limita o card a 65% da largura total */
+  padding: 10px; /* Espaçamento interno */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+.titulotransacoes {
+  display: flex;
+  justify-content: space-between;
+}
+
+.titulotransacoes p {
+  font-weight: 600;
+  font-size: medium;
+}
+
+/* ==================== Linhas internas ==================== */
+.linebanks,
+.linesTransacoes {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espaçamento entre ícone e texto */
+  margin-bottom: 10px; /* Espaço inferior entre as linhas */
+}
+
+/* ==================== Ícones ==================== */
+.iconNubank,
+.iconBrades,
+.iconH {
+  width: 24px;
+  height: 24px;
+}
+
+/* ==================== Estilização específica para cores ==================== */
+.spanRed span {
+  color: var(--vibrant-red);
+  font-weight: 700;
+}
+
+.spanGreen span {
+  color: var(--vibrant-grenn);
+  font-weight: 700;
+}
