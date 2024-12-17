@@ -2,10 +2,7 @@ package com.projetointegrado.MeuBolso.conta;
 
 import com.projetointegrado.MeuBolso.banco.Banco;
 import com.projetointegrado.MeuBolso.banco.BancoRepository;
-import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
-import com.projetointegrado.MeuBolso.conta.dto.ContaMinDTO;
-import com.projetointegrado.MeuBolso.conta.dto.ContaPostDTO;
-import com.projetointegrado.MeuBolso.conta.dto.ContaPutDTO;
+import com.projetointegrado.MeuBolso.conta.dto.*;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaRepository;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaService;
@@ -15,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -75,5 +73,15 @@ public class ContaService {
         conta.setTipo_conta(tipo);
         conta.setBanco(banco);
         return new ContaDTO(contaRepository.save(conta));
+    }
+
+    @Transactional(readOnly = true)
+    public SaldoTotalDTO getSaldo(){
+        BigDecimal saldo = new BigDecimal(0);
+        List<Conta> contas = contaRepository.findAll();
+        for (Conta c : contas){
+            saldo = saldo.add(c.getSaldo());
+        }
+        return new SaldoTotalDTO(saldo);
     }
 }
