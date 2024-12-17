@@ -1,0 +1,57 @@
+.item {
+    list-style: none;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .item:hover {
+    background-color: var(--gray); /* Mudança de fundo ao passar o mouse */
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaçamento entre a imagem e o nome */
+  }
+  
+  .header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Tornando a imagem redonda */
+    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+  }
+  
+  .header a {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .header a:hover {
+    color: #0056b3; /* Cor ao passar o mouse sobre o nome */
+  }
+  
+  .details {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #666;
+    transition: background-color 0.3s ease;
+  }
+  
+  .details p {
+    margin: 0;
+  }
+  
+  .details:hover {
+    background-color: #eef2f7; /* Mudança de cor no hover sobre o detalhe */
+  }
+  

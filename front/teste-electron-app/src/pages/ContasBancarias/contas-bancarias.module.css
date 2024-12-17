@@ -1,0 +1,14 @@
+.contas{
+    display: flex;
+    flex-direction: column;
+    margin-left: 300px;
+    padding-bottom: 40px;
+}
+.headerContas{
+    display: flex;
+    justify-content: space-between;
+}
+.headerContas div{
+    padding-top: 80px;
+    padding-right: 30px;
+}

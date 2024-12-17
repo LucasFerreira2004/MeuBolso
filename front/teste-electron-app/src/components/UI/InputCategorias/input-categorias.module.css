@@ -1,0 +1,52 @@
+/* Lista de categorias */
+.listItem {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .listItem:hover {
+    transform: scale(1.05); /* Efeito de aumento ao passar o mouse */
+  }
+  
+  /* Ícone de cor (a bolinha que ficará ao lado do nome) */
+  .iconeCor {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  /* Estilos para despesas */
+  .despesa:hover {
+    background-color: #f5c6cb; /* Escurece a cor de fundo ao passar o mouse */
+  }
+  
+  .receita:hover {
+    background-color: #c3e6cb; /* Escurece a cor de fundo ao passar o mouse */
+  }
+  
+  /* Estilo para o texto (nome da categoria) */
+  a {
+    font-weight: bold;
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  a:hover {
+    color: #0056b3; /* Cor do link ao passar o mouse */
+  }
+  
+  a span {
+    font-size: 14px;
+    color: inherit;
+    font-style: italic; /* Para tornar o texto da cor mais sutil */
+  }
+  

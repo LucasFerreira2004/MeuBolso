@@ -1,0 +1,184 @@
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modalHeader h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.closeIcon {
+  width: 16px;
+  cursor: pointer;
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.formGroup {
+  display: flex;
+  gap: 5px;
+  height: 35px;
+}
+
+.formGroup button {
+  margin-left: auto; /* Empurra o botão para o final */
+  border: none;
+  cursor: pointer;
+}
+
+.formGroup label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.formGroup input {
+  padding: 8px;
+  font-size: 1rem;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid black;
+  box-sizing: border-box; /* Inclui padding e borda no cálculo de largura */
+}
+
+.formGroup input:focus {
+  border-color: var(--main-color-light); /* Cor da borda ao focar no input */
+  outline: none; /* Remove o contorno padrão */
+}
+
+.radioGroup {
+  display: flex;
+  gap: 20px;
+}
+
+.radioGroup label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.radioGroup input {
+  accent-color: var(--primary-color); /* Define a cor do botão de rádio */
+  cursor: pointer;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.saveButton {
+  padding: 7px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: var(--main-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.saveButton:hover {
+  background-color: var(--main-color-light);
+}
+
+/* Novo estilo para o botão de cor */
+.colorButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #333;
+}
+
+.colorSet {
+  width: 25px; /* Tamanho da bolinha de cor */
+  height: 25px;
+  border-radius: 50%;
+  background-color: #000; /* Cor de fundo inicial */
+  border: 2px solid #ccc;
+  transition: transform 0.2s ease, border-color 0.2s ease; /* Transição para animação */
+}
+
+.colorSet:hover {
+  border-color: var(--main-color-light);
+  transform: scale(1.1); /* Efeito de zoom */
+}
+
+/* Estilos do Dropdown de cores */
+.containerDropDownCategories {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  width: 180px;
+  z-index: 1000;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.closeIcon {
+  width: 16px;
+  cursor: pointer;
+}
+
+.linhacor {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.colorOption {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 5px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.colorOption:hover {
+  transform: scale(1.1);
+  border-color: var(--main-color-light); /* Adiciona um destaque na borda ao passar o mouse */
+}

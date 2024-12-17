@@ -1,0 +1,30 @@
+.containerDropDownBancos {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    border: 1px solid black;
+    position: absolute;
+    margin-left: 430px;
+    background-color: #fff;
+    height: auto; /* Permite que o container cresça conforme os elementos */
+    width: 190px;
+    padding: 8px;
+    border-radius: 8px;
+    box-sizing: border-box; /* Para garantir que o padding não afete o tamanho total */
+  }
+
+  .header{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .header img{
+    cursor: pointer;
+  }
+  .header h3{
+    margin: 0px;
+  }
+  .listaBancos{
+    margin-top: 0px;
+    padding: 0px;
+  }
