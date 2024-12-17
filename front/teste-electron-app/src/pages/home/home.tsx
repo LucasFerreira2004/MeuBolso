@@ -1,12 +1,38 @@
+import { useEffect, useState } from "react";
 import style from "./home.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
 import CardMetas from "../../components/CardMetas/card-metas";
 
+interface Banco {
+  iconeUrl: string;
+  nomeBanco: string;
+  saldo: number;
+}
+
 function Home() {
+  const [bancos, setBancos] = useState<Banco[]>([]); 
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchBancos = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/contas/min");
+      if (!response.ok) {
+        throw new Error("Erro ao carregar os dados.");
+      }
+      const data = await response.json();
+      setBancos(data); 
+    } catch (error) {
+      setError("Erro ao buscar os dados dos bancos.");
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBancos();
+  }, []);
+
   return (
     <div className={style.home}>
-      
-      {/* ==================== Header ==================== */}
       <header className={style.header}>
         <div className={style.headerContent}>
           <h1>
@@ -28,45 +54,38 @@ function Home() {
           </div>
           <AddButton texto="Adicionar Transação" onClick={function (): void {
             throw new Error("Function not implemented.");
-          } } />
+          }} />
         </div>
       </header>
 
-      {/* ==================== Corpo Principal ==================== */}
       <main className={style.body}>
         <div className={style.cards}>
-          
-          {/* ==================== Cards de Saldo e Histórico ==================== */}
           <div className={style.cards1}>
-            {/* Card de Saldo Bancário */}
             <div className={style.cardSaldo}>
               <h3>Saldo bancário</h3>
-              <div className={style.linebanks}>
-                <img
-                  src="/assets/nubank.svg"
-                  alt="Ícone Nubank"
-                  className={style.iconNubank}
-                />
-                <p>Nubank: R$ 1400,00</p>
-              </div>
-              <div className={style.linebanks}>
-                <img
-                  src="/assets/bradesco.svg"
-                  alt="Ícone Bradesco"
-                  className={style.iconBrades}
-                />
-                <p>Bradesco: R$ 116,00</p>
-              </div>
+              {error && <p>{error}</p>}
+              {bancos.length === 0 ? (
+                <p>Carregando dados...</p> 
+              ) : (
+                bancos.map((banco) => (
+                  <div className={style.linebanks} key={banco.nomeBanco}>
+                    <img
+                      src={banco.iconeUrl}
+                      alt={`Ícone ${banco.nomeBanco}`}
+                      className={style.iconNubank}
+                    />
+                    <p>{banco.nomeBanco}: R$ {banco.saldo.toFixed(2)}</p>
+                  </div>
+                ))
+              )}
             </div>
 
-            {/* Card de Histórico de Transações */}
             <div className={style.cardHistorico}>
               <div className={style.titulotransacoes}>
                 <h3>Visão geral de transações</h3>
                 <p>Dez., 24</p>
               </div>
-              
-              {/* Transações do Dia e Mês */}
+
               <div className={style.linesTransacoes}>
                 <img
                   src="/assets/Hred.svg"
@@ -103,18 +122,14 @@ function Home() {
             </div>
           </div>
 
-          {/* ==================== Card de Meta ==================== */}
           <div className={style.cards2}>
             <h2>Metas</h2>
-            <CardMetas imagem="/assets/moto.svg" texto="Meta para moto"/>
+            <CardMetas imagem="/assets/moto.svg" texto="Meta para moto" />
           </div>
 
           <div className={style.cards3}>
-            <div className={style.graphic}>
-              
-            </div>
+            <div className={style.graphic}></div>
           </div>
-          
         </div>
       </main>
     </div>
