@@ -15,4 +15,9 @@ public class CategoriaExceptionHandler extends ResponseEntityExceptionHandler {
         ExceptionDTO dto = new ExceptionDTO(HttpStatus.CONFLICT, ex.getMessage());
         return new ResponseEntity<>(dto, HttpStatus.CONFLICT);
     }
+    @ExceptionHandler
+    private ResponseEntity<ExceptionDTO> nomeCadastradoException(TipoCategoriaNaoEspecificado ex){
+        ExceptionDTO dto = new ExceptionDTO(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+    }
 }

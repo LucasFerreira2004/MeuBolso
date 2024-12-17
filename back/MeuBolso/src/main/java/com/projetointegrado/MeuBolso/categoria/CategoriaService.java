@@ -3,6 +3,7 @@ package com.projetointegrado.MeuBolso.categoria;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
 import com.projetointegrado.MeuBolso.categoria.exceptions.NomeCadastradoException;
+import com.projetointegrado.MeuBolso.categoria.exceptions.TipoCategoriaNaoEspecificado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
