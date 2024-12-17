@@ -10,25 +10,42 @@ interface Banco {
 }
 
 function Home() {
-  const [bancos, setBancos] = useState<Banco[]>([]); 
+  const [bancos, setBancos] = useState<Banco[]>([]);
+  const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Função para buscar os bancos
   const fetchBancos = async () => {
     try {
       const response = await fetch("http://localhost:8080/contas/min");
       if (!response.ok) {
-        throw new Error("Erro ao carregar os dados.");
+        throw new Error("Erro ao carregar os dados dos bancos.");
       }
       const data = await response.json();
-      setBancos(data); 
+      setBancos(data);
     } catch (error) {
       setError("Erro ao buscar os dados dos bancos.");
       console.error(error);
     }
   };
 
+  const fetchSaldoTotal = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/contas/saldoTotal");
+      if (!response.ok) {
+        throw new Error("Erro ao carregar o saldo total.");
+      }
+      const data = await response.json();
+      setSaldoTotal(data.saldo); // Atualiza o estado com o saldo total retornado
+    } catch (error) {
+      setError("Erro ao buscar o saldo total.");
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     fetchBancos();
+    fetchSaldoTotal();
   }, []);
 
   return (
@@ -49,12 +66,11 @@ function Home() {
             />
             <p className={style.pHeader}>
               <span className={style.sHeader}>Estimativa de Saldo: </span>
-              R$ 1516,00
+              {/* Exibe o saldo total ou uma mensagem de carregamento */}
+              {saldoTotal !== null ? `R$ ${saldoTotal.toFixed(2)}` : "Carregando..."}
             </p>
           </div>
-          <AddButton texto="Adicionar Transação" onClick={function (): void {
-            throw new Error("Function not implemented.");
-          }} />
+          <AddButton texto="Adicionar Transação" onClick={function (): void {}} />
         </div>
       </header>
 
@@ -65,7 +81,7 @@ function Home() {
               <h3>Saldo bancário</h3>
               {error && <p>{error}</p>}
               {bancos.length === 0 ? (
-                <p>Carregando dados...</p> 
+                <p>Carregando dados...</p>
               ) : (
                 bancos.map((banco) => (
                   <div className={style.linebanks} key={banco.nomeBanco}>
