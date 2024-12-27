@@ -29,22 +29,11 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public UsuarioDTO findById(Long id) {
+    public UsuarioDTO findById(String id) {
         Usuario usuario = usuarioRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
         return new UsuarioDTO(usuario);
     }
 
-    public UsuarioDTO login(String email, String senha) {
-        Usuario usuario = (Usuario) usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado"));
-
-        if (!usuario.getSenha().equals(senha)) {
-            throw new SenhaIncorretaException("Senha incorreta");
-        }
-
-        // Converter para DTO
-        return new UsuarioDTO(usuario.getNome(), usuario.getEmail(), usuario.getSenha());
-    }
 }

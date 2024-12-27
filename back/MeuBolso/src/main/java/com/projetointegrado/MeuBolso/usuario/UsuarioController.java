@@ -1,9 +1,6 @@
 package com.projetointegrado.MeuBolso.usuario;
 
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
-import com.projetointegrado.MeuBolso.usuario.dto.UsuarioLoginDTO;
-import com.projetointegrado.MeuBolso.usuario.exception.SenhaIncorretaException;
-import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,12 +25,6 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userSalvo);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<UsuarioDTO> login(@Valid @RequestBody UsuarioLoginDTO usuarioLoginDTO) {
-        UsuarioDTO usuarioDTO = usuarioService.login(usuarioLoginDTO.getEmail(), usuarioLoginDTO.getSenha());
-        return ResponseEntity.ok(usuarioDTO);
-    }
-
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> findAll() {
         List<UsuarioDTO> list = usuarioService.findAll();
@@ -41,7 +32,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> buscarUsuario(@PathVariable Long id) {
+    public ResponseEntity<UsuarioDTO> buscarUsuario(@PathVariable String id) {
         Optional<UsuarioDTO> usuario = Optional.ofNullable(usuarioService.findById(id));
         return usuario.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
