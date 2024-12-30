@@ -1,11 +1,10 @@
 package com.projetointegrado.MeuBolso.usuario;
 
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
-import com.projetointegrado.MeuBolso.usuario.exception.SenhaIncorretaException;
-import com.projetointegrado.MeuBolso.usuario.exception.UsuarioExistenteException;
-import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
+import com.projetointegrado.MeuBolso.usuario.exception.EmailJaCadastradoException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +16,12 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Usuario salvarUsuario(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+    public UsuarioDTO salvarUsuario(UsuarioDTO usuarioDTO) {
+        if (usuarioRepository.findByEmail(usuarioDTO.getEmail()) != null)
+            throw new EmailJaCadastradoException();
+        String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioDTO.getSenha());
+        Usuario usuario = new Usuario(usuarioDTO.getNome(), usuarioDTO.getEmail(), encryptedPassword);
+        return new UsuarioDTO(usuarioRepository.save(usuario));
     }
 
     @Transactional(readOnly = true)

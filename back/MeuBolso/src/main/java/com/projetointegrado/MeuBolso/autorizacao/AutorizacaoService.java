@@ -14,7 +14,7 @@ public class AutorizacaoService implements UserDetailsService {
 
     //faz a consulta dos usuários pro spring security
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { //executa toda vez que alguém tentar se autenticar
-        return usuarioRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException { //executa toda vez que alguém tentar se autenticar
+        return usuarioRepository.findByEmail(email);
     }
 }

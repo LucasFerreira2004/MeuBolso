@@ -19,10 +19,9 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
-        Usuario usuario = new Usuario(usuarioDTO.getNome(), usuarioDTO.getEmail(), usuarioDTO.getSenha());
-        UsuarioDTO userSalvo = new UsuarioDTO(usuarioService.salvarUsuario(usuario));
+        usuarioService.salvarUsuario(usuarioDTO);
         ResponseEntity.ok("Usuário cadastrado com sucesso");
-        return ResponseEntity.status(HttpStatus.CREATED).body(userSalvo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioDTO);
     }
 
     @GetMapping
