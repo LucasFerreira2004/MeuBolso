@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.autorizacao;
+package com.projetointegrado.MeuBolso.autorizacao.seguranca;
 
 import com.projetointegrado.MeuBolso.autorizacao.token.TokenService;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
@@ -16,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-public class SecurityFIlter extends OncePerRequestFilter {
+public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     TokenService tokenService;
 
