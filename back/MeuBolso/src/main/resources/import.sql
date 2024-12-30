@@ -5,7 +5,7 @@ insert into tipo_conta(id, tipo_conta) values ('3', 'poupanca');
 insert into tipo_conta(id, tipo_conta) values ('4', 'investimentos');
 insert into tipo_conta(id, tipo_conta) values ('5', 'outro');
 
-/*USUARIO*/
+/*USUARIO - não é possível fazer login com este pois ele não está sendo salvo com senha em hash*/
 insert into usuario(id, nome, email, senha) values ('2ebbc2f1-bf81-470c-a5f2-063723d99d2c', 'Maria do Rosario Oliveira', 'mariarosariooli@gmail.com', 'oi2u243i');
 
 /*BANCO*/
