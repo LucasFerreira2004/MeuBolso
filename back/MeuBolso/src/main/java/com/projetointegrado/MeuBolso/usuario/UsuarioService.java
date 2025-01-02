@@ -4,6 +4,7 @@ import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
 import com.projetointegrado.MeuBolso.usuario.exception.EmailJaCadastradoException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,4 +40,8 @@ public class UsuarioService {
         return new UsuarioDTO(usuario);
     }
 
+    public String getUsuarioLogadoId(){
+        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return usuario.getId();
+    }
 }

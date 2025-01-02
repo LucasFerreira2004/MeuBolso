@@ -6,7 +6,7 @@ public class ContaPostDTO {
     private BigDecimal saldo;
     private Long id_banco;
     private Long id_tipo_conta;
-    private String id_usuario;
+
     public BigDecimal getSaldo() {
         return saldo;
     }
@@ -29,13 +29,5 @@ public class ContaPostDTO {
 
     public void setId_tipo_conta(Long id_tipo_conta) {
         this.id_tipo_conta = id_tipo_conta;
-    }
-
-    public String getId_usuario() {
-        return id_usuario;
-    }
-
-    public void setId_usuario(String id_usuario) {
-        this.id_usuario = id_usuario;
     }
 }

@@ -5,6 +5,7 @@ import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 
@@ -22,6 +23,7 @@ public class Conta {
     @ManyToOne
     private Banco banco;
     @ManyToOne
+    @Valid
     private Usuario usuario;
 
     @OneToMany(mappedBy = "conta", cascade = CascadeType.REMOVE)

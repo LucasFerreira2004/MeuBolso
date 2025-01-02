@@ -1,7 +1,9 @@
 package com.projetointegrado.MeuBolso.conta;
 
 import com.projetointegrado.MeuBolso.conta.dto.*;
+import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -12,25 +14,35 @@ import java.util.List;
 public class ContaController {
     @Autowired
     private ContaService contaService;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
     @GetMapping
     public List<ContaDTO> findAll() {
         return contaService.findAll();
     }
+
     @GetMapping("/{id}")
     public ContaDTO findById(@PathVariable Long id){
         return contaService.findById(id);
     }
+
     @GetMapping("/min")
     public List<ContaMinDTO> findMin() {
         return contaService.findAllMin();
     }
+
     @GetMapping("/saldoTotal")
     public SaldoTotalDTO findSaldoTotal() {
         return contaService.getSaldo();
     }
+
     @PostMapping
     public ContaDTO save(@RequestBody ContaPostDTO contaPostDTO){
-        return contaService.saveConta(contaPostDTO);
+        String userId = usuarioService.getUsuarioLogadoId();
+
+        return contaService.saveConta(userId, contaPostDTO);
     }
     @PutMapping("/{id}")
     public ContaDTO update(@PathVariable Long id, @RequestBody ContaPutDTO contaPostDTO){

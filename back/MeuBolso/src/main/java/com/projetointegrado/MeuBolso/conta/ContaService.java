@@ -2,7 +2,11 @@ package com.projetointegrado.MeuBolso.conta;
 
 import com.projetointegrado.MeuBolso.banco.Banco;
 import com.projetointegrado.MeuBolso.banco.BancoRepository;
+import com.projetointegrado.MeuBolso.categoria.exceptions.TipoCategoriaNaoEspecificado;
 import com.projetointegrado.MeuBolso.conta.dto.*;
+import com.projetointegrado.MeuBolso.conta.exception.IdBancoNaoEncontradoException;
+import com.projetointegrado.MeuBolso.conta.exception.IdTipoContaNaoEncontradoException;
+import com.projetointegrado.MeuBolso.conta.exception.IdUsuarioNaoEncontradoException;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaRepository;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaService;
@@ -44,11 +48,15 @@ public class ContaService {
         return result.stream().map(ContaMinDTO::new).toList();
     }
     @Transactional
-    public ContaDTO saveConta(ContaPostDTO dto) {
+    public ContaDTO saveConta(String userID, ContaPostDTO dto) {
         //tratar erros de ids que não existem!.
         TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
-        Usuario usuario = usuarioRepository.findById(dto.getId_usuario()).orElse(null);
+        Usuario usuario = usuarioRepository.findById(userID).orElse(null);
+
+        if (tipo == null) throw new IdTipoContaNaoEncontradoException();
+        if (banco == null) throw new IdBancoNaoEncontradoException();
+        if (usuario == null) throw new IdUsuarioNaoEncontradoException();
 
         Conta conta = new Conta(null, dto.getSaldo(), tipo, banco, usuario);
         return new ContaDTO(contaRepository.save(conta));

@@ -37,7 +37,7 @@ public class AutenticacaoController {
         var auth = this.authenticationManager.authenticate(usernameSenha);
         var token = tokenService.gerarToken((Usuario) auth.getPrincipal());
 
-        return new LoginResponseDTO(token); //poderia ser só .ok.build()
+        return new LoginResponseDTO(token);
     }
 
     @PostMapping("/cadastro")
