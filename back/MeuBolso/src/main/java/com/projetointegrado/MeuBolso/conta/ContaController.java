@@ -39,22 +39,25 @@ public class ContaController {
 
     @GetMapping("/saldoTotal")
     public SaldoTotalDTO findSaldoTotal() {
-        return contaService.getSaldo();
+        String idUsuario = usuarioService.getUsuarioLogadoId();
+        return contaService.getSaldo(idUsuario);
     }
 
     @PostMapping
     public ContaDTO save(@RequestBody ContaPostDTO contaPostDTO){
         String userId = usuarioService.getUsuarioLogadoId();
-
         return contaService.saveConta(userId, contaPostDTO);
     }
     @PutMapping("/{id}")
     public ContaDTO update(@PathVariable Long id, @RequestBody ContaPutDTO contaPostDTO){
-        return contaService.updateConta(id, contaPostDTO);
+        String userId = usuarioService.getUsuarioLogadoId();
+        return contaService.updateConta(id, contaPostDTO, userId);
     }
     @DeleteMapping("/{id}")
     public ContaDTO delete(@PathVariable Long id){
-        return contaService.deleteConta(id);
+        String userId = usuarioService.getUsuarioLogadoId();
+
+        return contaService.deleteConta(id, userId);
     }
 
 }

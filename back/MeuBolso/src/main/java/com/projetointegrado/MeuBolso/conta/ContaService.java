@@ -72,21 +72,25 @@ public class ContaService {
     }
 
     @Transactional
-    public ContaDTO deleteConta(Long id) {
-        //tratar erro de id null
+    public ContaDTO deleteConta(Long id, String idUsuario) {
         Conta conta = contaRepository.findById(id).orElse(null);
+        if (conta == null) throw new IdContaNaoEncontradaException();
+        if (!conta.getUsuario().getId().equals(idUsuario))
+            throw new AcessoContaNegadoException();
         contaRepository.delete(conta);
         return new ContaDTO(conta);
     }
 
     @Transactional
-    public ContaDTO updateConta (Long id, ContaPutDTO dto) {
-        //tratar caso seja nulo!
+    public ContaDTO updateConta (Long id, ContaPutDTO dto, String userId) {
         TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
-
         Conta conta = contaRepository.findById(id).orElse(null);
 
+        if (tipo == null) throw new IdTipoContaNaoEncontradoException();
+        if (banco == null) throw new IdBancoNaoEncontradoException();
+        if (conta == null) throw new IdContaNaoEncontradaException();
+        if (!conta.getUsuario().getId().equals(userId)) throw new AcessoContaNegadoException();
         conta.setSaldo(dto.getSaldo());
         conta.setTipo_conta(tipo);
         conta.setBanco(banco);
@@ -94,9 +98,9 @@ public class ContaService {
     }
 
     @Transactional(readOnly = true)
-    public SaldoTotalDTO getSaldo(){
+    public SaldoTotalDTO getSaldo(String idUsuario) {
         BigDecimal saldo = new BigDecimal(0);
-        List<Conta> contas = contaRepository.findAll();
+        List<Conta> contas = contaRepository.findAllByUsuario(idUsuario);
         for (Conta c : contas){
             saldo = saldo.add(c.getSaldo());
         }
