@@ -46,22 +46,19 @@ public class ContaService {
         return new ContaDTO(result);
     }
     @Transactional(readOnly = true)
-    public List<ContaDTO> findAll() {
-        String idUsuario = usuarioService.getUsuarioLogadoId();
+    public List<ContaDTO> findAll(String idUsuario) {
 
         List<Conta> result = contaRepository.findAllByUsuario(idUsuario);
         return result.stream().map(ContaDTO::new).toList();
     }
     @Transactional(readOnly = true)
-    public List<ContaMinDTO> findAllMin() {
-        String idUsuario = usuarioService.getUsuarioLogadoId();
+    public List<ContaMinDTO> findAllMin(String idUsuario) {
 
         List<Conta> result = contaRepository.findAllByUsuario(idUsuario);
         return result.stream().map(ContaMinDTO::new).toList();
     }
     @Transactional
     public ContaDTO saveConta(String userID, ContaPostDTO dto) {
-        //tratar erros de ids que não existem!.
         TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
         Usuario usuario = usuarioRepository.findById(userID).orElse(null);
@@ -89,6 +86,7 @@ public class ContaService {
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
 
         Conta conta = contaRepository.findById(id).orElse(null);
+
         conta.setSaldo(dto.getSaldo());
         conta.setTipo_conta(tipo);
         conta.setBanco(banco);

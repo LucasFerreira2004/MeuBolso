@@ -20,7 +20,9 @@ public class ContaController {
 
     @GetMapping
     public List<ContaDTO> findAll() {
-        return contaService.findAll();
+        String idUsuario = usuarioService.getUsuarioLogadoId();
+
+        return contaService.findAll(idUsuario);
     }
 
     @GetMapping("/{id}")
@@ -30,7 +32,9 @@ public class ContaController {
 
     @GetMapping("/min")
     public List<ContaMinDTO> findMin() {
-        return contaService.findAllMin();
+        String idUsuario = usuarioService.getUsuarioLogadoId();
+
+        return contaService.findAllMin(idUsuario);
     }
 
     @GetMapping("/saldoTotal")
