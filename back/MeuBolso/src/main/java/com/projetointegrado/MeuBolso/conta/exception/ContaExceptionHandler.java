@@ -24,4 +24,16 @@ public class ContaExceptionHandler {
         IdNaoEncontradoDTO dto = new IdNaoEncontradoDTO("token", "id usuario nao encontrado a partir do token");
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(IdContaNaoEncontradaException.class)
+    public ResponseEntity<?> handleIdContaNaoEncontradaException(IdContaNaoEncontradaException ex) {
+        IdNaoEncontradoDTO dto = new IdNaoEncontradoDTO("/id", "id conta nao encontrado");
+        return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AcessoContaNegadoException.class)
+    public ResponseEntity<?> handleAcessoContaNegadoException(AcessoContaNegadoException ex) {
+        IdNaoEncontradoDTO dto = new IdNaoEncontradoDTO("/id", ex.getMessage());
+        return new ResponseEntity<>(dto, HttpStatus.FORBIDDEN);
+    }
 }
