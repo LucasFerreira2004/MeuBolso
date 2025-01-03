@@ -12,6 +12,7 @@ import com.projetointegrado.MeuBolso.tipoConta.TipoContaRepository;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaService;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
+import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,8 @@ public class ContaService {
     private TipoContaRepository tipoContaRepository;
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @Transactional(readOnly = true)
     public ContaDTO findById(Long id) {
@@ -39,7 +42,9 @@ public class ContaService {
     }
     @Transactional(readOnly = true)
     public List<ContaDTO> findAll() {
-        List<Conta> result = contaRepository.findAll();
+        String idUsuario = usuarioService.getUsuarioLogadoId();
+
+        List<Conta> result = contaRepository.findAllByUsuario(idUsuario);
         return result.stream().map(ContaDTO::new).toList();
     }
     @Transactional(readOnly = true)
