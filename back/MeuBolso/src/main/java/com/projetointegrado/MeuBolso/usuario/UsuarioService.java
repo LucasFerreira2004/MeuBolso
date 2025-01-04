@@ -1,11 +1,11 @@
 package com.projetointegrado.MeuBolso.usuario;
 
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
-import com.projetointegrado.MeuBolso.usuario.exception.SenhaIncorretaException;
-import com.projetointegrado.MeuBolso.usuario.exception.UsuarioExistenteException;
-import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
+import com.projetointegrado.MeuBolso.usuario.exception.EmailJaCadastradoException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +17,12 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Usuario salvarUsuario(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+    public UsuarioDTO salvarUsuario(UsuarioDTO usuarioDTO) {
+        if (usuarioRepository.findByEmail(usuarioDTO.getEmail()) != null)
+            throw new EmailJaCadastradoException();
+        String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioDTO.getSenha());
+        Usuario usuario = new Usuario(usuarioDTO.getNome(), usuarioDTO.getEmail(), encryptedPassword);
+        return new UsuarioDTO(usuarioRepository.save(usuario));
     }
 
     @Transactional(readOnly = true)
@@ -29,22 +33,15 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public UsuarioDTO findById(Long id) {
+    public UsuarioDTO findById(String id) {
         Usuario usuario = usuarioRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
         return new UsuarioDTO(usuario);
     }
 
-    public UsuarioDTO login(String email, String senha) {
-        Usuario usuario = (Usuario) usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado"));
-
-        if (!usuario.getSenha().equals(senha)) {
-            throw new SenhaIncorretaException("Senha incorreta");
-        }
-
-        // Converter para DTO
-        return new UsuarioDTO(usuario.getNome(), usuario.getEmail(), usuario.getSenha());
+    public String getUsuarioLogadoId(){
+        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return usuario.getId();
     }
 }

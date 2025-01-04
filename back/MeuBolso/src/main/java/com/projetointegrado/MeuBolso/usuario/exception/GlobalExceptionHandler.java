@@ -4,6 +4,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,6 +38,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT); // Retorna 409
     }
 
+    // Tratamento para email já cadastrado usado no cadastro
+    @ExceptionHandler(EmailJaCadastradoException.class)
+    public ResponseEntity<?> handleEmailJaCadastradoException(EmailJaCadastradoException ex) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO("email", ex.getMessage());
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.CONFLICT);
+    }
     // Tratamento para usuario invalido
     @ExceptionHandler(UsuarioNaoEncontradoException.class)
     public ResponseEntity<ErrorResponseDTO> handleUsuarioNaoEncontradoException(UsuarioNaoEncontradoException ex) {

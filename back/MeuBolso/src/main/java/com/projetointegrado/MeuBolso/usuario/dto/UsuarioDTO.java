@@ -31,7 +31,6 @@ public class UsuarioDTO {
         this.nome = nome;
         this.senha = senha;
         this.email = email;
-
     }
 
     public String getNome() {

@@ -1,9 +1,6 @@
 package com.projetointegrado.MeuBolso.usuario;
 
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
-import com.projetointegrado.MeuBolso.usuario.dto.UsuarioLoginDTO;
-import com.projetointegrado.MeuBolso.usuario.exception.SenhaIncorretaException;
-import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,16 +19,9 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
-        Usuario usuario = new Usuario(usuarioDTO.getNome(), usuarioDTO.getEmail(), usuarioDTO.getSenha());
-        UsuarioDTO userSalvo = new UsuarioDTO(usuarioService.salvarUsuario(usuario));
+        usuarioService.salvarUsuario(usuarioDTO);
         ResponseEntity.ok("Usuário cadastrado com sucesso");
-        return ResponseEntity.status(HttpStatus.CREATED).body(userSalvo);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<UsuarioDTO> login(@Valid @RequestBody UsuarioLoginDTO usuarioLoginDTO) {
-        UsuarioDTO usuarioDTO = usuarioService.login(usuarioLoginDTO.getEmail(), usuarioLoginDTO.getSenha());
-        return ResponseEntity.ok(usuarioDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioDTO);
     }
 
     @GetMapping
@@ -41,7 +31,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> buscarUsuario(@PathVariable Long id) {
+    public ResponseEntity<UsuarioDTO> buscarUsuario(@PathVariable String id) {
         Optional<UsuarioDTO> usuario = Optional.ofNullable(usuarioService.findById(id));
         return usuario.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }

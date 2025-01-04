@@ -5,16 +5,16 @@ insert into tipo_conta(id, tipo_conta) values ('3', 'poupanca');
 insert into tipo_conta(id, tipo_conta) values ('4', 'investimentos');
 insert into tipo_conta(id, tipo_conta) values ('5', 'outro');
 
-/*USUARIO*/
-insert into usuario(nome, email, senha) values ('Maria do Rosario Oliveira', 'mariarosariooli@gmail.com', 'oi2u243i');
+/*USUARIO - não é possível fazer login com este pois ele não está sendo salvo com senha em hash*/
+insert into usuario(id, nome, email, senha) values ('2ebbc2f1-bf81-470c-a5f2-063723d99d2c', 'Maria do Rosario Oliveira', 'mariarosariooli@gmail.com', 'oi2u243i');
 
 /*BANCO*/
 insert into banco (nome, icone_url) values ('Bradesco', 'https://play-lh.googleusercontent.com/ReQEaxm44OuduIlJEVO_-xs9iZXSyRNdzGKrONYoLSgAdOzyhPKTb1xuuoPXK6tABm0');
-insert into banco (nome, icone_url) values ('Banco do Brasil', 'url');
+insert into banco (nome, icone_url) values ('Banco do Brasil', 'https://play-lh.googleusercontent.com/1-aNhsSPNqiVluwNGZar_7F5PbQ4u1zteuJ1jumnArhe8bfYHHaVwu4aVOF5-NAmLaA');
 insert into banco (nome, icone_url) values ('Nubank', 'https://t.ctcdn.com.br/DIEw0gGtQl_GNhWXJwgrRmuGpIk=/i624750.png');
 /*CONTA*/
-insert into conta(saldo, tipo_conta_id, banco_id, usuario_id) values ('1412', '1', '3', '1');
-insert into conta(saldo, tipo_conta_id, banco_id, usuario_id) values ('2000.50', '3', '1', '1');
+insert into conta(saldo, tipo_conta_id, banco_id, usuario_id) values ('1412', '1', '3', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
+insert into conta(saldo, tipo_conta_id, banco_id, usuario_id) values ('2000.50', '3', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
 
 /*CATEGORIAS*/
 insert into categoria (nome, tipo_categoria, cor) values ('casa', 'despesa', '8755BC');             /*1*/
