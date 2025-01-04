@@ -2,20 +2,16 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import style from "./cadastro.module.css";
 
-interface User {
-  email: string;
-  password: string;
-}
-
 function Cadastro() {
+  const [nome, setNome] = useState(""); // Campo nome adicionado
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleCadastro = () => {
-    if (email === "" || password === "" || repeatPassword === "") {
+  const handleCadastro = async () => {
+    if (nome === "" || email === "" || password === "" || repeatPassword === "") {
       setErrorMessage("Por favor, preencha todos os campos.");
       return;
     }
@@ -36,12 +32,29 @@ function Cadastro() {
       return;
     }
 
-    // Salva os dados no localStorage
-    const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
-    users.push({ email, password });
-    localStorage.setItem("users", JSON.stringify(users));
+    try {
+      const response = await fetch("http://localhost:8080/auth/cadastro", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nome, email, senha: password }), // Adicionando "nome" no corpo da requisição
+      });
 
-    navigate("/");
+      if (!response.ok) {
+        throw new Error("Erro ao cadastrar o usuário.");
+      }
+
+      // Não há corpo na resposta do cadastro, então apenas redireciona
+      alert("Usuário cadastrado com sucesso!");
+      navigate("/");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message || "Erro ao realizar o cadastro.");
+      } else {
+        setErrorMessage("Erro desconhecido.");
+      }
+    }
   };
 
   return (
@@ -56,6 +69,16 @@ function Cadastro() {
         </div>
 
         <div className={style.containerInput}>
+          <div className={style.inputNome}>
+            <h3 className={style.hC}>Nome</h3>
+            <input
+              type="text"
+              placeholder="Seu nome"
+              className={style.input}
+              value={nome}
+              onChange={(e) => setNome(e.target.value)} // Atualiza o campo nome
+            />
+          </div>
           <div className={style.inputEmail}>
             <h3 className={style.hC}>Email</h3>
             <input
@@ -89,11 +112,14 @@ function Cadastro() {
         </div>
 
         {errorMessage && <p className={style.errorMessage}>{errorMessage}</p>}
-        {/* Link para voltar à tela de login */}
-        <Link to="/" className={style.backToLogin}>Voltar para o login</Link>
-        
-        <button className={style.buttonC} onClick={handleCadastro}>Cadastrar</button>
 
+        <Link to="/" className={style.backToLogin}>
+          Voltar para o login
+        </Link>
+
+        <button className={style.buttonC} onClick={handleCadastro}>
+          Cadastrar
+        </button>
       </div>
     </div>
   );

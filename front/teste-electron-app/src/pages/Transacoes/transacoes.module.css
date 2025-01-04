@@ -1,0 +1,44 @@
+.containerTransacoes {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; 
+    margin-left: 260px;
+    padding: 20px;
+}   
+header{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--gray);
+    padding: 7px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+h3{
+    margin: 0px;
+}
+.rowTransacoes{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+}
+.rowTransacoes div{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.rowTransacoes p{
+    margin: 0px;
+}
+
+.iconT{
+    height: 28px;
+}
+.spanM{
+    color: #BC7D18;
+}
+.spanR{
+    color: #C63A22;
+}.spanT{
+    color: #2A9D8F;
+}

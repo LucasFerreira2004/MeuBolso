@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import style from "./login.module.css";
 
-interface User {
-  email: string;
-  password: string;
+// Definindo tipo para a resposta da API
+interface LoginResponse {
+  token: string;
 }
 
 function Login() {
@@ -13,23 +13,41 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (email === "" || password === "") {
       setErrorMessage("Por favor, preencha todos os campos.");
       return;
     }
 
-    // Verifica os dados no localStorage
-    const users: User[] = JSON.parse(localStorage.getItem("users") || "[]");
-    const user = users.find((user) => user.email === email && user.password === password);
+    try {
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, senha: password }),
+      });
 
-    if (!user) {
-      setErrorMessage("Email ou senha incorretos.");
-      return;
+      if (!response.ok) {
+        throw new Error("Email ou senha incorretos.");
+      }
+
+      const data: LoginResponse = await response.json(); // Tipando a resposta
+      const token = data.token;
+
+      // Salvar o token no localStorage
+      localStorage.setItem("authToken", token);
+
+      // Redirecionar para a página inicial após login bem-sucedido
+      navigate("/home");
+    } catch (error: unknown) {
+      // Usando 'unknown' para o erro e validando antes de usá-lo
+      if (error instanceof Error) {
+        setErrorMessage(error.message || "Erro ao realizar o login.");
+      } else {
+        setErrorMessage("Erro desconhecido.");
+      }
     }
-
-    // Redireciona para a página principal após o login bem-sucedido
-    navigate("/home");
   };
 
   return (
@@ -68,8 +86,12 @@ function Login() {
 
         {errorMessage && <p className={style.errorMessage}>{errorMessage}</p>}
 
-        <Link to="/cadastro"><p className={style.plogin}>Crie uma conta</p></Link>
-        <button className={style.buttonC} onClick={handleLogin}>Entrar</button>
+        <Link to="/cadastro">
+          <p className={style.plogin}>Crie uma conta</p>
+        </Link>
+        <button className={style.buttonC} onClick={handleLogin}>
+          Entrar
+        </button>
       </div>
     </div>
   );

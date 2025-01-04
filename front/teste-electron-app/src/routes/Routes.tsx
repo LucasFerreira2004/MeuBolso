@@ -6,6 +6,7 @@ import ContasBancarias from '../pages/ContasBancarias/contas-bancarias';
 import Categorias from '../pages/Categorias/categorias';
 import PageTeste from '../pages/PageTeste/page-teste';
 import App from '../App';
+import Transacoes from '../pages/Transacoes/transacoes';
 
 export const router = createBrowserRouter([
   {
@@ -38,7 +39,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/transacoes",
-        element: <PageTeste />
+        element: <Transacoes />
       },
       {
         path: "/metas",
