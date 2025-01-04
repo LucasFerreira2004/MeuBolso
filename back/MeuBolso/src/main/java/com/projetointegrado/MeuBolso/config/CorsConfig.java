@@ -13,7 +13,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Permite CORS para todos os endpoints
-                        .allowedOrigins("http://localhost:5173") // Origem permitida (React/Electron)
+                        .allowedOrigins("http://localhost:5173", "http://localhost:5175") // Origem permitida (React/Electron)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos HTTP permitidos
                         .allowedHeaders("*"); // Todos os cabeçalhos são permitidos
             }
