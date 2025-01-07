@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.categoria;
 
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
+import com.projetointegrado.MeuBolso.categoria.exceptions.AcessoCategoriaNegadoException;
 import com.projetointegrado.MeuBolso.categoria.exceptions.CategoriaNaoEncontrada;
 import com.projetointegrado.MeuBolso.categoria.exceptions.NomeCadastradoException;
 import com.projetointegrado.MeuBolso.categoria.exceptions.TipoCategoriaNaoEspecificado;
@@ -32,10 +33,12 @@ public class CategoriaService {
 
     @Transactional(readOnly = true)
     public CategoriaDTO findCategoriaById(String usuarioId, Long id) {
-        Categoria categoria = categoriaRepository.findById(usuarioId, id);
+        Categoria categoria = categoriaRepository.findById(id).orElse(null);
         if (categoria == null) {
             throw new CategoriaNaoEncontrada();
         }
+        if (!categoria.getUsuario().getId().equals(usuarioId))
+            throw new AcessoCategoriaNegadoException();
         return new CategoriaDTO(categoria);
     }
 
@@ -62,12 +65,12 @@ public class CategoriaService {
 
     @Transactional
     public CategoriaDTO update(String usuarioId, Long id, CategoriaSaveDTO dto) {
-        Categoria categoria = categoriaRepository.findById(usuarioId, id);
+        Categoria categoria = categoriaRepository.findById(id).orElse(null);
         if (categoria == null) {
             throw new CategoriaNaoEncontrada();
         }
         if (!categoria.getUsuario().getId().equals(usuarioId))
-            throw new AcessoContaNegadoException();
+            throw new AcessoCategoriaNegadoException();
 
         Usuario usuario = usuarioRepository.findById(usuarioId).get();
         Categoria novaCategoria = new Categoria(id, dto.getNome(), dto.getTipo(), dto.getCor(), true, usuario);
@@ -77,13 +80,13 @@ public class CategoriaService {
 
     @Transactional
     public CategoriaDTO arquivar(String usuarioId, Long id) {
-        Categoria categoria = categoriaRepository.findById(usuarioId, id);
+        Categoria categoria = categoriaRepository.findById(id).orElse(null);
         if (categoria == null) {
             throw new CategoriaNaoEncontrada();
         }
         if (!categoria.getUsuario().getId().equals(usuarioId))
-            throw new AcessoContaNegadoException();
+            throw new AcessoCategoriaNegadoException();
         categoriaRepository.arquivarById(usuarioId, id);
-        return new CategoriaDTO(categoriaRepository.findById(usuarioId, id));
+        return new CategoriaDTO(categoria);
     }
 }

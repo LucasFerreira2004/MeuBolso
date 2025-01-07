@@ -15,8 +15,8 @@ public class CategoriaExceptionHandler extends ResponseEntityExceptionHandler {
         ExceptionDTO dto = new ExceptionDTO(HttpStatus.CONFLICT, ex.getMessage());
         return new ResponseEntity<>(dto, HttpStatus.CONFLICT);
     }
-    @ExceptionHandler(NomeCadastradoException.class)
-    private ResponseEntity<ExceptionDTO> nomeCadastradoException(TipoCategoriaNaoEspecificado ex){
+    @ExceptionHandler(TipoCategoriaNaoEspecificado.class)
+    private ResponseEntity<ExceptionDTO> tipoCategoriaNaoEspecificadoHandler(TipoCategoriaNaoEspecificado ex){
         ExceptionDTO dto = new ExceptionDTO(HttpStatus.BAD_REQUEST, ex.getMessage());
         return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
     }
@@ -30,5 +30,6 @@ public class CategoriaExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AcessoCategoriaNegadoException.class)
     private ResponseEntity<ExceptionDTO> AcessoCategoriaNegadoHandler(AcessoCategoriaNegadoException ex){
         ExceptionDTO dto = new ExceptionDTO(HttpStatus.FORBIDDEN, "/id acesso a categoria negado");
+        return new ResponseEntity<>(dto, HttpStatus.FORBIDDEN);
     }
 }

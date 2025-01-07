@@ -13,11 +13,6 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     List<Categoria> findAllByUsuario(String usuario_id);
 
     @Query(nativeQuery = true, value = """
-        select * from categoria where id = :id AND usuario_id = :usuario_id
-    """)
-    Categoria findById(String usuario_id, Long id);
-
-    @Query(nativeQuery = true, value = """
         select * from categoria where ativa = true AND usuario_id = :usuario_id
     """)
     List<Categoria> findAllAtivas(String usuario_id);
