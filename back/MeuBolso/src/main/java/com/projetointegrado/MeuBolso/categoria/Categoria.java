@@ -1,25 +1,36 @@
 package com.projetointegrado.MeuBolso.categoria;
 
 import com.projetointegrado.MeuBolso.transacao.Transacao;
+import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.List;
 
 @Entity
-//@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"nome", "tipo_categoria"}) })
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"usuario_id", "nome", "tipo_categoria"}) })
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false)
+
+    @Column(nullable = false)
     private String nome;
+
     @Enumerated(EnumType.STRING)
     private TipoCategoria tipoCategoria;
+
     @Column(nullable = false)
     private String cor;
+
     @Column(name = "ativa", nullable = false, columnDefinition = "boolean default true")
     private Boolean ativa;
+
+    @ManyToOne
+    @Valid
+    @JoinColumn(nullable = false, name = "usuario_id")
+    private Usuario usuario;
 
     public Categoria() {
     }
@@ -77,5 +88,13 @@ public class Categoria {
 
     public void setAtiva(Boolean ativa) {
         this.ativa = ativa;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

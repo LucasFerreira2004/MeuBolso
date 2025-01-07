@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.categoria;
 
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
+import com.projetointegrado.MeuBolso.categoria.exceptions.CategoriaNaoEncontrada;
 import com.projetointegrado.MeuBolso.categoria.exceptions.NomeCadastradoException;
 import com.projetointegrado.MeuBolso.categoria.exceptions.TipoCategoriaNaoEspecificado;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +18,17 @@ public class CategoriaService {
     CategoriaRepository categoriaRepository;
 
     @Transactional(readOnly = true)
-    public List<CategoriaDTO> findCategoria() {
-        List<Categoria> result = categoriaRepository.findAllAtivas();
+    public List<CategoriaDTO> findCategoria(String usuarioId) {
+        List<Categoria> result = categoriaRepository.findAllAtivas(usuarioId);
         return result.stream().map(CategoriaDTO::new).toList();
     }
 
     @Transactional(readOnly = true)
-    public CategoriaDTO findCategoriaById(Long id) {
-        return categoriaRepository.findById(id)
-                .map(CategoriaDTO::new)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+    public CategoriaDTO findCategoriaById(String usuarioId, Long id) {
+        Categoria categoria = categoriaRepository.findById(usuarioId, id);
+        if (categoria == null) {
+            throw new CategoriaNaoEncontrada();
+        }
     }
 
     @Transactional

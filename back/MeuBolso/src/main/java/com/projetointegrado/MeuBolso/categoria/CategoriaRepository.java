@@ -8,30 +8,40 @@ import java.util.List;
 
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     @Query(nativeQuery = true, value = """
-        select * from categoria where ativa = true
+        select * from categoria where usuario_id = :usuario_id
     """)
-    List<Categoria> findAllAtivas();
+    List<Categoria> findAllByUsuario(String usuario_id);
 
     @Query(nativeQuery = true, value = """
-        select * from categoria where tipo_categoria = 'receita' AND ativa = true
+        select * from categoria where id = :id AND usuario_id = :usuario_id
     """)
-    List<Categoria> findAllByReceita();
+    Categoria findById(String usuario_id, Long id);
 
     @Query(nativeQuery = true, value = """
-        select * from categoria where tipo_categoria = 'despesa' and ativa = true
+        select * from categoria where ativa = true AND usuario_id = :usuario_id
     """)
-    List<Categoria> findAllByDespesa();
+    List<Categoria> findAllAtivas(String usuario_id);
 
     @Query(nativeQuery = true, value = """
-        select * from categoria where LOWER(nome) like LOWER(:nome)
+        select * from categoria where tipo_categoria = 'receita' AND ativa = true AND usuario_id = :usuario_id
     """)
-    Categoria findByName(String nome);
+    List<Categoria> findAllByReceita(String usuario_id);
+
+    @Query(nativeQuery = true, value = """
+        select * from categoria where tipo_categoria = 'despesa' and ativa = true AND usuario_id = :usuario_id
+    """)
+    List<Categoria> findAllByDespesa(String usuario_id);
+
+    @Query(nativeQuery = true, value = """
+        select * from categoria where LOWER(nome) like LOWER(:nome) AND usuario_id = :usuario_id
+    """)
+    Categoria findByName(String usuario_id, String nome);
 
     @Modifying
     @Query(nativeQuery = true, value = """
         update categoria
         set ativa = false
-        where id = :id and ativa = true;
+        where id = :id and ativa = true and usuario_id = :usuario_id;
     """)
-    void arquivarById (Long id);
+    void arquivarById (String usuario_id, Long id);
 }
