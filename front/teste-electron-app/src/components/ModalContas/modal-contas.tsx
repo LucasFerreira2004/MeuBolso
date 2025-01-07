@@ -4,7 +4,6 @@ import style from "./modal-contas.module.css";
 import DropDownBancos from "../UI/DropDownBancos/drop-down-bancos";
 import DropDownTipoConta from "../UI/DropDownTipoContas/drop-down-tipo-conta"; 
 
-// Definindo a interface para a Conta com todos os campos necessários
 interface Conta {
   id: number;
   saldo: number;
@@ -22,7 +21,7 @@ interface Conta {
 
 interface ModalContasProps {
   closeModal: () => void;
-  onAddConta: (novaConta: Conta) => void; // Função que será chamada no componente pai para adicionar a conta
+  onAddConta: (novaConta: Conta) => void;
 }
 
 const sendData = async ({
@@ -32,10 +31,17 @@ const sendData = async ({
   id_usuario,
 }: Conta) => {
   try {
+    const token = localStorage.getItem("authToken");
+    
+    if (!token) {
+      return { success: false, error: { message: "Token não encontrado. O usuário não está autenticado." } };
+    }
+
     const response = await fetch("http://localhost:8080/contas", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         saldo,
@@ -47,6 +53,8 @@ const sendData = async ({
 
     if (response.ok) {
       return { success: true, data: await response.json() };
+    } else if (response.status === 403) {
+      return { success: false, error: { message: "Acesso proibido. Verifique suas permissões." } };
     } else {
       const errorData = await response.json();
       return { success: false, error: errorData };
@@ -62,12 +70,11 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
   const [openTipoConta, setOpenTipoConta] = useState(false);
   const [isRotatedBancos, setIsRotatedBancos] = useState(false);
   const [isRotatedTipoConta, setIsRotatedTipoConta] = useState(false);
-  const [saldo, setSaldo] = useState<number | string>("");
+  const [saldo, setSaldo] = useState<number | string>(""); 
   const [selectedBanco, setSelectedBanco] = useState<number | null>(null);
   const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Função para alternar a visibilidade do dropdown de bancos
   const toggleDropdownBancos = () => {
     if (openTipoConta) {
       setOpenTipoConta(false);
@@ -77,7 +84,6 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
     setIsRotatedBancos(!isRotatedBancos);
   };
 
-  // Função para alternar a visibilidade do dropdown de tipo de conta
   const toggleDropdownTipoConta = () => {
     if (openBancos) {
       setOpenBancos(false);
@@ -95,24 +101,23 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
       return;
     }
 
-    const id_usuario = 1; // ID do usuário (isso pode vir de algum contexto ou estado global)
+    const id_usuario = 1;
 
-    // Criar uma nova conta com todos os campos necessários
     const novaConta: Conta = {
-      id: 0, // A API provavelmente vai gerar esse ID, ou você pode deixar como 0
-      saldo: parseFloat(saldo.toString()), // Converte o saldo para um número
-      banco: { nome: "Banco Exemplo", iconeUrl: "/path/to/icon" }, // Substitua com dados reais
-      tipo_conta: { tipoConta: "Tipo de Conta Exemplo" }, // Substitua com dados reais
+      id: 0, 
+      saldo: parseFloat(saldo.toString()), 
+      banco: { nome: "Banco Exemplo", iconeUrl: "/path/to/icon" }, 
+      tipo_conta: { tipoConta: "Tipo de Conta Exemplo" },
       id_banco: selectedBanco,
       id_tipo_conta: selectedTipoConta,
-      id_usuario, // Defina o ID do usuário
+      id_usuario,
     };
 
     const result = await sendData(novaConta);
 
     if (result.success) {
-      onAddConta(result.data); // Adiciona a nova conta ao componente pai
-      closeModal(); // Fecha o modal
+      onAddConta(result.data); 
+      closeModal(); 
     } else {
       setErrorMessage(result.error?.message || "Erro ao criar a conta.");
     }

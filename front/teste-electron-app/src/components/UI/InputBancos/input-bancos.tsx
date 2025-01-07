@@ -18,12 +18,18 @@ const InputBancos: React.FC<InputBancosProps> = ({ id, nome, iconeUrl, onClick }
   const [showDetails, setShowDetails] = useState(false);
   const [loading, setLoading] = useState(false);  // Estado para controlar o carregamento
 
-  // Função para buscar detalhes do banco
   const fetchBankDetails = async () => {
     setLoading(true);  // Começa o carregamento
+    const token = localStorage.getItem("authToken");  // Recupera o token do localStorage
+    
     try {
       const response = await axios.get(
-        `http://localhost:8080/bancos/${id}` // URL da API para obter detalhes
+        `http://localhost:8080/bancos/${id}`, // URL da API para obter detalhes
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Adiciona o cabeçalho de autenticação
+          },
+        }
       );
       setDetails(response.data);
     } catch (err) {
@@ -31,7 +37,7 @@ const InputBancos: React.FC<InputBancosProps> = ({ id, nome, iconeUrl, onClick }
     } finally {
       setLoading(false);  // Finaliza o carregamento
     }
-  };
+  };  
 
   // Carregar detalhes quando o usuário clicar
   const handleShowDetails = () => {

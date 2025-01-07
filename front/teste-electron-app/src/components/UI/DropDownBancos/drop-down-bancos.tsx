@@ -24,11 +24,19 @@ const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps)
     toggleDropdownBancos(); // Chama a função do componente pai para fechar também
   };
 
-  // Função para buscar dados da API
   const fetchBancos = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/bancos"); 
-      setBancos(response.data); 
+      // Supondo que o token esteja salvo no localStorage
+      const token = localStorage.getItem("authToken");
+  
+      // Se o token existir, inclui no cabeçalho da requisição
+      const response = await axios.get("http://localhost:8080/bancos", {
+        headers: {
+          Authorization: `Bearer ${token}`,  // Envia o token no cabeçalho
+        },
+      });
+  
+      setBancos(response.data); // Atualiza o estado com os dados recebidos
     } catch (err) {
       console.error("Erro ao buscar os dados dos bancos:", err);
     }
