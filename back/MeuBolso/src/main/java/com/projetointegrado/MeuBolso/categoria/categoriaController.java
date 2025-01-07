@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.categoria;
 
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
+import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,38 +15,41 @@ public class categoriaController {
     @Autowired
     CategoriaService categoriaService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @GetMapping
     public List<CategoriaDTO> findCategoria() {
-        List<CategoriaDTO> result = categoriaService.findCategoria();
+        List<CategoriaDTO> result = categoriaService.findCategoria(usuarioService.getUsuarioLogadoId());
         return result;
     }
 
     @GetMapping("/{id}")
     public CategoriaDTO findCategoriaById(@PathVariable Long id) {
-        CategoriaDTO result = categoriaService.findCategoriaById(id);
+        CategoriaDTO result = categoriaService.findCategoriaById(usuarioService.getUsuarioLogadoId(), id);
         return result;
     }
 
     @GetMapping("/receitas")
-    public List<CategoriaDTO> findReceitas(String usuarioId) {
-        return categoriaService.findAllByReceita(usuarioId);
+    public List<CategoriaDTO> findReceitas() {
+        return categoriaService.findAllByReceita(usuarioService.getUsuarioLogadoId());
     }
     @GetMapping("/despesas")
-    public List<CategoriaDTO> findDespesas(String usuarioId) {
-        return categoriaService.findAllByDespesa(usuarioId);
+    public List<CategoriaDTO> findDespesas() {
+        return categoriaService.findAllByDespesa(usuarioService.getUsuarioLogadoId());
     }
 
     @PostMapping
-    public CategoriaDTO save(String usuarioId, @RequestBody CategoriaSaveDTO categoriaSaveDTO) {
-        return categoriaService.save(usuarioId, categoriaSaveDTO);
+    public CategoriaDTO save(@RequestBody CategoriaSaveDTO categoriaSaveDTO) {
+        return categoriaService.save(usuarioService.getUsuarioLogadoId(), categoriaSaveDTO);
     }
     @PutMapping("{id}")
     public CategoriaDTO update(@PathVariable Long id, @RequestBody CategoriaSaveDTO categoriaSaveDTO) {
-        return categoriaService.update(id, categoriaSaveDTO);
+        return categoriaService.update(usuarioService.getUsuarioLogadoId(), id, categoriaSaveDTO);
     }
 
     @PutMapping("/arquivadas/{id}")
     public CategoriaDTO arquivar(@PathVariable Long id) {
-        return categoriaService.arquivar(id);
+        return categoriaService.arquivar(usuarioService.getUsuarioLogadoId(), id);
     }
 }
