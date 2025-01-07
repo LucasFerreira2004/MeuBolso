@@ -31,8 +31,13 @@ function ContasBancarias() {
   const [openAddModal, setOpenAddModal] = useState(false);
 
   const fetchContas = () => {
+    const token = localStorage.getItem("authToken"); // ou utilize qualquer método que tenha escolhido para armazenar o token
     axios
-      .get<Conta[]>("http://localhost:8080/contas")
+      .get<Conta[]>("http://localhost:8080/contas", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adicionando o token no cabeçalho
+        },
+      })
       .then((response) => {
         setContas(response.data);
       })
@@ -40,7 +45,7 @@ function ContasBancarias() {
         console.error("Erro ao buscar as contas:", error);
       });
   };
-
+  
   useEffect(() => {
     fetchContas();
   }, []);
