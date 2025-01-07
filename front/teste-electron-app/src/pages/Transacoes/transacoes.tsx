@@ -4,7 +4,7 @@ function Transacoes (){
     return(
         <div className={style.containerTransacoes}>
             <h1>Transações</h1>
-            <header>
+            <div className={style.headerTransacoes}>
                 <h3>Estimativa do mês</h3>
                 <div className={style.rowTransacoes}>
                     <div>
@@ -20,7 +20,7 @@ function Transacoes (){
                         <p><span className={style.spanT}>Despesas: </span>R$ 15316.00</p>
                     </div>
                 </div>
-            </header>
+            </div>
         </div>
         
     );

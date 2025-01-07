@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { saveToken } from "../../service/auth-service"; // Importe a função saveToken
 import style from "./login.module.css";
 
 // Definindo tipo para a resposta da API
@@ -36,7 +37,8 @@ function Login() {
       const token = data.token;
 
       // Salvar o token no localStorage
-      localStorage.setItem("authToken", token);
+      saveToken(token);
+      console.log("Token salvo:", token);
 
       // Redirecionar para a página inicial após login bem-sucedido
       navigate("/home");

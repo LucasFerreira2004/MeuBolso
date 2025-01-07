@@ -8,6 +8,11 @@
     border: 1px solid var(--main-color);
     display: flex;
     flex-direction: column;
+    cursor: pointer;
+    transition: transform 0.6s ease;
+  }
+  .cardContainer:hover{
+    transform: scale(1.05);
   }
   
   /* Estilo para o conteúdo do card */
