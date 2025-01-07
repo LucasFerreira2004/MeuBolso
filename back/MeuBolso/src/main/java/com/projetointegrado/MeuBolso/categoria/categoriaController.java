@@ -27,17 +27,17 @@ public class categoriaController {
     }
 
     @GetMapping("/receitas")
-    public List<CategoriaDTO> findReceitas() {
-        return categoriaService.findAllByReceita();
+    public List<CategoriaDTO> findReceitas(String usuarioId) {
+        return categoriaService.findAllByReceita(usuarioId);
     }
     @GetMapping("/despesas")
-    public List<CategoriaDTO> findDespesas() {
-        return categoriaService.findAllByDespesa();
+    public List<CategoriaDTO> findDespesas(String usuarioId) {
+        return categoriaService.findAllByDespesa(usuarioId);
     }
 
     @PostMapping
-    public CategoriaDTO save(@RequestBody CategoriaSaveDTO categoriaSaveDTO) {
-        return categoriaService.save(categoriaSaveDTO);
+    public CategoriaDTO save(String usuarioId, @RequestBody CategoriaSaveDTO categoriaSaveDTO) {
+        return categoriaService.save(usuarioId, categoriaSaveDTO);
     }
     @PutMapping("{id}")
     public CategoriaDTO update(@PathVariable Long id, @RequestBody CategoriaSaveDTO categoriaSaveDTO) {

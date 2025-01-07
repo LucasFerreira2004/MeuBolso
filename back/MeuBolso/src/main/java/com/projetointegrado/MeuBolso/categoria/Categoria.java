@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 import java.util.List;
 
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"usuario_id", "nome", "tipo_categoria"}) })
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"usuario_id", "nome"}) })
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,12 +35,13 @@ public class Categoria {
     public Categoria() {
     }
 
-    public Categoria(Long id, String nome, TipoCategoria tipoCategoria, String cor, Boolean ativa) {
+    public Categoria(Long id, String nome, TipoCategoria tipoCategoria, String cor, Boolean ativa, Usuario usuario) {
         this.id = id;
         this.nome = nome;
         this.tipoCategoria = tipoCategoria;
         this.cor = cor;
         this.ativa = ativa;
+        this.usuario = usuario;
     }
 
     public Long getId() {

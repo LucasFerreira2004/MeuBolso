@@ -26,4 +26,9 @@ public class CategoriaExceptionHandler extends ResponseEntityExceptionHandler {
         ExceptionDTO dto = new ExceptionDTO(HttpStatus.NOT_FOUND, ex.getMessage());
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(AcessoCategoriaNegadoException.class)
+    private ResponseEntity<ExceptionDTO> AcessoCategoriaNegadoHandler(AcessoCategoriaNegadoException ex){
+        ExceptionDTO dto = new ExceptionDTO(HttpStatus.FORBIDDEN, "/id acesso a categoria negado");
+    }
 }
