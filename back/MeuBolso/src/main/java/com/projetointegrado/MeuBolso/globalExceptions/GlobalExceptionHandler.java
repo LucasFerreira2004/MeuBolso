@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AcessoNegadoException.class)
     public ResponseEntity<ErrorResponseDTO> handleAcessoProibidoException(AcessoNegadoException ex) {
-        ErrorResponseDTO dto = new ErrorResponseDTO("", ex.getMessage());
+        ErrorResponseDTO dto = new ErrorResponseDTO("/{id}", ex.getMessage());
         return new ResponseEntity<>(dto, HttpStatus.FORBIDDEN);
     }
 

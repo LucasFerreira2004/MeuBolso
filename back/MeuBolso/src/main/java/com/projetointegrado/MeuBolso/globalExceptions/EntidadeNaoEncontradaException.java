@@ -1,7 +1,9 @@
 package com.projetointegrado.MeuBolso.globalExceptions;
 
 public class EntidadeNaoEncontradaException extends RuntimeException {
-    public EntidadeNaoEncontradaException(String message) {
+    private String campo;
+    public EntidadeNaoEncontradaException(String campo, String message) {
         super(message);
+        this.campo = campo;
     }
 }

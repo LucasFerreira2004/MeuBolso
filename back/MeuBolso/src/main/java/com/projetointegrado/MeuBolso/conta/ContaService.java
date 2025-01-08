@@ -38,12 +38,11 @@ public class ContaService {
     public ContaDTO findById(Long id) {
         Conta result = contaRepository.findById(id).orElse(null);
         String idUsuario = usuarioService.getUsuarioLogadoId();
-        if (result == null){
+        if (result == null)
             throw new IdContaNaoEncontradaException();
-        }
-        if (!result.getUsuario().getId().equals(idUsuario)) {
-            throw new AcessoNegadoException("acesso a conta negado");
-        }
+        if (!result.getUsuario().getId().equals(idUsuario))
+            throw new AcessoNegadoException();
+
         return new ContaDTO(result);
     }
     @Transactional(readOnly = true)
@@ -75,9 +74,10 @@ public class ContaService {
     @Transactional
     public ContaDTO deleteConta(Long id, String idUsuario) {
         Conta conta = contaRepository.findById(id).orElse(null);
-        if (conta == null) throw new IdContaNaoEncontradaException();
+        if (conta == null)
+            throw new IdContaNaoEncontradaException();
         if (!conta.getUsuario().getId().equals(idUsuario))
-            throw new AcessoContaNegadoException();
+            throw new AcessoNegadoException();
         contaRepository.delete(conta);
         return new ContaDTO(conta);
     }
@@ -91,7 +91,8 @@ public class ContaService {
         if (tipo == null) throw new IdTipoContaNaoEncontradoException();
         if (banco == null) throw new IdBancoNaoEncontradoException();
         if (conta == null) throw new IdContaNaoEncontradaException();
-        if (!conta.getUsuario().getId().equals(userId)) throw new AcessoContaNegadoException();
+        if (!conta.getUsuario().getId().equals(userId))
+            throw new AcessoNegadoException();
         conta.setSaldo(dto.getSaldo());
         conta.setTipo_conta(tipo);
         conta.setBanco(banco);
