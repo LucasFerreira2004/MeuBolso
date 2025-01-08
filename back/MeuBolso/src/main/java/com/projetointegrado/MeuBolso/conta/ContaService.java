@@ -5,6 +5,7 @@ import com.projetointegrado.MeuBolso.banco.BancoRepository;
 import com.projetointegrado.MeuBolso.categoria.exceptions.TipoCategoriaNaoEspecificado;
 import com.projetointegrado.MeuBolso.conta.dto.*;
 import com.projetointegrado.MeuBolso.conta.exception.*;
+import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaRepository;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaService;
@@ -41,7 +42,7 @@ public class ContaService {
             throw new IdContaNaoEncontradaException();
         }
         if (!result.getUsuario().getId().equals(idUsuario)) {
-            throw new AcessoContaNegadoException();
+            throw new AcessoNegadoException("acesso a conta negado");
         }
         return new ContaDTO(result);
     }
