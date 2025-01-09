@@ -26,12 +26,13 @@ import java.util.List;
 public class ContaService implements IContaService {
     @Autowired
     private ContaRepository contaRepository;
-    @Autowired
-    private TipoContaService tipoContaService;
+
     @Autowired
     private BancoRepository bancoRepository;
+
     @Autowired
     private TipoContaRepository tipoContaRepository;
+
     @Autowired
     private UsuarioRepository usuarioRepository;
 
