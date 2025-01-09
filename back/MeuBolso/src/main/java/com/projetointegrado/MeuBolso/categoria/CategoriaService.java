@@ -64,9 +64,11 @@ public class CategoriaService {
     @Transactional
     public CategoriaDTO update(String usuarioId, Long id, CategoriaSaveDTO dto) {
         Categoria categoria = categoriaRepository.findById(id).orElse(null);
-        if (categoria == null) {
+        if (categoria == null)
             throw new CategoriaNaoEncontrada();
-        }
+        Categoria categoriaDeMesmoNome = categoriaRepository.findByName(usuarioId, dto.getNome());
+        if (categoriaDeMesmoNome != null && !categoriaDeMesmoNome.getId().equals(id))
+            throw new NomeCadastradoException();
         if (!categoria.getUsuario().getId().equals(usuarioId))
             throw new AcessoNegadoException();
 
