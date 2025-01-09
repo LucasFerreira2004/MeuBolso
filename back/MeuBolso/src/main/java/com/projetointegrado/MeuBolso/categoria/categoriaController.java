@@ -15,7 +15,8 @@ import java.util.List;
 public class categoriaController {
 
     @Autowired
-    CategoriaService categoriaService;
+    @Qualifier("categoriaService")
+    private ICategoriaService categoriaService;
 
     @Autowired
     @Qualifier("usuarioService")
