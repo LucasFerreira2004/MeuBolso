@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.tipoConta;
 
+import com.projetointegrado.MeuBolso.tipoConta.dto.TipoContaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
