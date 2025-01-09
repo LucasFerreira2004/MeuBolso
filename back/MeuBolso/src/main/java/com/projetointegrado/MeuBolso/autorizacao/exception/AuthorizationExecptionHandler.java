@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.autorizacao.exception;
 
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

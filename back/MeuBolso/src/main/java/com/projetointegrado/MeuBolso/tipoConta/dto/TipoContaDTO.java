@@ -1,4 +1,7 @@
-package com.projetointegrado.MeuBolso.tipoConta;
+package com.projetointegrado.MeuBolso.tipoConta.dto;
+
+import com.projetointegrado.MeuBolso.tipoConta.EnumTipoConta;
+import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 
 public class TipoContaDTO {
     private Long id;
