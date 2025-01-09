@@ -23,13 +23,13 @@ public class categoriaController {
 
     @GetMapping
     public List<CategoriaDTO> findCategoria() {
-        List<CategoriaDTO> result = categoriaService.findCategoria(usuarioService.getUsuarioLogadoId());
+        List<CategoriaDTO> result = categoriaService.findAll(usuarioService.getUsuarioLogadoId());
         return result;
     }
 
     @GetMapping("/{id}")
     public CategoriaDTO findCategoriaById(@PathVariable Long id) {
-        CategoriaDTO result = categoriaService.findCategoriaById(usuarioService.getUsuarioLogadoId(), id);
+        CategoriaDTO result = categoriaService.findById(usuarioService.getUsuarioLogadoId(), id);
         return result;
     }
 
