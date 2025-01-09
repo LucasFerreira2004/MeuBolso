@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.autorizacao.seguranca;
 
 import com.projetointegrado.MeuBolso.autorizacao.token.TokenService;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
+import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

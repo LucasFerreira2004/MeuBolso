@@ -23,6 +23,6 @@ public class TipoController {
     }
     @GetMapping("{id}")
     public TipoContaDTO findById(@PathVariable Long id) {
-        return tipoContaService.findTipoContaById(id);
+        return tipoContaService.findById(id);
     }
 }

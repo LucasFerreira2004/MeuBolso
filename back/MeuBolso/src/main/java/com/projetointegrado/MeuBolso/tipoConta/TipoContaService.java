@@ -7,12 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class TipoContaService {
+public class TipoContaService implements ITipoContaService {
     @Autowired
     private TipoContaRepository tipoContaRepository;
 
     @Transactional(readOnly = true)
-    public TipoContaDTO findTipoContaById(Long id) {
+    public TipoContaDTO findById(Long id) {
         //tratar null
         TipoConta tipo = tipoContaRepository.findById(id).orElse(null);
         return new TipoContaDTO(tipo);
