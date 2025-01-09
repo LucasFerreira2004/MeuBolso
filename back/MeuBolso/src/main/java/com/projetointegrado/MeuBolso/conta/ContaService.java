@@ -6,6 +6,7 @@ import com.projetointegrado.MeuBolso.categoria.exceptions.TipoCategoriaNaoEspeci
 import com.projetointegrado.MeuBolso.conta.dto.*;
 import com.projetointegrado.MeuBolso.conta.exception.*;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
+import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaRepository;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaService;
@@ -39,7 +40,7 @@ public class ContaService {
         Conta result = contaRepository.findById(id).orElse(null);
         String idUsuario = usuarioService.getUsuarioLogadoId();
         if (result == null)
-            throw new IdContaNaoEncontradaException();
+            throw new EntidadeNaoEncontradaException("id conta");
         if (!result.getUsuario().getId().equals(idUsuario))
             throw new AcessoNegadoException();
 

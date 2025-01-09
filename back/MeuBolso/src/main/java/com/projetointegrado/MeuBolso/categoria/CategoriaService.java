@@ -2,14 +2,12 @@ package com.projetointegrado.MeuBolso.categoria;
 
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
-import com.projetointegrado.MeuBolso.categoria.exceptions.AcessoCategoriaNegadoException;
+
 import com.projetointegrado.MeuBolso.categoria.exceptions.CategoriaNaoEncontrada;
 import com.projetointegrado.MeuBolso.categoria.exceptions.NomeCadastradoException;
-import com.projetointegrado.MeuBolso.categoria.exceptions.TipoCategoriaNaoEspecificado;
-import com.projetointegrado.MeuBolso.conta.exception.AcessoContaNegadoException;
+import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
-import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +36,7 @@ public class CategoriaService {
             throw new CategoriaNaoEncontrada();
         }
         if (!categoria.getUsuario().getId().equals(usuarioId))
-            throw new AcessoCategoriaNegadoException();
+            throw new AcessoNegadoException();
         return new CategoriaDTO(categoria);
     }
 
@@ -70,7 +68,7 @@ public class CategoriaService {
             throw new CategoriaNaoEncontrada();
         }
         if (!categoria.getUsuario().getId().equals(usuarioId))
-            throw new AcessoCategoriaNegadoException();
+            throw new AcessoNegadoException();
 
         Usuario usuario = usuarioRepository.findById(usuarioId).get();
         Categoria novaCategoria = new Categoria(id, dto.getNome(), dto.getTipo(), dto.getCor(), true, usuario);
@@ -85,7 +83,7 @@ public class CategoriaService {
             throw new CategoriaNaoEncontrada();
         }
         if (!categoria.getUsuario().getId().equals(usuarioId))
-            throw new AcessoCategoriaNegadoException();
+            throw new AcessoNegadoException();
         categoriaRepository.arquivarById(usuarioId, id);
         return new CategoriaDTO(categoria);
     }

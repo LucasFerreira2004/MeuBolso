@@ -5,7 +5,7 @@ public class IdContaNaoEncontradaException extends RuntimeException {
         super(message);
     }
     public IdContaNaoEncontradaException() {
-        super("conta nao encontrada");
+        super("conta nao encontrada ");
     }
 
 }

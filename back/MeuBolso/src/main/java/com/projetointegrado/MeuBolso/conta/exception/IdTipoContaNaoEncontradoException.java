@@ -6,6 +6,6 @@ public class IdTipoContaNaoEncontradoException extends RuntimeException {
     }
 
     public IdTipoContaNaoEncontradoException() {
-        super("id do tipo conta não encontrado");
+        super("tipo conta não encontrado");
     }
 }

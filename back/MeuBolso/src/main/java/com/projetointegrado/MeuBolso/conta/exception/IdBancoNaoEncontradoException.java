@@ -6,6 +6,6 @@ public class IdBancoNaoEncontradoException extends RuntimeException {
     }
 
     public IdBancoNaoEncontradoException() {
-        super("id do banco não encontrado");
+        super("banco não encontrado");
     }
 }

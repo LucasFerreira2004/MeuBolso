@@ -5,7 +5,7 @@ public class CategoriaNaoEncontrada extends RuntimeException {
         super(message);
     }
   public CategoriaNaoEncontrada() {
-    super("conta nao encontrada");
+    super("categoria nao encontrada");
   }
 
 }

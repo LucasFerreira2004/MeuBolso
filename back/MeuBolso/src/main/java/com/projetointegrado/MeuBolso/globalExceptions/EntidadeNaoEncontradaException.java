@@ -6,4 +6,10 @@ public class EntidadeNaoEncontradaException extends RuntimeException {
         super(message);
         this.campo = campo;
     }
+    public EntidadeNaoEncontradaException(String campo) {
+        super("entidade não encontrada");
+    }
+    public String getCampo() {
+        return campo;
+    }
 }

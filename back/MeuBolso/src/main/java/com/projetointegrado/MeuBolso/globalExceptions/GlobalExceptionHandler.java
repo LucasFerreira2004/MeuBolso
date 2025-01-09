@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<ErrorResponseDTO> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex) {
-        ErrorResponseDTO dto = new ErrorResponseDTO("", ex.getMessage());
+        ErrorResponseDTO dto = new ErrorResponseDTO(ex.getCampo(), ex.getMessage());
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
 }
