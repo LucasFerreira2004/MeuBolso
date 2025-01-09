@@ -15,7 +15,7 @@ import java.util.List;
 public class ContaController {
     @Autowired
     @Qualifier("contaService")
-    private IContaService contaService;
+    private ContaService contaService;
 
     @Autowired
     private UsuarioService usuarioService;

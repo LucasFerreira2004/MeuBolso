@@ -34,6 +34,7 @@ public class ConfigurationSeguranca {
                 .authorizeHttpRequests(authorizeRequest -> authorizeRequest
                         .requestMatchers(HttpMethod.GET, "/h2-console/*").permitAll()
                         .requestMatchers(HttpMethod.POST, "/h2-console/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/cadastro").permitAll()
                         .anyRequest().authenticated()
