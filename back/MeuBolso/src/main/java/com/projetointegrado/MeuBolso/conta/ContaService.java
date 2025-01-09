@@ -42,7 +42,7 @@ public class ContaService {
         Conta result = contaRepository.findById(id).orElse(null);
         String idUsuario = usuarioService.getUsuarioLogadoId();
         if (result == null)
-            throw new EntidadeNaoEncontradaException("id conta");
+            throw new ContaNaoEncontradaException();
         if (!result.getUsuario().getId().equals(idUsuario))
             throw new AcessoNegadoException();
 
