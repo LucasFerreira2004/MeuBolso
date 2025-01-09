@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.conta;
 
 import com.projetointegrado.MeuBolso.conta.dto.*;
+import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +19,8 @@ public class ContaController {
     private IContaService contaService;
 
     @Autowired
-    private UsuarioService usuarioService;
+    @Qualifier("usuarioService")
+    private IUsuarioService usuarioService;
 
     @GetMapping
     public List<ContaDTO> findAll() {
