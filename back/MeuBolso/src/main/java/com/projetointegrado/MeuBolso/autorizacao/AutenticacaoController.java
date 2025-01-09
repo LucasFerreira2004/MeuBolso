@@ -43,7 +43,7 @@ public class AutenticacaoController {
     @PostMapping("/cadastro")
     public ResponseEntity cadastrar(@RequestBody @Valid CadastroDTO data){
         UsuarioDTO usuarioDTO = new UsuarioDTO(data.nome(), data.email(), data.senha());
-        usuarioService.salvarUsuario(usuarioDTO);
+        usuarioService.save(usuarioDTO);
 
         return ResponseEntity.ok().build();
     }

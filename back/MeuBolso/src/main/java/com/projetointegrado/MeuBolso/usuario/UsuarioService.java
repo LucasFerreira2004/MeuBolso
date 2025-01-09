@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements IUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public UsuarioDTO salvarUsuario(UsuarioDTO usuarioDTO) {
+    public UsuarioDTO save(UsuarioDTO usuarioDTO) {
         if (usuarioRepository.findByEmail(usuarioDTO.getEmail()) != null)
             throw new EmailJaCadastradoException();
         String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioDTO.getSenha());

@@ -3,6 +3,7 @@ package com.projetointegrado.MeuBolso.conta;
 import com.projetointegrado.MeuBolso.conta.dto.*;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,8 @@ import java.util.List;
 @RequestMapping(value = "/contas")
 public class ContaController {
     @Autowired
-    private ContaService contaService;
+    @Qualifier("contaService")
+    private IContaService contaService;
 
     @Autowired
     private UsuarioService usuarioService;
