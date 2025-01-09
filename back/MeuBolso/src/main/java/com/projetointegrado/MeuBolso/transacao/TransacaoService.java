@@ -8,17 +8,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class TransacaoService {
+public class TransacaoService implements ITransacaoService {
     @Autowired
     private TransacaoRepository transacaoRepository;
 
     @Transactional(readOnly = true)
-    public TransacaoDTO findTransacaoById(Long id){
+    public TransacaoDTO findById(Long id){
         Transacao transacao = transacaoRepository.findById(id).get(); //mudar essa linha pra colocar o .orElse(null)
         return new TransacaoDTO(transacao);
     }
     @Transactional(readOnly = true)
-    public List<TransacaoDTO> findTransacoes(){
+    public List<TransacaoDTO> findAll(){
         List<Transacao> transacoes = transacaoRepository.findAll();
         return transacoes.stream().map(TransacaoDTO::new).toList();
     }
