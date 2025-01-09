@@ -3,8 +3,8 @@ package com.projetointegrado.MeuBolso.categoria;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
 
-import com.projetointegrado.MeuBolso.categoria.exceptions.CategoriaNaoEncontrada;
-import com.projetointegrado.MeuBolso.categoria.exceptions.NomeCadastradoException;
+import com.projetointegrado.MeuBolso.categoria.exception.CategoriaNaoEncontrada;
+import com.projetointegrado.MeuBolso.categoria.exception.NomeCadastradoException;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;

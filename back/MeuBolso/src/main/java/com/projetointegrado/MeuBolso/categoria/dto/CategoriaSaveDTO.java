@@ -1,7 +1,7 @@
 package com.projetointegrado.MeuBolso.categoria.dto;
 
 import com.projetointegrado.MeuBolso.categoria.TipoCategoria;
-import com.projetointegrado.MeuBolso.categoria.exceptions.TipoCategoriaNaoEspecificado;
+import com.projetointegrado.MeuBolso.categoria.exception.TipoCategoriaNaoEspecificado;
 
 public class CategoriaSaveDTO {
     private String cor;

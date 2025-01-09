@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.categoria.exceptions;
+package com.projetointegrado.MeuBolso.categoria.exception;
 
 public class TipoCategoriaNaoEspecificado extends RuntimeException {
     public TipoCategoriaNaoEspecificado(){

@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.categoria.exceptions;
+package com.projetointegrado.MeuBolso.categoria.exception;
 
 public class CategoriaNaoEncontrada extends RuntimeException {
     public CategoriaNaoEncontrada(String message) {

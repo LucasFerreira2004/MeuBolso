@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.categoria.exceptions;
+package com.projetointegrado.MeuBolso.categoria.exception;
 
 import org.springframework.http.HttpStatus;
 

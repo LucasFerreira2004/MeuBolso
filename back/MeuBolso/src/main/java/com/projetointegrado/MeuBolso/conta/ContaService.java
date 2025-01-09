@@ -2,7 +2,7 @@ package com.projetointegrado.MeuBolso.conta;
 
 import com.projetointegrado.MeuBolso.banco.Banco;
 import com.projetointegrado.MeuBolso.banco.BancoRepository;
-import com.projetointegrado.MeuBolso.categoria.exceptions.TipoCategoriaNaoEspecificado;
+import com.projetointegrado.MeuBolso.banco.exception.BancoNaoEncontradoException;
 import com.projetointegrado.MeuBolso.conta.dto.*;
 import com.projetointegrado.MeuBolso.conta.exception.*;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
@@ -10,9 +10,11 @@ import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaExcep
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaRepository;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaService;
+import com.projetointegrado.MeuBolso.tipoConta.exception.TipoContaNaoEncontradoException;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
+import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,9 +66,9 @@ public class ContaService {
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
         Usuario usuario = usuarioRepository.findById(userID).orElse(null);
 
-        if (tipo == null) throw new IdTipoContaNaoEncontradoException();
-        if (banco == null) throw new IdBancoNaoEncontradoException();
-        if (usuario == null) throw new IdUsuarioNaoEncontradoException();
+        if (tipo == null) throw new TipoContaNaoEncontradoException();
+        if (banco == null) throw new BancoNaoEncontradoException();
+        if (usuario == null) throw new UsuarioNaoEncontradoException();
 
         Conta conta = new Conta(null, dto.getSaldo(), tipo, banco, usuario);
         return new ContaDTO(contaRepository.save(conta));
@@ -76,7 +78,7 @@ public class ContaService {
     public ContaDTO deleteConta(Long id, String idUsuario) {
         Conta conta = contaRepository.findById(id).orElse(null);
         if (conta == null)
-            throw new IdContaNaoEncontradaException();
+            throw new ContaNaoEncontradaException();
         if (!conta.getUsuario().getId().equals(idUsuario))
             throw new AcessoNegadoException();
         contaRepository.delete(conta);
@@ -89,9 +91,9 @@ public class ContaService {
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
         Conta conta = contaRepository.findById(id).orElse(null);
 
-        if (tipo == null) throw new IdTipoContaNaoEncontradoException();
-        if (banco == null) throw new IdBancoNaoEncontradoException();
-        if (conta == null) throw new IdContaNaoEncontradaException();
+        if (tipo == null) throw new TipoContaNaoEncontradoException();
+        if (banco == null) throw new BancoNaoEncontradoException();
+        if (conta == null) throw new ContaNaoEncontradaException();
         if (!conta.getUsuario().getId().equals(userId))
             throw new AcessoNegadoException();
         conta.setSaldo(dto.getSaldo());

@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.categoria.exceptions;
+package com.projetointegrado.MeuBolso.categoria.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +27,4 @@ public class CategoriaExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(AcessoCategoriaNegadoException.class)
-    private ResponseEntity<ExceptionDTO> AcessoCategoriaNegadoHandler(AcessoCategoriaNegadoException ex){
-        ExceptionDTO dto = new ExceptionDTO(HttpStatus.FORBIDDEN, "/id acesso a categoria negado");
-        return new ResponseEntity<>(dto, HttpStatus.FORBIDDEN);
-    }
 }

@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.categoria.exceptions;
+package com.projetointegrado.MeuBolso.categoria.exception;
 
 public class NomeCadastradoException extends RuntimeException{
     public NomeCadastradoException(String message) {
