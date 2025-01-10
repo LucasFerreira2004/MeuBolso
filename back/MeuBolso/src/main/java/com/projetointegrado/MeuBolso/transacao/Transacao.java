@@ -2,7 +2,10 @@ package com.projetointegrado.MeuBolso.transacao;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
+import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
+
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
@@ -13,23 +16,35 @@ public class Transacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
+    @DecimalMin(value = "0.01", message = "O valor da transação deve ser no mínimo 0.01")
     private BigDecimal valor;
+
     @Column(columnDefinition = "DATE")
     private Date data_transacao;
+
     @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "categoria", nullable = false)
     private Categoria categoria;
+
     @ManyToOne
     @JoinColumn(name = "conta_origem")
     private Conta conta;
+
     @Column(columnDefinition = "TEXT")
     private String comentario;
     @NotBlank
+
     @Column(columnDefinition = "TEXT")
     private String descricao;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
     public Transacao(Long id, BigDecimal valor, Date data_transacao, TipoTransacao tipo, Categoria categoria, String comentario, String descricao) {
         this.id = id;
