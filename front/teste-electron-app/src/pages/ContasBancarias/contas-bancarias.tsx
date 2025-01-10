@@ -5,7 +5,7 @@ import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./contas-bancarias.module.css";
 import ModalEditContas from "../../components/ModalEditContas/modal-edit-contas";
 import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-conta";
-import ModalContas from "../../components/ModalContas/modal-contas"; // Importando o ModalContas
+import ModalContas from "../../components/ModalContas/modal-contas";
 
 interface Conta {
   id: number;
@@ -25,17 +25,17 @@ interface Conta {
 function ContasBancarias() {
   const [contas, setContas] = useState<Conta[]>([]);
   const [open, setOpen] = useState(false);
-  const [selectedConta, setSelectedConta] = useState<Conta | null>(null); 
+  const [selectedConta, setSelectedConta] = useState<Conta | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedContaToDelete, setSelectedContaToDelete] = useState<Conta | null>(null);
   const [openAddModal, setOpenAddModal] = useState(false);
 
   const fetchContas = () => {
-    const token = localStorage.getItem("authToken"); // ou utilize qualquer método que tenha escolhido para armazenar o token
+    const token = localStorage.getItem("authToken"); 
     axios
       .get<Conta[]>("http://localhost:8080/contas", {
         headers: {
-          Authorization: `Bearer ${token}`, // Adicionando o token no cabeçalho
+          Authorization: `Bearer ${token}`, 
         },
       })
       .then((response) => {
@@ -45,7 +45,7 @@ function ContasBancarias() {
         console.error("Erro ao buscar as contas:", error);
       });
   };
-  
+
   useEffect(() => {
     fetchContas();
   }, []);
@@ -63,13 +63,13 @@ function ContasBancarias() {
   const handleCloseModal = () => {
     setOpen(false);
     setSelectedConta(null); 
-    fetchContas(); // Atualiza a lista de contas após fechar o modal de edição
+    fetchContas(); 
   };
 
   const closeDeleteModal = () => {
     setOpenDeleteModal(false);
     setSelectedContaToDelete(null); 
-    fetchContas(); // Atualiza a lista de contas após fechar o modal de exclusão
+    fetchContas(); 
   };
 
   const closeAddModal = () => {
@@ -79,22 +79,34 @@ function ContasBancarias() {
   const handleAddConta = (novaConta: Conta) => {
     setContas((prevContas) => [...prevContas, novaConta]); 
     closeAddModal();
-    fetchContas(); // Atualiza a lista de contas após adicionar uma nova conta
+    fetchContas(); 
   };
 
-  const handleConfirmDelete = async (conta: Conta) => {
+  const handleConfirmDelete = async (id: number) => {
     try {
-      const response = await axios.delete(`http://localhost:8080/contas/${conta.id}`);
+      console.log("Excluindo conta com ID:", id); // Verifique o ID da conta
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("Token de autenticação não encontrado.");
+        return;
+      }
+      const response = await axios.delete(`http://localhost:8080/contas/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.status === 200) {
-        setContas((prevContas) => prevContas.filter((item) => item.id !== conta.id));
+        setContas((prevContas) => prevContas.filter((item) => item.id !== id));
         closeDeleteModal();
       } else {
-        console.error("Erro ao excluir a conta");
+        console.error("Erro ao excluir a conta. Status:", response.status);
       }
     } catch (error) {
       console.error("Erro ao excluir a conta:", error);
     }
   };
+  
+  
 
   return (
     <div className={style.contas}>
@@ -112,7 +124,8 @@ function ContasBancarias() {
       {openDeleteModal && selectedContaToDelete && (
         <ModalDeleteConta
           onClose={closeDeleteModal}
-          onConfirmDelete={() => handleConfirmDelete(selectedContaToDelete)}
+          onConfirmDelete={handleConfirmDelete}  // Passando a função com ID
+          contaId={selectedContaToDelete.id} // Passando o ID da conta
         />
       )}
 
