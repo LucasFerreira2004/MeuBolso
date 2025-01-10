@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.conta;
 
 import com.projetointegrado.MeuBolso.conta.dto.*;
+import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,10 +16,11 @@ import java.util.List;
 public class ContaController {
     @Autowired
     @Qualifier("contaService")
-    private ContaService contaService;
+    private IContaService contaService;
 
     @Autowired
-    private UsuarioService usuarioService;
+    @Qualifier("usuarioService")
+    private IUsuarioService usuarioService;
 
 
     @GetMapping
@@ -30,7 +32,9 @@ public class ContaController {
 
     @GetMapping("/{id}")
     public ContaDTO findById(@PathVariable Long id){
-        return contaService.findById(id);
+        String idUsuario = usuarioService.getUsuarioLogadoId();
+
+        return contaService.findById(idUsuario, id);
     }
 
     @GetMapping("/min")
@@ -49,18 +53,18 @@ public class ContaController {
     @PostMapping
     public ContaDTO save(@RequestBody ContaPostDTO contaPostDTO){
         String userId = usuarioService.getUsuarioLogadoId();
-        return contaService.saveConta(userId, contaPostDTO);
+        return contaService.save(userId, contaPostDTO);
     }
     @PutMapping("/{id}")
     public ContaDTO update(@PathVariable Long id, @RequestBody ContaPutDTO contaPostDTO){
         String userId = usuarioService.getUsuarioLogadoId();
-        return contaService.updateConta(id, contaPostDTO, userId);
+        return contaService.update(id, contaPostDTO, userId);
     }
     @DeleteMapping("/{id}")
     public ContaDTO delete(@PathVariable Long id){
         String userId = usuarioService.getUsuarioLogadoId();
 
-        return contaService.deleteConta(id, userId);
+        return contaService.delete(id, userId);
     }
 
 }

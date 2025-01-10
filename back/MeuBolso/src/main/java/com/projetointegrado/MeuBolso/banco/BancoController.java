@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.banco;
 
 import com.projetointegrado.MeuBolso.banco.dto.BancoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,8 @@ import java.util.List;
 @RequestMapping(value = "/bancos")
 public class BancoController {
     @Autowired
-    private BancoService bancoService;
+    @Qualifier("bancoService")
+    private IBancoService bancoService;
 
     @GetMapping
     public List<BancoDTO> findAll(){

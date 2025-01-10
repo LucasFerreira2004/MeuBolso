@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class CategoriaService {
+public class CategoriaService implements ICategoriaService {
 
     @Autowired
     CategoriaRepository categoriaRepository;
@@ -24,13 +24,13 @@ public class CategoriaService {
     UsuarioRepository usuarioRepository;
 
     @Transactional(readOnly = true)
-    public List<CategoriaDTO> findCategoria(String usuarioId) {
+    public List<CategoriaDTO> findAll(String usuarioId) {
         List<Categoria> result = categoriaRepository.findAllAtivas(usuarioId);
         return result.stream().map(CategoriaDTO::new).toList();
     }
 
     @Transactional(readOnly = true)
-    public CategoriaDTO findCategoriaById(String usuarioId, Long id) {
+    public CategoriaDTO findById(String usuarioId, Long id) {
         Categoria categoria = categoriaRepository.findById(id).orElse(null);
         if (categoria == null) {
             throw new CategoriaNaoEncontrada();

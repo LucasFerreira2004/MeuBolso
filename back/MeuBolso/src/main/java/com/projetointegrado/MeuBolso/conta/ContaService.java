@@ -23,24 +23,22 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-public class ContaService {
+public class ContaService implements IContaService {
     @Autowired
     private ContaRepository contaRepository;
-    @Autowired
-    private TipoContaService tipoContaService;
+
     @Autowired
     private BancoRepository bancoRepository;
+
     @Autowired
     private TipoContaRepository tipoContaRepository;
+
     @Autowired
     private UsuarioRepository usuarioRepository;
-    @Autowired
-    private UsuarioService usuarioService;
 
     @Transactional(readOnly = true)
-    public ContaDTO findById(Long id) {
+    public ContaDTO findById(String idUsuario, Long id) {
         Conta result = contaRepository.findById(id).orElse(null);
-        String idUsuario = usuarioService.getUsuarioLogadoId();
         if (result == null)
             throw new ContaNaoEncontradaException();
         if (!result.getUsuario().getId().equals(idUsuario))
@@ -61,7 +59,7 @@ public class ContaService {
         return result.stream().map(ContaMinDTO::new).toList();
     }
     @Transactional
-    public ContaDTO saveConta(String userID, ContaPostDTO dto) {
+    public ContaDTO save(String userID, ContaPostDTO dto) {
         TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
         Usuario usuario = usuarioRepository.findById(userID).orElse(null);
@@ -75,7 +73,7 @@ public class ContaService {
     }
 
     @Transactional
-    public ContaDTO deleteConta(Long id, String idUsuario) {
+    public ContaDTO delete(Long id, String idUsuario) {
         Conta conta = contaRepository.findById(id).orElse(null);
         if (conta == null)
             throw new ContaNaoEncontradaException();
@@ -86,7 +84,7 @@ public class ContaService {
     }
 
     @Transactional
-    public ContaDTO updateConta (Long id, ContaPutDTO dto, String userId) {
+    public ContaDTO update (Long id, ContaPutDTO dto, String userId) {
         TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
         Conta conta = contaRepository.findById(id).orElse(null);

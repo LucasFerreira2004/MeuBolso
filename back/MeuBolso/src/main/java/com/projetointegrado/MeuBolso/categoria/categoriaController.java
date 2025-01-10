@@ -2,8 +2,10 @@ package com.projetointegrado.MeuBolso.categoria;
 
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
+import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,20 +15,22 @@ import java.util.List;
 public class categoriaController {
 
     @Autowired
-    CategoriaService categoriaService;
+    @Qualifier("categoriaService")
+    private ICategoriaService categoriaService;
 
     @Autowired
-    private UsuarioService usuarioService;
+    @Qualifier("usuarioService")
+    private IUsuarioService usuarioService;
 
     @GetMapping
     public List<CategoriaDTO> findCategoria() {
-        List<CategoriaDTO> result = categoriaService.findCategoria(usuarioService.getUsuarioLogadoId());
+        List<CategoriaDTO> result = categoriaService.findAll(usuarioService.getUsuarioLogadoId());
         return result;
     }
 
     @GetMapping("/{id}")
     public CategoriaDTO findCategoriaById(@PathVariable Long id) {
-        CategoriaDTO result = categoriaService.findCategoriaById(usuarioService.getUsuarioLogadoId(), id);
+        CategoriaDTO result = categoriaService.findById(usuarioService.getUsuarioLogadoId(), id);
         return result;
     }
 
