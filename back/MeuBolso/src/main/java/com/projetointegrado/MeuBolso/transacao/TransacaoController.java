@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.transacao;
 
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
+import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,16 +19,22 @@ public class TransacaoController {
     @Qualifier("transacaoService")
     private ITransacaoService transacaoService;
 
+    @Autowired
+    private IUsuarioService usuarioService;
+
     @Operation(summary = "Retorna todas as transacoes realizadas pelo usuario")
     @GetMapping
     public List<TransacaoDTO> findTransacoes(){
-        return transacaoService.findAll();
+        String userLogadoId = usuarioService.getUsuarioLogadoId();
+        return transacaoService.findAll(userLogadoId);
     }
 
     @Operation(summary = "Retorna uma transacao expecifica a partir de um id indicado")
     @GetMapping ("/{id}")
     public TransacaoDTO findById(@PathVariable Long id){
-        return transacaoService.findById(id);
+        String userLogadoId = usuarioService.getUsuarioLogadoId();
+
+        return transacaoService.findById(userLogadoId, id);
     }
 
 }
