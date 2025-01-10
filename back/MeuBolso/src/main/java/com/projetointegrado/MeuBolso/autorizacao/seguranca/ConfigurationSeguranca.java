@@ -35,6 +35,7 @@ public class ConfigurationSeguranca {
                         .requestMatchers(HttpMethod.GET, "/h2-console/*").permitAll()
                         .requestMatchers(HttpMethod.POST, "/h2-console/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/cadastro").permitAll()
                         .anyRequest().authenticated()
