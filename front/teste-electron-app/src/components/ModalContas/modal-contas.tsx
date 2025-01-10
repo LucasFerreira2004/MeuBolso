@@ -205,3 +205,4 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
 }
 
 export default ModalContas;
+  

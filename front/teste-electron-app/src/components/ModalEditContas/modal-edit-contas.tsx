@@ -24,10 +24,20 @@ const sendData = async ({
   id_tipo_conta,
 }: Conta) => {
   try {
+    const token = localStorage.getItem("authToken"); // Recupera o token
+
+    if (!token) {
+      return {
+        success: false,
+        error: { message: "Token não encontrado. O usuário não está autenticado." },
+      };
+    }
+
     const response = await fetch(`http://localhost:8080/contas/${id}`, {
-      method: "PUT",  
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Adiciona o token no cabeçalho
       },
       body: JSON.stringify({
         saldo,
@@ -47,6 +57,7 @@ const sendData = async ({
     return { success: false, error: { message: "Erro na conexão com o servidor." } };
   }
 };
+
 
 function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasProps) {
   const [openBancos, setOpenBancos] = useState(false); 
