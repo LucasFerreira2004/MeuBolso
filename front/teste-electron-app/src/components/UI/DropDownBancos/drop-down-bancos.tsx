@@ -11,7 +11,7 @@ interface Banco {
 
 interface DropDownBancosProps {
   toggleDropdownBancos: () => void;
-  setBanco: (id: number) => void;  // Função para atualizar o estado no componente pai
+  setBanco: (nome: string) => void;  // Agora o setBanco recebe o nome do banco
 }
 
 const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps) => {
@@ -26,17 +26,15 @@ const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps)
 
   const fetchBancos = async () => {
     try {
-      // Supondo que o token esteja salvo no localStorage
       const token = localStorage.getItem("authToken");
   
-      // Se o token existir, inclui no cabeçalho da requisição
       const response = await axios.get("http://localhost:8080/bancos", {
         headers: {
-          Authorization: `Bearer ${token}`,  // Envia o token no cabeçalho
+          Authorization: `Bearer ${token}`,
         },
       });
   
-      setBancos(response.data); // Atualiza o estado com os dados recebidos
+      setBancos(response.data); 
     } catch (err) {
       console.error("Erro ao buscar os dados dos bancos:", err);
     }
@@ -49,8 +47,8 @@ const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps)
   if (!isOpen) return null;
 
   // Função para lidar com a seleção do banco
-  const handleSelectBanco = (id: number) => {
-    setBanco(id);  // Passa o ID do banco para o componente pai
+  const handleSelectBanco = (nome: string) => {
+    setBanco(nome);  // Passa o nome do banco
     toggleDropdown(); // Fecha o dropdown após a seleção
   };
 
@@ -72,7 +70,7 @@ const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps)
             id={banco.id}
             nome={banco.nome}
             iconeUrl={banco.iconeUrl}
-            onClick={() => handleSelectBanco(banco.id)}  // Passa a função onClick corretamente
+            onClick={() => handleSelectBanco(banco.nome)}  // Passando nome do banco
           />
         ))}
       </ul>
