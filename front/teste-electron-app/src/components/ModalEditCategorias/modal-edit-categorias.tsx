@@ -10,11 +10,20 @@ interface ModalEditCategoriaProps {
 }
 
 const sendData = async (categoria: Categoria) => {
+  const token = localStorage.getItem("authToken");
+  if(!token){
+    return{
+      success: false,
+      error:{message: "Você precisa estar logado para realizar esta açao"},
+    };
+  }
+
   try {
     const response = await fetch(`http://localhost:8080/categorias/${categoria.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(categoria),
     });
