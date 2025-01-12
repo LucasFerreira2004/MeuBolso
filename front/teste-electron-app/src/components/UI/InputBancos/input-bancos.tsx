@@ -6,7 +6,7 @@ interface InputBancosProps {
   id: number;
   nome: string;
   iconeUrl: string;
-  onClick: (id: number) => void;  // Atualizando para passar o id do banco
+  onClick: (id: number) => void;
 }
 
 interface BancoDetails {
@@ -14,20 +14,20 @@ interface BancoDetails {
 }
 
 const InputBancos: React.FC<InputBancosProps> = ({ id, nome, iconeUrl, onClick }) => {
-  const [details, setDetails] = useState<BancoDetails | null>(null);  // Tipagem do estado de detalhes
+  const [details, setDetails] = useState<BancoDetails | null>(null);
   const [showDetails, setShowDetails] = useState(false);
-  const [loading, setLoading] = useState(false);  // Estado para controlar o carregamento
+  const [loading, setLoading] = useState(false);
 
   const fetchBankDetails = async () => {
-    setLoading(true);  // Começa o carregamento
-    const token = localStorage.getItem("authToken");  // Recupera o token do localStorage
-    
+    setLoading(true);
+    const token = localStorage.getItem("authToken");
+
     try {
       const response = await axios.get(
-        `http://localhost:8080/bancos/${id}`, // URL da API para obter detalhes
+        `http://localhost:8080/bancos/${id}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Adiciona o cabeçalho de autenticação
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -35,34 +35,30 @@ const InputBancos: React.FC<InputBancosProps> = ({ id, nome, iconeUrl, onClick }
     } catch (err) {
       console.error(`Erro ao buscar detalhes para o banco ${id}:`, err);
     } finally {
-      setLoading(false);  // Finaliza o carregamento
+      setLoading(false);
     }
-  };  
+  };
 
-  // Carregar detalhes quando o usuário clicar
   const handleShowDetails = () => {
     if (!details) {
-      fetchBankDetails();  // Carrega os detalhes caso ainda não tenha
+      fetchBankDetails();
     }
     setShowDetails(!showDetails);
   };
 
-  // Chama a função onClick do componente pai passando o id do banco
   const handleSelectBanco = () => {
-    onClick(id);  // Passa o id para o componente pai
+    onClick(id);
   };
 
   return (
-    <li className={style.item} onClick={handleSelectBanco}> {/* Evento de clique no item */}
+    <li className={style.item} onClick={handleSelectBanco}>
       <div className={style.header} onClick={handleShowDetails}>
         <img src={iconeUrl} alt={nome} />
         <a>{nome}</a>
       </div>
 
-      {/* Exibe o status de carregamento se estiver buscando detalhes */}
       {loading && <p>Carregando detalhes...</p>}
 
-      {/* Renderiza detalhes adicionais, se disponíveis */}
       {showDetails && details?.additionalInfo && !loading && (
         <p className={style.details}>{details.additionalInfo}</p>
       )}

@@ -17,8 +17,18 @@ function Home() {
 
   // Função para buscar os bancos
   const fetchBancos = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      setError("Você precisa estar logado para acessar esta funcionalidade.");
+      return;
+    }
+
     try {
-      const response = await fetch("http://localhost:8080/contas/min");
+      const response = await fetch("http://localhost:8080/contas/min", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!response.ok) {
         throw new Error("Erro ao carregar os dados dos bancos.");
       }
@@ -31,8 +41,18 @@ function Home() {
   };
 
   const fetchSaldoTotal = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      setError("Você precisa estar logado para acessar esta funcionalidade.");
+      return;
+    }
+
     try {
-      const response = await fetch("http://localhost:8080/contas/saldoTotal");
+      const response = await fetch("http://localhost:8080/contas/saldoTotal", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!response.ok) {
         throw new Error("Erro ao carregar o saldo total.");
       }
@@ -67,7 +87,6 @@ function Home() {
             />
             <p className={style.pHeader}>
               <span className={style.sHeader}>Estimativa de Saldo: </span>
-              {/* Exibe o saldo total ou uma mensagem de carregamento */}
               {saldoTotal !== null ? `R$ ${saldoTotal.toFixed(2)}` : "Carregando..."}
             </p>
           </div>
@@ -146,7 +165,7 @@ function Home() {
 
           <div className={style.cards3}>
             <div className={style.graphic}>
-              <Example/>
+              <Example />
             </div>
           </div>
         </div>
