@@ -84,7 +84,7 @@ function ContasBancarias() {
 
   const handleConfirmDelete = async (id: number) => {
     try {
-      console.log("Excluindo conta com ID:", id); // Verifique o ID da conta
+      console.log("Excluindo conta com ID:", id); //verificando id da conta
       const token = localStorage.getItem("authToken");
       if (!token) {
         console.error("Token de autenticação não encontrado.");
@@ -106,8 +106,6 @@ function ContasBancarias() {
     }
   };
   
-  
-
   return (
     <div className={style.contas}>
       <header className={style.headerContas}>
