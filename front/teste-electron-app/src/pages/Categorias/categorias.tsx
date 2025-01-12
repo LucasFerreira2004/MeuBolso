@@ -24,11 +24,28 @@ function Categorias() {
   }, []);
 
   const fetchCategorias = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      return {
+        success: false,
+        error: { message: "Você precisa estar logado para realizar esta ação" },
+      };
+    }
+
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8080/categorias");
-      const data: Categoria[] = await response.json();
-      setCategorias(data);
+      const response = await fetch("http://localhost:8080/categorias", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, // Adiciona o token no cabeçalho
+        },
+      });
+      if (response.ok) {
+        const data: Categoria[] = await response.json();
+        setCategorias(data);
+      } else {
+        throw new Error("Erro ao buscar categorias");
+      }
     } catch (error) {
       console.error("Erro ao buscar categorias:", error);
     } finally {
@@ -104,7 +121,7 @@ function Categorias() {
                 />
               ))}
           </div>
-              <hr className={style.hrCentral}/>
+          <hr className={style.hrCentral}/>
           {/* Renderizando categorias de receitas */}
           <div className={style.cardReceita}>
             <h3>Receitas</h3>
