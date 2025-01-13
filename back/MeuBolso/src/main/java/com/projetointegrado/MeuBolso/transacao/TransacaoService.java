@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.transacao;
 
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
+import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,11 @@ public class TransacaoService implements ITransacaoService {
     public List<TransacaoDTO> findAll(String userId) {
         List<Transacao> transacoes = transacaoRepository.findAllByUsuario(userId);
         return transacoes.stream().map(TransacaoDTO::new).toList();
+    }
+
+    @Transactional
+    public TransacaoDTO save(TransacaoSaveDTO dto) {
+
     }
 
 }
