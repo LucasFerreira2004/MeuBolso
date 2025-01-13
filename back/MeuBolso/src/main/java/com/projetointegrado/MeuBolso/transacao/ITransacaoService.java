@@ -10,5 +10,5 @@ public interface ITransacaoService {
 
     public List<TransacaoDTO> findAll(String userId);
 
-    public TransacaoDTO save(TransacaoSaveDTO dto);
+    public TransacaoDTO save(String userId, TransacaoSaveDTO dto);
 }

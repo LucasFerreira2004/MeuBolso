@@ -46,23 +46,17 @@ public class Transacao {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    public Transacao(Long id, BigDecimal valor, Date data_transacao, TipoTransacao tipo, Categoria categoria, String comentario, String descricao) {
+    public Transacao(Long id, BigDecimal valor, Date data_transacao, TipoTransacao tipo, Categoria categoria, Conta conta, String comentario, String descricao, Usuario usuario) {
         this.id = id;
         this.valor = valor;
         this.data_transacao = data_transacao;
         this.tipo = tipo;
         this.categoria = categoria;
+        this.conta = conta;
         this.comentario = comentario;
         this.descricao = descricao;
+        this.usuario = usuario;
     }
-    public Transacao(Long id, BigDecimal valor, Date data_transacao, Boolean e_fixo, String descricao) {
-        this.id = id;
-        this.valor = valor;
-        this.tipo = tipo;
-        this.data_transacao = data_transacao;
-        this.descricao = descricao;
-    }
-    public Transacao() {}
 
     // Getters e Setters
     public void setId(Long id) {
