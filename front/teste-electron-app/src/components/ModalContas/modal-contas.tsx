@@ -2,7 +2,7 @@ import { useState } from "react";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-contas.module.css";
 import DropDownBancos from "../UI/DropDownBancos/drop-down-bancos";
-import DropDownTipoConta from "../UI/DropDownTipoContas/drop-down-tipo-conta";
+import DropDownTipoConta from "../UI/DropDownTipoContas/drop-down-tipo-conta"; 
 
 interface Conta {
   id: number;
@@ -16,6 +16,7 @@ interface Conta {
   };
   id_banco: number;
   id_tipo_conta: number;
+  id_usuario: number;
 }
 
 interface ModalContasProps {
@@ -27,10 +28,11 @@ const sendData = async ({
   saldo,
   id_banco,
   id_tipo_conta,
+  id_usuario,
 }: Conta) => {
   try {
     const token = localStorage.getItem("authToken");
-
+    
     if (!token) {
       return { success: false, error: { message: "Token não encontrado. O usuário não está autenticado." } };
     }
@@ -45,6 +47,7 @@ const sendData = async ({
         saldo,
         id_banco,
         id_tipo_conta,
+        id_usuario,
       }),
     });
 
@@ -68,7 +71,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
   const [isRotatedBancos, setIsRotatedBancos] = useState(false);
   const [isRotatedTipoConta, setIsRotatedTipoConta] = useState(false);
   const [saldo, setSaldo] = useState<number | string>(""); 
-  const [selectedBanco, setSelectedBanco] = useState<string | null>(null); // Agora armazena o nome do banco
+  const [selectedBanco, setSelectedBanco] = useState<number | null>(null);
   const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -98,13 +101,16 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
       return;
     }
 
+    const id_usuario = 1;
+
     const novaConta: Conta = {
       id: 0, 
-      saldo: parseFloat(saldo.toString()), 
-      banco: { nome: selectedBanco, iconeUrl: "/path/to/icon" }, 
+      saldo: parseFloat(saldo.toString()),  // Converte para número
+      banco: { nome: "Banco Exemplo", iconeUrl: "/path/to/icon" }, 
       tipo_conta: { tipoConta: "Tipo de Conta Exemplo" },
-      id_banco: 0,  // ID do banco será enviado após conversão para ID no backend
+      id_banco: selectedBanco,
       id_tipo_conta: selectedTipoConta,
+      id_usuario,
     };
 
     const result = await sendData(novaConta);
@@ -156,7 +162,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             {openBancos && (
               <DropDownBancos
                 toggleDropdownBancos={toggleDropdownBancos}
-                setBanco={setSelectedBanco}  // Passando o nome do banco
+                setBanco={setSelectedBanco}
               />
             )}
           </div>
