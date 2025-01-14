@@ -78,7 +78,8 @@ function Categorias() {
     <div className={style.containerCategorias}>
       <header className={style.headerCategorias}>
         <h1>Categorias</h1>
-        <div>
+        <div className={style.buttons}>
+          <AddButton texto="Categorias arquivadas" onClick={handleAddClick} />
           <AddButton texto="Adicionar Categoria" onClick={handleAddClick} />
         </div>
       </header>
