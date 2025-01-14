@@ -23,7 +23,14 @@ public class TransacaoDTO {
 
     public TransacaoDTO(Transacao transacao) {
         //isso so funcionará se os atributos forem os mesmos e estiverem na mesma ordem que a entidade
-        BeanUtils.copyProperties(transacao, this);
+        this.id = transacao.getId();
+        this.valor = transacao.getValor();
+        this.data_transacao = transacao.getData_transacao();
+        this.tipo = transacao.getTipo();
+        this.categoriaDTO = new CategoriaDTO(transacao.getCategoria());
+        this.contaDTO = new ContaDTO(transacao.getConta());
+        this.comentario = transacao.getComentario();
+        this.descricao = transacao.getDescricao();
     }
 
     //getters e setters

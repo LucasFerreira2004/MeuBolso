@@ -12,6 +12,7 @@ import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +48,7 @@ public class TransacaoService implements ITransacaoService {
     }
 
     @Transactional
-    public TransacaoDTO save(String userId, TransacaoSaveDTO dto) {
+    public TransacaoDTO save(String userId, @Valid TransacaoSaveDTO dto) {
         Transacao transacao = saveAndValidate(userId, dto);
         return new TransacaoDTO(transacao);
     }
@@ -68,7 +69,7 @@ public class TransacaoService implements ITransacaoService {
         System.out.println("pasou aqui");
         Transacao transacao = new Transacao(null, dto.getValor(), dto.getDataTransacao(), dto.getTipoTransacao(),
                                             categoria, conta, dto.getComentario(), dto.getDescricao(), usuario);
-        System.out.println("pasou aqui 2");
+        System.out.println(transacao);
         return transacaoRepository.save(transacao);
     }
 

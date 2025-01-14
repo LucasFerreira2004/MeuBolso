@@ -5,19 +5,32 @@ import com.projetointegrado.MeuBolso.categoria.exception.TipoCategoriaNaoEspecif
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 
 import com.projetointegrado.MeuBolso.transacao.exceptions.TipoTransacaoNaoIdentificadoException;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class TransacaoSaveDTO {
+    @NotNull
+    @DecimalMin(value = "0.01", message = "O valor da transação deve ser no mínimo 0.01")
     private BigDecimal valor;
+
+    @NotNull(message = "data é obrigatório")
     private Date dataTransacao;
+
     @NotNull(message = "O tipo de transação é obrigatório.")
     private String tipoTransacao; //está em string apenas para poder verificar o erro de TipoTransacao
+
+    @NotNull
     private Long categoriaId;
+
+    @NotNull
     private Long contaId;
+
     private String comentario;
+
+    @NotNull
     private String descricao;
 
     public BigDecimal getValor() {
@@ -43,8 +56,7 @@ public class TransacaoSaveDTO {
         TipoTransacao tipo;
         try {
             tipo = TipoTransacao.valueOf(this.tipoTransacao);
-        }catch (Exception e) {
-            System.out.println(e + "\n" + e.getMessage());
+        }catch (IllegalArgumentException  e) {
             throw new TipoTransacaoNaoIdentificadoException();
         }
         return tipo;

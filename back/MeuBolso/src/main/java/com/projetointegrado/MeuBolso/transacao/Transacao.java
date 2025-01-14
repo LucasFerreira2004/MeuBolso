@@ -37,8 +37,8 @@ public class Transacao {
 
     @Column(columnDefinition = "TEXT")
     private String comentario;
-    @NotBlank
 
+    @NotBlank
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
@@ -132,5 +132,20 @@ public class Transacao {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    @Override
+    public String toString() {
+        return "Transacao{" +
+                "id=" + id +
+                ", valor=" + valor +
+                ", data_transacao=" + data_transacao +
+                ", tipo=" + tipo +
+                ", categoria=" + categoria +
+                ", conta=" + conta +
+                ", comentario='" + comentario + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", usuario=" + usuario +
+                '}';
     }
 }
