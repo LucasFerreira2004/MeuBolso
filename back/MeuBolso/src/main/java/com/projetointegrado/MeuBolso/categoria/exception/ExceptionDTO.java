@@ -1,21 +1,19 @@
 package com.projetointegrado.MeuBolso.categoria.exception;
 
-import org.springframework.http.HttpStatus;
-
 public class ExceptionDTO {
-    private HttpStatus status;
+    private String campo;
     private String message;
-    public ExceptionDTO(HttpStatus status, String message) {
-        this.status = status;
+    public ExceptionDTO(String status, String message) {
+        this.campo = status;
         this.message = message;
     }
 
-    public HttpStatus getStatus() {
-        return status;
+    public String getStatus() {
+        return campo;
     }
 
-    public void setStatus(HttpStatus status) {
-        this.status = status;
+    public void setStatus(String status) {
+        this.campo = status;
     }
 
     public String getMessage() {

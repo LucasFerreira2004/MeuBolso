@@ -2,7 +2,10 @@ package com.projetointegrado.MeuBolso.transacao;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
+import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
+
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
@@ -13,41 +16,50 @@ public class Transacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
+    @DecimalMin(value = "0.01", message = "O valor da transação deve ser no mínimo 0.01")
     private BigDecimal valor;
+
     @Column(columnDefinition = "DATE")
     private Date data_transacao;
+
     @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "categoria", nullable = false)
     private Categoria categoria;
+
     @ManyToOne
     @JoinColumn(name = "conta_origem")
     private Conta conta;
+
     @Column(columnDefinition = "TEXT")
     private String comentario;
+
     @NotBlank
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
-    public Transacao(Long id, BigDecimal valor, Date data_transacao, TipoTransacao tipo, Categoria categoria, String comentario, String descricao) {
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    public Transacao(Long id, BigDecimal valor, Date data_transacao, TipoTransacao tipo, Categoria categoria, Conta conta, String comentario, String descricao, Usuario usuario) {
         this.id = id;
         this.valor = valor;
         this.data_transacao = data_transacao;
         this.tipo = tipo;
         this.categoria = categoria;
+        this.conta = conta;
         this.comentario = comentario;
         this.descricao = descricao;
+        this.usuario = usuario;
     }
-    public Transacao(Long id, BigDecimal valor, Date data_transacao, Boolean e_fixo, String descricao) {
-        this.id = id;
-        this.valor = valor;
-        this.tipo = tipo;
-        this.data_transacao = data_transacao;
-        this.descricao = descricao;
+
+    public Transacao() {
     }
-    public Transacao() {}
 
     // Getters e Setters
     public void setId(Long id) {
@@ -112,5 +124,28 @@ public class Transacao {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    @Override
+    public String toString() {
+        return "Transacao{" +
+                "id=" + id +
+                ", valor=" + valor +
+                ", data_transacao=" + data_transacao +
+                ", tipo=" + tipo +
+                ", categoria=" + categoria +
+                ", conta=" + conta +
+                ", comentario='" + comentario + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", usuario=" + usuario +
+                '}';
     }
 }
