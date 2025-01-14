@@ -58,6 +58,9 @@ public class Transacao {
         this.usuario = usuario;
     }
 
+    public Transacao() {
+    }
+
     // Getters e Setters
     public void setId(Long id) {
         this.id = id;

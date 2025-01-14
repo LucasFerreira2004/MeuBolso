@@ -9,6 +9,9 @@ import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
+import com.projetointegrado.MeuBolso.usuario.Usuario;
+import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
+import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +28,8 @@ public class TransacaoService implements ITransacaoService {
 
     @Autowired
     private CategoriaRepository categoriaRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Transactional(readOnly = true)
     public TransacaoDTO findById(String userId, Long id){
@@ -43,28 +48,28 @@ public class TransacaoService implements ITransacaoService {
 
     @Transactional
     public TransacaoDTO save(String userId, TransacaoSaveDTO dto) {
-        if (acessoDadosPermitido(userId, dto.getContaId(), dto.getCategoriaId())){
-            Conta conta = contaRepository.findById(dto.getContaId()).orElse(null);
-            Categoria categoria = categoriaRepository.findById(dto.getCategoriaId()).orElse(null);
-            transacaoRepository.save(new Transacao(null, dto.getValor(), dto.getDataTransacao(), dto.getTipoTransacao(), categoria, conta, dto.getComentario(), dto.getDescricao()));
-
-
-        }
+        Transacao transacao = saveAndValidate(userId, dto);
+        return new TransacaoDTO(transacao);
     }
 
-    private boolean  acessoDadosPermitido(String userId, Long contaId, Long categoriaId){
-        Conta conta = contaRepository.findById(contaId).orElse(null);
-        if(conta == null)
-            throw new EntidadeNaoEncontradaException("contaId: ", "Conta não encontrada");
+    private Transacao  saveAndValidate(String userId, TransacaoSaveDTO dto) {
+        Conta conta = contaRepository.findById(dto.getContaId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("contaId: ", "Conta não encontrada"));
         if (!conta.getUsuario().getId().equals(userId))
             throw new AcessoNegadoException();
-        Categoria categoria = categoriaRepository.findById(categoriaId).orElse(null);
-        if (categoria == null)
-            throw new EntidadeNaoEncontradaException("categoriaId", "Categoria nao encontrada");
+
+        Categoria categoria = categoriaRepository.findById(dto.getCategoriaId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("categoriaId", "Categoria nao encontrada"));
         if(!categoria.getUsuario().getId().equals(userId))
             throw new AcessoNegadoException();
 
-        return true;
+        Usuario usuario = usuarioRepository.findById(userId)
+                .orElseThrow(UsuarioNaoEncontradoException::new);
+        System.out.println("pasou aqui");
+        Transacao transacao = new Transacao(null, dto.getValor(), dto.getDataTransacao(), dto.getTipoTransacao(),
+                                            categoria, conta, dto.getComentario(), dto.getDescricao(), usuario);
+        System.out.println("pasou aqui 2");
+        return transacaoRepository.save(transacao);
     }
 
 }

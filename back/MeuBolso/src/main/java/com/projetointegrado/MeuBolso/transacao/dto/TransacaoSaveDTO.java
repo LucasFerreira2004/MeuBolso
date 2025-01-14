@@ -4,6 +4,7 @@ import com.projetointegrado.MeuBolso.categoria.TipoCategoria;
 import com.projetointegrado.MeuBolso.categoria.exception.TipoCategoriaNaoEspecificado;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 
+import com.projetointegrado.MeuBolso.transacao.exceptions.TipoTransacaoNaoIdentificadoException;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -28,6 +29,9 @@ public class TransacaoSaveDTO {
     }
 
     public Date getDataTransacao() {
+        if (dataTransacao == null) {
+            throw new TipoTransacaoNaoIdentificadoException(); //criar exceção depois
+        }
         return dataTransacao;
     }
 
@@ -35,17 +39,19 @@ public class TransacaoSaveDTO {
         this.dataTransacao = dataTransacao;
     }
 
-    public String getTipoTransacao() {
-        return tipoTransacao;
-    }
-
-    public void setTipoTransacao(String tipoTransacao) {
+    public TipoTransacao getTipoTransacao() {
         TipoTransacao tipo;
         try {
             tipo = TipoTransacao.valueOf(this.tipoTransacao);
         }catch (Exception e) {
-            throw new TipoCategoriaNaoEspecificado();
+            System.out.println(e + "\n" + e.getMessage());
+            throw new TipoTransacaoNaoIdentificadoException();
         }
+        return tipo;
+    }
+
+    public void setTipoTransacao(String tipoTransacao) {
+        this.tipoTransacao = tipoTransacao;
     }
 
     public Long getCategoriaId() {
