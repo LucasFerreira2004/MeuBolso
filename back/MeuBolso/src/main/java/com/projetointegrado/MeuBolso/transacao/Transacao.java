@@ -21,9 +21,10 @@ public class Transacao {
     @DecimalMin(value = "0.01", message = "O valor da transação deve ser no mínimo 0.01")
     private BigDecimal valor;
 
-    @Column(columnDefinition = "DATE")
+    @Column(nullable = false, columnDefinition = "DATE")
     private Date data_transacao;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
 
@@ -31,7 +32,7 @@ public class Transacao {
     @JoinColumn(name = "categoria", nullable = false)
     private Categoria categoria;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "conta_origem")
     private Conta conta;
 
@@ -39,7 +40,7 @@ public class Transacao {
     private String comentario;
 
     @NotBlank
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String descricao;
 
     @ManyToOne(optional = false)

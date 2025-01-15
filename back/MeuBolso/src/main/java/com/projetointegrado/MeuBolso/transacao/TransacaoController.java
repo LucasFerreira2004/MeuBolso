@@ -4,6 +4,7 @@ import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class TransacaoController {
 
     @Operation(summary = "Permite cadastrar uma transacao")
     @PostMapping
-    public TransacaoDTO save(@RequestBody TransacaoSaveDTO dto){
+    public TransacaoDTO save(@Valid @RequestBody TransacaoSaveDTO dto){
         String userLogadoId = usuarioService.getUsuarioLogadoId();
         return transacaoService.save(userLogadoId, dto);
     }

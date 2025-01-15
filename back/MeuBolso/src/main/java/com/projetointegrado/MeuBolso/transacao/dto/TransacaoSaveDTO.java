@@ -12,25 +12,26 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class TransacaoSaveDTO {
-    @NotNull
+
+    @NotNull(message = "valor não pde ser nulo, deve ser do tipo BigDecimal. ex: 9.99")
     @DecimalMin(value = "0.01", message = "O valor da transação deve ser no mínimo 0.01")
     private BigDecimal valor;
 
-    @NotNull(message = "data é obrigatório")
+    @NotNull(message = "data não pose der nulo, deve ser do tipo Date. ex: 2025-12-25")
     private Date dataTransacao;
 
     @NotNull(message = "O tipo de transação é obrigatório.")
     private String tipoTransacao; //está em string apenas para poder verificar o erro de TipoTransacao
 
-    @NotNull
+    @NotNull(message = "lajflçdasjlk")
     private Long categoriaId;
 
-    @NotNull
+    @NotNull(message = "lajflkasdjlkfj")
     private Long contaId;
 
     private String comentario;
 
-    @NotNull
+    @NotNull(message = "lajflkasdjlkfj")
     private String descricao;
 
     public BigDecimal getValor() {
