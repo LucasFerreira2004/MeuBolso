@@ -48,7 +48,7 @@ public class TransacaoService implements ITransacaoService {
     }
 
     @Transactional
-    public TransacaoDTO save(String userId, @Valid TransacaoSaveDTO dto) {
+    public TransacaoDTO save(String userId, TransacaoSaveDTO dto) {
         Transacao transacao = saveAndValidate(userId, dto);
         return new TransacaoDTO(transacao);
     }

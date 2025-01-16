@@ -7,11 +7,12 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponseDTO> handleDuplicateDataException(DataIntegrityViolationException ex) {
@@ -31,15 +32,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class) //exceção lançada quando o @Valid falha
-    public ResponseEntity<List<ErrorResponseDTO>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    @ExceptionHandler(ValoresNaoPermitidosException.class) //exceção lançada quando o @Valid falha
+    public ResponseEntity<List<ErrorResponseDTO>> handleValoresNaoPermitidosException(ValoresNaoPermitidosException ex) {
+        System.out.println("-=-=-=-=-=-=-=-=-=-=-=-exeção de valid capturada-=-=-=-=-=-=-=-=-=-=-=-");
         List<ErrorResponseDTO> errors = new ArrayList<>();
-        ex.getBindingResult().getAllErrors()
-                .forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            String fieldName = error.getField();
             String errorMessage = error.getDefaultMessage();
             errors.add(new ErrorResponseDTO(fieldName, errorMessage));
-                    System.out.println(new ErrorResponseDTO(fieldName, errorMessage));
         });
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
