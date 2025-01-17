@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.transacao.dto;
 
 import com.projetointegrado.MeuBolso.categoria.TipoCategoria;
 import com.projetointegrado.MeuBolso.categoria.exception.TipoCategoriaNaoEspecificado;
+import com.projetointegrado.MeuBolso.globalConstraints.validEnum.ValidEnum;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 
 import com.projetointegrado.MeuBolso.transacao.exceptions.TipoTransacaoNaoIdentificadoException;
@@ -20,7 +21,8 @@ public class TransacaoSaveDTO {
     @NotNull(message = "data não pose der nulo, deve ser do tipo Date. ex: \"2025-12-25\"")
     private Date dataTransacao;
 
-    @NotNull(message = "O tipo de transação é obrigatório. tipos permitidos: \"RECEITA\" ou \"DESPESA\"")
+    @NotNull(message = "O tipo de transação é obrigatório. tipos permitidos: RECEITA ou DESPESA")
+    @ValidEnum(value = TipoTransacao.class, message = "tipos permitidos são DESPESA e RECEITA")
     private String tipoTransacao; //está em string apenas para poder verificar o erro de TipoTransacao
 
     private final String categoriaIdDefaultMessage = "O categoriaId é obrigatório e deve ser um inteiro maior que 0";
@@ -61,13 +63,7 @@ public class TransacaoSaveDTO {
     }
 
     public TipoTransacao getTipoTransacao() {
-        TipoTransacao tipo;
-        try {
-            tipo = TipoTransacao.valueOf(this.tipoTransacao);
-        }catch (IllegalArgumentException  e) {
-            throw new TipoTransacaoNaoIdentificadoException();
-        }
-        return tipo;
+        return TipoTransacao.valueOf(tipoTransacao);
     }
 
     public void setTipoTransacao(String tipoTransacao) {
