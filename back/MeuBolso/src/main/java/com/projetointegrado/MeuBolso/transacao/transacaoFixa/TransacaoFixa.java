@@ -3,6 +3,7 @@ package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
+import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -35,7 +36,11 @@ public class TransacaoFixa {
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, Date dataCadastro, String descricao, Conta conta, Categoria categoria) {
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, Date dataCadastro, String descricao, Conta conta, Categoria categoria, Usuario usuario) {
         this.id = id;
         this.valor = valor;
         this.tipo = tipo;
@@ -43,6 +48,7 @@ public class TransacaoFixa {
         this.descricao = descricao;
         this.conta = conta;
         this.categoria = categoria;
+        this.usuario = usuario;
     }
 
     public TransacaoFixa() {}
@@ -101,5 +107,13 @@ public class TransacaoFixa {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

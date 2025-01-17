@@ -1,5 +1,9 @@
 package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
 
+import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
+import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
+import com.projetointegrado.MeuBolso.transacao.Transacao;
+import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto.TransacaoFixaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +18,16 @@ public class TransacaoFixaService implements ITransacaoFixaService {
 
     @Transactional
     public List<TransacaoFixaDTO> findAll(String userId){
-        return transacaoFixaRepository.findAllByUsuario(userId).stream().map(x -> new TransacaoFixaDTO(x));
+        return transacaoFixaRepository.findAllByUsuario(userId).stream().map(x -> new TransacaoFixaDTO(x)).toList();
+    }
+
+    @Transactional
+    public TransacaoFixaDTO findById(String userId, Long id){
+        TransacaoFixa transacao = transacaoFixaRepository.findById(id).orElse(null);
+        if (transacao == null)
+            throw new EntidadeNaoEncontradaException("/{id}", "Transacao nao encontrada");
+        if (!transacao.getUsuario().getId().equals(userId))
+            throw new AcessoNegadoException();
+        return new TransacaoFixaDTO(transacao);
     }
 }
