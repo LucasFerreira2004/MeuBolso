@@ -34,7 +34,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ValoresNaoPermitidosException.class) //exceção lançada quando o @Valid falha
     public ResponseEntity<List<ErrorResponseDTO>> handleValoresNaoPermitidosException(ValoresNaoPermitidosException ex) {
-        System.out.println("-=-=-=-=-=-=-=-=-=-=-=-exeção de valid capturada-=-=-=-=-=-=-=-=-=-=-=-");
         List<ErrorResponseDTO> errors = new ArrayList<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> {
             String fieldName = error.getField();

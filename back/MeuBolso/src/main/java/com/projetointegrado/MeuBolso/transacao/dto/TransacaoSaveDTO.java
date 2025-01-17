@@ -5,8 +5,8 @@ import com.projetointegrado.MeuBolso.categoria.exception.TipoCategoriaNaoEspecif
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 
 import com.projetointegrado.MeuBolso.transacao.exceptions.TipoTransacaoNaoIdentificadoException;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -17,21 +17,28 @@ public class TransacaoSaveDTO {
     @DecimalMin(value = "0.01", message = "O valor da transação deve ser no mínimo 0.01")
     private BigDecimal valor;
 
-    @NotNull(message = "data não pose der nulo, deve ser do tipo Date. ex: 2025-12-25")
+    @NotNull(message = "data não pose der nulo, deve ser do tipo Date. ex: \"2025-12-25\"")
     private Date dataTransacao;
 
-    @NotNull(message = "O tipo de transação é obrigatório.")
+    @NotNull(message = "O tipo de transação é obrigatório. tipos permitidos: \"RECEITA\" ou \"DESPESA\"")
     private String tipoTransacao; //está em string apenas para poder verificar o erro de TipoTransacao
 
-    @NotNull(message = "lajflçdasjlk")
+    private final String categoriaIdDefaultMessage = "O categoriaId é obrigatório e deve ser um inteiro maior que 0";
+    @NotNull(message = categoriaIdDefaultMessage)
+    @Positive(message = categoriaIdDefaultMessage)
     private Long categoriaId;
 
-    @NotNull(message = "lajflkasdjlkfj")
+    private final String contaIdDefaultMessage = "O contaId é obrigatório e deve ser um inteiro maior que 0";
+    @NotNull(message = contaIdDefaultMessage)
+    @Positive(message = contaIdDefaultMessage)
     private Long contaId;
 
+    //testar se é possivel receber comentarios compostos somente com espaços em branco
     private String comentario;
 
-    @NotNull(message = "lajflkasdjlkfj")
+    private final String descricaoDefalutMessage = "A descrição é obrigatória e deve ser uma string válida.";
+    @NotNull(message = descricaoDefalutMessage)
+    @NotBlank(message = descricaoDefalutMessage)
     private String descricao;
 
     public BigDecimal getValor() {
