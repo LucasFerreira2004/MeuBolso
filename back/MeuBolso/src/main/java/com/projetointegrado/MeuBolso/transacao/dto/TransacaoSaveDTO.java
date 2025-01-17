@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.transacao.dto;
 
 import com.projetointegrado.MeuBolso.categoria.TipoCategoria;
 import com.projetointegrado.MeuBolso.categoria.exception.TipoCategoriaNaoEspecificado;
+import com.projetointegrado.MeuBolso.globalConstraints.NotBlankIfPresent.NotBlankIfPresent;
 import com.projetointegrado.MeuBolso.globalConstraints.validEnum.ValidEnum;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 
@@ -35,7 +36,7 @@ public class TransacaoSaveDTO {
     @Positive(message = contaIdDefaultMessage)
     private Long contaId;
 
-    //testar se é possivel receber comentarios compostos somente com espaços em branco
+    @NotBlankIfPresent(message = "o comentario é opcional (pode receber valor null), mas caso atribuído com string deve receber uma não vazia.")
     private String comentario;
 
     private final String descricaoDefalutMessage = "A descrição é obrigatória e deve ser uma string válida.";
