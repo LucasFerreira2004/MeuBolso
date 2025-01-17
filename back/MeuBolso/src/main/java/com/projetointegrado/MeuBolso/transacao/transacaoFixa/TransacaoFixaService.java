@@ -7,4 +7,6 @@ import org.springframework.stereotype.Service;
 public class TransacaoFixaService implements ITransacaoFixaService {
     @Autowired
     private TransacaoFixaRepository transacaoFixaRepository;
+
+
 }
