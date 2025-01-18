@@ -3,6 +3,7 @@ package com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto;
 import com.projetointegrado.MeuBolso.globalConstraints.validEnum.ValidEnum;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -19,18 +20,30 @@ public class TransacaoFixaSaveDTO {
     private String tipoTransacao;
 
     @NotNull(message = "data não pose der nulo, deve ser do tipo Date. ex: \"2025-12-25\"")
-    private Date dataCadastro;
+    private Date data;
 
     private final String contaIdDefaultMessage = "O contaId é obrigatório e deve ser um inteiro maior que 0";
     @NotNull(message = contaIdDefaultMessage)
     @Positive(message = contaIdDefaultMessage)
-    private Long idConta;
+    private Long contaId;
 
-    public TransacaoFixaSaveDTO(BigDecimal valor, String tipoTransacao, Date dataCadastro, Long idConta) {
+    private final String categoriaIdDefaultMessage = "O categoriaId é obrigatório e deve ser um inteiro maior que 0";
+    @NotNull(message = categoriaIdDefaultMessage)
+    @Positive(message = categoriaIdDefaultMessage)
+    private Long categoriaId;
+
+    private final String descricaoDefaultMessage = "a descricao e obrigatoria e deve ser uma string valida.";
+    @NotNull(message = descricaoDefaultMessage)
+    @NotBlank(message = descricaoDefaultMessage)
+    private String descricao;
+
+    public TransacaoFixaSaveDTO(BigDecimal valor, String tipoTransacao, Date data, Long contaId, Long categoriaId, String descricao) {
         this.valor = valor;
         this.tipoTransacao = tipoTransacao;
-        this.dataCadastro = dataCadastro;
-        this.idConta = idConta;
+        this.data = data;
+        this.contaId = contaId;
+        this.categoriaId = categoriaId;
+        this.descricao = descricao;
     }
 
     public BigDecimal getValor() {
@@ -49,19 +62,35 @@ public class TransacaoFixaSaveDTO {
         this.tipoTransacao = tipoTransacao;
     }
 
-    public Date getDataCadastro() {
-        return dataCadastro;
+    public Date getData() {
+        return data;
     }
 
-    public void setDataCadastro(Date dataCadastro) {
-        this.dataCadastro = dataCadastro;
+    public void setData(Date data) {
+        this.data = data;
     }
 
-    public Long getIdConta() {
-        return idConta;
+    public Long getContaId() {
+        return contaId;
     }
 
-    public void setIdConta(Long idConta) {
-        this.idConta = idConta;
+    public void setContaId(Long contaId) {
+        this.contaId = contaId;
+    }
+
+    public Long getCategoriaId() {
+        return categoriaId;
+    }
+
+    public void setCategoriaId(Long categoriaId) {
+        this.categoriaId = categoriaId;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }

@@ -25,18 +25,18 @@ public class TransacaoFixa {
     @Column(nullable = false, columnDefinition = "DATE")
     private Date dataCadastro;
 
-    @Column(nullable = false)
+    @Column(nullable = false) //especificarTamanho da descrição
     private String descricao;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "conta_id")
     private Conta conta;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 

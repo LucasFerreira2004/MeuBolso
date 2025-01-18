@@ -1,12 +1,11 @@
 package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
 
 import com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto.TransacaoFixaDTO;
+import com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto.TransacaoFixaSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +30,13 @@ public class TransacaoFixaController {
         String userId = usuarioService.getUsuarioLogadoId();
 
         return transacaoFixaService.findById(userId, id);
+    }
+
+    @PostMapping()
+    public TransacaoFixaDTO save (@Valid @RequestBody TransacaoFixaSaveDTO dto){
+        String userId = usuarioService.getUsuarioLogadoId();
+
+        return transacaoFixaService.save(userId, dto);
     }
 
 }

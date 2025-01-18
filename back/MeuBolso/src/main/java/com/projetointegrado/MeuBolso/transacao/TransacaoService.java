@@ -4,7 +4,6 @@ import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.categoria.CategoriaRepository;
 import com.projetointegrado.MeuBolso.conta.Conta;
 import com.projetointegrado.MeuBolso.conta.ContaRepository;
-import com.projetointegrado.MeuBolso.conta.exception.ContaNaoEncontradaException;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
@@ -12,7 +11,6 @@ import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,7 +65,7 @@ public class TransacaoService implements ITransacaoService {
         Usuario usuario = usuarioRepository.findById(userId)
                 .orElseThrow(UsuarioNaoEncontradoException::new);
         System.out.println("pasou aqui");
-        Transacao transacao = new Transacao(null, dto.getValor(), dto.getDataTransacao(), dto.getTipoTransacao(),
+        Transacao transacao = new Transacao(null, dto.getValor(), dto.getData(), dto.getTipoTransacao(),
                                             categoria, conta, dto.getComentario(), dto.getDescricao(), usuario);
         System.out.println(transacao);
         return transacaoRepository.save(transacao);

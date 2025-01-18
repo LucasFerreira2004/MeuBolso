@@ -40,7 +40,7 @@ public class Transacao {
     private String comentario;
 
     @NotBlank
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT") //especificar tamanho maximo da descricao
     private String descricao;
 
     @ManyToOne(optional = false)
