@@ -5,10 +5,12 @@ import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -24,28 +26,29 @@ public class ContaController {
 
 
     @GetMapping
-    public List<ContaDTO> findAll() {
+    public List<ContaDTO> findAll(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data) {
+
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
         return contaService.findAll(idUsuario);
     }
 
     @GetMapping("/{id}")
-    public ContaDTO findById(@PathVariable Long id){
+    public ContaDTO findById(@PathVariable Long id, @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data){
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
         return contaService.findById(idUsuario, id);
     }
 
     @GetMapping("/min")
-    public List<ContaMinDTO> findMin() {
+    public List<ContaMinDTO> findMin(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data) {
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
         return contaService.findAllMin(idUsuario);
     }
 
     @GetMapping("/saldoTotal")
-    public SaldoTotalDTO findSaldoTotal() {
+    public SaldoTotalDTO findSaldoTotal(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data) {
         String idUsuario = usuarioService.getUsuarioLogadoId();
         return contaService.getSaldo(idUsuario);
     }
