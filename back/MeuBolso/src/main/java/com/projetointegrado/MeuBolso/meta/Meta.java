@@ -17,7 +17,7 @@ public class Meta {
     private BigDecimal valorMeta;
 
     @Column(nullable = false)
-    private BigDecimal valostido;
+    private BigDecimal valoInvestido;
     private String urlImg;
     private String descricao;
 
@@ -29,16 +29,16 @@ public class Meta {
     public Meta(){
     }
 
-    public Meta(BigDecimal valorMeta, BigDecimal valostido, String urlImg, String descricao) {
+    public Meta(BigDecimal valorMeta, BigDecimal valoInvestido, String urlImg, String descricao) {
         this.valorMeta = valorMeta;
-        this.valostido = valostido;
+        this.valoInvestido = valoInvestido;
         this.urlImg = urlImg;
         this.descricao = descricao;
     }
 
-    public Meta(BigDecimal valorMeta, BigDecimal valostido, String urlImg) {
+    public Meta(BigDecimal valorMeta, BigDecimal valoInvestido, String urlImg) {
         this.valorMeta = valorMeta;
-        this.valostido = valostido;
+        this.valoInvestido = valoInvestido;
         this.urlImg = urlImg;
     }
 
@@ -58,12 +58,12 @@ public class Meta {
         this.valorMeta = valorMeta;
     }
 
-    public BigDecimal getValostido() {
-        return valostido;
+    public BigDecimal getValorInvestido() {
+        return valoInvestido;
     }
 
-    public void setValostido(BigDecimal valostido) {
-        this.valostido = valostido;
+    public void setValorInvestido(BigDecimal valoInvestido) {
+        this.valoInvestido = valoInvestido;
     }
 
     public String getUrlImg() {
