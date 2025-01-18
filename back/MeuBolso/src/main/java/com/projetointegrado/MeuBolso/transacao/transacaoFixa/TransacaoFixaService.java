@@ -54,6 +54,16 @@ public class TransacaoFixaService implements ITransacaoFixaService {
         return new TransacaoFixaDTO(transacaoFixa);
     }
 
+    @Transactional
+    public TransacaoFixaDTO update(String userId, Long id, TransacaoFixaSaveDTO dto){
+        if (transacaoFixaRepository.findById(id).isEmpty())
+            throw new EntidadeNaoEncontradaException("/{id}", "TransacaoFixa nao encontrada");
+
+        TransacaoFixa fixa = saveAndValidate(userId, dto);
+        return new TransacaoFixaDTO(fixa);
+    }
+
+
     private TransacaoFixa  saveAndValidate(String userId, TransacaoFixaSaveDTO dto) {
         Conta conta = contaRepository.findById(dto.getContaId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("contaId: ", "Conta não encontrada"));
