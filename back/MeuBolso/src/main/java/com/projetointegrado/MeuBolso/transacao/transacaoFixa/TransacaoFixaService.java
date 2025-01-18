@@ -25,7 +25,7 @@ public class TransacaoFixaService implements ITransacaoFixaService {
     public TransacaoFixaDTO findById(String userId, Long id){
         TransacaoFixa transacao = transacaoFixaRepository.findById(id).orElse(null);
         if (transacao == null)
-            throw new EntidadeNaoEncontradaException("/{id}", "Transacao nao encontrada");
+            throw new EntidadeNaoEncontradaException("/{id}", "TransacaoFixa nao encontrada");
         if (!transacao.getUsuario().getId().equals(userId))
             throw new AcessoNegadoException();
         return new TransacaoFixaDTO(transacao);

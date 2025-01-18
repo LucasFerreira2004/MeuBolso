@@ -46,7 +46,6 @@ public class TransacaoController {
 
     @Operation(summary = "Permite cadastrar uma transacao")
     @PostMapping
-
     public ResponseEntity<?> save(@Valid @RequestBody TransacaoSaveDTO dto, BindingResult bindingResult) throws ValoresNaoPermitidosException {
         if (bindingResult.hasErrors()){
             throw new ValoresNaoPermitidosException(bindingResult);
