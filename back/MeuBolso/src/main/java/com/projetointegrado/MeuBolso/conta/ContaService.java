@@ -19,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.crypto.Data;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -37,7 +39,7 @@ public class ContaService implements IContaService {
     private UsuarioRepository usuarioRepository;
 
     @Transactional(readOnly = true)
-    public ContaDTO findById(String idUsuario, Long id) {
+    public ContaDTO findById(String idUsuario, Long id, Date data) {
         Conta result = contaRepository.findById(id).orElse(null);
         if (result == null)
             throw new ContaNaoEncontradaException();
@@ -47,17 +49,29 @@ public class ContaService implements IContaService {
         return new ContaDTO(result);
     }
     @Transactional(readOnly = true)
-    public List<ContaDTO> findAll(String idUsuario) {
+    public List<ContaDTO> findAll(String idUsuario, Date data) {
 
         List<Conta> result = contaRepository.findAllByUsuario(idUsuario);
+        result.forEach(conta -> conta.setDataAtual(data));
         return result.stream().map(ContaDTO::new).toList();
     }
     @Transactional(readOnly = true)
-    public List<ContaMinDTO> findAllMin(String idUsuario) {
+    public List<ContaMinDTO> findAllMin(String idUsuario, Date data) {
 
         List<Conta> result = contaRepository.findAllByUsuario(idUsuario);
         return result.stream().map(ContaMinDTO::new).toList();
     }
+
+    @Transactional(readOnly = true)
+    public SaldoTotalDTO getSaldo(String idUsuario, Date data) {
+        BigDecimal saldo = new BigDecimal(0);
+        List<Conta> contas = contaRepository.findAllByUsuario(idUsuario);
+        for (Conta c : contas){
+            saldo = saldo.add(c.getSaldo());
+        }
+        return new SaldoTotalDTO(saldo);
+    }
+
     @Transactional
     public ContaDTO save(String userID, ContaPostDTO dto) {
         TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
@@ -94,19 +108,10 @@ public class ContaService implements IContaService {
         if (conta == null) throw new ContaNaoEncontradaException();
         if (!conta.getUsuario().getId().equals(userId))
             throw new AcessoNegadoException();
-        conta.setSaldo(dto.getSaldo());
+        //conta.setSaldo(dto.getSaldo());
         conta.setTipo_conta(tipo);
         conta.setBanco(banco);
         return new ContaDTO(contaRepository.save(conta));
     }
 
-    @Transactional(readOnly = true)
-    public SaldoTotalDTO getSaldo(String idUsuario) {
-        BigDecimal saldo = new BigDecimal(0);
-        List<Conta> contas = contaRepository.findAllByUsuario(idUsuario);
-        for (Conta c : contas){
-            saldo = saldo.add(c.getSaldo());
-        }
-        return new SaldoTotalDTO(saldo);
-    }
 }

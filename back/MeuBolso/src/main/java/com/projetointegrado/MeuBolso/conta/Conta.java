@@ -5,11 +5,12 @@ import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
+import org.hibernate.annotations.Formula;
 import org.springframework.beans.BeanUtils;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,17 +18,24 @@ public class Conta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Formula("(SELECT SUM(t.valor) FROM transacao t WHERE t.conta_origem = id) and data <= dataAtual")
     private BigDecimal saldo;
+
     @ManyToOne
     private TipoConta tipo_conta;
+
     @ManyToOne
     private Banco banco;
+
     @ManyToOne
-    @Valid
     private Usuario usuario;
 
     @OneToMany(mappedBy = "conta", cascade = CascadeType.REMOVE)
     private List<Transacao> transacoes;
+
+    @Transient //indica que o valor não será persistido no banco de dados.
+    private Date dataAtual;
 
     public Conta(Long id, BigDecimal saldo, TipoConta tipo_conta, Banco banco, Usuario usuario) {
         this.id = id;
@@ -53,10 +61,9 @@ public class Conta {
     public BigDecimal getSaldo() {
         return saldo;
     }
-
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
-    }
+//    public void setSaldo(BigDecimal saldo) {
+//        this.saldo = saldo; //tirar essa lógica depois.
+//    }
 
     public TipoConta getTipo_conta() {
         return tipo_conta;
@@ -80,5 +87,21 @@ public class Conta {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public List<Transacao> getTransacoes() {
+        return transacoes;
+    }
+
+    public void setTransacoes(List<Transacao> transacoes) {
+        this.transacoes = transacoes;
+    }
+
+    public Date getDataAtual() {
+        return dataAtual;
+    }
+
+    public void setDataAtual(Date dataAtual) {
+        this.dataAtual = dataAtual;
     }
 }

@@ -30,36 +30,37 @@ public class ContaController {
 
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
-        return contaService.findAll(idUsuario);
+        return contaService.findAll(idUsuario, data);
     }
 
     @GetMapping("/{id}")
     public ContaDTO findById(@PathVariable Long id, @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data){
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
-        return contaService.findById(idUsuario, id);
+        return contaService.findById(idUsuario, id, data);
     }
 
     @GetMapping("/min")
     public List<ContaMinDTO> findMin(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data) {
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
-        return contaService.findAllMin(idUsuario);
+        return contaService.findAllMin(idUsuario, data);
     }
 
     @GetMapping("/saldoTotal")
     public SaldoTotalDTO findSaldoTotal(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data) {
         String idUsuario = usuarioService.getUsuarioLogadoId();
-        return contaService.getSaldo(idUsuario);
+        return contaService.getSaldo(idUsuario, data);
+
     }
 
     @PostMapping
-    public ContaDTO save(@RequestBody ContaPostDTO contaPostDTO){
+    public ContaDTO save(@RequestBody ContaPostDTO contaPostDTO){ //alterar para ao invés de saldo criar uma transacao inicial
         String userId = usuarioService.getUsuarioLogadoId();
         return contaService.save(userId, contaPostDTO);
     }
     @PutMapping("/{id}")
-    public ContaDTO update(@PathVariable Long id, @RequestBody ContaPutDTO contaPostDTO){
+    public ContaDTO update(@PathVariable Long id, @RequestBody ContaPutDTO contaPostDTO){ //aterar para criar transacao de correcao de valor
         String userId = usuarioService.getUsuarioLogadoId();
         return contaService.update(id, contaPostDTO, userId);
     }

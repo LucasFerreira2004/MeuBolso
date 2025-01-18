@@ -22,7 +22,7 @@ public class Transacao {
     private BigDecimal valor;
 
     @Column(nullable = false, columnDefinition = "DATE")
-    private Date data_transacao;
+    private Date data;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -47,10 +47,10 @@ public class Transacao {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    public Transacao(Long id, BigDecimal valor, Date data_transacao, TipoTransacao tipo, Categoria categoria, Conta conta, String comentario, String descricao, Usuario usuario) {
+    public Transacao(Long id, BigDecimal valor, Date data, TipoTransacao tipo, Categoria categoria, Conta conta, String comentario, String descricao, Usuario usuario) {
         this.id = id;
         this.valor = valor;
-        this.data_transacao = data_transacao;
+        this.data = data;
         this.tipo = tipo;
         this.categoria = categoria;
         this.conta = conta;
@@ -95,12 +95,12 @@ public class Transacao {
         this.descricao = descricao;
     }
 
-    public Date getData_transacao() {
-        return data_transacao;
+    public Date getData() {
+        return data;
     }
 
-    public void setData_transacao(Date data_transacao) {
-        this.data_transacao = data_transacao;
+    public void setData(Date data_transacao) {
+        this.data = data_transacao;
     }
 
     public Conta getConta() {
@@ -140,7 +140,7 @@ public class Transacao {
         return "Transacao{" +
                 "id=" + id +
                 ", valor=" + valor +
-                ", data_transacao=" + data_transacao +
+                ", data_transacao=" + data +
                 ", tipo=" + tipo +
                 ", categoria=" + categoria +
                 ", conta=" + conta +
