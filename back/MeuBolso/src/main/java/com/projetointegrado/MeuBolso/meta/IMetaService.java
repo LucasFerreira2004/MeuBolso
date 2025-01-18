@@ -1,12 +1,14 @@
 package com.projetointegrado.MeuBolso.meta;
 
+import com.projetointegrado.MeuBolso.meta.dto.MetaDTO;
+import com.projetointegrado.MeuBolso.meta.dto.MetaPostDTO;
+
 import java.util.List;
-import java.util.Optional;
 
 public interface IMetaService {
-    public List<Meta> findAll(String usuarioId);
-    public Optional<Meta> findById(String usuarioId, Long metaId);
-    public Meta save(Meta meta);
-    public Meta update(Meta meta);
-    public void delete(String usuarioId, String metaId);
+    public List<MetaDTO> findAll(String usuarioId);
+    public MetaDTO findById(String usuarioId, Long metaId);
+    public MetaDTO save(String usuarioId, MetaPostDTO meta);
+    public MetaDTO update(String usuarioId, Long id, MetaPostDTO meta);
+    public void delete(String usuarioId, Long metaId);
 }

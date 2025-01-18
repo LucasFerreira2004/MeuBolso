@@ -1,8 +1,11 @@
 package com.projetointegrado.MeuBolso.meta;
 
+import com.projetointegrado.MeuBolso.meta.dto.MetaDTO;
+import com.projetointegrado.MeuBolso.meta.dto.MetaPostDTO;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -17,8 +20,10 @@ public class Meta {
     private BigDecimal valorMeta;
 
     @Column(nullable = false)
-    private BigDecimal valoInvestido;
+    private BigDecimal valorInvestido;
     private String urlImg;
+
+    @Column(nullable = false, unique = true)
     private String descricao;
 
     @ManyToOne
@@ -29,17 +34,23 @@ public class Meta {
     public Meta(){
     }
 
-    public Meta(BigDecimal valorMeta, BigDecimal valoInvestido, String urlImg, String descricao) {
+    public Meta(BigDecimal valorMeta, BigDecimal valorInvestido, String urlImg, String descricao, Usuario usuario) {
         this.valorMeta = valorMeta;
-        this.valoInvestido = valoInvestido;
+        this.valorInvestido = valorInvestido;
         this.urlImg = urlImg;
         this.descricao = descricao;
+        this.usuario = usuario;
     }
 
-    public Meta(BigDecimal valorMeta, BigDecimal valoInvestido, String urlImg) {
-        this.valorMeta = valorMeta;
-        this.valoInvestido = valoInvestido;
-        this.urlImg = urlImg;
+    public Meta(MetaDTO metaDTO) {
+        BeanUtils.copyProperties(metaDTO, this);
+    }
+
+    public Meta(MetaPostDTO meta) {
+        this.valorMeta = meta.getValorMeta();
+        this.valorInvestido = BigDecimal.ZERO;
+        this.descricao = meta.getDescricao();
+        this.urlImg = meta.getUrlImg();
     }
 
     public Long getId() {
@@ -59,11 +70,11 @@ public class Meta {
     }
 
     public BigDecimal getValorInvestido() {
-        return valoInvestido;
+        return valorInvestido;
     }
 
-    public void setValorInvestido(BigDecimal valoInvestido) {
-        this.valoInvestido = valoInvestido;
+    public void setValorInvestido(BigDecimal valorInvestido) {
+        this.valorInvestido = valorInvestido;
     }
 
     public String getUrlImg() {
@@ -80,6 +91,14 @@ public class Meta {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override
