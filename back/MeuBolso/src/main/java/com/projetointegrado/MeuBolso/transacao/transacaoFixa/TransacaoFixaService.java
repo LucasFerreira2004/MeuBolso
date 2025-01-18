@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.transacao;
+package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.categoria.CategoriaRepository;
@@ -6,8 +6,9 @@ import com.projetointegrado.MeuBolso.conta.Conta;
 import com.projetointegrado.MeuBolso.conta.ContaRepository;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
-import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
-import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
+import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
+import com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto.TransacaoFixaDTO;
+import com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto.TransacaoFixaSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
@@ -18,40 +19,52 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class TransacaoService implements ITransacaoService {
+public class TransacaoFixaService implements ITransacaoFixaService {
     @Autowired
-    private TransacaoRepository transacaoRepository;
+    private TransacaoFixaRepository transacaoFixaRepository;
 
     @Autowired
     private ContaRepository contaRepository;
 
     @Autowired
     private CategoriaRepository categoriaRepository;
+
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Transactional(readOnly = true)
-    public TransacaoDTO findById(String userId, Long id){
-        Transacao transacao = transacaoRepository.findById(id).orElse(null);
+    public List<TransacaoFixaDTO> findAll(String userId){
+        return transacaoFixaRepository.findAllByUsuario(userId).stream().map(x -> new TransacaoFixaDTO(x)).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public TransacaoFixaDTO findById(String userId, Long id){
+        TransacaoFixa transacao = transacaoFixaRepository.findById(id).orElse(null);
         if (transacao == null)
-            throw new EntidadeNaoEncontradaException("/{id}", "Transacao nao encontrada");
+            throw new EntidadeNaoEncontradaException("/{id}", "TransacaoFixa nao encontrada");
         if (!transacao.getUsuario().getId().equals(userId))
             throw new AcessoNegadoException();
-        return new TransacaoDTO(transacao);
-    }
-    @Transactional(readOnly = true)
-    public List<TransacaoDTO> findAll(String userId) {
-        List<Transacao> transacoes = transacaoRepository.findAllByUsuario(userId);
-        return transacoes.stream().map(TransacaoDTO::new).toList();
+        return new TransacaoFixaDTO(transacao);
     }
 
     @Transactional
-    public TransacaoDTO save(String userId, TransacaoSaveDTO dto) {
-        Transacao transacao = saveAndValidate(userId, dto);
-        return new TransacaoDTO(transacao);
+    public TransacaoFixaDTO save(String userId, TransacaoFixaSaveDTO dto){
+        TransacaoFixa transacaoFixa = saveAndValidate(userId, dto);
+
+        return new TransacaoFixaDTO(transacaoFixa);
     }
 
-    private Transacao  saveAndValidate(String userId, TransacaoSaveDTO dto) {
+    @Transactional
+    public TransacaoFixaDTO update(String userId, Long id, TransacaoFixaSaveDTO dto){
+        if (transacaoFixaRepository.findById(id).isEmpty())
+            throw new EntidadeNaoEncontradaException("/{id}", "TransacaoFixa nao encontrada");
+
+        TransacaoFixa fixa = saveAndValidate(userId, dto);
+        return new TransacaoFixaDTO(fixa);
+    }
+
+
+    private TransacaoFixa  saveAndValidate(String userId, TransacaoFixaSaveDTO dto) {
         Conta conta = contaRepository.findById(dto.getContaId())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("contaId: ", "Conta não encontrada"));
         if (!conta.getUsuario().getId().equals(userId))
@@ -64,10 +77,10 @@ public class TransacaoService implements ITransacaoService {
 
         Usuario usuario = usuarioRepository.findById(userId)
                 .orElseThrow(UsuarioNaoEncontradoException::new);
-        System.out.println("pasou aqui");
-        Transacao transacao = new Transacao(null, dto.getValor(), dto.getData(), dto.getTipoTransacao(),
-                                            categoria, conta, dto.getComentario(), dto.getDescricao(), usuario);
-        System.out.println(transacao);
-        return transacaoRepository.save(transacao);
+
+        TransacaoFixa transacaoFixa = new TransacaoFixa(null, dto.getValor(), TipoTransacao.valueOf(dto.getTipoTransacao()), dto.getData(),
+                dto.getDescricao(), conta, categoria, usuario);
+
+        return transacaoFixaRepository.save(transacaoFixa);
     }
 }

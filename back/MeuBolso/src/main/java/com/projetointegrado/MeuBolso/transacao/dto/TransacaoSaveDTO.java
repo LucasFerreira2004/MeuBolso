@@ -1,13 +1,10 @@
 package com.projetointegrado.MeuBolso.transacao.dto;
 
-import com.projetointegrado.MeuBolso.categoria.TipoCategoria;
-import com.projetointegrado.MeuBolso.categoria.exception.TipoCategoriaNaoEspecificado;
 import com.projetointegrado.MeuBolso.globalConstraints.NotBlankIfPresent.NotBlankIfPresent;
 import com.projetointegrado.MeuBolso.globalConstraints.validEnum.ValidEnum;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 
 import com.projetointegrado.MeuBolso.transacao.exceptions.TipoTransacaoNaoIdentificadoException;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
@@ -20,7 +17,7 @@ public class TransacaoSaveDTO {
     private BigDecimal valor;
 
     @NotNull(message = "data não pose der nulo, deve ser do tipo Date. ex: \"2025-12-25\"")
-    private Date dataTransacao;
+    private Date data;
 
     @NotNull(message = "O tipo de transação é obrigatório. tipos permitidos: RECEITA ou DESPESA")
     @ValidEnum(value = TipoTransacao.class, message = "tipos permitidos são DESPESA e RECEITA")
@@ -52,15 +49,15 @@ public class TransacaoSaveDTO {
         this.valor = valor;
     }
 
-    public Date getDataTransacao() {
-        if (dataTransacao == null) {
+    public Date getData() {
+        if (data == null) {
             throw new TipoTransacaoNaoIdentificadoException(); //criar exceção depois
         }
-        return dataTransacao;
+        return data;
     }
 
-    public void setDataTransacao(Date dataTransacao) {
-        this.dataTransacao = dataTransacao;
+    public void setData(Date data) {
+        this.data = data;
     }
 
     public TipoTransacao getTipoTransacao() {
