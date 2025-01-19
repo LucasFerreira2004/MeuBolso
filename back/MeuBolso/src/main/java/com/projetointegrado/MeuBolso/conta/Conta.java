@@ -32,7 +32,7 @@ public class Conta {
     @ManyToOne
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "conta", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Transacao> transacoes;
 
     @Transient //indica que o valor não será persistido no banco de dados.
@@ -60,6 +60,7 @@ public class Conta {
 
     public BigDecimal getSaldo() { //a consulta pode ser melhorada no futuro em questão de desempenho.
         saldo = BigDecimal.ZERO;
+        if (transacoes == null || transacoes.isEmpty()) return saldo; //0
         for (Transacao transacao : transacoes) {
             if (transacao.getData().before(dataAtual)){
                 if (transacao.getTipo() == TipoTransacao.RECEITA)

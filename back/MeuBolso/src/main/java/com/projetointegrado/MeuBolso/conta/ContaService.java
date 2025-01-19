@@ -24,6 +24,7 @@ import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
+import org.aspectj.apache.bcel.classfile.ExceptionTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,7 +74,7 @@ public class ContaService implements IContaService {
 
         List<Conta> result = contaRepository.findAllByUsuario(idUsuario);
         result.forEach(conta -> conta.setDataAtual(data));
-        System.out.println("passou no for each do find all");
+        System.out.println("Conta Service -> findAll: passou no for each do find all");
         return result.stream().map(ContaDTO::new).toList();
     }
     @Transactional(readOnly = true)
@@ -93,7 +94,7 @@ public class ContaService implements IContaService {
         return new SaldoTotalDTO(saldo);
     }
 
-
+    @Transactional
     public ContaDTO save(String userID, ContaPostDTO dto) {
         TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
@@ -108,8 +109,17 @@ public class ContaService implements IContaService {
 
         Categoria categoria = categoriaRepository.findByName(userID,"DepositoInicial*");
         if(categoria == null) throw new RuntimeException("categoria de nome DepositoInicial* não econtrada. ContaService -> save");
-        transacaoRepository.save(new Transacao(null, dto.getSaldo(), dto.getData(), TipoTransacao.RECEITA, categoria,  conta, null, "Deposito Inicial",usuario));
-        // transacaoService.save(userID, new TransacaoSaveDTO(dto.getSaldo(), dto.getData(), "RECEITA", categoria.getId(), conta.getId(), "DepositoInicial" ));
+        //transacaoRepository.save(new Transacao(null, dto.getSaldo(), dto.getData(), TipoTransacao.RECEITA, categoria,  conta, null, "Deposito Inicial",usuario));
+        try {
+            TransacaoDTO transacaodto = transacaoService.save(userID, new TransacaoSaveDTO(dto.getSaldo(), dto.getData(), "RECEITA", categoria.getId(), conta.getId(), "DepositoInicial"));
+            System.out.println("conta service -> save : transacaoDTO: " + transacaodto.toString());
+        } catch(Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao salvar transação", e);
+        }
+        System.out.println("Conta Service -> save");
+        System.out.println("conta " + conta.toString());
+
         return new ContaDTO(conta);
     }
 

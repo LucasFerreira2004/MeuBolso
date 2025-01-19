@@ -94,4 +94,18 @@ public class TransacaoDTO {
     public void setConta(ContaDTO conta) {
         this.contaDTO = conta;
     }
+
+    @Override
+    public String toString() {
+        return "TransacaoDTO{" +
+                "id=" + id +
+                ", valor=" + valor +
+                ", data_transacao=" + data_transacao +
+                ", tipo=" + tipo +
+                ", categoriaDTO=" + categoriaDTO +
+                ", contaDTO=" + contaDTO +
+                ", comentario='" + comentario + '\'' +
+                ", descricao='" + descricao + '\'' +
+                '}';
+    }
 }

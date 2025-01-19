@@ -42,12 +42,18 @@ public class TransacaoService implements ITransacaoService {
     @Transactional(readOnly = true)
     public List<TransacaoDTO> findAll(String userId) {
         List<Transacao> transacoes = transacaoRepository.findAllByUsuario(userId);
+        System.out.println("printando transacoes encontradas pelo findAll no id de usuário " + userId);
+        transacoes.forEach(transacao -> System.out.println(transacao));
         return transacoes.stream().map(TransacaoDTO::new).toList();
     }
 
     @Transactional
     public TransacaoDTO save(String userId, TransacaoSaveDTO dto) {
+        System.out.println("transacaoService -> save:");
+        System.out.println(dto.toString());
+        System.out.println("user id: " + userId);
         Transacao transacao = saveAndValidate(userId, dto);
+        System.out.println("transacao: " + transacao);
         return new TransacaoDTO(transacao);
     }
 
@@ -64,7 +70,7 @@ public class TransacaoService implements ITransacaoService {
 
         Usuario usuario = usuarioRepository.findById(userId)
                 .orElseThrow(UsuarioNaoEncontradoException::new);
-        System.out.println("pasou aqui");
+        System.out.println("TransacaoService -> saveAndValidate : chegou ao fim das checagens");
         Transacao transacao = new Transacao(null, dto.getValor(), dto.getData(), dto.getTipoTransacao(),
                                             categoria, conta, dto.getComentario(), dto.getDescricao(), usuario);
         System.out.println(transacao);

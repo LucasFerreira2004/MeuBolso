@@ -108,4 +108,20 @@ public class TransacaoSaveDTO {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    @Override
+    public String toString() {
+        return "TransacaoSaveDTO{" +
+                "valor=" + valor +
+                ", data=" + data +
+                ", tipoTransacao='" + tipoTransacao + '\'' +
+                ", categoriaIdDefaultMessage='" + categoriaIdDefaultMessage + '\'' +
+                ", categoriaId=" + categoriaId +
+                ", contaIdDefaultMessage='" + contaIdDefaultMessage + '\'' +
+                ", contaId=" + contaId +
+                ", comentario='" + comentario + '\'' +
+                ", descricaoDefalutMessage='" + descricaoDefalutMessage + '\'' +
+                ", descricao='" + descricao + '\'' +
+                '}';
+    }
 }
