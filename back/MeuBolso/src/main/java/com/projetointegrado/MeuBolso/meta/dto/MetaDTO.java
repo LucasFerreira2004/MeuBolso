@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 public class MetaDTO {
     private Long id;
     private BigDecimal valorMeta;
-    private BigDecimal valoInvestido;
+    private BigDecimal valorInvestido;
     private String descricao;
 
     public MetaDTO() {
@@ -16,7 +16,7 @@ public class MetaDTO {
     public MetaDTO(Meta metaEntity) {
         this.id = metaEntity.getId();
         this.valorMeta = metaEntity.getValorMeta();
-        this.valoInvestido = metaEntity.getValorInvestido();
+        this.valorInvestido = metaEntity.getValorInvestido();
         this.descricao = metaEntity.getDescricao();
     }
 
@@ -32,12 +32,12 @@ public class MetaDTO {
         this.valorMeta = valorMeta;
     }
 
-    public BigDecimal getValoInvestido() {
-        return valoInvestido;
+    public BigDecimal getValorInvestido() {
+        return valorInvestido;
     }
 
-    public void setValoInvestido(BigDecimal valoInvestido) {
-        this.valoInvestido = valoInvestido;
+    public void setValorInvestido(BigDecimal valorInvestido) {
+        this.valorInvestido = valorInvestido;
     }
 
     public String getDescricao() {

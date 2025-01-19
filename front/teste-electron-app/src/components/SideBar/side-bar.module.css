@@ -1,4 +1,7 @@
 .sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   position: fixed;
   top: 0;
   left: 0;
@@ -7,6 +10,11 @@
   background-color: #FFFFFF;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   z-index: 100;
+}
+.auxLine{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .divlogo {
@@ -26,7 +34,7 @@
   margin: 0;
 }
 
-nav {
+.sideBar {
   padding-top: 10px;
 }
 
@@ -56,6 +64,36 @@ nav {
   font-size: 18px;
   font-weight: normal;
   transition: color 0.3s ease;
+}
+.link {
+  text-decoration: none; 
+  color: inherit; 
+}
+
+.sair {
+  display: flex;
+  list-style: none;
+  gap: 10px;
+  padding: 20px;
+  cursor: pointer;
+}
+
+.sair p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.sair:hover p {
+  color: var(--vibrant-red);
+}
+
+.sair img {
+  transition: transform 0.3s ease;
+}
+
+.sair:hover img {
+  transform: scale(1.1); 
 }
 
 @media (max-width: 768px) {
