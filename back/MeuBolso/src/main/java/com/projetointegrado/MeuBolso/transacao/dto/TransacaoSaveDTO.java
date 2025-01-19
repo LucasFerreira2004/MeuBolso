@@ -41,6 +41,15 @@ public class TransacaoSaveDTO {
     @NotBlank(message = descricaoDefalutMessage)
     private String descricao;
 
+    public TransacaoSaveDTO(BigDecimal valor, Date data, String tipoTransacao, Long categoriaId, Long contaId, String descricao) {
+        this.valor = valor;
+        this.data = data;
+        this.tipoTransacao = tipoTransacao;
+        this.categoriaId = categoriaId;
+        this.contaId = contaId;
+        this.descricao = descricao;
+    }
+
     public BigDecimal getValor() {
         return valor;
     }

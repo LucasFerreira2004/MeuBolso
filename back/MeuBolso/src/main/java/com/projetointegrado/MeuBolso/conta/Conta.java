@@ -3,6 +3,7 @@ package com.projetointegrado.MeuBolso.conta;
 import com.projetointegrado.MeuBolso.banco.Banco;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
+import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Formula;
@@ -19,7 +20,7 @@ public class Conta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Formula("(SELECT SUM(t.valor) FROM transacao t WHERE t.conta_origem = id) and data <= dataAtual")
+    @Transient
     private BigDecimal saldo;
 
     @ManyToOne
@@ -37,9 +38,8 @@ public class Conta {
     @Transient //indica que o valor não será persistido no banco de dados.
     private Date dataAtual;
 
-    public Conta(Long id, BigDecimal saldo, TipoConta tipo_conta, Banco banco, Usuario usuario) {
+    public Conta(Long id, TipoConta tipo_conta, Banco banco, Usuario usuario) {
         this.id = id;
-        this.saldo = saldo;
         this.tipo_conta = tipo_conta;
         this.banco = banco;
         this.usuario = usuario;
@@ -58,7 +58,16 @@ public class Conta {
         this.id = id;
     }
 
-    public BigDecimal getSaldo() {
+    public BigDecimal getSaldo() { //a consulta pode ser melhorada no futuro em questão de desempenho.
+        saldo = BigDecimal.ZERO;
+        for (Transacao transacao : transacoes) {
+            if (transacao.getData().before(dataAtual)){
+                if (transacao.getTipo() == TipoTransacao.RECEITA)
+                    saldo = saldo.add(transacao.getValor());
+                if (transacao.getTipo() == TipoTransacao.DESPESA)
+                    saldo = saldo.subtract(transacao.getValor());
+            }
+        }
         return saldo;
     }
 //    public void setSaldo(BigDecimal saldo) {
