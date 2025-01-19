@@ -60,7 +60,7 @@ public class Conta {
 
     public BigDecimal getSaldo() { //a consulta pode ser melhorada no futuro em questão de desempenho.
         saldo = BigDecimal.ZERO;
-        if (transacoes == null || transacoes.isEmpty()) return saldo; //0
+        if (transacoes == null || transacoes.isEmpty() || dataAtual == null) return saldo; //0
         for (Transacao transacao : transacoes) {
             if (transacao.getData().before(dataAtual)){
                 if (transacao.getTipo() == TipoTransacao.RECEITA)

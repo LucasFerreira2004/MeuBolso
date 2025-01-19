@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TransacaoService implements ITransacaoService {
@@ -44,6 +45,12 @@ public class TransacaoService implements ITransacaoService {
         List<Transacao> transacoes = transacaoRepository.findAllByUsuario(userId);
         System.out.println("printando transacoes encontradas pelo findAll no id de usuário " + userId);
         transacoes.forEach(transacao -> System.out.println(transacao));
+        try{
+            List<TransacaoDTO> listDto = transacoes.stream().map(transacao -> new TransacaoDTO(transacao)).toList();
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("deu problema na criação da lista de transacaoDTO em transacaoService -> findAll");
+        }
         return transacoes.stream().map(TransacaoDTO::new).toList();
     }
 
