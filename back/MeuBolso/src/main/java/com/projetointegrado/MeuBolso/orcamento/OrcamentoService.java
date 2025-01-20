@@ -37,7 +37,6 @@ public class OrcamentoService implements IOrcamentoService {
         if (orcamentoAtual == null) {
             return null;
         }
-        orcamento.setId(orcamentoAtual.getId());
 
         return orcamentoRepository.save(orcamento);
     }

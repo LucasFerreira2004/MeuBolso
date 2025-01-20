@@ -13,6 +13,8 @@ public class Orcamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String descricao;
+
     @OneToOne
     @JoinColumn(nullable = false, unique = true)
     private Categoria categoria;
@@ -29,12 +31,11 @@ public class Orcamento {
     public Orcamento() {
     }
 
-    public Orcamento(Categoria categoria, String mesAno, BigDecimal valorEstimado, BigDecimal valorGasto, BigDecimal valorRestante, Usuario usuario) {
+    public Orcamento(Categoria categoria, String mesAno, BigDecimal valorEstimado, Usuario usuario) {
         this.categoria = categoria;
+        this.descricao = categoria.getNome();
         this.mesAno = mesAno;
         this.valorEstimado = valorEstimado;
-        this.valorGasto = valorGasto;
-        this.valorRestante = valorRestante;
         this.usuario = usuario;
     }
 
@@ -42,8 +43,12 @@ public class Orcamento {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public Categoria getCategoria() {
@@ -52,6 +57,7 @@ public class Orcamento {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+        this.setDescricao(categoria.getNome());
     }
 
     public String getMesAno() {
