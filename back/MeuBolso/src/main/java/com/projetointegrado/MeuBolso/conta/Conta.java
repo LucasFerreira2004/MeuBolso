@@ -6,6 +6,7 @@ import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.Formula;
 import org.springframework.beans.BeanUtils;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
@@ -19,6 +20,10 @@ public class Conta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    @Column(nullable = false)
+    private String descricao;
 
     @Transient
     private BigDecimal saldo;
@@ -38,10 +43,11 @@ public class Conta {
     @Transient //indica que o valor não será persistido no banco de dados.
     private Date dataAtual;
 
-    public Conta(Long id, TipoConta tipo_conta, Banco banco, Usuario usuario) {
+    public Conta(Long id, TipoConta tipo_conta, Banco banco, String descricao, Usuario usuario) {
         this.id = id;
         this.tipo_conta = tipo_conta;
         this.banco = banco;
+        this.descricao = descricao;
         this.usuario = usuario;
     }
     public Conta(ContaDTO contaDTO) {
@@ -113,5 +119,27 @@ public class Conta {
 
     public void setDataAtual(Date dataAtual) {
         this.dataAtual = dataAtual;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    @Override
+    public String toString() {
+        return "Conta{" +
+                "id=" + id +
+                ", descricao='" + descricao + '\'' +
+                ", saldo=" + saldo +
+                ", tipo_conta=" + tipo_conta +
+                ", banco=" + banco +
+                ", usuario=" + usuario +
+                ", transacoes=" + transacoes +
+                ", dataAtual=" + dataAtual +
+                '}';
     }
 }

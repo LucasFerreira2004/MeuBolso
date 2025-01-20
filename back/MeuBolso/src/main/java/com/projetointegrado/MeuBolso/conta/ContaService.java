@@ -104,9 +104,12 @@ public class ContaService implements IContaService {
         if (banco == null) throw new BancoNaoEncontradoException(); //adicionar verificação se banco pertence a outra pessoa
         if (usuario == null) throw new UsuarioNaoEncontradoException();
 
-        Conta conta = new Conta(null, tipo, banco, usuario);
-        conta = contaRepository.save(conta);
+        if(contaRepository.findByDescricao(userID, dto.getDescricao()) != null) throw new DescricaoJaExistenteException();
 
+        Conta conta = new Conta(null, tipo, banco, dto.getDescricao(), usuario);
+        System.out.println("conta service -> save: conta mem:" + conta.toString());
+        conta = contaRepository.save(conta);
+        System.out.println("conta service -> save: conta bd:" + conta.toString());
         Categoria categoria = categoriaRepository.findByName(userID,"DepositoInicial*");
         if(categoria == null) throw new RuntimeException("categoria de nome DepositoInicial* não econtrada. ContaService -> save");
         //transacaoRepository.save(new Transacao(null, dto.getSaldo(), dto.getData(), TipoTransacao.RECEITA, categoria,  conta, null, "Deposito Inicial",usuario));
@@ -145,9 +148,13 @@ public class ContaService implements IContaService {
         if (conta == null) throw new ContaNaoEncontradaException();
         if (!conta.getUsuario().getId().equals(userId))
             throw new AcessoNegadoException();
+        if(contaRepository.findByDescricao(userId, dto.getDescricao()) != null
+                && !conta.getDescricao().equals(dto.getDescricao())) throw new DescricaoJaExistenteException();
+
         //conta.setSaldo(dto.getSaldo());
         conta.setTipo_conta(tipo);
         conta.setBanco(banco);
+        conta.setDescricao(dto.getDescricao());
         return new ContaDTO(contaRepository.save(conta));
     }
 

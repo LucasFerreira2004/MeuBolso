@@ -55,7 +55,7 @@ public class ContaController {
     }
 
     @PostMapping
-    public ContaDTO save(@RequestBody ContaPostDTO contaPostDTO){ //alterar para ao invés de saldo criar uma transacao inicial
+    public ContaDTO save(@RequestBody ContaPostDTO contaPostDTO){ //adicionar @Valid depois.
         String userId = usuarioService.getUsuarioLogadoId();
         return contaService.save(userId, contaPostDTO);
     }

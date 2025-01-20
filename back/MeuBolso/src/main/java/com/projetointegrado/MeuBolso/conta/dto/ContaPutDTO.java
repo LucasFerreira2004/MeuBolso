@@ -6,6 +6,15 @@ public class ContaPutDTO {
     private BigDecimal saldo;
     private Long id_banco;
     private Long id_tipo_conta;
+    private String descricao;
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
     public BigDecimal getSaldo() {
         return saldo;

@@ -8,6 +8,15 @@ public class ContaPostDTO {
     private Long id_banco;
     private Long id_tipo_conta;
     private Date data;
+    private String descricao;
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
     public Date getData() {
         return data;
