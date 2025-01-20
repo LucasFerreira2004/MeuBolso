@@ -15,7 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-
+import com.projetointegrado.MeuBolso.transacao.ITransacaoService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,6 @@ import java.util.List;
 @RequestMapping(value = "/transacoes")
 public class TransacaoController {
     @Autowired
-    @Qualifier("transacaoService")
     private ITransacaoService transacaoService;
 
     @Autowired
@@ -46,13 +45,12 @@ public class TransacaoController {
 
     @Operation(summary = "Permite cadastrar uma transacao")
     @PostMapping
-    public ResponseEntity<?> save(@Valid @RequestBody TransacaoSaveDTO dto, BindingResult bindingResult) throws ValoresNaoPermitidosException {
+    public TransacaoDTO save(@Valid @RequestBody TransacaoSaveDTO dto, BindingResult bindingResult) throws ValoresNaoPermitidosException {
         if (bindingResult.hasErrors()){
             throw new ValoresNaoPermitidosException(bindingResult);
         }
-
         String userLogadoId = usuarioService.getUsuarioLogadoId();
-        return new ResponseEntity<>(transacaoService.save(userLogadoId, dto), HttpStatus.CREATED);
+        return transacaoService.save(userLogadoId, dto);
     }
 
     @GetMapping("teste")

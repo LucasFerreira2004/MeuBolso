@@ -135,18 +135,4 @@ public class Transacao {
         this.usuario = usuario;
     }
 
-    @Override
-    public String toString() {
-        return "Transacao{" +
-                "id=" + id +
-                ", valor=" + valor +
-                ", data_transacao=" + data +
-                ", tipo=" + tipo +
-                ", categoria=" + categoria +
-                ", conta=" + conta +
-                ", comentario='" + comentario + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", usuario=" + usuario +
-                '}';
-    }
 }

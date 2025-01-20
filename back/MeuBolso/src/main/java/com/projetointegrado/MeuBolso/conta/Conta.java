@@ -128,18 +128,4 @@ public class Conta {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-
-    @Override
-    public String toString() {
-        return "Conta{" +
-                "id=" + id +
-                ", descricao='" + descricao + '\'' +
-                ", saldo=" + saldo +
-                ", tipo_conta=" + tipo_conta +
-                ", banco=" + banco +
-                ", usuario=" + usuario +
-                ", transacoes=" + transacoes +
-                ", dataAtual=" + dataAtual +
-                '}';
-    }
 }
