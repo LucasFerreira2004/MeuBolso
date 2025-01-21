@@ -62,5 +62,12 @@ public class TransacaoController {
         String userLogadoId = usuarioService.getUsuarioLogadoId();
         return transacaoService.update(userLogadoId, id, dto);
     }
+
+    @Operation(summary = "Permite deletar uma transacao já existe")
+    @DeleteMapping("/{id}")
+    public TransacaoDTO delete(@PathVariable Long id){
+        String userLogadoId = usuarioService.getUsuarioLogadoId();
+        return transacaoService.delete(userLogadoId, id);
+    }
 }
 

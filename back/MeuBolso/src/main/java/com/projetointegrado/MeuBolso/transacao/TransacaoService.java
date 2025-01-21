@@ -36,6 +36,9 @@ public class TransacaoService implements ITransacaoService {
     @Autowired
     private UsuarioValidateService usuarioValidateService;
 
+    @Autowired
+    private TransacaoValidateService transacaoValidateService;
+
     @Transactional(readOnly = true)
     public TransacaoDTO findById(String userId, Long id){
         Transacao transacao = transacaoRepository.findById(id).orElse(null);
@@ -79,5 +82,13 @@ public class TransacaoService implements ITransacaoService {
                 categoria, conta, dto.getComentario(), dto.getDescricao(), usuario);
     System.out.println(transacao);
     return transacaoRepository.save(transacao);
+    }
+
+    public TransacaoDTO delete(String userId, Long id){
+        Transacao transacao = transacaoValidateService.validateAndGet(id, userId,
+                new EntidadeNaoEncontradaException("{/id}", "transacao nao encontrada"), new AcessoNegadoException());
+        transacaoRepository.delete(transacao);
+        return new TransacaoDTO(transacao);
+
     }
 }
