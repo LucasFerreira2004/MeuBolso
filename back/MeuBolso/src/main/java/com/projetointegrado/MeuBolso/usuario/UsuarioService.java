@@ -30,7 +30,11 @@ public class UsuarioService implements IUsuarioService {
 
         usuario = usuarioRepository.save(usuario);
 
-        categoriaService.save(usuario.getId(), new CategoriaSaveDTO("#000", "DepositoInicial*", "RECEITA"));
+        //isso tem que sair daqui na refatorada ...
+        categoriaService.save(usuario.getId(), new CategoriaSaveDTO("000", "DepositoInicial*", "RECEITA"));
+        categoriaService.save(usuario.getId(), new CategoriaSaveDTO("000", "ReajusteSaldoAumento*", "RECEITA"));
+        categoriaService.save(usuario.getId(), new CategoriaSaveDTO("000", "ReajusteSaldoDecremento*", "DESPESA"));
+
         return new UsuarioDTO(usuario);
     }
 

@@ -14,7 +14,7 @@ public class ContaMinDTO {
     public ContaMinDTO(Conta conta) {
         TipoConta tipo = conta.getTipo_conta();
         Banco banco = conta.getBanco();
-        this.saldo = conta.getSaldo();
+        this.saldo = null;
         this.nomeBanco = banco.getNome();
         this.iconeUrl = banco.getIconeUrl();
     }

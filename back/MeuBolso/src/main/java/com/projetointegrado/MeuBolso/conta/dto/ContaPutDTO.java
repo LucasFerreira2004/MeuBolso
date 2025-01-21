@@ -1,12 +1,23 @@
 package com.projetointegrado.MeuBolso.conta.dto;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class ContaPutDTO {
     private BigDecimal saldo;
     private Long id_banco;
     private Long id_tipo_conta;
+    private Date data;
     private String descricao;
+
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
 
     public String getDescricao() {
         return descricao;

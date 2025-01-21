@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,8 +41,8 @@ public class Conta {
     @OneToMany(mappedBy = "conta", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Transacao> transacoes;
 
-    @Transient //indica que o valor não será persistido no banco de dados.
-    private Date dataAtual;
+   // @Transient //indica que o valor não será persistido no banco de dados.
+    //private Date dataAtual;
 
     public Conta(Long id, TipoConta tipo_conta, Banco banco, String descricao, Usuario usuario) {
         this.id = id;
@@ -49,11 +50,14 @@ public class Conta {
         this.banco = banco;
         this.descricao = descricao;
         this.usuario = usuario;
+        this.transacoes = new ArrayList<>();
     }
     public Conta(ContaDTO contaDTO) {
         BeanUtils.copyProperties(contaDTO, this);
     }
-    public Conta() {}
+    public Conta() {
+        this.transacoes = new ArrayList<>();
+    }
 
     //getters e setters
     public Long getId() {
@@ -64,14 +68,14 @@ public class Conta {
         this.id = id;
     }
 
-    public BigDecimal getSaldo() { //a consulta pode ser melhorada no futuro em questão de desempenho.
-        saldo = BigDecimal.ZERO;
-        if (transacoes == null || transacoes.isEmpty() || dataAtual == null) return saldo; //0
+    public BigDecimal getSaldo(Date data) {
+        BigDecimal saldo = BigDecimal.ZERO;
+        if (transacoes == null || transacoes.isEmpty()) return saldo;
         for (Transacao transacao : transacoes) {
-            if (transacao.getData().before(dataAtual)){
+            if (transacao.getData().before(data)) {
                 if (transacao.getTipo() == TipoTransacao.RECEITA)
                     saldo = saldo.add(transacao.getValor());
-                if (transacao.getTipo() == TipoTransacao.DESPESA)
+                else if (transacao.getTipo() == TipoTransacao.DESPESA)
                     saldo = saldo.subtract(transacao.getValor());
             }
         }
@@ -113,13 +117,13 @@ public class Conta {
         this.transacoes = transacoes;
     }
 
-    public Date getDataAtual() {
-        return dataAtual;
-    }
-
-    public void setDataAtual(Date dataAtual) {
-        this.dataAtual = dataAtual;
-    }
+//    public Date getDataAtual() {
+//        return dataAtual;
+//    }
+//
+//    public void setDataAtual(Date dataAtual) {
+//        this.dataAtual = dataAtual;
+//    }
 
     public String getDescricao() {
         return descricao;

@@ -43,10 +43,7 @@ public class TransacaoService implements ITransacaoService {
     @Transactional(readOnly = true)
     public List<TransacaoDTO> findAll(String userId) {
         List<Transacao> transacoes = transacaoRepository.findAllByUsuario(userId);
-        System.out.println("printando transacoes encontradas pelo findAll no id de usuário " + userId);
-        transacoes.forEach(transacao -> System.out.println(transacao));
 
-        transacoes.forEach(transacao -> transacao.getConta().setDataAtual(transacao.getData()));
         List<TransacaoDTO> transacaoDTOs = transacoes.stream().map(transacao -> new TransacaoDTO(transacao)).toList();
 
         return transacaoDTOs;

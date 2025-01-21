@@ -17,7 +17,7 @@ public class ContaDTO {
 
     public ContaDTO(Conta conta) {
         this.id = conta.getId();
-        this.saldo = conta.getSaldo();
+        this.saldo = null;
         this.tipo_conta = conta.getTipo_conta();
         this.banco = conta.getBanco();
         this.descricao = conta.getDescricao();
