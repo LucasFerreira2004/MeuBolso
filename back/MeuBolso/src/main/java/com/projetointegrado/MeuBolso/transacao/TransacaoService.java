@@ -4,6 +4,7 @@ import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.categoria.CategoriaRepository;
 import com.projetointegrado.MeuBolso.conta.Conta;
 import com.projetointegrado.MeuBolso.conta.ContaRepository;
+import com.projetointegrado.MeuBolso.conta.ContaValidateService;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
@@ -31,6 +32,9 @@ public class TransacaoService implements ITransacaoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private ContaValidateService contaValidateService;
+
     @Transactional(readOnly = true)
     public TransacaoDTO findById(String userId, Long id){
         Transacao transacao = transacaoRepository.findById(id).orElse(null);
@@ -43,7 +47,6 @@ public class TransacaoService implements ITransacaoService {
     @Transactional(readOnly = true)
     public List<TransacaoDTO> findAll(String userId) {
         List<Transacao> transacoes = transacaoRepository.findAllByUsuario(userId);
-
         List<TransacaoDTO> transacaoDTOs = transacoes.stream().map(transacao -> new TransacaoDTO(transacao)).toList();
 
         return transacaoDTOs;
@@ -51,24 +54,17 @@ public class TransacaoService implements ITransacaoService {
 
     @Transactional
     public TransacaoDTO save(String userId, TransacaoSaveDTO dto) {
-        try{
-            System.out.println("transacaoService -> save:");
-            System.out.println(dto.toString());
-            System.out.println("user id: " + userId);
-            Transacao transacao = saveAndValidate(userId, dto);
-            System.out.println("transacao: " + transacao);
-            return new TransacaoDTO(transacao);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        System.out.println("transacaoService -> save:");
+        System.out.println(dto.toString());
+        System.out.println("user id: " + userId);
+        Transacao transacao = saveAndValidate(userId, dto);
+        System.out.println("transacao: " + transacao);
+        return new TransacaoDTO(transacao);
     }
 
     private Transacao  saveAndValidate(String userId, TransacaoSaveDTO dto) {
-    Conta conta = contaRepository.findById(dto.getContaId())
-            .orElseThrow(() -> new EntidadeNaoEncontradaException("contaId: ", "Conta não encontrada"));
-    if (!conta.getUsuario().getId().equals(userId))
-        throw new AcessoNegadoException();
+    Conta conta = contaValidateService.validateAndGet(dto.getContaId(), userId,
+            new EntidadeNaoEncontradaException("contaId", "conta nao encontrada"), new AcessoNegadoException());
 
     Categoria categoria = categoriaRepository.findById(dto.getCategoriaId())
             .orElseThrow(() -> new EntidadeNaoEncontradaException("categoriaId", "Categoria nao encontrada"));
