@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,9 +26,6 @@ import java.util.stream.Collectors;
 public class TransacaoService implements ITransacaoService {
     @Autowired
     private TransacaoRepository transacaoRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private ContaValidateService contaValidateService;
@@ -57,15 +55,17 @@ public class TransacaoService implements ITransacaoService {
 
     @Transactional
     public TransacaoDTO save(String userId, TransacaoSaveDTO dto) {
-        System.out.println("transacaoService -> save:");
-        System.out.println(dto.toString());
-        System.out.println("user id: " + userId);
-        Transacao transacao = saveAndValidate(userId, dto);
-        System.out.println("transacao: " + transacao);
+        Transacao transacao = saveAndValidate(userId, null, dto);
         return new TransacaoDTO(transacao);
     }
 
-    private Transacao  saveAndValidate(String userId, TransacaoSaveDTO dto) {
+    @Transactional
+    public TransacaoDTO update(String userId, Long id, TransacaoSaveDTO dto) {
+        Transacao transacao = saveAndValidate(userId, id, dto);
+        return new TransacaoDTO(transacao);
+    }
+
+    private Transacao  saveAndValidate(String userId, Long id, TransacaoSaveDTO dto) {
     Conta conta = contaValidateService.validateAndGet(dto.getContaId(), userId,
             new EntidadeNaoEncontradaException("contaId", "conta nao encontrada"), new AcessoNegadoException());
 
@@ -75,7 +75,7 @@ public class TransacaoService implements ITransacaoService {
     Usuario usuario = usuarioValidateService.validateAndGet(userId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
     System.out.println("TransacaoService -> saveAndValidate : chegou ao fim das checagens");
 
-    Transacao transacao = new Transacao(null, dto.getValor(), dto.getData(), dto.getTipoTransacao(),
+    Transacao transacao = new Transacao(id, dto.getValor(), dto.getData(), dto.getTipoTransacao(),
                 categoria, conta, dto.getComentario(), dto.getDescricao(), usuario);
     System.out.println(transacao);
     return transacaoRepository.save(transacao);

@@ -53,10 +53,14 @@ public class TransacaoController {
         return transacaoService.save(userLogadoId, dto);
     }
 
-    @GetMapping("teste")
-    public void teste (){
-        throw new IllegalArgumentException("Teste de exceção para validação.");
+    @Operation(summary = "Permite update em uma transação já existente")
+    @PutMapping("/{id}")
+    public TransacaoDTO update(@PathVariable Long id, @Valid @RequestBody TransacaoSaveDTO dto, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
+        String userLogadoId = usuarioService.getUsuarioLogadoId();
+        return transacaoService.update(userLogadoId, id, dto);
     }
-
 }
 
