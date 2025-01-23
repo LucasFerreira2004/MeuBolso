@@ -5,6 +5,7 @@ import com.projetointegrado.MeuBolso.banco.BancoRepository;
 import com.projetointegrado.MeuBolso.banco.exception.BancoNaoEncontradoException;
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.categoria.CategoriaRepository;
+import com.projetointegrado.MeuBolso.categoria.CategoriaValidateService;
 import com.projetointegrado.MeuBolso.categoria.ICategoriaService;
 import com.projetointegrado.MeuBolso.conta.dto.*;
 import com.projetointegrado.MeuBolso.conta.exception.*;
@@ -57,6 +58,9 @@ public class ContaService implements IContaService {
     private CategoriaRepository categoriaRepository;
 
     @Autowired
+    private ContaValidateService contaValidateService;
+
+    @Autowired
     private ITransacaoService transacaoService;
 
     @Autowired
@@ -64,17 +68,13 @@ public class ContaService implements IContaService {
 
     @Transactional(readOnly = true)
     public ContaDTO findById(String idUsuario, Long id, Date data) {
-        Conta result = contaRepository.findById(id).orElse(null);
-        if (result == null)
-            throw new ContaNaoEncontradaException();
-        if (!result.getUsuario().getId().equals(idUsuario))
-            throw new AcessoNegadoException();
-
-        return new ContaDTO(result);
+        Conta conta = contaValidateService.validateAndGet(id, idUsuario, new EntidadeNaoEncontradaException("/{id}", "conta nao encontrada"), new AcessoNegadoException());
+        ContaDTO dto = new ContaDTO(conta);
+        dto.setSaldo(conta.getSaldo(data));
+        return dto;
     }
     @Transactional(readOnly = true)
     public List<ContaDTO> findAll(String idUsuario, Date data) {
-
         List<Conta> listConta = contaRepository.findAllByUsuario(idUsuario);
         List<ContaDTO> listDto = new ArrayList<>();
         for (Conta conta : listConta) {
@@ -82,15 +82,18 @@ public class ContaService implements IContaService {
             dto.setSaldo(conta.getSaldo(data));
             listDto.add(dto);
         }
-        //result.forEach(conta -> conta.setDataAtual(data));
-        System.out.println("Conta Service -> findAll: passou no for each do find all");
         return listDto;
     }
     @Transactional(readOnly = true)
     public List<ContaMinDTO> findAllMin(String idUsuario, Date data) {
-
-        List<Conta> result = contaRepository.findAllByUsuario(idUsuario);
-        return result.stream().map(ContaMinDTO::new).toList();
+        List<Conta> contas = contaRepository.findAllByUsuario(idUsuario);
+        List<ContaMinDTO> listDto = new ArrayList<>();
+        for (Conta conta : contas){
+            ContaMinDTO dto = new ContaMinDTO(conta);
+            dto.setSaldo(conta.getSaldo(data));
+            listDto.add(dto);
+        }
+        return listDto;
     }
 
     @Transactional(readOnly = true)
@@ -158,18 +161,12 @@ public class ContaService implements IContaService {
 
         if(contaRepository.findByDescricao(userId, dto.getDescricao()) != null
                 && !conta.getDescricao().equals(dto.getDescricao())) throw new DescricaoJaExistenteException();
-
         //conta.setSaldo(dto.getSaldo());
         conta.setTipo_conta(tipo);
         conta.setBanco(banco);
         conta.setDescricao(dto.getDescricao());
         if (!Objects.equals(dto.getSaldo(), conta.getSaldo(dto.getData()))){
             Hibernate.initialize(conta.getTransacoes());
-            //conta.setDataAtual(dto.getData());
-            System.out.println("conta service -> update: conta.getData:" + conta.getSaldo(dto.getData()));
-            System.out.println("conta service -> update: dto saldo:" + dto.getSaldo());
-            System.out.println("conta service -> update: valor operacao:" + conta.getSaldo(dto.getData()).subtract(dto.getSaldo()).abs());
-
             BigDecimal valorTransacao = conta.getSaldo(dto.getData()).subtract(dto.getSaldo()).abs();
             TipoTransacao tipoTransacaoCorrecao;
             Categoria categoria;
@@ -180,7 +177,6 @@ public class ContaService implements IContaService {
             }else {
                 tipoTransacaoCorrecao = TipoTransacao.DESPESA;
                 categoria = categoriaRepository.findByName(userId, "ReajusteSaldoDecremento*");
-
             }
             transacaoService.save(userId, new TransacaoSaveDTO(valorTransacao, dto.getData(), tipoTransacaoCorrecao.name(), categoria.getId(), conta.getId(), conta.getDescricao()));
 
