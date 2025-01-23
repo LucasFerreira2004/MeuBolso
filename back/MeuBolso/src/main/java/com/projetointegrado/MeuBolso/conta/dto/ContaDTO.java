@@ -13,12 +13,14 @@ public class ContaDTO {
 
     private TipoConta tipo_conta;
     private Banco banco;
+    private String descricao;
 
     public ContaDTO(Conta conta) {
         this.id = conta.getId();
-        this.saldo = conta.getSaldo();
+        this.saldo = null;
         this.tipo_conta = conta.getTipo_conta();
         this.banco = conta.getBanco();
+        this.descricao = conta.getDescricao();
     }
 
     //getters e setters
@@ -54,4 +56,11 @@ public class ContaDTO {
         this.banco = banco;
     }
 
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 }

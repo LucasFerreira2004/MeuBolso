@@ -15,7 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-
+import com.projetointegrado.MeuBolso.transacao.ITransacaoService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,6 @@ import java.util.List;
 @RequestMapping(value = "/transacoes")
 public class TransacaoController {
     @Autowired
-    @Qualifier("transacaoService")
     private ITransacaoService transacaoService;
 
     @Autowired
@@ -46,19 +45,29 @@ public class TransacaoController {
 
     @Operation(summary = "Permite cadastrar uma transacao")
     @PostMapping
-    public ResponseEntity<?> save(@Valid @RequestBody TransacaoSaveDTO dto, BindingResult bindingResult) throws ValoresNaoPermitidosException {
+    public TransacaoDTO save(@Valid @RequestBody TransacaoSaveDTO dto, BindingResult bindingResult) throws ValoresNaoPermitidosException {
         if (bindingResult.hasErrors()){
             throw new ValoresNaoPermitidosException(bindingResult);
         }
-
         String userLogadoId = usuarioService.getUsuarioLogadoId();
-        return new ResponseEntity<>(transacaoService.save(userLogadoId, dto), HttpStatus.CREATED);
+        return transacaoService.save(userLogadoId, dto);
     }
 
-    @GetMapping("teste")
-    public void teste (){
-        throw new IllegalArgumentException("Teste de exceção para validação.");
+    @Operation(summary = "Permite update em uma transação já existente")
+    @PutMapping("/{id}")
+    public TransacaoDTO update(@PathVariable Long id, @Valid @RequestBody TransacaoSaveDTO dto, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
+        String userLogadoId = usuarioService.getUsuarioLogadoId();
+        return transacaoService.update(userLogadoId, id, dto);
     }
 
+    @Operation(summary = "Permite deletar uma transacao já existe")
+    @DeleteMapping("/{id}")
+    public TransacaoDTO delete(@PathVariable Long id){
+        String userLogadoId = usuarioService.getUsuarioLogadoId();
+        return transacaoService.delete(userLogadoId, id);
+    }
 }
 

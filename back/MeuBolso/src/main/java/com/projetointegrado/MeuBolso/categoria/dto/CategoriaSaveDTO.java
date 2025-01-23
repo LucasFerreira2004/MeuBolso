@@ -8,6 +8,12 @@ public class CategoriaSaveDTO {
     private String nome;
     private String tipo; //tipo categoria
 
+    public CategoriaSaveDTO(String cor, String nome, String tipo) {
+        this.cor = cor;
+        this.nome = nome;
+        this.tipo = tipo;
+    }
+
     public String getCor() {
         return cor;
     }
