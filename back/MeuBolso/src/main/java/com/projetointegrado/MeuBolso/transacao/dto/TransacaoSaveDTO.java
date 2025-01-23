@@ -41,6 +41,15 @@ public class TransacaoSaveDTO {
     @NotBlank(message = descricaoDefalutMessage)
     private String descricao;
 
+    public TransacaoSaveDTO(BigDecimal valor, Date data, String tipoTransacao, Long categoriaId, Long contaId, String descricao) {
+        this.valor = valor;
+        this.data = data;
+        this.tipoTransacao = tipoTransacao;
+        this.categoriaId = categoriaId;
+        this.contaId = contaId;
+        this.descricao = descricao;
+    }
+
     public BigDecimal getValor() {
         return valor;
     }
@@ -98,5 +107,21 @@ public class TransacaoSaveDTO {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    @Override
+    public String toString() {
+        return "TransacaoSaveDTO{" +
+                "valor=" + valor +
+                ", data=" + data +
+                ", tipoTransacao='" + tipoTransacao + '\'' +
+                ", categoriaIdDefaultMessage='" + categoriaIdDefaultMessage + '\'' +
+                ", categoriaId=" + categoriaId +
+                ", contaIdDefaultMessage='" + contaIdDefaultMessage + '\'' +
+                ", contaId=" + contaId +
+                ", comentario='" + comentario + '\'' +
+                ", descricaoDefalutMessage='" + descricaoDefalutMessage + '\'' +
+                ", descricao='" + descricao + '\'' +
+                '}';
     }
 }

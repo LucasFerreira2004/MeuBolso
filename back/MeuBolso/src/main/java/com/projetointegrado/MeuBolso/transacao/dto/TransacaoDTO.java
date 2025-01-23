@@ -1,13 +1,9 @@
 package com.projetointegrado.MeuBolso.transacao.dto;
 
-import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
-import com.projetointegrado.MeuBolso.conta.Conta;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -26,7 +22,7 @@ public class TransacaoDTO {
         //isso so funcionará se os atributos forem os mesmos e estiverem na mesma ordem que a entidade
         this.id = transacao.getId();
         this.valor = transacao.getValor();
-        this.data_transacao = transacao.getData_transacao();
+        this.data_transacao = transacao.getData();
         this.tipo = transacao.getTipo();
         this.categoriaDTO = new CategoriaDTO(transacao.getCategoria());
         this.contaDTO = new ContaDTO(transacao.getConta());
@@ -97,5 +93,19 @@ public class TransacaoDTO {
 
     public void setConta(ContaDTO conta) {
         this.contaDTO = conta;
+    }
+
+    @Override
+    public String toString() {
+        return "TransacaoDTO{" +
+                "id=" + id +
+                ", valor=" + valor +
+                ", data_transacao=" + data_transacao +
+                ", tipo=" + tipo +
+                ", categoriaDTO=" + categoriaDTO +
+                ", contaDTO=" + contaDTO +
+                ", comentario='" + comentario + '\'' +
+                ", descricao='" + descricao + '\'' +
+                '}';
     }
 }

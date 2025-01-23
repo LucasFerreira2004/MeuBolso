@@ -1,5 +1,7 @@
 package com.projetointegrado.MeuBolso.usuario;
 
+import com.projetointegrado.MeuBolso.categoria.ICategoriaService;
+import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
 import com.projetointegrado.MeuBolso.usuario.exception.EmailJaCadastradoException;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,12 +19,23 @@ public class UsuarioService implements IUsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private ICategoriaService categoriaService;
+
     public UsuarioDTO save(UsuarioDTO usuarioDTO) {
         if (usuarioRepository.findByEmail(usuarioDTO.getEmail()) != null)
             throw new EmailJaCadastradoException();
         String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioDTO.getSenha());
         Usuario usuario = new Usuario(usuarioDTO.getNome(), usuarioDTO.getEmail(), encryptedPassword);
-        return new UsuarioDTO(usuarioRepository.save(usuario));
+
+        usuario = usuarioRepository.save(usuario);
+
+        //isso tem que sair daqui na refatorada ...
+        categoriaService.save(usuario.getId(), new CategoriaSaveDTO("000", "DepositoInicial*", "RECEITA"));
+        categoriaService.save(usuario.getId(), new CategoriaSaveDTO("000", "ReajusteSaldoAumento*", "RECEITA"));
+        categoriaService.save(usuario.getId(), new CategoriaSaveDTO("000", "ReajusteSaldoDecremento*", "DESPESA"));
+
+        return new UsuarioDTO(usuario);
     }
 
     @Transactional(readOnly = true)
