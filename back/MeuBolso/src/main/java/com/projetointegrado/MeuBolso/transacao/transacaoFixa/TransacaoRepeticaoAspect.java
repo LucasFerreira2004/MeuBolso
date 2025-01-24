@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
 
+import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoRepeticaoExecutor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -10,24 +11,31 @@ import java.time.LocalDate;
 @Aspect
 @Component
 public class TransacaoRepeticaoAspect {
-    private final TransacaoRepeticaoService transacaoRepeticaoService;
+    private final TransacaoRepeticaoExecutor transacaoRepeticaoExecutor;
 
-    public TransacaoRepeticaoAspect(TransacaoRepeticaoService transacaoRepeticaoService) {
-        this.transacaoRepeticaoService = transacaoRepeticaoService;
+    public TransacaoRepeticaoAspect(TransacaoRepeticaoExecutor transacaoRepeticaoExecutor) {
+        this.transacaoRepeticaoExecutor = transacaoRepeticaoExecutor;
     }
 
-    @Before("execution(* com.projetointegrado.MeuBolso.conta.ContaService.find*(..)) || execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.find*(..))")
+    @Before("execution(* com.projetointegrado.MeuBolso.conta.ContaService.find*(..)) || execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findAll(..))")
     public void gerarTransacoesFixasAntesDasBuscas(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
+        LocalDate data = null;
+        String usuarioId = null;
 
-        if (args.length < 2 || !(args[0] instanceof LocalDate) || !(args[1] instanceof String)) {
-            System.out.println("AOP -> Parâmetros inválidos, não gerando transações.");
-            return;
+        for (Object arg : args) {
+            if (arg instanceof LocalDate) {
+                data = (LocalDate) arg;
+            } else if (arg instanceof String) {
+                usuarioId = (String) arg;
+            }
         }
 
-        LocalDate data = (LocalDate) args[0];
-        String  usuarioId = (String) args[1];
-        System.out.println("AOP -> Gerando transações fixas antes de buscar contas ou transações.");
-        transacaoRepeticaoService.gerarTransacoes();
+        if (data != null && usuarioId != null) {
+            System.out.println("AOP -> Gerando transações fixas para usuário ID " + usuarioId + " e data " + data);
+            transacaoRepeticaoExecutor.executarGeracaoTransacoes(data, usuarioId); // ✅ Agora sempre executa em nova transação
+        } else {
+            System.out.println("AOP -> Parâmetros não encontrados, pulando geração de transações.");
+        }
     }
 }
