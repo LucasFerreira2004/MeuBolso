@@ -7,7 +7,7 @@ import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 public class TransacaoFixa {
@@ -23,7 +23,7 @@ public class TransacaoFixa {
     private TipoTransacao tipo;
 
     @Column(nullable = false, columnDefinition = "DATE")
-    private Date dataCadastro;
+    private LocalDate dataCadastro;
 
     @Column(nullable = false) //especificarTamanho da descrição
     private String descricao;
@@ -40,7 +40,10 @@ public class TransacaoFixa {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, Date dataCadastro, String descricao, Conta conta, Categoria categoria, Usuario usuario) {
+    @Enumerated(EnumType.STRING)
+    private Periodicidade periodicidade;
+
+    public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Usuario usuario) {
         this.id = id;
         this.valor = valor;
         this.tipo = tipo;
@@ -77,11 +80,11 @@ public class TransacaoFixa {
         this.tipo = tipo;
     }
 
-    public Date getDataCadastro() {
+    public LocalDate getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(Date dataCadastro) {
+    public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
@@ -115,5 +118,13 @@ public class TransacaoFixa {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Periodicidade getPeriodicidade() {
+        return periodicidade;
+    }
+
+    public void setPeriodicidade(Periodicidade periodicidade) {
+        this.periodicidade = periodicidade;
     }
 }

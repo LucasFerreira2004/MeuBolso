@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class TransacaoFixaSaveDTO {
     @NotNull(message = "valor não pde ser nulo, deve ser do tipo BigDecimal. ex: 9.99")
@@ -19,8 +19,7 @@ public class TransacaoFixaSaveDTO {
     @ValidEnum(value = TipoTransacao.class, message = "tipos permitidos são DESPESA e RECEITA")
     private String tipoTransacao;
 
-    @NotNull(message = "data não pose der nulo, deve ser do tipo Date. ex: \"2025-12-25\"")
-    private Date data;
+    private LocalDate data;
 
     private final String contaIdDefaultMessage = "O contaId é obrigatório e deve ser um inteiro maior que 0";
     @NotNull(message = contaIdDefaultMessage)
@@ -37,7 +36,7 @@ public class TransacaoFixaSaveDTO {
     @NotBlank(message = descricaoDefaultMessage)
     private String descricao;
 
-    public TransacaoFixaSaveDTO(BigDecimal valor, String tipoTransacao, Date data, Long contaId, Long categoriaId, String descricao) {
+    public TransacaoFixaSaveDTO(BigDecimal valor, String tipoTransacao, LocalDate data, Long contaId, Long categoriaId, String descricao) {
         this.valor = valor;
         this.tipoTransacao = tipoTransacao;
         this.data = data;
@@ -62,11 +61,11 @@ public class TransacaoFixaSaveDTO {
         this.tipoTransacao = tipoTransacao;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 

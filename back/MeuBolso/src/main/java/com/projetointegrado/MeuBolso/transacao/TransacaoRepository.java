@@ -10,4 +10,10 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
         select * from transacao where usuario_id = :userId;
     """)
     public List<Transacao> findAllByUsuario(String userId);
+
+
+    @Query(nativeQuery = true, value = """
+        select * from transacao where data = '____-:month-:year';
+    """)
+    public List<Transacao> findAllByMonthYear(int month, int year);
 }
