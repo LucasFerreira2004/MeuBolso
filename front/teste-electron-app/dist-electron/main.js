@@ -14,7 +14,11 @@ function startAPI() {
   const apiPath = path.join(process.env.APP_ROOT, "api", "dslist.jar");
   apiProcess = spawn("java", ["-jar", apiPath], { stdio: "inherit" });
   apiProcess.on("error", (err) => {
-    console.error("Erro ao iniciar a API:", err);
+    if (err instanceof Error) {
+      console.error("Erro ao iniciar a API:", err.message);
+    } else {
+      console.error("Erro desconhecido ao iniciar a API:", err);
+    }
   });
   apiProcess.on("exit", (code) => {
     console.log("Processo da API foi encerrado com código:", code);
@@ -32,6 +36,16 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs")
     }
+  });
+  win.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        "Content-Security-Policy": [
+          "default-src 'self'; connect-src *; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self';"
+        ]
+      }
+    });
   });
   win.webContents.on("did-finish-load", () => {
     win == null ? void 0 : win.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
