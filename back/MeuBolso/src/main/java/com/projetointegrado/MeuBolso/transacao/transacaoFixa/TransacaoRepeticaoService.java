@@ -3,16 +3,14 @@ package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Service
-public class TransacaoMensalService {
+public class TransacaoRepeticaoService {
 
     @Autowired
     private TransacaoRepository transacaoRepository;
@@ -23,13 +21,12 @@ public class TransacaoMensalService {
     @Transactional
     public List<Transacao> gerarTransacoes(LocalDate data, String userId) {
         // Obtém todas as transações normais no período
-        System.out.println("TransacaoMensalService -> gerarTransacoes");
+        System.out.println("TransacaoRepeticaoService -> gerarTransacoes");
         List<Transacao> transacoesNormais = transacaoRepository.findAllBeforeDate(data, userId);
 
-        // Obtém as transações fixas
         List<TransacaoFixa> transacoesFixas = transacaoFixaRepository.findAllByUsuario(userId);
         if (transacoesNormais.isEmpty() || transacoesFixas.isEmpty()) return null;
-        // Verifica e gera transações fixas para o período
+
         for (TransacaoFixa transacaoFixa : transacoesFixas) {
             gerarTransacoesFixas(transacaoFixa, data);
         }
@@ -38,7 +35,7 @@ public class TransacaoMensalService {
     }
 
     private void gerarTransacoesFixas(TransacaoFixa transacaoFixa, LocalDate dataBusca) {
-        System.out.println("TransacaoMensalService -> gerarTransacoesFixas");
+        System.out.println("TransacaoRepeticaoService -> gerarTransacoesFixas");
         LocalDate dataUltimaExecucao = transacaoFixa.getUltimaExecucao() != null
                 ? avancarData(transacaoFixa.getUltimaExecucao(), transacaoFixa.getPeriodicidade())
                 : transacaoFixa.getDataCadastro();
@@ -50,12 +47,12 @@ public class TransacaoMensalService {
 
             dataUltimaExecucao = avancarData(dataUltimaExecucao, transacaoFixa.getPeriodicidade());
         }
-        System.out.println("TransacaoMensalService -> gerarTransacoesFixas -> ultimaExecucao = " + transacaoFixa.getUltimaExecucao());
+        System.out.println("TransacaoRepeticaoService -> gerarTransacoesFixas -> ultimaExecucao = " + transacaoFixa.getUltimaExecucao());
         transacaoFixaRepository.save(transacaoFixa);
     }
 
     private LocalDate avancarData(LocalDate data, Periodicidade periodicidade) {
-        System.out.println("TransacaoMensalService -> avancarData");
+        System.out.println("TransacaoRepeticaoService -> avancarData");
         switch (periodicidade) {
             case DIARIO:
                 return data.plusDays(1);

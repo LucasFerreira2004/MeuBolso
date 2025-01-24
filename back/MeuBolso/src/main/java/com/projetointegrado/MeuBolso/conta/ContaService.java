@@ -14,10 +14,9 @@ import com.projetointegrado.MeuBolso.tipoConta.TipoContaRepository;
 import com.projetointegrado.MeuBolso.tipoConta.exception.TipoContaNaoEncontradoException;
 import com.projetointegrado.MeuBolso.transacao.ITransacaoService;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
-import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
-import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoMensalService;
+import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoRepeticaoService;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
@@ -55,10 +54,6 @@ public class ContaService implements IContaService {
     @Autowired
     private ITransacaoService transacaoService;
 
-    //temporario
-    @Autowired
-    private TransacaoMensalService transacaoMensalService;
-
     @Transactional(readOnly = true)
     public ContaDTO findById(String idUsuario, Long id, LocalDate data) {
         Conta conta = contaValidateService.validateAndGet(id, idUsuario, new EntidadeNaoEncontradaException("/{id}", "conta nao encontrada"), new AcessoNegadoException());
@@ -66,9 +61,8 @@ public class ContaService implements IContaService {
         dto.setSaldo(conta.getSaldo(data));
         return dto;
     }
-    @Transactional() //voltar pra read only depois
+    @Transactional(readOnly = true)
     public List<ContaDTO> findAll(String idUsuario, LocalDate data) {
-        transacaoMensalService.gerarTransacoes(data, idUsuario);
         List<Conta> listConta = contaRepository.findAllByUsuario(idUsuario);
         List<ContaDTO> listDto = new ArrayList<>();
         for (Conta conta : listConta) {
@@ -91,7 +85,7 @@ public class ContaService implements IContaService {
     }
 
     @Transactional(readOnly = true)
-    public SaldoTotalDTO getSaldo(String idUsuario, LocalDate data) {
+    public SaldoTotalDTO findoSaldo(String idUsuario, LocalDate data) {
         BigDecimal saldo = new BigDecimal(0);
         List<Conta> contas = contaRepository.findAllByUsuario(idUsuario);
         for (Conta c : contas){

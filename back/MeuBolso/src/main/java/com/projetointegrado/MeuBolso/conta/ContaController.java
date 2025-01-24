@@ -47,7 +47,7 @@ public class ContaController {
     @GetMapping("/saldoTotal")
     public SaldoTotalDTO findSaldoTotal(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
         String idUsuario = usuarioService.getUsuarioLogadoId();
-        return contaService.getSaldo(idUsuario, data);
+        return contaService.findoSaldo(idUsuario, data);
 
     }
 
