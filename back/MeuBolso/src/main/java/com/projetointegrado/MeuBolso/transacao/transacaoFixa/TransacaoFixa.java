@@ -3,11 +3,13 @@ package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
+import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class TransacaoFixa {
@@ -47,6 +49,9 @@ public class TransacaoFixa {
     @Column(nullable = true, name = "ultima_execucao")
     private LocalDate ultimaExecucao; //representa a data que foi chamada pela última vez para realizar a cricação de transacoes
 
+    @OneToMany(mappedBy = "transacaoFixa", cascade = CascadeType.REMOVE)
+    private List<Transacao> transacoes;
+
     public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario) {
         this.id = id;
         this.valor = valor;
@@ -61,6 +66,14 @@ public class TransacaoFixa {
     }
 
     public TransacaoFixa() {}
+
+    public List<Transacao> getTransacoes() {
+        return transacoes;
+    }
+
+    public void setTransacoes(List<Transacao> transacoes) {
+        this.transacoes = transacoes;
+    }
 
     public Long getId() {
         return id;

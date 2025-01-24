@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @Service
@@ -58,7 +59,13 @@ public class TransacaoRepeticaoService {
             case SEMANAL:
                 return data.plusWeeks(1);
             case MENSAL:
-                return data.plusMonths(1);
+                int ultimoDiaDoMesAtual = data.lengthOfMonth(); // Último dia do mês original
+                LocalDate novaData = data.plusMonths(1); // Avança um mês
+
+                if (data.getDayOfMonth() == ultimoDiaDoMesAtual) {
+                    novaData = novaData.with(TemporalAdjusters.lastDayOfMonth());
+                }
+                return novaData;
             default:
                 throw new IllegalArgumentException("Periodicidade desconhecida");
         }
