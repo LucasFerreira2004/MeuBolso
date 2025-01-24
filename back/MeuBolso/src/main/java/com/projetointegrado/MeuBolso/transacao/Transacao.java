@@ -9,7 +9,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 public class Transacao {
@@ -22,7 +22,7 @@ public class Transacao {
     private BigDecimal valor;
 
     @Column(nullable = false, columnDefinition = "DATE")
-    private Date data;
+    private LocalDate data;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -47,7 +47,7 @@ public class Transacao {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    public Transacao(Long id, BigDecimal valor, Date data, TipoTransacao tipo, Categoria categoria, Conta conta, String comentario, String descricao, Usuario usuario) {
+    public Transacao(Long id, BigDecimal valor, LocalDate data, TipoTransacao tipo, Categoria categoria, Conta conta, String comentario, String descricao, Usuario usuario) {
         this.id = id;
         this.valor = valor;
         this.data = data;
@@ -95,11 +95,11 @@ public class Transacao {
         this.descricao = descricao;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data_transacao) {
+    public void setData(LocalDate data_transacao) {
         this.data = data_transacao;
     }
 

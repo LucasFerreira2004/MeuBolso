@@ -7,13 +7,12 @@ import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.Formula;
 import org.springframework.beans.BeanUtils;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -68,7 +67,7 @@ public class Conta {
         this.id = id;
     }
 
-    public BigDecimal getSaldo(Date data) {
+    public BigDecimal getSaldo(LocalDate data) {
         BigDecimal saldo = BigDecimal.ZERO;
         if (transacoes == null || transacoes.isEmpty()) return saldo;
         for (Transacao transacao : transacoes) {

@@ -2,15 +2,12 @@ package com.projetointegrado.MeuBolso.conta;
 
 import com.projetointegrado.MeuBolso.conta.dto.*;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
-import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -26,7 +23,7 @@ public class ContaController {
 
 
     @GetMapping
-    public List<ContaDTO> findAll(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data) {
+    public List<ContaDTO> findAll(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
 
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
@@ -34,21 +31,21 @@ public class ContaController {
     }
 
     @GetMapping("/{id}")
-    public ContaDTO findById(@PathVariable Long id, @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data){
+    public ContaDTO findById(@PathVariable Long id, @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
         return contaService.findById(idUsuario, id, data);
     }
 
     @GetMapping("/min")
-    public List<ContaMinDTO> findMin(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data) {
+    public List<ContaMinDTO> findMin(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
         return contaService.findAllMin(idUsuario, data);
     }
 
     @GetMapping("/saldoTotal")
-    public SaldoTotalDTO findSaldoTotal(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data) {
+    public SaldoTotalDTO findSaldoTotal(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
         String idUsuario = usuarioService.getUsuarioLogadoId();
         return contaService.getSaldo(idUsuario, data);
 

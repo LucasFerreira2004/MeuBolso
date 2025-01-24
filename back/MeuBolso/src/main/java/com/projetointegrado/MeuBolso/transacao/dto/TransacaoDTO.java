@@ -6,12 +6,12 @@ import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class TransacaoDTO {
     private Long id;
     private BigDecimal valor;
-    private Date data_transacao;
+    private LocalDate data_transacao;
     private TipoTransacao tipo;
     private CategoriaDTO categoriaDTO;
     private ContaDTO contaDTO;
@@ -47,11 +47,11 @@ public class TransacaoDTO {
         this.valor = valor;
     }
 
-    public Date getData_transacao() {
+    public LocalDate getData_transacao() {
         return data_transacao;
     }
 
-    public void setData_transacao(Date data_transacao) {
+    public void setData_transacao(LocalDate data_transacao) {
         this.data_transacao = data_transacao;
     }
 
