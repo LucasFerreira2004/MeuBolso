@@ -17,6 +17,7 @@ import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
+import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoMensalService;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
@@ -54,8 +55,9 @@ public class ContaService implements IContaService {
     @Autowired
     private ITransacaoService transacaoService;
 
+    //temporario
     @Autowired
-    private TransacaoRepository transacaoRepository;
+    private TransacaoMensalService transacaoMensalService;
 
     @Transactional(readOnly = true)
     public ContaDTO findById(String idUsuario, Long id, LocalDate data) {
@@ -64,8 +66,9 @@ public class ContaService implements IContaService {
         dto.setSaldo(conta.getSaldo(data));
         return dto;
     }
-    @Transactional(readOnly = true)
+    @Transactional() //voltar pra read only depois
     public List<ContaDTO> findAll(String idUsuario, LocalDate data) {
+        transacaoMensalService.gerarTransacoes(data, idUsuario);
         List<Conta> listConta = contaRepository.findAllByUsuario(idUsuario);
         List<ContaDTO> listDto = new ArrayList<>();
         for (Conta conta : listConta) {

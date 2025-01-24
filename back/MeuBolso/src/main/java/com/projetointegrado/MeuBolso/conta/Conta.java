@@ -71,7 +71,7 @@ public class Conta {
         BigDecimal saldo = BigDecimal.ZERO;
         if (transacoes == null || transacoes.isEmpty()) return saldo;
         for (Transacao transacao : transacoes) {
-            if (transacao.getData().before(data)) {
+            if (!transacao.getData().isAfter(data)) { //retorna true para todas as datas antes de data
                 if (transacao.getTipo() == TipoTransacao.RECEITA)
                     saldo = saldo.add(transacao.getValor());
                 else if (transacao.getTipo() == TipoTransacao.DESPESA)

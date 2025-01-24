@@ -41,9 +41,13 @@ public class TransacaoFixa {
     private Usuario usuario;
 
     @Enumerated(EnumType.STRING)
-    private Periodicidade periodicidade;
+    @Column (nullable = false)
+    private Periodicidade periodicidade; //ainda não está em uso
 
-    public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Usuario usuario) {
+    @Column(nullable = true, name = "ultima_execucao")
+    private LocalDate ultimaExecucao; //representa a data que foi chamada pela última vez para realizar a cricação de transacoes
+
+    public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario) {
         this.id = id;
         this.valor = valor;
         this.tipo = tipo;
@@ -51,7 +55,9 @@ public class TransacaoFixa {
         this.descricao = descricao;
         this.conta = conta;
         this.categoria = categoria;
+        this.periodicidade = periodicidade;
         this.usuario = usuario;
+        this.ultimaExecucao = null;
     }
 
     public TransacaoFixa() {}
@@ -126,5 +132,13 @@ public class TransacaoFixa {
 
     public void setPeriodicidade(Periodicidade periodicidade) {
         this.periodicidade = periodicidade;
+    }
+
+    public LocalDate getUltimaExecucao() {
+        return ultimaExecucao;
+    }
+
+    public void setUltimaExecucao(LocalDate ultimaExecucao) {
+        this.ultimaExecucao = ultimaExecucao;
     }
 }

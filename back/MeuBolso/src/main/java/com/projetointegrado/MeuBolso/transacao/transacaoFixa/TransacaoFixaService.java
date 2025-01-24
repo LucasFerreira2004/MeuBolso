@@ -80,7 +80,7 @@ public class TransacaoFixaService implements ITransacaoFixaService {
         Usuario usuario = usuarioValidateService.validateAndGet(userId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado"));
 
         TransacaoFixa transacaoFixa = new TransacaoFixa(null, dto.getValor(), TipoTransacao.valueOf(dto.getTipoTransacao()), dto.getData(),
-                dto.getDescricao(), conta, categoria, usuario);
+                dto.getDescricao(), conta, categoria, Periodicidade.valueOf(dto.getPeriodicidade()), usuario);
 
         return transacaoFixaRepository.save(transacaoFixa);
     }

@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto;
 
 import com.projetointegrado.MeuBolso.globalConstraints.validEnum.ValidEnum;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
+import com.projetointegrado.MeuBolso.transacao.transacaoFixa.Periodicidade;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -36,13 +37,23 @@ public class TransacaoFixaSaveDTO {
     @NotBlank(message = descricaoDefaultMessage)
     private String descricao;
 
-    public TransacaoFixaSaveDTO(BigDecimal valor, String tipoTransacao, LocalDate data, Long contaId, Long categoriaId, String descricao) {
+//    private final String comentarioDefaultMessage = "o comentario deve ser uma string valida.";
+//    @NotNull(message = comentarioDefaultMessage)
+//    private String comentario; TRATAR A CRIACAO DE COMENTARIO E CRIAR NOTATION PARA NULO OU STRING VALIDA
+
+    private final String periodicidadeDefaultMessage = "a periodicidade é obrigatória e deve ter o valor: DIARIO, SEMANAL ou MENSAL";
+    @NotNull(message = periodicidadeDefaultMessage)
+    @ValidEnum(value = Periodicidade.class, message = "tipos permitidos são DIARIO, SEMANAL ou MENSAL" )
+    private String periodicidade;
+
+    public TransacaoFixaSaveDTO(BigDecimal valor, String tipoTransacao, LocalDate data, Long contaId, Long categoriaId, String descricao, String periodicidade) {
         this.valor = valor;
         this.tipoTransacao = tipoTransacao;
         this.data = data;
         this.contaId = contaId;
         this.categoriaId = categoriaId;
         this.descricao = descricao;
+        this.periodicidade = periodicidade;
     }
 
     public BigDecimal getValor() {
@@ -91,5 +102,13 @@ public class TransacaoFixaSaveDTO {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getPeriodicidade() {
+        return periodicidade;
+    }
+
+    public void setPeriodicidade(String periodicidade) {
+        this.periodicidade = periodicidade;
     }
 }

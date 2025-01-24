@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.transacao;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
+import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoFixa;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 
@@ -47,6 +48,10 @@ public class Transacao {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "transacao_fixa_id")
+    private TransacaoFixa transacaoFixa;
+
     public Transacao(Long id, BigDecimal valor, LocalDate data, TipoTransacao tipo, Categoria categoria, Conta conta, String comentario, String descricao, Usuario usuario) {
         this.id = id;
         this.valor = valor;
@@ -59,10 +64,33 @@ public class Transacao {
         this.usuario = usuario;
     }
 
+    public Transacao (TransacaoFixa transacaoFixa, LocalDate data) {
+        this.id = null;
+        this.valor = transacaoFixa.getValor();
+        this.data = data;
+        this.tipo = transacaoFixa.getTipo();
+        this.categoria = transacaoFixa.getCategoria();
+        this.conta = transacaoFixa.getConta();
+        this.comentario = null;
+        this.descricao = transacaoFixa.getDescricao();
+        this.usuario = transacaoFixa.getUsuario();
+        this.transacaoFixa = transacaoFixa;
+    }
+
     public Transacao() {
     }
 
     // Getters e Setters
+
+
+    public TransacaoFixa getTransacaoFixa() {
+        return transacaoFixa;
+    }
+
+    public void setTransacaoFixa(TransacaoFixa transacaoFixa) {
+        this.transacaoFixa = transacaoFixa;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }

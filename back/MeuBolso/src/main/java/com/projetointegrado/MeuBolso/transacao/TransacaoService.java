@@ -10,6 +10,7 @@ import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
+import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoMensalService;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
@@ -38,6 +39,10 @@ public class TransacaoService implements ITransacaoService {
 
     @Autowired
     private TransacaoValidateService transacaoValidateService;
+
+    //temporário
+    @Autowired
+    private TransacaoMensalService transacaoMensalService;
 
     @Transactional(readOnly = true)
     public TransacaoDTO findById(String userId, Long id){
