@@ -2,13 +2,14 @@ package com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto;
 
 import com.projetointegrado.MeuBolso.globalConstraints.validEnum.ValidEnum;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
+import com.projetointegrado.MeuBolso.transacao.transacaoFixa.Periodicidade;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class TransacaoFixaSaveDTO {
     @NotNull(message = "valor não pde ser nulo, deve ser do tipo BigDecimal. ex: 9.99")
@@ -19,8 +20,7 @@ public class TransacaoFixaSaveDTO {
     @ValidEnum(value = TipoTransacao.class, message = "tipos permitidos são DESPESA e RECEITA")
     private String tipoTransacao;
 
-    @NotNull(message = "data não pose der nulo, deve ser do tipo Date. ex: \"2025-12-25\"")
-    private Date data;
+    private LocalDate data;
 
     private final String contaIdDefaultMessage = "O contaId é obrigatório e deve ser um inteiro maior que 0";
     @NotNull(message = contaIdDefaultMessage)
@@ -37,13 +37,23 @@ public class TransacaoFixaSaveDTO {
     @NotBlank(message = descricaoDefaultMessage)
     private String descricao;
 
-    public TransacaoFixaSaveDTO(BigDecimal valor, String tipoTransacao, Date data, Long contaId, Long categoriaId, String descricao) {
+//    private final String comentarioDefaultMessage = "o comentario deve ser uma string valida.";
+//    @NotNull(message = comentarioDefaultMessage)
+//    private String comentario; TRATAR A CRIACAO DE COMENTARIO E CRIAR NOTATION PARA NULO OU STRING VALIDA
+
+    private final String periodicidadeDefaultMessage = "a periodicidade é obrigatória e deve ter o valor: DIARIO, SEMANAL ou MENSAL";
+    @NotNull(message = periodicidadeDefaultMessage)
+    @ValidEnum(value = Periodicidade.class, message = "tipos permitidos são DIARIO, SEMANAL ou MENSAL" )
+    private String periodicidade;
+
+    public TransacaoFixaSaveDTO(BigDecimal valor, String tipoTransacao, LocalDate data, Long contaId, Long categoriaId, String descricao, String periodicidade) {
         this.valor = valor;
         this.tipoTransacao = tipoTransacao;
         this.data = data;
         this.contaId = contaId;
         this.categoriaId = categoriaId;
         this.descricao = descricao;
+        this.periodicidade = periodicidade;
     }
 
     public BigDecimal getValor() {
@@ -62,11 +72,11 @@ public class TransacaoFixaSaveDTO {
         this.tipoTransacao = tipoTransacao;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
@@ -92,5 +102,13 @@ public class TransacaoFixaSaveDTO {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getPeriodicidade() {
+        return periodicidade;
+    }
+
+    public void setPeriodicidade(String periodicidade) {
+        this.periodicidade = periodicidade;
     }
 }

@@ -10,4 +10,5 @@ public interface ITransacaoFixaService {
     public TransacaoFixaDTO findById(String userId, Long id);
     public TransacaoFixaDTO save(String userId, TransacaoFixaSaveDTO dto);
     public TransacaoFixaDTO update(String userId, Long id, TransacaoFixaSaveDTO dto);
+    public TransacaoFixaDTO delete(String userId, Long id);
 }
