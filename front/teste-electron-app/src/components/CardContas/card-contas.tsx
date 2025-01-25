@@ -3,15 +3,18 @@ import style from "./card-contas.module.css";
 interface CardContasProps {
   titulo: string;
   tipo: string;
-  saldo: number;
+  saldo: number | null | undefined; // Permite valores nulos ou indefinidos
   banco: string;
   altBanco: string;
   onDelete: () => void;
-  onEdit: () => void; // Nova função para editar
+  onEdit: () => void;
 }
 
 const CardContas: React.FC<CardContasProps> = ({ titulo, tipo, saldo, banco, altBanco, onDelete, onEdit }) => {
-  const formatarSaldo = (valor: number) => {
+  const formatarSaldo = (valor: number | null | undefined) => {
+    if (valor == null) {
+      return "R$ 0,00"; // Valor padrão caso o saldo seja inválido
+    }
     return valor.toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
