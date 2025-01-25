@@ -1,15 +1,12 @@
 import { app, BrowserWindow } from 'electron';
-//import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 
-//const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 process.env.APP_ROOT = path.join(__dirname, '..');
 
-// 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL'];
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron');
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
@@ -22,7 +19,6 @@ let apiProcess: any; // Referência para o processo da API
 function startAPI() {
   const apiPath = path.join(process.env.APP_ROOT, 'api', 'dslist.jar');
 
-  // Lança o .jar usando o Java instalado no sistema
   apiProcess = spawn('java', ['-jar', apiPath], { stdio: 'inherit' });
   apiProcess.on('error', (err: unknown) => {
     if (err instanceof Error) {
@@ -58,12 +54,19 @@ function createWindow() {
       responseHeaders: {
         ...details.responseHeaders,
         "Content-Security-Policy": [
-          "default-src 'self'; connect-src *; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self';",
+          "default-src 'self';" +
+          " connect-src 'self' http://localhost:8080;" + // Adicionando sua API se necessário
+          " script-src 'self' 'unsafe-inline';" +
+          " style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;" + // Permite carregar fontes do Google
+          " font-src 'self' https://fonts.gstatic.com;" + // Permite carregar fontes do Google
+          " img-src 'self' https://play-lh.googleusercontent.com https://t.ctcdn.com.br;" + // Permite imagens externas
+          " object-src 'none';"
         ],
       },
     });
   });
-  // Test active push message to Renderer-process.
+
+  // Teste para enviar mensagem para o renderer process
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', new Date().toLocaleString());
   });
