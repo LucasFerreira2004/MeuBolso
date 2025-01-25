@@ -17,8 +17,6 @@ interface Conta {
   id_banco: number;
   id_tipo_conta: number;
   id_usuario: number;
-  data: string;
-  descricao: string;
 }
 
 interface ModalContasProps {
@@ -31,12 +29,10 @@ const sendData = async ({
   id_banco,
   id_tipo_conta,
   id_usuario,
-  data,
-  descricao,
 }: Conta) => {
   try {
     const token = localStorage.getItem("authToken");
-
+    
     if (!token) {
       return { success: false, error: { message: "Token não encontrado. O usuário não está autenticado." } };
     }
@@ -52,8 +48,6 @@ const sendData = async ({
         id_banco,
         id_tipo_conta,
         id_usuario,
-        data,
-        descricao,
       }),
     });
 
@@ -77,7 +71,6 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
   const [isRotatedBancos, setIsRotatedBancos] = useState(false);
   const [isRotatedTipoConta, setIsRotatedTipoConta] = useState(false);
   const [saldo, setSaldo] = useState<number | string>(""); 
-  const [descricao, setDescricao] = useState<string>("");
   const [selectedBanco, setSelectedBanco] = useState<number | null>(null);
   const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -102,33 +95,26 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-  
-    if (!saldo || !selectedBanco || !selectedTipoConta || !descricao) {
+
+    if (!saldo || !selectedBanco || !selectedTipoConta) {
       setErrorMessage("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
-  
+
     const id_usuario = 1;
-  
-    // Geração da data
-    const data = new Date().toISOString().split("T")[0];
-  
-    console.log("Data gerada: ", data);  
-  
+
     const novaConta: Conta = {
       id: 0, 
-      saldo: parseFloat(saldo.toString()),
+      saldo: parseFloat(saldo.toString()),  // Converte para número
       banco: { nome: "Banco Exemplo", iconeUrl: "/path/to/icon" }, 
       tipo_conta: { tipoConta: "Tipo de Conta Exemplo" },
       id_banco: selectedBanco,
       id_tipo_conta: selectedTipoConta,
       id_usuario,
-      data,  
-      descricao,
     };
-  
+
     const result = await sendData(novaConta);
-  
+
     if (result.success) {
       onAddConta(result.data); 
       closeModal(); 
@@ -136,7 +122,6 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
       setErrorMessage(result.error?.message || "Erro ao criar a conta.");
     }
   };
-  
 
   return (
     <div className={style.overlay} onClick={closeModal}>
@@ -159,17 +144,6 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
               placeholder="R$ 0,00"
               value={saldo}
               onChange={(e) => setSaldo(e.target.value)}
-            />
-          </div>
-
-          <div className={style.formGroup}>
-            <label htmlFor="descricao">Descrição: </label>
-            <input
-              id="descricao"
-              type="text"
-              placeholder="Descrição da conta"
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
             />
           </div>
 
