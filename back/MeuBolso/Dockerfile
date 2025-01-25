@@ -4,7 +4,7 @@ WORKDIR /build
 COPY . .
 
 # Cria o .jar da aplicacao
-# RUN mvn clean install -DskipTests
+RUN mvn clean install -DskipTests
 
 FROM openjdk:17-jdk-alpine
 
