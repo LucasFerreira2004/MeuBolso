@@ -1,5 +1,7 @@
 package com.projetointegrado.MeuBolso.orcamento;
 
+import com.projetointegrado.MeuBolso.orcamento.dto.OrcamentoDTO;
+import com.projetointegrado.MeuBolso.orcamento.dto.OrcamentoPostDTO;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -8,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orcamento")
+@RequestMapping("/orcamentos")
 public class OrcamentoController {
 
     @Autowired
@@ -20,32 +22,32 @@ public class OrcamentoController {
     private IUsuarioService usuarioService;
 
     @GetMapping
-    public List<Orcamento> findAll() {
+    public List<OrcamentoDTO> findAll() {
         String usuarioId = usuarioService.getUsuarioLogadoId();
-        return orcamentoService.findAll();
+        return orcamentoService.findAll(usuarioId);
     }
 
     @GetMapping("/{orcamentoId}")
-    public Orcamento findById(@PathVariable Long orcamentoId) {
+    public OrcamentoDTO findById(@PathVariable Long orcamentoId) {
         String usuarioId = usuarioService.getUsuarioLogadoId();
-        return orcamentoService.findById(orcamentoId);
+        return orcamentoService.findById(orcamentoId, usuarioId);
     }
 
     @PostMapping
-    public Orcamento save(@RequestBody Orcamento orcamento) {
+    public OrcamentoDTO save(@RequestBody OrcamentoPostDTO orcamento) {
         String usuarioId = usuarioService.getUsuarioLogadoId();
-        return orcamentoService.save(orcamento);
+        return orcamentoService.save(usuarioId, orcamento);
     }
 
     @PutMapping("/{orcamentoId}")
-    public Orcamento update(@PathVariable Long orcamentoId, @RequestBody Orcamento orcamento) {
+    public OrcamentoDTO update(@PathVariable Long orcamentoId, @RequestBody OrcamentoPostDTO orcamento) {
         String usuarioId = usuarioService.getUsuarioLogadoId();
-        return orcamentoService.update(orcamentoId, orcamento);
+        return orcamentoService.update(orcamentoId, orcamento, usuarioId);
     }
 
     @DeleteMapping("/{orcamentoId}")
     public void delete(@PathVariable Long orcamentoId) {
         String usuarioId = usuarioService.getUsuarioLogadoId();
-        orcamentoService.deleteById(orcamentoId);
+        orcamentoService.deleteById(usuarioId, orcamentoId);
     }
 }

@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
+@Table(name = "orcamento", uniqueConstraints = {@UniqueConstraint(columnNames = {"categoria_id"})})
 public class Orcamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +17,7 @@ public class Orcamento {
     private String descricao;
 
     @OneToOne
-    @JoinColumn(nullable = false, unique = true)
+    @JoinColumn(nullable = false)
     private Categoria categoria;
 
     private String mesAno;
@@ -24,7 +25,7 @@ public class Orcamento {
     private BigDecimal valorGasto;
     private BigDecimal valorRestante;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false)
     private Usuario usuario;
 

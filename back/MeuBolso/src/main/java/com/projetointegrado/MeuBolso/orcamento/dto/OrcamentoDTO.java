@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.orcamento.dto;
 
-import com.projetointegrado.MeuBolso.categoria.Categoria;
+import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
+import com.projetointegrado.MeuBolso.orcamento.Orcamento;
 
 import java.math.BigDecimal;
 
@@ -10,18 +11,29 @@ public class OrcamentoDTO {
     private BigDecimal valorEstimado;
     private BigDecimal valorGasto;
     private BigDecimal valorRestante;
-    private Categoria categoria;
+    private String mesAno;
+    private CategoriaDTO categoriaDTO;
 
     public OrcamentoDTO() {
     }
 
-    public OrcamentoDTO(Long id, String descricao, BigDecimal valorEstimado, BigDecimal valorGasto, BigDecimal valorRestante, Categoria categoria) {
+    public OrcamentoDTO(Long id, String descricao, BigDecimal valorEstimado, BigDecimal valorGasto, BigDecimal valorRestante, String mesAno, CategoriaDTO categoriaDTO) {
         this.id = id;
         this.descricao = descricao;
         this.valorEstimado = valorEstimado;
         this.valorGasto = valorGasto;
         this.valorRestante = valorRestante;
-        this.categoria = categoria;
+        this.mesAno = mesAno;
+        this.categoriaDTO = categoriaDTO;
+    }
+
+    public OrcamentoDTO(Orcamento orcamento) {
+        this.id = orcamento.getId();
+        this.descricao = orcamento.getDescricao();
+        this.valorEstimado = orcamento.getValorEstimado();
+        this.valorGasto = orcamento.getValorGasto();
+        this.valorRestante = orcamento.getValorRestante();
+        this.categoriaDTO = new CategoriaDTO(orcamento.getCategoria());
     }
 
     public Long getId() {
@@ -32,8 +44,8 @@ public class OrcamentoDTO {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescricao() {
+        this.descricao = categoriaDTO.getNome();
     }
 
     public BigDecimal getValorEstimado() {
@@ -60,12 +72,20 @@ public class OrcamentoDTO {
         this.valorRestante = valorRestante;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public String getMesAno() {
+        return mesAno;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-        this.descricao = categoria.getNome();
+    public void setMesAno(String mesAno) {
+        this.mesAno = mesAno;
+    }
+
+    public CategoriaDTO getCategoriaDTO() {
+        return categoriaDTO;
+    }
+
+    public void setCategoriaDTO(CategoriaDTO categoriaDTO) {
+        this.categoriaDTO = categoriaDTO;
+        this.setDescricao();
     }
 }

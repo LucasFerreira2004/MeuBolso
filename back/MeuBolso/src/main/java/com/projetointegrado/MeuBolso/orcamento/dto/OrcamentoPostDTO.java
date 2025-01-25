@@ -1,31 +1,19 @@
 package com.projetointegrado.MeuBolso.orcamento.dto;
 
-import com.projetointegrado.MeuBolso.categoria.Categoria;
-
 import java.math.BigDecimal;
 
 public class OrcamentoPostDTO {
-    private String descricao;
     private BigDecimal valorEstimado;
     private String mesAno;
-    private Categoria categoria;
+    private Long idCategoria;
 
     public OrcamentoPostDTO() {
     }
 
-    public OrcamentoPostDTO(BigDecimal valorEstimado, String mesAno, Categoria categoria) {
+    public OrcamentoPostDTO(BigDecimal valorEstimado, String mesAno, Long idCategoria) {
         this.valorEstimado = valorEstimado;
         this.mesAno = mesAno;
-        this.categoria = categoria;
-        this.descricao = categoria.getNome();
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+        this.idCategoria = idCategoria;
     }
 
     public BigDecimal getValorEstimado() {
@@ -44,11 +32,11 @@ public class OrcamentoPostDTO {
         this.mesAno = mesAno;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public Long getIdCategoria() {
+        return idCategoria;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setIdCategoria(Long idCategoria) {
+        this.idCategoria = idCategoria;
     }
 }
