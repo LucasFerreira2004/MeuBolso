@@ -1,26 +1,23 @@
 package com.projetointegrado.MeuBolso.transacao;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
-import com.projetointegrado.MeuBolso.categoria.CategoriaRepository;
 import com.projetointegrado.MeuBolso.categoria.CategoriaValidateService;
 import com.projetointegrado.MeuBolso.conta.Conta;
-import com.projetointegrado.MeuBolso.conta.ContaRepository;
 import com.projetointegrado.MeuBolso.conta.ContaValidateService;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
+import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoRepeticaoService;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
-import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
-import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TransacaoService implements ITransacaoService {
@@ -39,6 +36,10 @@ public class TransacaoService implements ITransacaoService {
     @Autowired
     private TransacaoValidateService transacaoValidateService;
 
+    //temporário
+    @Autowired
+    private TransacaoRepeticaoService transacaoRepeticaoService;
+
     @Transactional(readOnly = true)
     public TransacaoDTO findById(String userId, Long id){
         Transacao transacao = transacaoRepository.findById(id).orElse(null);
@@ -49,8 +50,8 @@ public class TransacaoService implements ITransacaoService {
         return new TransacaoDTO(transacao);
     }
     @Transactional(readOnly = true)
-    public List<TransacaoDTO> findAll(String userId) {
-        List<Transacao> transacoes = transacaoRepository.findAllByUsuario(userId);
+    public List<TransacaoDTO> findAll(String userId, LocalDate data) {
+        List<Transacao> transacoes = transacaoRepository.findAllBeforeDate(data, userId);
         List<TransacaoDTO> transacaoDTOs = transacoes.stream().map(transacao -> new TransacaoDTO(transacao)).toList();
 
         return transacaoDTOs;

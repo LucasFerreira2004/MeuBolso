@@ -2,13 +2,13 @@ package com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto;
 import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoFixa;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class TransacaoFixaDTO {
     Long id;
     BigDecimal valor;
     String tipo;
-    Date dataCadastro;
+    LocalDate dataCadastro;
     String descricao;
     Long contaId;
 
@@ -45,11 +45,11 @@ public class TransacaoFixaDTO {
         this.tipo = tipo;
     }
 
-    public Date getDataCadastro() {
+    public LocalDate getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(Date dataCadastro) {
+    public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 

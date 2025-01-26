@@ -3,11 +3,13 @@ package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
+import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class TransacaoFixa {
@@ -23,7 +25,7 @@ public class TransacaoFixa {
     private TipoTransacao tipo;
 
     @Column(nullable = false, columnDefinition = "DATE")
-    private Date dataCadastro;
+    private LocalDate dataCadastro;
 
     @Column(nullable = false) //especificarTamanho da descrição
     private String descricao;
@@ -40,7 +42,17 @@ public class TransacaoFixa {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, Date dataCadastro, String descricao, Conta conta, Categoria categoria, Usuario usuario) {
+    @Enumerated(EnumType.STRING)
+    @Column (nullable = false)
+    private Periodicidade periodicidade; //ainda não está em uso
+
+    @Column(nullable = true, name = "ultima_execucao")
+    private LocalDate ultimaExecucao; //representa a data que foi chamada pela última vez para realizar a cricação de transacoes
+
+    @OneToMany(mappedBy = "transacaoFixa", cascade = CascadeType.REMOVE)
+    private List<Transacao> transacoes;
+
+    public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario) {
         this.id = id;
         this.valor = valor;
         this.tipo = tipo;
@@ -48,10 +60,20 @@ public class TransacaoFixa {
         this.descricao = descricao;
         this.conta = conta;
         this.categoria = categoria;
+        this.periodicidade = periodicidade;
         this.usuario = usuario;
+        this.ultimaExecucao = null;
     }
 
     public TransacaoFixa() {}
+
+    public List<Transacao> getTransacoes() {
+        return transacoes;
+    }
+
+    public void setTransacoes(List<Transacao> transacoes) {
+        this.transacoes = transacoes;
+    }
 
     public Long getId() {
         return id;
@@ -77,11 +99,11 @@ public class TransacaoFixa {
         this.tipo = tipo;
     }
 
-    public Date getDataCadastro() {
+    public LocalDate getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(Date dataCadastro) {
+    public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
@@ -115,5 +137,21 @@ public class TransacaoFixa {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Periodicidade getPeriodicidade() {
+        return periodicidade;
+    }
+
+    public void setPeriodicidade(Periodicidade periodicidade) {
+        this.periodicidade = periodicidade;
+    }
+
+    public LocalDate getUltimaExecucao() {
+        return ultimaExecucao;
+    }
+
+    public void setUltimaExecucao(LocalDate ultimaExecucao) {
+        this.ultimaExecucao = ultimaExecucao;
     }
 }

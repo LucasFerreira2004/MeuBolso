@@ -1,13 +1,13 @@
 package com.projetointegrado.MeuBolso.conta.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class ContaPostDTO {
     private BigDecimal saldo;
     private Long id_banco;
     private Long id_tipo_conta;
-    private Date data;
+    private LocalDate data;
     private String descricao;
 
     public String getDescricao() {
@@ -18,11 +18,11 @@ public class ContaPostDTO {
         this.descricao = descricao;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 

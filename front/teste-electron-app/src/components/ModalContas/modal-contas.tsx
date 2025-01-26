@@ -3,6 +3,7 @@ import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-contas.module.css";
 import DropDownBancos from "../UI/DropDownBancos/drop-down-bancos";
 import DropDownTipoConta from "../UI/DropDownTipoContas/drop-down-tipo-conta"; 
+import axios from "axios";
 
 interface Conta {
   id: number;
@@ -17,6 +18,8 @@ interface Conta {
   id_banco: number;
   id_tipo_conta: number;
   id_usuario: number;
+  descricao: string;
+  data: string; // Adicionando o campo data
 }
 
 interface ModalContasProps {
@@ -29,38 +32,40 @@ const sendData = async ({
   id_banco,
   id_tipo_conta,
   id_usuario,
+  descricao,
 }: Conta) => {
   try {
     const token = localStorage.getItem("authToken");
-    
+
     if (!token) {
       return { success: false, error: { message: "Token não encontrado. O usuário não está autenticado." } };
     }
 
-    const response = await fetch("http://localhost:8080/contas", {
-      method: "POST",
+    // Pega a data atual no formato ISO (ano-mês-dia) sem a parte da hora
+    const dataAtual = new Date().toISOString().split('T')[0]; // Isso pega apenas "YYYY-MM-DD"
+
+    const response = await axios.post("http://localhost:8080/contas", {
+      saldo,
+      id_banco,
+      id_tipo_conta,
+      id_usuario,
+      descricao,
+      data: dataAtual, // Envia a data atual no formato desejado
+    }, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        saldo,
-        id_banco,
-        id_tipo_conta,
-        id_usuario,
-      }),
     });
 
-    if (response.ok) {
-      return { success: true, data: await response.json() };
-    } else if (response.status === 403) {
-      return { success: false, error: { message: "Acesso proibido. Verifique suas permissões." } };
-    } else {
-      const errorData = await response.json();
-      return { success: false, error: errorData };
-    }
+    console.log("Resposta do servidor:", response.data); // Log da resposta
+    return { success: true, data: response.data };
   } catch (error) {
-    console.error("Erro na requisição", error);
+    if (axios.isAxiosError(error)) {
+      console.error("Erro na requisição Axios:", error.response?.data);  // Log do erro detalhado
+    } else {
+      console.error("Erro desconhecido:", error);
+    }
     return { success: false, error: { message: "Erro na conexão com o servidor." } };
   }
 };
@@ -73,6 +78,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
   const [saldo, setSaldo] = useState<number | string>(""); 
   const [selectedBanco, setSelectedBanco] = useState<number | null>(null);
   const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(null);
+  const [descricao, setDescricao] = useState(""); // Campo de descrição
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const toggleDropdownBancos = () => {
@@ -95,14 +101,15 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
-    if (!saldo || !selectedBanco || !selectedTipoConta) {
+  
+    // Verifica se o saldo é um número válido e se os outros campos obrigatórios estão preenchidos
+    if (isNaN(Number(saldo)) || !selectedBanco || !selectedTipoConta) {
       setErrorMessage("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
-
+  
     const id_usuario = 1;
-
+  
     const novaConta: Conta = {
       id: 0, 
       saldo: parseFloat(saldo.toString()),  // Converte para número
@@ -111,10 +118,12 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
       id_banco: selectedBanco,
       id_tipo_conta: selectedTipoConta,
       id_usuario,
+      descricao, // Incluindo o campo de descrição (pode ser vazio)
+      data: new Date().toISOString().split('T')[0], // Adicionando a data atual
     };
-
+  
     const result = await sendData(novaConta);
-
+  
     if (result.success) {
       onAddConta(result.data); 
       closeModal(); 
@@ -185,6 +194,17 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
                 setTipoConta={setSelectedTipoConta}
               />
             )}
+          </div>
+
+          <div className={style.formGroup}>
+            <label htmlFor="descricao">Descrição: </label>
+            <input
+              id="descricao"
+              type="text"
+              placeholder="Descrição da conta"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+            />
           </div>
 
           {errorMessage && (
