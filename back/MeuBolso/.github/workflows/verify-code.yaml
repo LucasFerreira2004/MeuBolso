@@ -1,0 +1,27 @@
+name: Verify Code
+
+on:
+  push:
+    branches:
+      - main
+      - developer
+      - staging
+  merge_group:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Run Maven Verify
+        run: mvn --batch-mode --update-snapshots verify
