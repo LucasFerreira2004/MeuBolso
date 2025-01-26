@@ -6,7 +6,6 @@ on:
       - main
       - developer
       - staging
-  merge_group:
   pull_request:
 
 jobs:
