@@ -42,3 +42,60 @@ h3{
 }.spanT{
     color: #2A9D8F;
 }
+
+.bodyTransacoes{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+.headerBodyT{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px ;
+    padding: 20px;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0; /* cor de fundo suave */
+    padding: 0px 12px;
+    border-radius: 25px; /* bordas arredondadas */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* sombra suave */
+    max-width: 300px;
+    height: 40px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.search:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* sombra mais forte ao passar o mouse */
+}
+
+.input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 0px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #333;
+    background-color: transparent;
+}
+
+.input::placeholder {
+    color: #888;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.icon:hover {
+    filter: brightness(0.8); /* efeito de escurecer ao passar o mouse */
+}
