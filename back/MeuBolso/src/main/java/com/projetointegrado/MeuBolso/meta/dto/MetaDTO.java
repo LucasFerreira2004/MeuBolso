@@ -9,6 +9,7 @@ public class MetaDTO {
     private BigDecimal valorMeta;
     private BigDecimal valorInvestido;
     private String descricao;
+    private String imgUrl;
 
     public MetaDTO() {
     }
@@ -18,6 +19,7 @@ public class MetaDTO {
         this.valorMeta = metaEntity.getValorMeta();
         this.valorInvestido = metaEntity.getValorInvestido();
         this.descricao = metaEntity.getDescricao();
+        this.imgUrl = metaEntity.getUrlImg();
     }
 
     public Long getId() {
@@ -46,5 +48,13 @@ public class MetaDTO {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }
