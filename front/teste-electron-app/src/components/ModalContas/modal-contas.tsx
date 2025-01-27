@@ -18,7 +18,7 @@ interface Conta {
   id_tipo_conta: number;
   id_usuario: number;
   descricao: string;
-  data: string; // Adicionando o campo data
+  data: string;
 }
 
 interface ModalContasProps {
@@ -46,7 +46,6 @@ const sendData = async ({
       };
     }
 
-    // Constrói a URL para enviar os dados via POST (não usa query params agora)
     const url = "http://localhost:8080/contas";
 
     const novaConta = {
@@ -88,12 +87,11 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
   const [openTipoConta, setOpenTipoConta] = useState(false);
   const [isRotatedBancos, setIsRotatedBancos] = useState(false);
   const [isRotatedTipoConta, setIsRotatedTipoConta] = useState(false);
-  const [saldo, setSaldo] = useState<number>(0); // Valor inicial como número
+  const [saldo, setSaldo] = useState<number>(0);
   const [selectedBanco, setSelectedBanco] = useState<number | null>(null);
-  const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(
-    null
-  );
-  const [descricao, setDescricao] = useState(""); // Campo de descrição
+  const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(null);
+  const [descricao, setDescricao] = useState("");
+  const [data, setData] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const toggleDropdownBancos = () => {
@@ -116,54 +114,47 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-  
-    // Limpa a mensagem de erro
     setErrorMessage(null);
-  
+
     const parsedSaldo = parseFloat(saldo.toString());
-  
+
     if (isNaN(parsedSaldo) || parsedSaldo <= 0) {
       setErrorMessage("Por favor, insira um saldo válido.");
       return;
     }
-  
-    console.log("Saldo a ser enviado:", parsedSaldo);
-  
-    if (!selectedBanco || !selectedTipoConta) {
+
+    if (!data || !selectedBanco || !selectedTipoConta || !descricao) {
       setErrorMessage("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
-  
+
     const id_usuario = 1;
-  
+
     const novaConta: Conta = {
       id: 0,
-      saldo: parsedSaldo, // Verifique se o saldo está correto
+      saldo: parsedSaldo,
       banco: { nome: "Banco Exemplo", iconeUrl: "/path/to/icon" },
       tipo_conta: { tipoConta: "Tipo de Conta Exemplo" },
       id_banco: selectedBanco,
       id_tipo_conta: selectedTipoConta,
       id_usuario,
       descricao,
-      data: new Date().toISOString().split("T")[0],
+      data,
     };
-  
+
     const result = await sendData(novaConta);
-  
+
     if (result.success) {
       onAddConta(result.data);
       closeModal();
     } else {
       setErrorMessage(result.error?.message || "Erro ao criar a conta.");
     }
-  };  
+  };
 
   return (
     <div className={style.overlay} onClick={closeModal}>
-      <div
-        className={style.containerModalContas}
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className={style.containerModalContas} onClick={(e) => e.stopPropagation()}>
         <div className={style.headerModalContas}>
           <p>Conta bancária</p>
           <img
@@ -175,30 +166,46 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
         </div>
         <form className={style.formModalContas} onSubmit={handleSubmit}>
           <div className={style.formGroup}>
-            <label htmlFor="saldo">Saldo: </label>
+            <label htmlFor="saldo">Saldo:</label>
             <input
               id="saldo"
               type="number"
               placeholder="R$ 0,00"
-              value={saldo || ""} // Verifique se é um valor válido ou use "" como fallback
-              onChange={(e) => setSaldo(parseFloat(e.target.value) || 0)} // Converte para número, se não for um número válido, define como 0
+              value={saldo || ""}
+              onChange={(e) => setSaldo(parseFloat(e.target.value) || 0)}
+            />
+          </div>
+
+          <div className={style.formGroup}>
+            <label htmlFor="data">Data:</label>
+            <input
+              id="data"
+              type="date"
+              value={data}
+              onChange={(e) => setData(e.target.value)}
+            />
+          </div>
+
+          <div className={style.formGroup}>
+            <label htmlFor="descricao">Descrição:</label>
+            <textarea
+              id="descricao"
+              placeholder="Digite uma descrição"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
             />
           </div>
 
           <div className={style.divDropContas}>
             <InputWithIcon
-              label="Banco: "
+              label="Banco:"
               iconSrc="/assets/iconsModal/notes.svg"
-              placeholder={
-                selectedBanco ? `Banco: ${selectedBanco}` : "Selecione o banco"
-              }
+              placeholder={selectedBanco ? `Banco: ${selectedBanco}` : "Selecione o banco"}
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
               alt="Abrir seleção de bancos"
-              className={`${style.iconLogoArrow} ${
-                isRotatedBancos ? style.rotated : ""
-              }`}
+              className={`${style.iconLogoArrow} ${isRotatedBancos ? style.rotated : ""}`}
               onClick={toggleDropdownBancos}
             />
             {openBancos && (
@@ -211,20 +218,14 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
 
           <div className={style.divDropContas}>
             <InputWithIcon
-              label="Tipo: "
+              label="Tipo:"
               iconSrc="/assets/iconsModal/icontag.svg"
-              placeholder={
-                selectedTipoConta
-                  ? `Tipo: ${selectedTipoConta}`
-                  : "Selecione o tipo"
-              }
+              placeholder={selectedTipoConta ? `Tipo: ${selectedTipoConta}` : "Selecione o tipo"}
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
               alt="Abrir seleção de tipo de conta"
-              className={`${style.iconLogoArrow} ${
-                isRotatedTipoConta ? style.rotated : ""
-              }`}
+              className={`${style.iconLogoArrow} ${isRotatedTipoConta ? style.rotated : ""}`}
               onClick={toggleDropdownTipoConta}
             />
             {openTipoConta && (
@@ -235,20 +236,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             )}
           </div>
 
-          <div className={style.formGroup}>
-            <label htmlFor="descricao">Descrição: </label>
-            <input
-              id="descricao"
-              type="text"
-              placeholder="Descrição da conta"
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
-            />
-          </div>
-
-          {errorMessage && (
-            <div className={style.errorMessage}>{errorMessage}</div>
-          )}
+          {errorMessage && <div className={style.errorMessage}>{errorMessage}</div>}
 
           <div className={style.formActions}>
             <button type="submit" className={style.saveButton}>
