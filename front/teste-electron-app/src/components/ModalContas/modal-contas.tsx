@@ -46,7 +46,8 @@ const sendData = async ({
       };
     }
 
-    const url = "http://localhost:8080/contas";
+    // Construindo a URL dinâmica
+    const url = `http://localhost:8080/contas?data=${data}`;
 
     const novaConta = {
       saldo,

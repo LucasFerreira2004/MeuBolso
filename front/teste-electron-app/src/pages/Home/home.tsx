@@ -14,9 +14,9 @@ function Home() {
   const [bancos, setBancos] = useState<Banco[]>([]);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const dataReferencia = "2026-01-18"; // Data fixa para a consulta
 
-  // Função para buscar os bancos
-  const fetchBancos = async () => {
+  const fetchData = async (url: string, errorMessage: string, setData: (data: any) => void) => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       setError("Você precisa estar logado para acessar esta funcionalidade.");
@@ -24,50 +24,37 @@ function Home() {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/contas/min", {
+      const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (!response.ok) {
-        throw new Error("Erro ao carregar os dados dos bancos.");
-      }
-      const data = await response.json();
-      setBancos(data);
-    } catch (error) {
-      setError("Erro ao buscar os dados dos bancos.");
-      console.error(error);
-    }
-  };
 
-  const fetchSaldoTotal = async () => {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      setError("Você precisa estar logado para acessar esta funcionalidade.");
-      return;
-    }
-
-    try {
-      const response = await fetch("http://localhost:8080/contas/saldoTotal", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
       if (!response.ok) {
-        throw new Error("Erro ao carregar o saldo total.");
+        throw new Error(errorMessage);
       }
+
       const data = await response.json();
-      setSaldoTotal(data.saldo); // Atualiza o estado com o saldo total retornado
+      setData(data);
     } catch (error) {
-      setError("Erro ao buscar o saldo total.");
+      setError(errorMessage);
       console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchBancos();
-    fetchSaldoTotal();
-  }, []);
+    fetchData(
+      `http://localhost:8080/contas/min?data=${dataReferencia}`,
+      "Erro ao carregar os dados dos bancos.",
+      setBancos
+    );
+
+    fetchData(
+      `http://localhost:8080/contas/saldoTotal?data=${dataReferencia}`,
+      "Erro ao carregar o saldo total.",
+      (data) => setSaldoTotal(data.saldo)
+    );
+  }, [dataReferencia]);
 
   return (
     <div className={style.home}>
@@ -90,7 +77,7 @@ function Home() {
               {saldoTotal !== null ? `R$ ${saldoTotal.toFixed(2)}` : "Carregando..."}
             </p>
           </div>
-          <AddButton texto="Adicionar Transação" onClick={function (): void {}} />
+          <AddButton texto="Adicionar Transação" onClick={() => {}} />
         </div>
       </header>
 
@@ -110,7 +97,7 @@ function Home() {
                       alt={`Ícone ${banco.nomeBanco}`}
                       className={style.iconNubank}
                     />
-                    <p>{banco.nomeBanco}: R$ {banco.saldo.toFixed(2)}</p>
+                    <p>{`${banco.nomeBanco}: R$ ${banco.saldo.toFixed(2)}`}</p>
                   </div>
                 ))
               )}
