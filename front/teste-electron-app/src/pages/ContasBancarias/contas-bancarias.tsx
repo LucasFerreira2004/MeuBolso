@@ -31,20 +31,39 @@ function ContasBancarias() {
   const [openAddModal, setOpenAddModal] = useState(false);
 
   const fetchContas = () => {
-    const token = localStorage.getItem("authToken"); 
-    axios
-      .get<Conta[]>("http://localhost:8080/contas", {
-        headers: {
-          Authorization: `Bearer ${token}`, 
-        },
-      })
+    const token = localStorage.getItem("authToken");
+  
+    if (!token) {
+      console.error("Token de autenticação não encontrado.");
+      return;
+    }
+  
+    const url = "http://localhost:8080/contas?data=2025-01-26";  // Substitua 'value' pelo valor esperado
+  
+    fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
-        setContas(response.data);
+        if (!response.ok) {
+          return response.text().then((text) => {
+            throw new Error(`Erro ${response.status}: ${text}`);
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Resposta do servidor:", data);
+        setContas(data);
       })
       .catch((error) => {
         console.error("Erro ao buscar as contas:", error);
       });
   };
+  
 
   useEffect(() => {
     fetchContas();
