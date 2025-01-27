@@ -1,0 +1,18 @@
+.headerModal{
+    display: flex;
+    justify-content: space-between;
+}
+.radioGroup{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.saldo{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 15px;
+}
+.inputSaldo{
+    border: none;
+}

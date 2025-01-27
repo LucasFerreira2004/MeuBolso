@@ -1,14 +1,25 @@
+import { useState } from "react";
 import AddButton from "../../components/UI/AddButton/add-button";
 import Date from "../../components/UI/Date/date";
+import ModalAddTransacao from "../../components/ModalAddTransacao/modal-add-transacao";
 import style from "./transacoes.module.css";
 
 function Transacoes() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [] = useState([
+    // Exemplo de transações, você pode substituir pelo seu array de transações reais
+  ]);
+
   const handleMonthChange = (month: string) => {
     console.log("Mês selecionado:", month);
   };
 
   const handleYearChange = (year: string) => {
     console.log("Ano selecionado:", year);
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen((prev) => !prev);
   };
 
   return (
@@ -74,10 +85,24 @@ function Transacoes() {
             />
           </div>
           <div>
-            <AddButton texto="Realizar Transação" onClick={console.log} />
+            <AddButton texto="Realizar Transação" onClick={toggleModal} />
           </div>
         </div>
+
+        {/* Exibindo as transações */}
+        <div className={style.transacoesList}>
+          transacoes aqui
+        </div>
       </div>
+
+      {/* Renderização condicional do modal */}
+      {isModalOpen && (
+        <div className={style.modalOverlay}>
+          <div className={style.modalContainer}>
+            <ModalAddTransacao onClose={toggleModal} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
