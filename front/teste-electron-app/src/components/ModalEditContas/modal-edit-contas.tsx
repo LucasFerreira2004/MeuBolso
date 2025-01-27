@@ -64,17 +64,47 @@ const sendData = async ({
   }
 };
 
+// Função para formatar o valor como moeda
+const formatarMoeda = (valor: string): string => {
+  // Remove todos os caracteres que não são números
+  let valorNumerico = valor.replace(/\D/g, '');
+
+  // Adiciona os zeros necessários para os centavos
+  valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
+
+  // Substitui o ponto por vírgula e adiciona o ponto como separador de milhar
+  valorNumerico = valorNumerico.replace('.', ',');
+  valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+
+  return `R$ ${valorNumerico}`;
+};
+
+// Função para remover a formatação e retornar um número
+const removerFormatacaoMoeda = (valorFormatado: string): number => {
+  const valorNumerico = valorFormatado
+    .replace("R$ ", "")
+    .replace(/\./g, "")
+    .replace(",", ".");
+  return parseFloat(valorNumerico);
+};
+
 function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasProps) {
   const [openBancos, setOpenBancos] = useState(false);
   const [openTipoConta, setOpenTipoConta] = useState(false);
   const [isRotatedBancos, setIsRotatedBancos] = useState(false);
   const [isRotatedTipoConta, setIsRotatedTipoConta] = useState(false);
-  const [saldo, setSaldo] = useState<number | string>(conta.saldo);
+  const [saldo, setSaldo] = useState<string>(formatarMoeda(conta.saldo.toString())); // Estado como string para a máscara
   const [selectedBanco, setSelectedBanco] = useState<number | null>(conta.id_banco);
   const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(conta.id_tipo_conta);
   const [data, setData] = useState<string>(conta.data || "");
   const [descricao, setDescricao] = useState<string>(conta.descricao || "");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleSaldoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const valorDigitado = e.target.value;
+    const valorFormatado = formatarMoeda(valorDigitado);
+    setSaldo(valorFormatado); // Atualiza o estado com o valor formatado
+  };
 
   const toggleDropdown = (
     dropdownSetter: React.Dispatch<React.SetStateAction<boolean>>,
@@ -89,14 +119,21 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!saldo || !selectedBanco || !selectedTipoConta || !data || !descricao) {
+    const saldoNumerico = removerFormatacaoMoeda(saldo); // Converte o valor formatado para número
+
+    if (isNaN(saldoNumerico) || saldoNumerico <= 0) {
+      setErrorMessage("Por favor, insira um saldo válido.");
+      return;
+    }
+
+    if (!data || !selectedBanco || !selectedTipoConta || !descricao) {
       setErrorMessage("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
     const result = await sendData({
       id: conta.id,
-      saldo: parseFloat(saldo.toString()),
+      saldo: saldoNumerico,
       id_banco: selectedBanco!,
       id_tipo_conta: selectedTipoConta!,
       data,
@@ -128,10 +165,10 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
             <label htmlFor="saldo">Saldo:</label>
             <input
               id="saldo"
-              type="number"
+              type="text"
               placeholder="R$ 0,00"
               value={saldo}
-              onChange={(e) => setSaldo(e.target.value)}
+              onChange={handleSaldoChange}
             />
           </div>
 
