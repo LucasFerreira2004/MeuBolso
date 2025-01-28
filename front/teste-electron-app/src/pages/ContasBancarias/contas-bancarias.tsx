@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import CardContas from "../../components/CardContas/card-contas";
+import CardContas from "../../components/UI/CardContas/card-contas";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./contas-bancarias.module.css";
 import ModalEditContas from "../../components/ModalEditContas/modal-edit-contas";

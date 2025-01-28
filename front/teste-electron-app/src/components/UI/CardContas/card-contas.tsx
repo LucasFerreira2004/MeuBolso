@@ -10,6 +10,14 @@ interface CardContasProps {
   onEdit: () => void;
 }
 
+// Função para formatar o tipo de conta
+const formatarTipoConta = (tipo: string) => {
+  return tipo
+    .toLowerCase()  // transforma tudo para minúsculo
+    .replace(/_/g, ' ')  // substitui underscores por espaços
+    .replace(/\b\w/g, (char) => char.toUpperCase());  // deixa a primeira letra de cada palavra em maiúscula
+};
+
 const CardContas: React.FC<CardContasProps> = ({ titulo, tipo, saldo, banco, altBanco, onDelete, onEdit }) => {
   const formatarSaldo = (valor: number | null | undefined) => {
     if (valor == null) {
@@ -29,7 +37,7 @@ const CardContas: React.FC<CardContasProps> = ({ titulo, tipo, saldo, banco, alt
         </div>
         <div className={style.infoText}>
           <h3>{titulo}</h3>
-          <p>Conta: {tipo}</p>
+          <p>Conta: {formatarTipoConta(tipo)}</p> {/* Formatar tipo aqui */}
           <p>Saldo: <span>{formatarSaldo(saldo)}</span></p>
         </div>
       </div>
