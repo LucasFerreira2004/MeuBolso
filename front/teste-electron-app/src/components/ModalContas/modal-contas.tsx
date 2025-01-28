@@ -91,9 +91,9 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
   const [selectedBanco, setSelectedBanco] = useState<number | null>(null);
   const [selectedBancoName, setSelectedBancoName] = useState<string | null>(null); // Para armazenar o nome do banco
   const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(null);
+  const [selectedTipoContaName, setSelectedTipoContaName] = useState<string | null>(null); // Para armazenar o nome do tipo de conta
   const [descricao, setDescricao] = useState("");
   const [data, setData] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const toggleDropdownBancos = () => {
     if (openTipoConta) {
@@ -115,20 +115,13 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
 
   // Função para formatar o valor como moeda
   const formatarMoeda = (valor: string): string => {
-    // Remove todos os caracteres que não são números
     let valorNumerico = valor.replace(/\D/g, '');
-
-    // Adiciona os zeros necessários para os centavos
     valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
-
-    // Substitui o ponto por vírgula e adiciona o ponto como separador de milhar
     valorNumerico = valorNumerico.replace('.', ',');
     valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-
     return `R$ ${valorNumerico}`;
   };
 
-  // Função para remover a formatação e retornar um número
   const removerFormatacaoMoeda = (valorFormatado: string): number => {
     const valorNumerico = valorFormatado
       .replace("R$ ", "")
@@ -145,17 +138,14 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setErrorMessage(null);
 
     const saldoNumerico = removerFormatacaoMoeda(saldo); // Converte o valor formatado para número
 
     if (isNaN(saldoNumerico) || saldoNumerico <= 0) {
-      setErrorMessage("Por favor, insira um saldo válido.");
       return;
     }
 
     if (!data || !selectedBanco || !selectedTipoConta || !descricao) {
-      setErrorMessage("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
@@ -165,9 +155,9 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
       id: 0,
       saldo: saldoNumerico,
       banco: { nome: selectedBancoName || "Banco não selecionado", iconeUrl: "/path/to/icon" },
-      tipo_conta: { tipoConta: "Tipo de Conta Exemplo" },
+      tipo_conta: { tipoConta: selectedTipoContaName || "Tipo de Conta Exemplo" },
       id_banco: selectedBanco,
-      id_tipo_conta: selectedTipoConta,
+      id_tipo_conta: selectedTipoConta!,
       id_usuario,
       descricao,
       data,
@@ -178,8 +168,6 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
     if (result.success) {
       onAddConta(result.data);
       closeModal();
-    } else {
-      setErrorMessage(result.error?.message || "Erro ao criar a conta.");
     }
   };
 
@@ -244,7 +232,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
                 toggleDropdownBancos={toggleDropdownBancos}
                 setBanco={(id, nome) => { 
                   setSelectedBanco(id);
-                  setSelectedBancoName(nome); // Armazena o nome do banco selecionado
+                  setSelectedBancoName(nome);
                 }}
               />
             )}
@@ -254,7 +242,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             <InputWithIcon
               label="Tipo:"
               iconSrc="/assets/iconsModal/icontag.svg"
-              placeholder={selectedTipoConta ? `Tipo: ${selectedTipoConta}` : "Selecione o tipo"}
+              placeholder={selectedTipoContaName ? `Tipo: ${selectedTipoContaName}` : "Selecione o tipo"}
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
@@ -265,12 +253,13 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             {openTipoConta && (
               <DropDownTipoConta
                 toggleDropdownTipoConta={toggleDropdownTipoConta}
-                setTipoConta={setSelectedTipoConta}
+                setTipoConta={(id, nome) => { 
+                  setSelectedTipoConta(id);
+                  setSelectedTipoContaName(nome); 
+                }}
               />
             )}
           </div>
-
-          {errorMessage && <div className={style.errorMessage}>{errorMessage}</div>}
 
           <div className={style.formActions}>
             <button type="submit" className={style.saveButton}>
