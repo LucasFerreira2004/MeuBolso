@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import style from "./home.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
-import CardMetas from "../../components/CardMetas/card-metas";
+import CardMetas from "../../components/UI/CardMetas/card-metas";
 import Example from "../../components/UI/Mycharts/my-charts";
 
 interface Banco {
@@ -42,6 +42,17 @@ function Home() {
     }
   };
 
+  // Função para formatar o saldo como moeda
+  const formatarSaldo = (valor: number | null | undefined) => {
+    if (valor == null) {
+      return "R$ 0,00"; // Valor padrão caso o saldo seja inválido
+    }
+    return valor.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+  };
+
   useEffect(() => {
     fetchData(
       `http://localhost:8080/contas/min?data=${dataReferencia}`,
@@ -74,7 +85,7 @@ function Home() {
             />
             <p className={style.pHeader}>
               <span className={style.sHeader}>Estimativa de Saldo: </span>
-              {saldoTotal !== null ? `R$ ${saldoTotal.toFixed(2)}` : "Carregando..."}
+              {saldoTotal !== null ? formatarSaldo(saldoTotal) : "Carregando..."}
             </p>
           </div>
           <AddButton texto="Adicionar Transação" onClick={() => {}} />
@@ -97,7 +108,7 @@ function Home() {
                       alt={`Ícone ${banco.nomeBanco}`}
                       className={style.iconNubank}
                     />
-                    <p>{`${banco.nomeBanco}: R$ ${banco.saldo.toFixed(2)}`}</p>
+                    <p>{`${banco.nomeBanco}: ${formatarSaldo(banco.saldo)}`}</p> {/* Formatação do saldo do banco */}
                   </div>
                 ))
               )}
