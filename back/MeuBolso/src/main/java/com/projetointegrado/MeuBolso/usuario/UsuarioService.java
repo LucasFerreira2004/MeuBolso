@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.usuario;
 
+import com.projetointegrado.MeuBolso.categoria.CriarCategoriasIniciaisService;
 import com.projetointegrado.MeuBolso.categoria.ICategoriaService;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
@@ -20,8 +21,9 @@ public class UsuarioService implements IUsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private ICategoriaService categoriaService;
+    private CriarCategoriasIniciaisService criarCategoriasIniciaisService;
 
+    @Transactional
     public UsuarioDTO save(UsuarioDTO usuarioDTO) {
         if (usuarioRepository.findByEmail(usuarioDTO.getEmail()) != null)
             throw new EmailJaCadastradoException();
@@ -30,11 +32,7 @@ public class UsuarioService implements IUsuarioService {
 
         usuario = usuarioRepository.save(usuario);
 
-        //isso tem que sair daqui na refatorada ...
-        categoriaService.save(usuario.getId(), new CategoriaSaveDTO("000", "DepositoInicial*", "RECEITA"));
-        categoriaService.save(usuario.getId(), new CategoriaSaveDTO("000", "ReajusteSaldoAumento*", "RECEITA"));
-        categoriaService.save(usuario.getId(), new CategoriaSaveDTO("000", "ReajusteSaldoDecremento*", "DESPESA"));
-
+        criarCategoriasIniciaisService.criarCategorias(usuario.getId());
         return new UsuarioDTO(usuario);
     }
 
