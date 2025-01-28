@@ -27,6 +27,9 @@ public class Categoria {
     @Column(name = "ativa", nullable = false, columnDefinition = "boolean default true")
     private Boolean ativa;
 
+    @Column(name = "interna_sistema", nullable = false, columnDefinition = "boolean default false")
+    private Boolean internaSistema;
+
     @ManyToOne
     @Valid
     @JoinColumn(nullable = false, name = "usuario_id")
@@ -42,6 +45,16 @@ public class Categoria {
         this.cor = cor;
         this.ativa = ativa;
         this.usuario = usuario;
+    }
+
+    public Categoria(Long id, String nome, TipoCategoria tipoCategoria, String cor, Boolean ativa, Usuario usuario, Boolean internaSistema) {
+        this.id = id;
+        this.nome = nome;
+        this.tipoCategoria = tipoCategoria;
+        this.cor = cor;
+        this.ativa = ativa;
+        this.usuario = usuario;
+        this.internaSistema = internaSistema;
     }
 
     public Long getId() {
@@ -97,5 +110,13 @@ public class Categoria {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Boolean getInternaSistema() {
+        return internaSistema;
+    }
+
+    public void setInternaSistema(Boolean internaSistema) {
+        this.internaSistema = internaSistema;
     }
 }
