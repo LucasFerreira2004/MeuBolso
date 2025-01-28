@@ -45,6 +45,7 @@ public class Categoria {
         this.cor = cor;
         this.ativa = ativa;
         this.usuario = usuario;
+        this.internaSistema = false;
     }
 
     public Categoria(Long id, String nome, TipoCategoria tipoCategoria, String cor, Boolean ativa, Usuario usuario, Boolean internaSistema) {

@@ -46,7 +46,7 @@ public class CriarCategoriasIniciaisService {
         return categoria;
     }
     private Categoria criarCategoriaExterna(Usuario usuario, String nome, TipoCategoria tipo) {
-        Categoria categoria = new Categoria(null, nome, tipo, "000", true, usuario, true);
+        Categoria categoria = new Categoria(null, nome, tipo, "000", true, usuario, false);
         return categoria;
     }
 }
