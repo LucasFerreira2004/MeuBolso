@@ -101,26 +101,15 @@ public class ContaService implements IContaService {
         Usuario usuario = usuarioRepository.findById(userID).orElse(null);
 
         if (tipo == null) throw new TipoContaNaoEncontradoException();
-        if (banco == null) throw new BancoNaoEncontradoException(); //adicionar verificação se banco pertence a outra pessoa
+        if (banco == null) throw new BancoNaoEncontradoException();
         if (usuario == null) throw new UsuarioNaoEncontradoException();
 
         if(contaRepository.findByDescricao(userID, dto.getDescricao()) != null) throw new DescricaoJaExistenteException();
 
         Conta conta = new Conta(null, tipo, banco, dto.getDescricao(), usuario);
         conta = contaRepository.save(conta);
-
         Categoria categoria = categoriaRepository.findByName(userID,"DepositoInicial*");
-        if(categoria == null) throw new RuntimeException("categoria de nome DepositoInicial* não econtrada. ContaService -> save");
-        try {
-            TransacaoDTO transacaodto = transacaoService.save(userID, new TransacaoSaveDTO(dto.getSaldo(), dto.getData(), "RECEITA", categoria.getId(), conta.getId(), "DepositoInicial"));
-            System.out.println("conta service -> save : transacaoDTO: " + transacaodto.toString());
-        } catch(Exception e){
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao salvar transação", e);
-        }
-        System.out.println("Conta Service -> save");
-        System.out.println("conta " + conta.toString());
-
+        TransacaoDTO transacaodto = transacaoService.save(userID, new TransacaoSaveDTO(dto.getSaldo(), dto.getData(), "RECEITA", categoria.getId(), conta.getId(), "DepositoInicial"));
         return new ContaDTO(conta);
     }
 
@@ -139,20 +128,23 @@ public class ContaService implements IContaService {
     public ContaDTO update (Long id, ContaPutDTO dto, String userId) {
         TipoConta tipo = tipoContaRepository.findById(dto.getId_tipo_conta()).orElse(null);
         Banco banco = bancoRepository.findById(dto.getId_banco()).orElse(null);
-        Conta conta = contaRepository.findById(id).orElse(null);
-
+        Conta conta = contaValidateService.validateAndGet(id, userId,
+                new EntidadeNaoEncontradaException("/{id}", "conta nao encontrada"), new AcessoNegadoException());
         if (tipo == null) throw new TipoContaNaoEncontradoException();
         if (banco == null) throw new BancoNaoEncontradoException();
-        if (conta == null) throw new ContaNaoEncontradaException();
-        if (!conta.getUsuario().getId().equals(userId))
-            throw new AcessoNegadoException();
 
-        if(contaRepository.findByDescricao(userId, dto.getDescricao()) != null
-                && !conta.getDescricao().equals(dto.getDescricao())) throw new DescricaoJaExistenteException();
-        //conta.setSaldo(dto.getSaldo());
+        if(contaRepository.findByDescricao(userId, dto.getDescricao()) != null && !conta.getDescricao().equals(dto.getDescricao()))
+            throw new DescricaoJaExistenteException();
+
         conta.setTipo_conta(tipo);
         conta.setBanco(banco);
         conta.setDescricao(dto.getDescricao());
+        createTransacaoUpdateSaldo(conta, dto, userId);
+
+        return new ContaDTO(contaRepository.save(conta));
+    }
+
+    private void createTransacaoUpdateSaldo(Conta conta, ContaPutDTO dto, String userId){
         if (!Objects.equals(dto.getSaldo(), conta.getSaldo(dto.getData()))){
             Hibernate.initialize(conta.getTransacoes());
             BigDecimal valorTransacao = conta.getSaldo(dto.getData()).subtract(dto.getSaldo()).abs();
@@ -160,16 +152,12 @@ public class ContaService implements IContaService {
             Categoria categoria;
             if (dto.getSaldo().compareTo(conta.getSaldo(dto.getData())) == 1) { //se saldo do dto for maior que saldo da conta
                 tipoTransacaoCorrecao = TipoTransacao.RECEITA;
-                 categoria = categoriaRepository.findByName(userId, "ReajusteSaldoAumento*");
-
+                categoria = categoriaRepository.findByName(userId, "ReajusteSaldoAumento*");
             }else {
                 tipoTransacaoCorrecao = TipoTransacao.DESPESA;
                 categoria = categoriaRepository.findByName(userId, "ReajusteSaldoDecremento*");
             }
             transacaoService.save(userId, new TransacaoSaveDTO(valorTransacao, dto.getData(), tipoTransacaoCorrecao.name(), categoria.getId(), conta.getId(), conta.getDescricao()));
-
         }
-        return new ContaDTO(contaRepository.save(conta));
     }
-
 }

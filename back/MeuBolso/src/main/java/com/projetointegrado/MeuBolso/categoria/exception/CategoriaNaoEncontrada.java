@@ -1,11 +1,10 @@
 package com.projetointegrado.MeuBolso.categoria.exception;
 
-public class CategoriaNaoEncontrada extends RuntimeException {
-    public CategoriaNaoEncontrada(String message) {
-        super(message);
+import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
+
+public class CategoriaNaoEncontrada extends EntidadeNaoEncontradaException {
+    public CategoriaNaoEncontrada(String campo, String mensagem) {
+        super(campo, mensagem);
     }
-  public CategoriaNaoEncontrada() {
-    super("categoria nao encontrada");
-  }
 
 }
