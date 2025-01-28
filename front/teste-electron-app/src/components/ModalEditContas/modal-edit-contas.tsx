@@ -17,6 +17,13 @@ interface Conta {
   id_tipo_conta: number;
   data?: string;
   descricao?: string;
+  banco?: {
+    nome: string;
+    iconeUrl: string;
+  };
+  tipo_conta?: {
+    tipoConta: string;
+  };
 }
 
 const sendData = async ({
@@ -64,6 +71,7 @@ const sendData = async ({
   }
 };
 
+// Função para formatar o valor como moeda
 const formatarMoeda = (valor: string): string => {
   let valorNumerico = valor.replace(/\D/g, '');
   valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
@@ -72,6 +80,7 @@ const formatarMoeda = (valor: string): string => {
   return `R$ ${valorNumerico}`;
 };
 
+// Função para remover a formatação e retornar um número
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
     .replace("R$ ", "")
@@ -80,20 +89,27 @@ const removerFormatacaoMoeda = (valorFormatado: string): number => {
   return parseFloat(valorNumerico);
 };
 
+// Função para formatar o nome das categorias (Banco e Tipo de Conta)
+const formatarCategoria = (categoria: string) => {
+  return categoria
+    .toLowerCase()  // transforma tudo para minúsculo
+    .replace(/_/g, ' ')  // substitui underscores por espaços
+    .replace(/\b\w/g, (char) => char.toUpperCase());  // deixa a primeira letra de cada palavra em maiúscula
+};
+
 function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasProps) {
   const [openBancos, setOpenBancos] = useState(false);
   const [openTipoConta, setOpenTipoConta] = useState(false);
   const [isRotatedBancos, setIsRotatedBancos] = useState(false);
   const [isRotatedTipoConta, setIsRotatedTipoConta] = useState(false);
-  const [saldo, setSaldo] = useState<string>(formatarMoeda(conta.saldo.toString()));
+  const [saldo, setSaldo] = useState<string>(formatarMoeda(conta.saldo.toString())); // Estado como string para a máscara
   const [selectedBanco, setSelectedBanco] = useState<number | null>(conta.id_banco);
+  const [selectedBancoName, setSelectedBancoName] = useState<string | null>(conta.banco?.nome || ""); // Para armazenar o nome do banco
   const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(conta.id_tipo_conta);
+  const [selectedTipoContaName, setSelectedTipoContaName] = useState<string | null>(conta.tipo_conta?.tipoConta || ""); // Para armazenar o nome do tipo de conta
   const [data, setData] = useState<string>(conta.data || "");
   const [descricao, setDescricao] = useState<string>(conta.descricao || "");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  
-  const [bancoNome, setBancoNome] = useState<string>("");  // Adicionado para armazenar o nome do banco selecionado
-  const [tipoContaNome, setTipoContaNome] = useState<string>("");  // Adicionado para armazenar o nome do tipo de conta selecionado
 
   const handleSaldoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorDigitado = e.target.value;
@@ -114,7 +130,7 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const saldoNumerico = removerFormatacaoMoeda(saldo);
+    const saldoNumerico = removerFormatacaoMoeda(saldo); // Converte o valor formatado para número
 
     if (isNaN(saldoNumerico) || saldoNumerico <= 0) {
       setErrorMessage("Por favor, insira um saldo válido.");
@@ -191,7 +207,7 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
             <InputWithIcon
               label="Banco:"
               iconSrc="/assets/iconsModal/notes.svg"
-              placeholder={bancoNome || (selectedBanco ? `Banco: ${selectedBanco}` : "Selecione o banco")}
+              placeholder={selectedBancoName ? `${formatarCategoria(selectedBancoName)}` : "Selecione o banco"}
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
@@ -204,9 +220,9 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
             {openBancos && (
               <DropDownBancos
                 toggleDropdownBancos={() => setOpenBancos(false)}
-                setBanco={(id: number, nome: string) => {
+                setBanco={(id, nome) => { 
                   setSelectedBanco(id);
-                  setBancoNome(nome);  // Atualiza o nome do banco selecionado
+                  setSelectedBancoName(nome);
                 }}
               />
             )}
@@ -216,7 +232,7 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
             <InputWithIcon
               label="Tipo:"
               iconSrc="/assets/iconsModal/icontag.svg"
-              placeholder={tipoContaNome || (selectedTipoConta ? `Tipo: ${selectedTipoConta}` : "Selecione o tipo")}
+              placeholder={selectedTipoContaName ? `${formatarCategoria(selectedTipoContaName)}` : "Selecione o tipo"}
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
@@ -229,9 +245,9 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
             {openTipoConta && (
               <DropDownTipoConta
                 toggleDropdownTipoConta={() => setOpenTipoConta(false)}
-                setTipoConta={(id: number, nome: string) => {
+                setTipoConta={(id, nome) => { 
                   setSelectedTipoConta(id);
-                  setTipoContaNome(nome);  // Atualiza o nome do tipo de conta selecionado
+                  setSelectedTipoContaName(nome); 
                 }}
               />
             )}
