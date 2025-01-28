@@ -37,6 +37,8 @@ public class TransacaoFixaService implements ITransacaoFixaService {
 
     @Autowired
     private UsuarioValidateService usuarioValidateService;
+    @Autowired
+    private TransacaoFixaValidateService transacaoFixaValidateService;
 
     @Transactional(readOnly = true)
     public List<TransacaoFixaDTO> findAll(String userId){
@@ -45,11 +47,8 @@ public class TransacaoFixaService implements ITransacaoFixaService {
 
     @Transactional(readOnly = true)
     public TransacaoFixaDTO findById(String userId, Long id){
-        TransacaoFixa transacao = transacaoFixaRepository.findById(id).orElse(null);
-        if (transacao == null)
-            throw new EntidadeNaoEncontradaException("/{id}", "TransacaoFixa nao encontrada");
-        if (!transacao.getUsuario().getId().equals(userId))
-            throw new AcessoNegadoException();
+        TransacaoFixa transacao = transacaoFixaValidateService.validateAndGet(id, userId,
+                new EntidadeNaoEncontradaException("/{id}", "TransacaoFixa nao encontrada"), new AcessoNegadoException());
         return new TransacaoFixaDTO(transacao);
     }
 
@@ -71,8 +70,8 @@ public class TransacaoFixaService implements ITransacaoFixaService {
 
     @Transactional
     public TransacaoFixaDTO delete(String userId, Long id) {
-        TransacaoFixa transacaoFixa = transacaoFixaRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException("/{id}", "TransacaoFixa nao encontrada"));
-        if (!transacaoFixa.getUsuario().getId().equals(userId)) throw new AcessoNegadoException();
+        TransacaoFixa transacaoFixa = transacaoFixaValidateService.validateAndGet(id, userId,
+                new EntidadeNaoEncontradaException("/{id}", "TransacaoFixa nao encontrada"), new AcessoNegadoException());
         TransacaoFixaDTO dto = new TransacaoFixaDTO(transacaoFixa);
         transacaoFixaRepository.delete(transacaoFixa);
         return dto;
