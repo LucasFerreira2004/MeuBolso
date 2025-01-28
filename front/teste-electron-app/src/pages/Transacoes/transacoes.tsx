@@ -3,6 +3,7 @@ import AddButton from "../../components/UI/AddButton/add-button";
 import Date from "../../components/UI/Date/date";
 import ModalAddTransacao from "../../components/ModalAddTransacao/modal-add-transacao";
 import style from "./transacoes.module.css";
+import CardTransacoes from "../../components/UI/CardTransacoes/card-transacoes";
 
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,7 +47,7 @@ function Transacoes() {
               className={style.iconT}
             />
             <p>
-              <span className={style.spanR}>Receitas: </span>R$ 3896.00
+              <span className={style.spanR}>Despesas: </span>R$ 3896.00
             </p>
           </div>
           <div>
@@ -56,7 +57,7 @@ function Transacoes() {
               className={style.iconT}
             />
             <p>
-              <span className={style.spanT}>Despesas: </span>R$ 15316.00
+              <span className={style.spanT}>Receitas: </span>R$ 15316.00
             </p>
           </div>
         </div>
@@ -91,7 +92,16 @@ function Transacoes() {
 
         {/* Exibindo as transações */}
         <div className={style.transacoesList}>
-          transacoes aqui
+          <CardTransacoes
+            dia="28"
+            mes={1}
+            ano={2025}
+            valor={1500.75}
+            descricao="Pagamento de serviço"
+            categoria="Serviços"
+            conta="Conta Corrente"
+            fixa="Não"
+          />
         </div>
       </div>
 
