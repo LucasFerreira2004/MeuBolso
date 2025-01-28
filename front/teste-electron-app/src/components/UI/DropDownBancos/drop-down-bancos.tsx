@@ -1,22 +1,20 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "axios"; 
 import style from "./drop-down-bancos.module.css";
 import InputBancos from "../InputBancos/input-bancos";
 
 interface Banco {
+  id: number;
   nome: string;
-  iconeUrl: string;
+  iconeUrl: string; 
 }
 
 interface DropDownBancosProps {
   toggleDropdownBancos: () => void;
-  setBanco: (nome: string, iconeUrl: string) => void; // Atualizado para receber nome e iconeUrl
+  setBanco: (id: number, nome: string) => void; // Alterei para passar o nome e o id
 }
 
-const DropDownBancos = ({
-  toggleDropdownBancos,
-  setBanco,
-}: DropDownBancosProps) => {
+const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [bancos, setBancos] = useState<Banco[]>([]);
 
@@ -33,27 +31,22 @@ const DropDownBancos = ({
           Authorization: `Bearer ${token}`,
         },
       });
-      // Mapeia a resposta para incluir apenas nome e iconeUrl
-      const bancosFormatados = response.data.map((banco: any) => ({
-        nome: banco.nome,
-        iconeUrl: banco.iconeUrl,
-      }));
-      setBancos(bancosFormatados);
+      setBancos(response.data);
     } catch (err) {
       console.error("Erro ao buscar os dados dos bancos:", err);
     }
   };
 
   useEffect(() => {
-    fetchBancos();
+    fetchBancos(); 
   }, []);
 
-  const handleSelectBanco = (nome: string, iconeUrl: string) => {
-    setBanco(nome, iconeUrl); // Passa nome e iconeUrl
+  if (!isOpen) return null;
+
+  const handleSelectBanco = (id: number, nome: string) => {
+    setBanco(id, nome);
     toggleDropdown();
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className={style.containerDropDownBancos}>
@@ -63,17 +56,17 @@ const DropDownBancos = ({
           src="/assets/iconsModal/iconX.svg"
           alt="Fechar"
           className={style.iconClose}
-          onClick={toggleDropdown}
+          onClick={toggleDropdown} 
         />
       </div>
       <ul className={style.listaBancos}>
-        {bancos.map((banco, index) => (
+        {bancos.map((banco) => (
           <InputBancos
-            key={index} // Usando o índice como a key
-            id={index} // Passando o índice como id
+            key={banco.id}
+            id={banco.id}
             nome={banco.nome}
             iconeUrl={banco.iconeUrl}
-            onClick={() => handleSelectBanco(banco.nome, banco.iconeUrl)}
+            onClick={() => handleSelectBanco(banco.id, banco.nome)} 
           />
         ))}
       </ul>
