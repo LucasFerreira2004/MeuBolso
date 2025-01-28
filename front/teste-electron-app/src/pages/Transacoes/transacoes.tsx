@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddButton from "../../components/UI/AddButton/add-button";
 import Date from "../../components/UI/Date/date";
 import ModalAddTransacao from "../../components/ModalAddTransacao/modal-add-transacao";
@@ -7,9 +7,49 @@ import CardTransacoes from "../../components/UI/CardTransacoes/card-transacoes";
 
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [] = useState([
-    // Exemplo de transações, você pode substituir pelo seu array de transações reais
-  ]);
+  const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const dataReferencia = "2026-01-18"; // Data fixa para a consulta
+
+  const fetchSaldoTotal = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      setError("Você precisa estar logado para acessar esta funcionalidade.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/contas/saldoTotal?data=${dataReferencia}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao carregar o saldo total.");
+      }
+
+      const data = await response.json();
+      setSaldoTotal(data.saldo);
+    } catch (error) {
+      setError("Erro ao carregar o saldo total.");
+      console.error(error);
+    }
+  };
+
+  // Função para formatar o saldo como moeda
+  const formatarSaldo = (valor: number | null | undefined) => {
+    if (valor == null) {
+      return "R$ 0,00"; // Valor padrão caso o saldo seja inválido
+    }
+    return valor.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+  };
 
   const handleMonthChange = (month: string) => {
     console.log("Mês selecionado:", month);
@@ -22,6 +62,10 @@ function Transacoes() {
   const toggleModal = () => {
     setIsModalOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    fetchSaldoTotal();
+  }, [dataReferencia]);
 
   return (
     <div className={style.containerTransacoes}>
@@ -36,8 +80,8 @@ function Transacoes() {
               className={style.iconT}
             />
             <p>
-              <span className={style.spanM}>Estimativa de Saldo: </span>R$
-              1516.00
+              <span className={style.spanM}>Estimativa de Saldo: </span>
+              {saldoTotal !== null ? formatarSaldo(saldoTotal) : "Carregando..."}
             </p>
           </div>
           <div>
@@ -62,12 +106,13 @@ function Transacoes() {
           </div>
         </div>
       </div>
+
+      {/* Exibição de erro */}
+      {error && <div className={style.errorMessage}>{error}</div>}
+
       <div className={style.bodyTransacoes}>
         <div className={style.headerBodyT}>
-          <Date
-            onMonthChange={handleMonthChange}
-            onYearChange={handleYearChange}
-          />
+          <Date onMonthChange={handleMonthChange} onYearChange={handleYearChange} />
           <div className={style.search}>
             <input
               className={style.input}
