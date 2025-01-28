@@ -227,7 +227,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             <InputWithIcon
               label="Banco:"
               iconSrc="/assets/iconsModal/notes.svg"
-              placeholder={selectedBancoName ? `Banco: ${formatarCategoria(selectedBancoName)}` : "Selecione o banco"}
+              placeholder={selectedBancoName ? `${formatarCategoria(selectedBancoName)}` : "Selecione o banco"}
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
@@ -250,7 +250,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             <InputWithIcon
               label="Tipo:"
               iconSrc="/assets/iconsModal/icontag.svg"
-              placeholder={selectedTipoContaName ? `Tipo: ${formatarCategoria(selectedTipoContaName)}` : "Selecione o tipo"}
+              placeholder={selectedTipoContaName ? `${formatarCategoria(selectedTipoContaName)}` : "Selecione o tipo"}
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"

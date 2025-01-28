@@ -64,22 +64,14 @@ const sendData = async ({
   }
 };
 
-// Função para formatar o valor como moeda
 const formatarMoeda = (valor: string): string => {
-  // Remove todos os caracteres que não são números
   let valorNumerico = valor.replace(/\D/g, '');
-
-  // Adiciona os zeros necessários para os centavos
   valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
-
-  // Substitui o ponto por vírgula e adiciona o ponto como separador de milhar
   valorNumerico = valorNumerico.replace('.', ',');
   valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-
   return `R$ ${valorNumerico}`;
 };
 
-// Função para remover a formatação e retornar um número
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
     .replace("R$ ", "")
@@ -93,12 +85,15 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
   const [openTipoConta, setOpenTipoConta] = useState(false);
   const [isRotatedBancos, setIsRotatedBancos] = useState(false);
   const [isRotatedTipoConta, setIsRotatedTipoConta] = useState(false);
-  const [saldo, setSaldo] = useState<string>(formatarMoeda(conta.saldo.toString())); // Estado como string para a máscara
+  const [saldo, setSaldo] = useState<string>(formatarMoeda(conta.saldo.toString()));
   const [selectedBanco, setSelectedBanco] = useState<number | null>(conta.id_banco);
   const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(conta.id_tipo_conta);
   const [data, setData] = useState<string>(conta.data || "");
   const [descricao, setDescricao] = useState<string>(conta.descricao || "");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  const [bancoNome, setBancoNome] = useState<string>("");  // Adicionado para armazenar o nome do banco selecionado
+  const [tipoContaNome, setTipoContaNome] = useState<string>("");  // Adicionado para armazenar o nome do tipo de conta selecionado
 
   const handleSaldoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorDigitado = e.target.value;
@@ -119,7 +114,7 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const saldoNumerico = removerFormatacaoMoeda(saldo); // Converte o valor formatado para número
+    const saldoNumerico = removerFormatacaoMoeda(saldo);
 
     if (isNaN(saldoNumerico) || saldoNumerico <= 0) {
       setErrorMessage("Por favor, insira um saldo válido.");
@@ -196,7 +191,7 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
             <InputWithIcon
               label="Banco:"
               iconSrc="/assets/iconsModal/notes.svg"
-              placeholder={selectedBanco ? `Banco: ${selectedBanco}` : "Selecione o banco"}
+              placeholder={bancoNome || (selectedBanco ? `Banco: ${selectedBanco}` : "Selecione o banco")}
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
@@ -207,7 +202,13 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
               }
             />
             {openBancos && (
-              <DropDownBancos toggleDropdownBancos={() => setOpenBancos(false)} setBanco={setSelectedBanco} />
+              <DropDownBancos
+                toggleDropdownBancos={() => setOpenBancos(false)}
+                setBanco={(id: number, nome: string) => {
+                  setSelectedBanco(id);
+                  setBancoNome(nome);  // Atualiza o nome do banco selecionado
+                }}
+              />
             )}
           </div>
 
@@ -215,7 +216,7 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
             <InputWithIcon
               label="Tipo:"
               iconSrc="/assets/iconsModal/icontag.svg"
-              placeholder={selectedTipoConta ? `Tipo: ${selectedTipoConta}` : "Selecione o tipo"}
+              placeholder={tipoContaNome || (selectedTipoConta ? `Tipo: ${selectedTipoConta}` : "Selecione o tipo")}
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
@@ -228,7 +229,10 @@ function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasPr
             {openTipoConta && (
               <DropDownTipoConta
                 toggleDropdownTipoConta={() => setOpenTipoConta(false)}
-                setTipoConta={setSelectedTipoConta}
+                setTipoConta={(id: number, nome: string) => {
+                  setSelectedTipoConta(id);
+                  setTipoContaNome(nome);  // Atualiza o nome do tipo de conta selecionado
+                }}
               />
             )}
           </div>
