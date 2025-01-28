@@ -70,12 +70,27 @@ public class MetaService implements IMetaService {
 
 
     private Meta saveAndValidate(String usuarioId, Long id, MetaPostDTO metaDTO) {
-        Usuario usuario = usuarioValidateService.validateAndGet(usuarioId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
+        Usuario usuario = usuarioValidateService.validateAndGet(usuarioId,
+                new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
+
         metaValidateService.validateDescricaoUnica(metaDTO.getDescricao(), usuarioId, id, new DescricaoUnicaException());
 
-        Meta meta = new Meta(id, metaDTO.getValorMeta(), metaDTO.getDescricao(), metaDTO.getUrlImg(), usuario);
-        System.out.println(meta);
+        Meta meta;
+        if (id != null) {
+            // Busca a meta existente para atualizar
+            meta = metaRepository.findById(id)
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("{id}", "Meta não encontrada para atualização"));
 
+            // Atualiza os campos da meta existente
+            meta.setValorMeta(metaDTO.getValorMeta());
+            meta.setDescricao(metaDTO.getDescricao());
+            meta.setUrlImg(metaDTO.getUrlImg());
+        } else {
+            // Cria nova meta se for um save
+            meta = new Meta(null, metaDTO.getValorMeta(), metaDTO.getDescricao(), metaDTO.getUrlImg(), usuario);
+        }
+
+        System.out.println(meta);
         return metaRepository.save(meta);
     }
 }
