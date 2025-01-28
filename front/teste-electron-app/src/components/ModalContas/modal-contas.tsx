@@ -130,6 +130,14 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
     return parseFloat(valorNumerico);
   };
 
+  // Função para formatar o nome das categorias (Banco e Tipo de Conta)
+  const formatarCategoria = (categoria: string) => {
+    return categoria
+      .toLowerCase()  // transforma tudo para minúsculo
+      .replace(/_/g, ' ')  // substitui underscores por espaços
+      .replace(/\b\w/g, (char) => char.toUpperCase());  // deixa a primeira letra de cada palavra em maiúscula
+  };
+
   const handleSaldoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorDigitado = e.target.value;
     const valorFormatado = formatarMoeda(valorDigitado);
@@ -219,7 +227,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             <InputWithIcon
               label="Banco:"
               iconSrc="/assets/iconsModal/notes.svg"
-              placeholder={selectedBancoName ? `Banco: ${selectedBancoName}` : "Selecione o banco"}
+              placeholder={selectedBancoName ? `Banco: ${formatarCategoria(selectedBancoName)}` : "Selecione o banco"}
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
@@ -242,7 +250,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             <InputWithIcon
               label="Tipo:"
               iconSrc="/assets/iconsModal/icontag.svg"
-              placeholder={selectedTipoContaName ? `Tipo: ${selectedTipoContaName}` : "Selecione o tipo"}
+              placeholder={selectedTipoContaName ? `Tipo: ${formatarCategoria(selectedTipoContaName)}` : "Selecione o tipo"}
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
