@@ -4,6 +4,7 @@ import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
 
 import com.projetointegrado.MeuBolso.categoria.exception.CategoriaNaoEncontrada;
+import com.projetointegrado.MeuBolso.categoria.exception.ModificacaoCategoriaInternaException;
 import com.projetointegrado.MeuBolso.categoria.exception.NomeCadastradoException;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
@@ -54,21 +55,29 @@ public class CategoriaService implements ICategoriaService {
 
     @Transactional
     public CategoriaDTO save(String usuarioId, CategoriaSaveDTO dto) {
-        if (categoriaRepository.findByName(usuarioId, dto.getNome()) != null)
+        Categoria categoria = categoriaRepository.findByName(usuarioId, dto.getNome());
+        if (categoria != null && categoria.getInternaSistema())
+            throw new NomeCadastradoException("já existe uma categoria interna do sistema com esse nome");
+        else if(categoria != null)
             throw new NomeCadastradoException();
+
         Usuario usuario = usuarioValidateService.validateAndGet(usuarioId, new EntidadeNaoEncontradaException("{token}", "usuario não controdaco"));
 
-        Categoria categoria = new Categoria(null, dto.getNome(), dto.getTipo(), dto.getCor(), true, usuario);
-        return new CategoriaDTO(categoriaRepository.save(categoria));
+        Categoria novaCategoria = new Categoria(null, dto.getNome(), dto.getTipo(), dto.getCor(), true, usuario);
+        return new CategoriaDTO(categoriaRepository.save(novaCategoria));
     }
 
     @Transactional
     public CategoriaDTO update(String usuarioId, Long id, CategoriaSaveDTO dto) {
         Categoria categoria = categoriaValidateService.validateAndGet(id, usuarioId,
                 new CategoriaNaoEncontrada("/{id}", "categoria não encontrada"), new AcessoNegadoException());
+        if (categoria.getInternaSistema())
+            throw new ModificacaoCategoriaInternaException();
 
         Categoria categoriaDeMesmoNome = categoriaRepository.findByName(usuarioId, dto.getNome());
-        if (categoriaDeMesmoNome != null && !categoriaDeMesmoNome.getId().equals(id))
+        if (categoriaDeMesmoNome != null && !categoriaDeMesmoNome.getId().equals(id) && categoriaDeMesmoNome.getInternaSistema())
+            throw new NomeCadastradoException("já existe uma categoria interna do sistema com esse nome");
+        else if (categoriaDeMesmoNome != null && !categoriaDeMesmoNome.getId().equals(id))
             throw new NomeCadastradoException();
 
         Usuario usuario = usuarioValidateService.validateAndGet(usuarioId, new EntidadeNaoEncontradaException("{token}", "usuario não controdaco"));
@@ -82,6 +91,8 @@ public class CategoriaService implements ICategoriaService {
     public CategoriaDTO arquivar(String usuarioId, Long id) {
         Categoria categoria = categoriaValidateService.validateAndGet(id, usuarioId,
                 new CategoriaNaoEncontrada("/{id}", "categoria não encontrada"), new AcessoNegadoException());
+        if (categoria.getInternaSistema())
+            throw new ModificacaoCategoriaInternaException();
         categoriaRepository.arquivarById(usuarioId, id);
         return new CategoriaDTO(categoria);
     }

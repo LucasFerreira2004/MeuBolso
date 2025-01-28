@@ -27,4 +27,10 @@ public class CategoriaExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ModificacaoCategoriaInternaException.class)
+    private ResponseEntity<ExceptionDTO> modificandoCategoriaInternaHandler(ModificacaoCategoriaInternaException ex){
+        ExceptionDTO dto = new ExceptionDTO("/{id}", ex.getMessage());
+        return new ResponseEntity<>(dto, HttpStatus.FORBIDDEN);
+    }
+
 }
