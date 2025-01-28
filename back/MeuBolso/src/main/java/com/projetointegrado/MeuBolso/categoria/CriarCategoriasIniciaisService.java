@@ -37,9 +37,8 @@ public class CriarCategoriasIniciaisService {
             criarCategoriaExterna(usuario, "roupas", TipoCategoria.DESPESA),
             criarCategoriaExterna(usuario, "saúde", TipoCategoria.DESPESA),
             criarCategoriaExterna(usuario, "pagamentos", TipoCategoria.DESPESA)
-
         );
-
+        categoriaRepository.saveAll(categoriasPadrao);
     }
 
     private Categoria criarCategoriaInterna(Usuario usuario, String nome, TipoCategoria tipo) {
