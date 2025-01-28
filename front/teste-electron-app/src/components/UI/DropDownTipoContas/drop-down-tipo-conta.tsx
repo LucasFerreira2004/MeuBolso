@@ -43,6 +43,13 @@ const DropDownTipoConta = ({ toggleDropdownTipoConta, setTipoConta }: DropDownTi
     toggleDropdownTipoConta();
   };
 
+  const formatTipoConta = (tipo: string) => {
+    return tipo
+      .toLowerCase()  // transforma tudo para minúsculo
+      .replace(/_/g, ' ')  // substitui underscores por espaços
+      .replace(/\b\w/g, (char) => char.toUpperCase());  // deixa a primeira letra de cada palavra em maiúscula
+  };
+
   return (
     <div className={style.containerTipo}>
       <div className={style.header}>
@@ -59,7 +66,7 @@ const DropDownTipoConta = ({ toggleDropdownTipoConta, setTipoConta }: DropDownTi
           <ul className={style.dropdownList}>
             {tiposConta.map((tipo) => (
               <li key={tipo.id} onClick={() => handleSelectTipoConta(tipo.id, tipo.tipoConta)}>
-                <a href="#">{tipo.tipoConta}</a>
+                <a href="#">{formatTipoConta(tipo.tipoConta)}</a>
               </li>
             ))}
           </ul>
