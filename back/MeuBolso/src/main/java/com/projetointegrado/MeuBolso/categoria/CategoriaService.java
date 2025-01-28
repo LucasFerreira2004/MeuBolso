@@ -85,4 +85,5 @@ public class CategoriaService implements ICategoriaService {
         categoriaRepository.arquivarById(usuarioId, id);
         return new CategoriaDTO(categoria);
     }
+
 }
