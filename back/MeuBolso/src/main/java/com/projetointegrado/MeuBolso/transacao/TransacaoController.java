@@ -35,7 +35,7 @@ public class TransacaoController {
     @GetMapping
     public List<TransacaoDTO> findAll(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
         String userLogadoId = usuarioService.getUsuarioLogadoId();
-        return transacaoService.findAll(userLogadoId, data);
+        return transacaoService.findAllByMonth(userLogadoId, data);
     }
 
     @Operation(summary = "Retorna uma transacao expecifica a partir de um id indicado")

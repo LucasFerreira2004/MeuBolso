@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @Service
@@ -50,10 +52,11 @@ public class TransacaoService implements ITransacaoService {
         return new TransacaoDTO(transacao);
     }
     @Transactional(readOnly = true)
-    public List<TransacaoDTO> findAll(String userId, LocalDate data) {
-        List<Transacao> transacoes = transacaoRepository.findAllBeforeDate(data, userId);
+    public List<TransacaoDTO> findAllByMonth(String userId, LocalDate data) {
+        LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate dataFim = data.with(TemporalAdjusters.lastDayOfMonth());
+        List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
         List<TransacaoDTO> transacaoDTOs = transacoes.stream().map(transacao -> new TransacaoDTO(transacao)).toList();
-
         return transacaoDTOs;
     }
 
