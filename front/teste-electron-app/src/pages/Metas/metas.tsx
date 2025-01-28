@@ -1,4 +1,4 @@
-import CardMetas from "../../components/CardMetas/card-metas";
+import CardMetas from "../../components/UI/CardMetas/card-metas";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./metas.module.css"
 

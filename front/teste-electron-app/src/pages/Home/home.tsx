@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import style from "./home.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
-import CardMetas from "../../components/CardMetas/card-metas";
+import CardMetas from "../../components/UI/CardMetas/card-metas";
 import Example from "../../components/UI/Mycharts/my-charts";
 
 interface Banco {
@@ -14,9 +14,9 @@ function Home() {
   const [bancos, setBancos] = useState<Banco[]>([]);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const dataReferencia = "2026-01-18"; // Data fixa para a consulta
 
-  // Função para buscar os bancos
-  const fetchBancos = async () => {
+  const fetchData = async (url: string, errorMessage: string, setData: (data: any) => void) => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       setError("Você precisa estar logado para acessar esta funcionalidade.");
@@ -24,50 +24,48 @@ function Home() {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/contas/min", {
+      const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
       if (!response.ok) {
-        throw new Error("Erro ao carregar os dados dos bancos.");
+        throw new Error(errorMessage);
       }
+
       const data = await response.json();
-      setBancos(data);
+      setData(data);
     } catch (error) {
-      setError("Erro ao buscar os dados dos bancos.");
+      setError(errorMessage);
       console.error(error);
     }
   };
 
-  const fetchSaldoTotal = async () => {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      setError("Você precisa estar logado para acessar esta funcionalidade.");
-      return;
+  // Função para formatar o saldo como moeda
+  const formatarSaldo = (valor: number | null | undefined) => {
+    if (valor == null) {
+      return "R$ 0,00"; // Valor padrão caso o saldo seja inválido
     }
-
-    try {
-      const response = await fetch("http://localhost:8080/contas/saldoTotal", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Erro ao carregar o saldo total.");
-      }
-      const data = await response.json();
-      setSaldoTotal(data.saldo); // Atualiza o estado com o saldo total retornado
-    } catch (error) {
-      setError("Erro ao buscar o saldo total.");
-      console.error(error);
-    }
+    return valor.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
   };
 
   useEffect(() => {
-    fetchBancos();
-    fetchSaldoTotal();
-  }, []);
+    fetchData(
+      `http://localhost:8080/contas/min?data=${dataReferencia}`,
+      "Erro ao carregar os dados dos bancos.",
+      setBancos
+    );
+
+    fetchData(
+      `http://localhost:8080/contas/saldoTotal?data=${dataReferencia}`,
+      "Erro ao carregar o saldo total.",
+      (data) => setSaldoTotal(data.saldo)
+    );
+  }, [dataReferencia]);
 
   return (
     <div className={style.home}>
@@ -87,10 +85,10 @@ function Home() {
             />
             <p className={style.pHeader}>
               <span className={style.sHeader}>Estimativa de Saldo: </span>
-              {saldoTotal !== null ? `R$ ${saldoTotal.toFixed(2)}` : "Carregando..."}
+              {saldoTotal !== null ? formatarSaldo(saldoTotal) : "Carregando..."}
             </p>
           </div>
-          <AddButton texto="Adicionar Transação" onClick={function (): void {}} />
+          <AddButton texto="Adicionar Transação" onClick={() => {}} />
         </div>
       </header>
 
@@ -110,7 +108,7 @@ function Home() {
                       alt={`Ícone ${banco.nomeBanco}`}
                       className={style.iconNubank}
                     />
-                    <p>{banco.nomeBanco}: R$ {banco.saldo.toFixed(2)}</p>
+                    <p>{`${banco.nomeBanco}: ${formatarSaldo(banco.saldo)}`}</p> {/* Formatação do saldo do banco */}
                   </div>
                 ))
               )}
