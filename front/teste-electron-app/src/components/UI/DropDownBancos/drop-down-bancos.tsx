@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react";
-import axios from "axios"; 
+import axios from "axios";
 import style from "./drop-down-bancos.module.css";
 import InputBancos from "../InputBancos/input-bancos";
 
 interface Banco {
-  id: number;
   nome: string;
-  iconeUrl: string; 
+  iconeUrl: string;
 }
 
 interface DropDownBancosProps {
   toggleDropdownBancos: () => void;
-  setBanco: (id: number) => void;
+  setBanco: (nome: string, iconeUrl: string) => void; // Atualizado para receber nome e iconeUrl
 }
 
-const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps) => {
+const DropDownBancos = ({
+  toggleDropdownBancos,
+  setBanco,
+}: DropDownBancosProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [bancos, setBancos] = useState<Banco[]>([]);
 
@@ -31,22 +33,27 @@ const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps)
           Authorization: `Bearer ${token}`,
         },
       });
-      setBancos(response.data);
+      // Mapeia a resposta para incluir apenas nome e iconeUrl
+      const bancosFormatados = response.data.map((banco: any) => ({
+        nome: banco.nome,
+        iconeUrl: banco.iconeUrl,
+      }));
+      setBancos(bancosFormatados);
     } catch (err) {
       console.error("Erro ao buscar os dados dos bancos:", err);
     }
   };
 
   useEffect(() => {
-    fetchBancos(); 
+    fetchBancos();
   }, []);
 
-  if (!isOpen) return null;
-
-  const handleSelectBanco = (id: number) => {
-    setBanco(id);
+  const handleSelectBanco = (nome: string, iconeUrl: string) => {
+    setBanco(nome, iconeUrl); // Passa nome e iconeUrl
     toggleDropdown();
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className={style.containerDropDownBancos}>
@@ -56,17 +63,17 @@ const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps)
           src="/assets/iconsModal/iconX.svg"
           alt="Fechar"
           className={style.iconClose}
-          onClick={toggleDropdown} 
+          onClick={toggleDropdown}
         />
       </div>
       <ul className={style.listaBancos}>
-        {bancos.map((banco) => (
+        {bancos.map((banco, index) => (
           <InputBancos
-            key={banco.id}
-            id={banco.id}
+            key={index} // Usando o índice como a key
+            id={index} // Passando o índice como id
             nome={banco.nome}
             iconeUrl={banco.iconeUrl}
-            onClick={() => handleSelectBanco(banco.id)} 
+            onClick={() => handleSelectBanco(banco.nome, banco.iconeUrl)}
           />
         ))}
       </ul>
