@@ -52,6 +52,9 @@ public class MetaService implements IMetaService {
 
     @Transactional
     public MetaDTO update(String usuarioId, Long id, MetaPostDTO metaDTO) {
+        metaValidateService.validate(id, usuarioId,
+                new EntidadeNaoEncontradaException("{id}", "meta nao encontrado a partir do id"),
+                new AcessoNegadoException());
         Meta meta = saveAndValidate(usuarioId, id, metaDTO);
         return new MetaDTO(meta);
     }
@@ -65,20 +68,14 @@ public class MetaService implements IMetaService {
         return new MetaDTO(meta);
     }
 
+
     private Meta saveAndValidate(String usuarioId, Long id, MetaPostDTO metaDTO) {
         Usuario usuario = usuarioValidateService.validateAndGet(usuarioId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
-        System.out.println("MetaService -> saveAndValidate : chegou ao fim das checagens");
         metaValidateService.validateDescricaoUnica(metaDTO.getDescricao(), usuarioId, id, new DescricaoUnicaException());
 
         Meta meta = new Meta(id, metaDTO.getValorMeta(), metaDTO.getDescricao(), metaDTO.getUrlImg(), usuario);
         System.out.println(meta);
 
-        try {
-            return metaRepository.save(meta);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return meta;
+        return metaRepository.save(meta);
     }
 }
