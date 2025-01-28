@@ -89,6 +89,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
   const [isRotatedTipoConta, setIsRotatedTipoConta] = useState(false);
   const [saldo, setSaldo] = useState<string>(""); // Estado como string para a máscara
   const [selectedBanco, setSelectedBanco] = useState<number | null>(null);
+  const [selectedBancoName, setSelectedBancoName] = useState<string | null>(null); // Para armazenar o nome do banco
   const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(null);
   const [descricao, setDescricao] = useState("");
   const [data, setData] = useState<string>("");
@@ -163,7 +164,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
     const novaConta: Conta = {
       id: 0,
       saldo: saldoNumerico,
-      banco: { nome: "Banco Exemplo", iconeUrl: "/path/to/icon" },
+      banco: { nome: selectedBancoName || "Banco não selecionado", iconeUrl: "/path/to/icon" },
       tipo_conta: { tipoConta: "Tipo de Conta Exemplo" },
       id_banco: selectedBanco,
       id_tipo_conta: selectedTipoConta,
@@ -230,7 +231,7 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             <InputWithIcon
               label="Banco:"
               iconSrc="/assets/iconsModal/notes.svg"
-              placeholder={selectedBanco ? `Banco: ${selectedBanco}` : "Selecione o banco"}
+              placeholder={selectedBancoName ? `Banco: ${selectedBancoName}` : "Selecione o banco"}
             />
             <img
               src="/assets/iconsModal/iconsarrowleft.svg"
@@ -241,7 +242,10 @@ function ModalContas({ closeModal, onAddConta }: ModalContasProps) {
             {openBancos && (
               <DropDownBancos
                 toggleDropdownBancos={toggleDropdownBancos}
-                setBanco={setSelectedBanco}
+                setBanco={(id, nome) => { 
+                  setSelectedBanco(id);
+                  setSelectedBancoName(nome); // Armazena o nome do banco selecionado
+                }}
               />
             )}
           </div>
