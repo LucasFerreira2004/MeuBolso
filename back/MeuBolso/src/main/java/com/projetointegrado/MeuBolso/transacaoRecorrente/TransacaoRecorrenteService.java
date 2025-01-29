@@ -33,7 +33,7 @@ public class TransacaoRecorrenteService implements ITransacaoRecorrenteService {
     @Autowired
     private UsuarioValidateService usuarioValidateService;
     @Autowired
-    private TransacaoFixaValidateService transacaoFixaValidateService;
+    private TransacaoRecorrenteValidateService transacaoRecorrenteValidateService;
 
     @Transactional(readOnly = true)
     public List<TransacaoFixaDTO> findAll(String userId){
@@ -42,7 +42,7 @@ public class TransacaoRecorrenteService implements ITransacaoRecorrenteService {
 
     @Transactional(readOnly = true)
     public TransacaoFixaDTO findById(String userId, Long id){
-        TransacaoRecorrente transacao = transacaoFixaValidateService.validateAndGet(id, userId,
+        TransacaoRecorrente transacao = transacaoRecorrenteValidateService.validateAndGet(id, userId,
                 new EntidadeNaoEncontradaException("/{id}", "TransacaoRecorrente nao encontrada"), new AcessoNegadoException());
         return new TransacaoFixaDTO(transacao);
     }
@@ -65,7 +65,7 @@ public class TransacaoRecorrenteService implements ITransacaoRecorrenteService {
 
     @Transactional
     public TransacaoFixaDTO delete(String userId, Long id) {
-        TransacaoRecorrente transacaoRecorrente = transacaoFixaValidateService.validateAndGet(id, userId,
+        TransacaoRecorrente transacaoRecorrente = transacaoRecorrenteValidateService.validateAndGet(id, userId,
                 new EntidadeNaoEncontradaException("/{id}", "TransacaoRecorrente nao encontrada"), new AcessoNegadoException());
         TransacaoFixaDTO dto = new TransacaoFixaDTO(transacaoRecorrente);
         transacaoRecorrenteRepository.delete(transacaoRecorrente);
