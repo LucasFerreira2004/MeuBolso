@@ -44,6 +44,6 @@ public record TransacaoFixaSaveDTO(
         String periodicidade,
 
         @JsonIgnore
-        Integer qtdRepeticao
+        Integer qtdParcelas
 
 ) implements ITransacaoRecorrenteDTO{}
