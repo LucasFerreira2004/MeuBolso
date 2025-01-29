@@ -6,7 +6,11 @@ interface ModalTransacaoProps {
 
 function ModalTransacao({ onClose }: ModalTransacaoProps) {
     return (
-            <div className={styles.modalContent}>
+        <div className={styles.modalOverlay} onClick={onClose}>
+            <div
+                className={styles.modalContent}
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className={styles.header}>
                     <button className={styles.closeButton} onClick={onClose}>
                         <img
@@ -35,6 +39,7 @@ function ModalTransacao({ onClose }: ModalTransacaoProps) {
                     </button>
                 </div>
             </div>
+        </div>
     );
 }
 

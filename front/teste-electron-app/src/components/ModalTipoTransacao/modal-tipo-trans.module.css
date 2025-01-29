@@ -1,4 +1,16 @@
+.modalOverlay {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    z-index: 1000; 
+}
 .modalContent {
+    position: absolute;
     background-color: #fff;
     border-radius: 8px;
     padding: 10px;
@@ -6,7 +18,11 @@
     max-height: 120px;
     width: 100%;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    right: 180px;
+    top: 263px;
+    max-width: 12vw;
 }
+
 
 .header {
     display: flex;   
