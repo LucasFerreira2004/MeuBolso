@@ -35,7 +35,7 @@ public class TransacaoRepeticaoService {
     private void gerarTransacoesFixas(TransacaoFixa transacaoFixa, LocalDate dataBusca) {
         System.out.println("TransacaoRepeticaoService -> gerarTransacoesFixas");
         LocalDate dataUltimaExecucao = transacaoFixa.getUltimaExecucao() != null
-                ? avancarData(transacaoFixa.getUltimaExecucao(), transacaoFixa.getPeriodicidade())
+                ? avancarData(transacaoFixa.getUltimaExecucao(), transacaoFixa.getDataCadastro(), transacaoFixa.getPeriodicidade())
                 : transacaoFixa.getDataCadastro();
 
         while (!dataUltimaExecucao.isAfter(dataBusca)) {
@@ -43,27 +43,35 @@ public class TransacaoRepeticaoService {
             transacaoRepository.save(novaTransacao);
             transacaoFixa.setUltimaExecucao(dataUltimaExecucao);
 
-            dataUltimaExecucao = avancarData(dataUltimaExecucao, transacaoFixa.getPeriodicidade());
+            dataUltimaExecucao = avancarData(dataUltimaExecucao, transacaoFixa.getDataCadastro(),transacaoFixa.getPeriodicidade());
         }
         System.out.println("TransacaoRepeticaoService -> gerarTransacoesFixas -> ultimaExecucao = " + transacaoFixa.getUltimaExecucao());
         transacaoFixaRepository.save(transacaoFixa);
     }
 
-    private LocalDate avancarData(LocalDate data, Periodicidade periodicidade) {
+    private LocalDate avancarData(LocalDate dataAtual, LocalDate dataCadastro,Periodicidade periodicidade) {
         System.out.println("TransacaoRepeticaoService -> avancarData");
         switch (periodicidade) {
             case DIARIO:
-                return data.plusDays(1);
+                return dataAtual.plusDays(1);
             case SEMANAL:
-                return data.plusWeeks(1);
+                return dataAtual.plusWeeks(1);
             case MENSAL:
-                int ultimoDiaDoMesAtual = data.lengthOfMonth(); // Último dia do mês original
-                LocalDate novaData = data.plusMonths(1); // Avança um mês
+                try {
+                    LocalDate novaData = dataAtual.plusMonths(1); // Avança um mês
+                    int ultimoDiaDoMesAtual = novaData.lengthOfMonth();
+                    System.out.println(ultimoDiaDoMesAtual);
 
-                if (data.getDayOfMonth() == ultimoDiaDoMesAtual) {
-                    novaData = novaData.with(TemporalAdjusters.lastDayOfMonth());
+                    if (dataCadastro.getDayOfMonth() > ultimoDiaDoMesAtual) {
+                        novaData = novaData.with(TemporalAdjusters.lastDayOfMonth());
+                    } else {
+                        novaData = novaData.withDayOfMonth(dataCadastro.getDayOfMonth());
+                    }
+                    return novaData;
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
-                return novaData;
             default:
                 throw new IllegalArgumentException("Periodicidade desconhecida");
         }

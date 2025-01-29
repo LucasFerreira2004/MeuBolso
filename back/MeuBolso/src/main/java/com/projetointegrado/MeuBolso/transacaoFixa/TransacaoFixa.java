@@ -44,7 +44,7 @@ public class TransacaoFixa {
 
     @Enumerated(EnumType.STRING)
     @Column (nullable = false)
-    private Periodicidade periodicidade; //ainda não está em uso
+    private Periodicidade periodicidade;
 
     @Column(nullable = true, name = "ultima_execucao")
     private LocalDate ultimaExecucao; //representa a data que foi chamada pela última vez para realizar a cricação de transacoes
