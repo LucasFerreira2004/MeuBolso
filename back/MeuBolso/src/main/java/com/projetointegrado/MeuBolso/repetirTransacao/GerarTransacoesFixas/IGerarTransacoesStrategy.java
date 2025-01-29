@@ -1,4 +1,9 @@
 package com.projetointegrado.MeuBolso.repetirTransacao.GerarTransacoesFixas;
 
-public class IGerarTransacoesStrategy {
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
+
+import java.time.LocalDate;
+
+public interface IGerarTransacoesStrategy {
+    void gerarTransacoes (TransacaoRecorrente transacaoRecorrente, LocalDate dataBusca);
 }
