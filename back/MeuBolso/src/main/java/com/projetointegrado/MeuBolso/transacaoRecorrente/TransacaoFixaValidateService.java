@@ -8,16 +8,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransacaoFixaValidateService {
     @Autowired
-    private TransacaoFixaRepository transacaoFixaRepository;
+    private TransacaoRecorrenteRepository transacaoRecorrenteRepository;
 
     public void validate(Long id, String userId, EntidadeNaoEncontradaException entidadeNaoEncontrada, AcessoNegadoException acessoNegadoException) {
-        TransacaoRecorrente transacao = transacaoFixaRepository.findById(id)
+        TransacaoRecorrente transacao = transacaoRecorrenteRepository.findById(id)
                 .orElseThrow(() -> entidadeNaoEncontrada);
         if (!transacao.getUsuario().getId().equals(userId))
             throw  acessoNegadoException;
     }
     public TransacaoRecorrente validateAndGet(Long id, String userId, EntidadeNaoEncontradaException entidadeNaoEncontrada, AcessoNegadoException acessoNegadoException) {
-        TransacaoRecorrente transacao = transacaoFixaRepository.findById(id)
+        TransacaoRecorrente transacao = transacaoRecorrenteRepository.findById(id)
                 .orElseThrow(() -> entidadeNaoEncontrada);
         if (!transacao.getUsuario().getId().equals(userId))
             throw  acessoNegadoException;

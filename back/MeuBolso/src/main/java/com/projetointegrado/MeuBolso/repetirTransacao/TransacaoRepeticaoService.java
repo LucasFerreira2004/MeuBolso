@@ -5,7 +5,7 @@ import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStr
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
-import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoFixaRepository;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +19,14 @@ public class TransacaoRepeticaoService {
     private TransacaoRepository transacaoRepository;
 
     @Autowired
-    private TransacaoFixaRepository transacaoFixaRepository;
+    private TransacaoRecorrenteRepository transacaoRecorrenteRepository;
 
     public List<Transacao> gerarTransacoes(LocalDate data, String userId) {
         // Obtém todas as transações normais no período
         System.out.println("TransacaoRepeticaoService -> gerarTransacoes");
         List<Transacao> transacoesNormais = transacaoRepository.findAllBeforeDate(data, userId);
 
-        List<TransacaoRecorrente> transacoesFixas = transacaoFixaRepository.findAllByUsuario(userId);
+        List<TransacaoRecorrente> transacoesFixas = transacaoRecorrenteRepository.findAllByUsuario(userId);
         if (transacoesNormais.isEmpty() || transacoesFixas.isEmpty()) return null;
 
         for (TransacaoRecorrente transacaoRecorrente : transacoesFixas) {
@@ -53,7 +53,7 @@ public class TransacaoRepeticaoService {
             dataUltimaExecucao = AvancoStrategy.avancarData(dataUltimaExecucao, transacaoRecorrente.getDataCadastro(), 1);
         }
         System.out.println("TransacaoRepeticaoService -> gerarTransacoesFixas -> ultimaExecucao = " + transacaoRecorrente.getUltimaExecucao());
-        transacaoFixaRepository.save(transacaoRecorrente);
+        transacaoRecorrenteRepository.save(transacaoRecorrente);
     }
 
 

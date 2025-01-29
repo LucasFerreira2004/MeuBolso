@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface TransacaoFixaRepository extends JpaRepository<TransacaoRecorrente, Long> {
+public interface TransacaoRecorrenteRepository extends JpaRepository<TransacaoRecorrente, Long> {
     @Query(nativeQuery = true, value = """
         select * from transacao_fixa where usuario_id = :userId;
     """)
