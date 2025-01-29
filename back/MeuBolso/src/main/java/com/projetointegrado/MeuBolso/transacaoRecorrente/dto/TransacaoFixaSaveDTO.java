@@ -39,7 +39,7 @@ public class TransacaoFixaSaveDTO {
 
 //    private final String comentarioDefaultMessage = "o comentario deve ser uma string valida.";
 //    @NotNull(message = comentarioDefaultMessage)
-//    private String comentario; TRATAR A CRIACAO DE COMENTARIO E CRIAR NOTATION PARA NULO OU STRING VALIDA
+//    private String comentario; TRATAR A CRIACAO DE COMENTARIO E CRIAR NOTATION PARA NULO OU STRING VALIDAz
 
     private final String periodicidadeDefaultMessage = "a periodicidade é obrigatória e deve ter o valor: DIARIO, SEMANAL ou MENSAL";
     @NotNull(message = periodicidadeDefaultMessage)
