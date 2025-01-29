@@ -39,7 +39,7 @@ public record TransacaoParceladaSaveDTO(
     @ValidEnum(value = Periodicidade.class, message = "tipos permitidos são DIARIO, SEMANAL ou MENSAL" )
     String periodicidade,
 
-    @NotNull(message = "a quantidade de repetições não pode ser nula")
+    @NotNull(message = "a quantidade de parcelas não pode ser nula")
     @Min(value = 2, message = "a quantidade mínima de parcelas é 2")
-    Integer qtdRepeticao
+    Integer qtdParcelas
     ) implements ITransacaoRecorrenteDTO {}

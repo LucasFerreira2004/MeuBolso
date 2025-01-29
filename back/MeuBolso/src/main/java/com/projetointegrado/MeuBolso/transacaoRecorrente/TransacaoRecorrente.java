@@ -54,8 +54,8 @@ public class TransacaoRecorrente {
     @Column(name = "data_final")
     private LocalDate dataFinal;
 
-    @Column(name = "qtd_repeticoes")
-    private Integer qtdRepeticoes;
+    @Column(name = "qtd_parcelas")
+    private Integer qtdParcelas;
 
     @OneToMany(mappedBy = "transacaoRecorrente", cascade = CascadeType.REMOVE)
     private List<Transacao> transacoes;
@@ -73,7 +73,7 @@ public class TransacaoRecorrente {
         this.ultimaExecucao = null;
     }
 
-    public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario, Integer qtdRepeticoes) {
+    public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario, Integer qtdParcelas) {
         this.id = id;
         this.valor = valor;
         this.tipo = tipo;
@@ -84,10 +84,10 @@ public class TransacaoRecorrente {
         this.periodicidade = periodicidade;
         this.usuario = usuario;
         this.ultimaExecucao = null;
-        this.qtdRepeticoes = qtdRepeticoes;
-        if (qtdRepeticoes == null) return;
+        this.qtdParcelas = qtdParcelas;
+        if (qtdParcelas == null) return;
         IAvancoDataStrategy avancoStrategy = AvancoDataFactory.getStrategy(this.periodicidade);
-        this.dataFinal = avancoStrategy.avancarData(this.dataCadastro, this.dataCadastro, this.qtdRepeticoes);
+        this.dataFinal = avancoStrategy.avancarData(this.dataCadastro, this.dataCadastro, this.qtdParcelas - 1);
     }
     public TransacaoRecorrente() {}
 
@@ -187,11 +187,11 @@ public class TransacaoRecorrente {
         this.dataFinal = dataFinal;
     }
 
-    public Integer getQtdRepeticoes() {
-        return qtdRepeticoes;
+    public Integer getQtdParcelas() {
+        return qtdParcelas;
     }
 
-    public void setQtdRepeticoes(Integer qtdRepeticoes) {
-        this.qtdRepeticoes = qtdRepeticoes;
+    public void setQtdParcelas(Integer qtdParcelas) {
+        this.qtdParcelas = qtdParcelas;
     }
 }

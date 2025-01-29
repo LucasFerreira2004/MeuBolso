@@ -11,5 +11,5 @@ public interface ITransacaoRecorrenteDTO {
         Long categoriaId();
         String descricao();
         String periodicidade();
-        Integer qtdRepeticao();
+        Integer qtdParcelas();
 }
