@@ -16,13 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"usuario_id", "descricao"}) })
 public class Conta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, name = "descricao")
     private String descricao;
 
     @Transient
@@ -35,6 +36,7 @@ public class Conta {
     private Banco banco;
 
     @ManyToOne
+    @JoinColumn(nullable = false, name = "usuario_id")
     private Usuario usuario;
 
     @OneToMany(mappedBy = "conta", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
