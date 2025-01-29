@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.transacaoFixa;
+package com.projetointegrado.MeuBolso.transacaoRecorrente;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.categoria.CategoriaValidateService;
@@ -7,8 +7,8 @@ import com.projetointegrado.MeuBolso.conta.ContaValidateService;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
-import com.projetointegrado.MeuBolso.transacaoFixa.dto.TransacaoFixaDTO;
-import com.projetointegrado.MeuBolso.transacaoFixa.dto.TransacaoFixaSaveDTO;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoFixaDTO;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoFixaSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
 import org.springframework.beans.factory.annotation.Autowired;

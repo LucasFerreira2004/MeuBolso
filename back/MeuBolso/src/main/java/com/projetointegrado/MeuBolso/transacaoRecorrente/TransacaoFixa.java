@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.transacaoFixa;
+package com.projetointegrado.MeuBolso.transacaoRecorrente;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
@@ -48,6 +48,12 @@ public class TransacaoFixa {
 
     @Column(nullable = true, name = "ultima_execucao")
     private LocalDate ultimaExecucao; //representa a data que foi chamada pela última vez para realizar a cricação de transacoes
+
+    @Column(name = "data_final")
+    private LocalDate dataFinal;
+
+    @Column(name = "qtd_repeticoes")
+    private Integer qtdRepeticoes;
 
     @OneToMany(mappedBy = "transacaoFixa", cascade = CascadeType.REMOVE)
     private List<Transacao> transacoes;

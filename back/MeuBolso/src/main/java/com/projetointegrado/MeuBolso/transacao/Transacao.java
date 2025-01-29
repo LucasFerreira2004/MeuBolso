@@ -2,7 +2,7 @@ package com.projetointegrado.MeuBolso.transacao;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
-import com.projetointegrado.MeuBolso.transacaoFixa.TransacaoFixa;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoFixa;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 

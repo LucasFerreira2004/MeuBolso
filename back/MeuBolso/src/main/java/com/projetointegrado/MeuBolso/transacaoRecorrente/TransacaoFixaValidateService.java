@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.transacaoFixa;
+package com.projetointegrado.MeuBolso.transacaoRecorrente;
 
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
