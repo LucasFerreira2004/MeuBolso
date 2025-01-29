@@ -41,4 +41,4 @@ public record TransacaoFixaSaveDTO (
         @NotNull(message ="a periodicidade é obrigatória e deve ter o valor: DIARIO, SEMANAL ou MENSAL")
         @ValidEnum(value = Periodicidade.class, message = "tipos permitidos são DIARIO, SEMANAL ou MENSAL" )
         String periodicidade
-){}
+) implements ITransacaoRepeticaoDTO{}
