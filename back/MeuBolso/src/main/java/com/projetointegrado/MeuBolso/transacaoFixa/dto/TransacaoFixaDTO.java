@@ -1,5 +1,5 @@
-package com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto;
-import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoFixa;
+package com.projetointegrado.MeuBolso.transacaoFixa.dto;
+import com.projetointegrado.MeuBolso.transacaoFixa.TransacaoFixa;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -1,9 +1,8 @@
-package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
+package com.projetointegrado.MeuBolso.transacaoFixa;
 
 import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
-import com.projetointegrado.MeuBolso.transacao.TransacaoController;
-import com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto.TransacaoFixaDTO;
-import com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto.TransacaoFixaSaveDTO;
+import com.projetointegrado.MeuBolso.transacaoFixa.dto.TransacaoFixaDTO;
+import com.projetointegrado.MeuBolso.transacaoFixa.dto.TransacaoFixaSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

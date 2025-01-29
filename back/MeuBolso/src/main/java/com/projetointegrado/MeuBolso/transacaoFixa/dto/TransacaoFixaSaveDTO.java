@@ -1,8 +1,8 @@
-package com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto;
+package com.projetointegrado.MeuBolso.transacaoFixa.dto;
 
 import com.projetointegrado.MeuBolso.globalConstraints.validEnum.ValidEnum;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
-import com.projetointegrado.MeuBolso.transacao.transacaoFixa.Periodicidade;
+import com.projetointegrado.MeuBolso.transacaoFixa.Periodicidade;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
