@@ -10,5 +10,5 @@ public interface IMetaService {
     public MetaDTO findById(String usuarioId, Long metaId);
     public MetaDTO save(String usuarioId, MetaPostDTO meta);
     public MetaDTO update(String usuarioId, Long id, MetaPostDTO meta);
-    public void delete(String usuarioId, Long metaId);
+    public MetaDTO delete(String usuarioId, Long metaId);
 }

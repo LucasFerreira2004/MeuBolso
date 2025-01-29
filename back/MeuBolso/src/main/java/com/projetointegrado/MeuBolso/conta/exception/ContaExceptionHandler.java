@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.conta.exception;
 
 import com.projetointegrado.MeuBolso.banco.exception.BancoNaoEncontradoException;
 import com.projetointegrado.MeuBolso.tipoConta.exception.TipoContaNaoEncontradoException;
+import com.projetointegrado.MeuBolso.usuario.exception.ErrorResponseDTO;
 import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +33,11 @@ public class ContaExceptionHandler {
     public ResponseEntity<?> handleIdContaNaoEncontradaException(ContaNaoEncontradaException ex) {
         IdNaoEncontradoDTO dto = new IdNaoEncontradoDTO("/id", "id conta nao encontrado");
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DescricaoJaExistenteException.class)
+    public ResponseEntity<?> handleDescricaoJaExistenteException(DescricaoJaExistenteException ex) {
+        ErrorResponseDTO dto = new ErrorResponseDTO("descricao", "descricao ja existente, insira outra descricao");
+        return new ResponseEntity<>(dto, HttpStatus.CONFLICT);
     }
 }

@@ -4,6 +4,7 @@ import ModalEditCategoria from "../../components/ModalEditCategorias/modal-edit-
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./categorias.module.css";
 import InputCategorias from "../../components/UI/InputCategorias/input-categorias";
+import axios from "axios";
 
 export interface Categoria {
   id: number;
@@ -31,22 +32,18 @@ function Categorias() {
         error: { message: "Você precisa estar logado para realizar esta ação" },
       };
     }
-
+  
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8080/categorias", {
-        method: "GET",
+      const response = await axios.get("http://localhost:8080/categorias", {
         headers: {
           Authorization: `Bearer ${token}`, // Adiciona o token no cabeçalho
         },
       });
-      if (response.ok) {
-        const data: Categoria[] = await response.json();
-        setCategorias(data);
-      } else {
-        throw new Error("Erro ao buscar categorias");
-      }
-    } catch (error) {
+  
+      // A resposta já vem com o status e os dados, basta acessar diretamente
+      setCategorias(response.data); // Aqui estamos usando o `data` retornado pelo Axios
+    } catch (error: any) {
       console.error("Erro ao buscar categorias:", error);
     } finally {
       setLoading(false);

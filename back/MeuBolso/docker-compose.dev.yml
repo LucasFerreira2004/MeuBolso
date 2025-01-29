@@ -17,15 +17,14 @@ services:
       SPRING_DATASOURCE_USERNAME: sa
       SPRING_DATASOURCE_PASSWORD:
 
-      # H2 Client
       SPRING_H2_CONSOLE_ENABLED: 'true'
-      SPRING_H2_CONSOLE_PATH: /h2-console
+      SPRING_H2_CONSOLE_PATH: '/h2-console'
 
-      # Show SQL
       SPRING_JPA_SHOW_SQL: 'true'
       SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: 'true'
     networks:
       - dev-network
+
 # ======================================================================================================================
 # REDE
 # ======================================================================================================================

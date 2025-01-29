@@ -4,39 +4,43 @@ import com.projetointegrado.MeuBolso.meta.dto.MetaDTO;
 import com.projetointegrado.MeuBolso.meta.dto.MetaPostDTO;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"usuario_id", "descricao"}) })
 public class Meta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @DecimalMin(value = "0.01", message = "O valor de uma meta deve ser maior que 0.")
     @Column(nullable = false)
     private BigDecimal valorMeta;
 
+    @DecimalMin(value = "0.00", message = "O valor mínimo de uma meta é 0.")
     @Column(nullable = false)
     private BigDecimal valorInvestido;
     private String urlImg;
 
-    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Uma meta deve possuir uma descricao.")
+    @Column(name = "descricao", nullable = false)
     private String descricao;
 
-    @ManyToOne
-    @Valid
-    @JoinColumn(nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
     public Meta(){
     }
 
-    public Meta(BigDecimal valorMeta, BigDecimal valorInvestido, String urlImg, String descricao, Usuario usuario) {
+    public Meta(Long id, BigDecimal valorMeta, String descricao, String urlImg, Usuario usuario) {
         this.valorMeta = valorMeta;
-        this.valorInvestido = valorInvestido;
+        this.valorInvestido = BigDecimal.ZERO;
         this.urlImg = urlImg;
         this.descricao = descricao;
         this.usuario = usuario;

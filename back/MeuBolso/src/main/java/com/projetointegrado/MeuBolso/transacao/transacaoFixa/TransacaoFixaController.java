@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
 
 import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
+import com.projetointegrado.MeuBolso.transacao.TransacaoController;
 import com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto.TransacaoFixaDTO;
 import com.projetointegrado.MeuBolso.transacao.transacaoFixa.dto.TransacaoFixaSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
@@ -54,4 +55,10 @@ public class TransacaoFixaController {
         return transacaoFixaService.update(userId, id, dto);
     }
 
+    @DeleteMapping("/{id}")
+    public TransacaoFixaDTO delete (@PathVariable Long id){
+        String userId = usuarioService.getUsuarioLogadoId();
+
+        return transacaoFixaService.delete(userId, id);
+    }
 }

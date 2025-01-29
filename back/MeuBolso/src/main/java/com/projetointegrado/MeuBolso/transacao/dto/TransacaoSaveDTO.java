@@ -8,7 +8,7 @@ import com.projetointegrado.MeuBolso.transacao.exceptions.TipoTransacaoNaoIdenti
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class TransacaoSaveDTO {
 
@@ -16,8 +16,7 @@ public class TransacaoSaveDTO {
     @DecimalMin(value = "0.01", message = "O valor da transação deve ser no mínimo 0.01")
     private BigDecimal valor;
 
-    @NotNull(message = "data não pose der nulo, deve ser do tipo Date. ex: \"2025-12-25\"")
-    private Date data;
+    private LocalDate data;
 
     @NotNull(message = "O tipo de transação é obrigatório. tipos permitidos: RECEITA ou DESPESA")
     @ValidEnum(value = TipoTransacao.class, message = "tipos permitidos são DESPESA e RECEITA")
@@ -41,6 +40,15 @@ public class TransacaoSaveDTO {
     @NotBlank(message = descricaoDefalutMessage)
     private String descricao;
 
+    public TransacaoSaveDTO(BigDecimal valor, LocalDate data, String tipoTransacao, Long categoriaId, Long contaId, String descricao) {
+        this.valor = valor;
+        this.data = data;
+        this.tipoTransacao = tipoTransacao;
+        this.categoriaId = categoriaId;
+        this.contaId = contaId;
+        this.descricao = descricao;
+    }
+
     public BigDecimal getValor() {
         return valor;
     }
@@ -49,14 +57,14 @@ public class TransacaoSaveDTO {
         this.valor = valor;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         if (data == null) {
             throw new TipoTransacaoNaoIdentificadoException(); //criar exceção depois
         }
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
@@ -98,5 +106,21 @@ public class TransacaoSaveDTO {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    @Override
+    public String toString() {
+        return "TransacaoSaveDTO{" +
+                "valor=" + valor +
+                ", data=" + data +
+                ", tipoTransacao='" + tipoTransacao + '\'' +
+                ", categoriaIdDefaultMessage='" + categoriaIdDefaultMessage + '\'' +
+                ", categoriaId=" + categoriaId +
+                ", contaIdDefaultMessage='" + contaIdDefaultMessage + '\'' +
+                ", contaId=" + contaId +
+                ", comentario='" + comentario + '\'' +
+                ", descricaoDefalutMessage='" + descricaoDefalutMessage + '\'' +
+                ", descricao='" + descricao + '\'' +
+                '}';
     }
 }
