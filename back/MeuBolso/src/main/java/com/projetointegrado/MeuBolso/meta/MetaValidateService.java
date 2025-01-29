@@ -14,8 +14,7 @@ public class MetaValidateService {
     private MetaRepository metaRepository;
 
     public void validate(Long id, String userId, EntidadeNaoEncontradaException entidadeNaoEncontrada, AcessoNegadoException acessoNegadoException) {
-        Meta meta = metaRepository.findById(id)
-                .orElseThrow(() -> entidadeNaoEncontrada);
+        Meta meta = metaRepository.findById(id).orElseThrow(() -> entidadeNaoEncontrada);
         if (!meta.getUsuario().getId().equals(userId))
             throw  acessoNegadoException;
     }
@@ -29,12 +28,10 @@ public class MetaValidateService {
         return meta;
     }
 
-    public void validateDescricaoUnica(String descricao, String usuarioId, Long id, DescricaoUnicaException descricaoUnicaException) {
-        Optional<Meta> metaExistente = metaRepository.findByDescricaoAndUsuarioId(descricao, usuarioId);
-        if (metaExistente.isPresent()) {
-            if (id == null || !metaExistente.get().getId().equals(id)) {
-                throw descricaoUnicaException;
-            }
+    public void validateDescricaoUnica(String descricao, String usuarioId, Long idMeta, DescricaoUnicaException descricaoUnicaException) {
+        Optional<Meta> metaExistente = metaRepository.findByDescricao(descricao);
+        if (metaExistente.isPresent() && (idMeta == null || !metaExistente.get().getId().equals(idMeta)) && metaExistente.get().getUsuario().getId().equals(usuarioId)) {
+            throw descricaoUnicaException;
         }
     }
 }
