@@ -1,5 +1,7 @@
 package com.projetointegrado.MeuBolso.repetirTransacao;
 
+import com.projetointegrado.MeuBolso.repetirTransacao.GerarTransacoesFixas.GerarTransacoesFactory;
+import com.projetointegrado.MeuBolso.repetirTransacao.GerarTransacoesFixas.IGerarTransacoesStrategy;
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFactory;
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStrategy;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
@@ -26,35 +28,22 @@ public class TransacaoRepeticaoService {
         System.out.println("TransacaoRecorrenteService -> gerarTransacoes");
         List<Transacao> transacoesNormais = transacaoRepository.findAllBeforeDate(data, userId);
 
-        List<TransacaoRecorrente> transacoesFixas = transacaoRecorrenteRepository.findAllByUsuario(userId);
-        if (transacoesNormais.isEmpty() || transacoesFixas.isEmpty()) return null;
+        List<TransacaoRecorrente> transacoesRecorrentes = transacaoRecorrenteRepository.findAllByUsuario(userId);
+        if (transacoesNormais.isEmpty() || transacoesRecorrentes.isEmpty()) return null;
 
-        for (TransacaoRecorrente transacaoRecorrente : transacoesFixas) {
-            gerarTransacoesFixas(transacaoRecorrente, data);
+        try {
+            for (TransacaoRecorrente transacaoRecorrente : transacoesRecorrentes) {
+                IGerarTransacoesStrategy gerarTransacoesStrategy;
+                if (transacaoRecorrente.getDataFinal() == null)
+                    gerarTransacoesStrategy = GerarTransacoesFactory.gerarTransacoesStrategy(TipoRepeticao.FIXO);
+                else
+                    gerarTransacoesStrategy = GerarTransacoesFactory.gerarTransacoesStrategy(TipoRepeticao.PARCELAMENTO);
+                gerarTransacoesStrategy.gerarTransacoes(transacaoRecorrente, data);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
         return transacoesNormais;
     }
-    private void gerarTransacoesFixas(TransacaoRecorrente transacaoRecorrente, LocalDate dataBusca) {
-        System.out.println("TransacaoRecorrenteService -> gerarTransacoesFixas");
-        IAvancoDataStrategy AvancoStrategy = AvancoDataFactory.getStrategy(transacaoRecorrente.getPeriodicidade());
-        LocalDate dataUltimaExecucao;
-        if(transacaoRecorrente.getUltimaExecucao() != null){
-            dataUltimaExecucao = AvancoStrategy.avancarData(transacaoRecorrente.getUltimaExecucao(), transacaoRecorrente.getDataCadastro(), 1);
-        }else{
-            dataUltimaExecucao = transacaoRecorrente.getDataCadastro();
-        }
-
-        while (!dataUltimaExecucao.isAfter(dataBusca)) {
-            Transacao novaTransacao = new Transacao(transacaoRecorrente, dataUltimaExecucao);
-            transacaoRepository.save(novaTransacao);
-            transacaoRecorrente.setUltimaExecucao(dataUltimaExecucao);
-
-            dataUltimaExecucao = AvancoStrategy.avancarData(dataUltimaExecucao, transacaoRecorrente.getDataCadastro(), 1);
-        }
-        System.out.println("TransacaoRecorrenteService -> gerarTransacoesFixas -> ultimaExecucao = " + transacaoRecorrente.getUltimaExecucao());
-        transacaoRecorrenteRepository.save(transacaoRecorrente);
-    }
-
-
 }
