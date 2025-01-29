@@ -1,5 +1,6 @@
+/* ModalTipoTransacao */
 .modalOverlay {
-    position: fixed; 
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
@@ -7,9 +8,10 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    z-index: 1000; 
+    z-index: 10; 
 }
-.modalContent {
+  
+  .modalContent {
     position: absolute;
     background-color: #fff;
     border-radius: 8px;
@@ -21,9 +23,9 @@
     right: 180px;
     top: 263px;
     max-width: 12vw;
-}
-
-
+    z-index: 20; 
+  }
+  
 .header {
     display: flex;   
     justify-content: flex-end;
