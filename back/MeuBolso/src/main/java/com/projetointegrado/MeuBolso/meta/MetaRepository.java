@@ -10,6 +10,6 @@ public interface MetaRepository extends JpaRepository<Meta, Long> {
     @Query(nativeQuery = true, value = "select * from meta where usuario_id = :idUsuario")
     public List<Meta> findAllByUsuario(String idUsuario);
 
-//    @Query
-    Optional<Meta> findByDescricaoAndUsuarioId(String descricao, String usuarioId);
+    @Query(nativeQuery = true, value = "select * from meta where LOWER(descricao) = LOWER(:descricao)")
+    Optional<Meta> findByDescricao(String descricao);
 }

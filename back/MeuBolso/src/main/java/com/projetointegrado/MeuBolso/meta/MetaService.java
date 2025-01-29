@@ -52,6 +52,9 @@ public class MetaService implements IMetaService {
 
     @Transactional
     public MetaDTO update(String usuarioId, Long id, MetaPostDTO metaDTO) {
+        metaValidateService.validate(id, usuarioId,
+                new EntidadeNaoEncontradaException("{id}", "meta nao encontrado a partir do id"),
+                new AcessoNegadoException());
         Meta meta = saveAndValidate(usuarioId, id, metaDTO);
         return new MetaDTO(meta);
     }
@@ -65,20 +68,29 @@ public class MetaService implements IMetaService {
         return new MetaDTO(meta);
     }
 
+
     private Meta saveAndValidate(String usuarioId, Long id, MetaPostDTO metaDTO) {
-        Usuario usuario = usuarioValidateService.validateAndGet(usuarioId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
-        System.out.println("MetaService -> saveAndValidate : chegou ao fim das checagens");
+        Usuario usuario = usuarioValidateService.validateAndGet(usuarioId,
+                new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
+
         metaValidateService.validateDescricaoUnica(metaDTO.getDescricao(), usuarioId, id, new DescricaoUnicaException());
 
-        Meta meta = new Meta(id, metaDTO.getValorMeta(), metaDTO.getDescricao(), metaDTO.getUrlImg(), usuario);
-        System.out.println(meta);
+        Meta meta;
+        if (id != null) {
+            // Busca a meta existente para atualizar
+            meta = metaRepository.findById(id)
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("{id}", "Meta não encontrada para atualização"));
 
-        try {
-            return metaRepository.save(meta);
-        } catch (Exception e) {
-            e.printStackTrace();
+            // Atualiza os campos da meta existente
+            meta.setValorMeta(metaDTO.getValorMeta());
+            meta.setDescricao(metaDTO.getDescricao());
+            meta.setUrlImg(metaDTO.getUrlImg());
+        } else {
+            // Cria nova meta se for um save
+            meta = new Meta(null, metaDTO.getValorMeta(), metaDTO.getDescricao(), metaDTO.getUrlImg(), usuario);
         }
 
-        return meta;
+        System.out.println(meta);
+        return metaRepository.save(meta);
     }
 }
