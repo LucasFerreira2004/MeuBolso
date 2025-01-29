@@ -57,7 +57,7 @@ public class TransacaoRecorrente {
     @Column(name = "qtd_repeticoes")
     private Integer qtdRepeticoes;
 
-    @OneToMany(mappedBy = "transacaoFixa", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "transacaoRecorrente", cascade = CascadeType.REMOVE)
     private List<Transacao> transacoes;
 
     public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario) {
