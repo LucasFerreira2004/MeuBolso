@@ -4,11 +4,11 @@ import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-despesas.module.css";
 
 interface ModalADespesasProps {
-  onClose: () => void; // Função para fechar o modal
+  onClose: () => void;
 }
 
 function ModalDespesas({ onClose }: ModalADespesasProps) {
-  const [valor, setValor] = useState<number>(0);
+  const [valor] = useState<number>(0);
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<string>("");
   const [conta, setConta] = useState<string>("");
@@ -33,10 +33,6 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
     } catch (error) {
       console.error("Erro ao adicionar transação:", error);
     }
-  };
-
-  const handleChangeValor = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValor(Number(e.target.value));
   };
 
   const handleChangeDescricao = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,40 +68,38 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
             <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
-        <div className={style.saldo}>
-          <label>Saldo:</label>
-          <input
-            type="number"
-            placeholder="R$ 0,00"
-            className={style.inputSaldo}
-            value={valor}
-            onChange={handleChangeValor}
-          />
-        </div>
+        <InputWithIcon
+          label="Saldo: "
+          type="number"
+          iconSrc="/assets/iconsModalDelete/money.svg"
+          placeholder="R$ 0,00"
+          value={descricao}
+          onChange={handleChangeDescricao}
+        />
         <InputWithIcon
           label="Descrição: "
-          iconSrc="/assets/iconsModal/icondescription.svg"
+          iconSrc="/assets/iconsModalDelete/descrip.svg"
           placeholder="Descrição"
           value={descricao}
           onChange={handleChangeDescricao}
         />
         <InputWithIcon
           label="Categoria: "
-          iconSrc="/assets/iconsModal/icontag.svg"
+          iconSrc="/assets/iconsModalDelete/hashtag.svg"
           placeholder="Categoria"
           value={categoria}
           onChange={handleChangeCategoria}
         />
         <InputWithIcon
           label="Conta: "
-          iconSrc="/assets/iconsModal/iconbankmodal.svg"
+          iconSrc="/assets/iconsModalDelete/bank.svg"
           placeholder="Conta"
           value={conta}
           onChange={handleChangeConta}
         />
         <InputWithIcon
           label="Data: "
-          iconSrc="/assets/iconsModal/iconcalendario.svg"
+          iconSrc="/assets/iconsModalDelete/date.svg"
           placeholder="Data"
           type="date"
           value={data}
@@ -113,7 +107,7 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
         />
         <InputWithIcon
           label="Comentário: "
-          iconSrc="/assets/iconsModal/icondescriptionplus.svg"
+          iconSrc="/assets/iconsModalDelete/descrip.svg"
           placeholder="Comentário"
           value={comentario || ""}
           onChange={handleChangeComentario}
