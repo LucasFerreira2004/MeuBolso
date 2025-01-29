@@ -42,38 +42,38 @@ public class TransacaoFixaService implements ITransacaoFixaService {
 
     @Transactional(readOnly = true)
     public TransacaoFixaDTO findById(String userId, Long id){
-        TransacaoFixa transacao = transacaoFixaValidateService.validateAndGet(id, userId,
-                new EntidadeNaoEncontradaException("/{id}", "TransacaoFixa nao encontrada"), new AcessoNegadoException());
+        TransacaoRecorrente transacao = transacaoFixaValidateService.validateAndGet(id, userId,
+                new EntidadeNaoEncontradaException("/{id}", "TransacaoRecorrente nao encontrada"), new AcessoNegadoException());
         return new TransacaoFixaDTO(transacao);
     }
 
     @Transactional
     public TransacaoFixaDTO save(String userId, TransacaoFixaSaveDTO dto){
-        TransacaoFixa transacaoFixa = saveAndValidate(userId, dto);
+        TransacaoRecorrente transacaoRecorrente = saveAndValidate(userId, dto);
 
-        return new TransacaoFixaDTO(transacaoFixa);
+        return new TransacaoFixaDTO(transacaoRecorrente);
     }
 
     @Transactional
     public TransacaoFixaDTO update(String userId, Long id, TransacaoFixaSaveDTO dto){
         if (transacaoFixaRepository.findById(id).isEmpty())
-            throw new EntidadeNaoEncontradaException("/{id}", "TransacaoFixa nao encontrada");
+            throw new EntidadeNaoEncontradaException("/{id}", "TransacaoRecorrente nao encontrada");
 
-        TransacaoFixa fixa = saveAndValidate(userId, dto);
+        TransacaoRecorrente fixa = saveAndValidate(userId, dto);
         return new TransacaoFixaDTO(fixa);
     }
 
     @Transactional
     public TransacaoFixaDTO delete(String userId, Long id) {
-        TransacaoFixa transacaoFixa = transacaoFixaValidateService.validateAndGet(id, userId,
-                new EntidadeNaoEncontradaException("/{id}", "TransacaoFixa nao encontrada"), new AcessoNegadoException());
-        TransacaoFixaDTO dto = new TransacaoFixaDTO(transacaoFixa);
-        transacaoFixaRepository.delete(transacaoFixa);
+        TransacaoRecorrente transacaoRecorrente = transacaoFixaValidateService.validateAndGet(id, userId,
+                new EntidadeNaoEncontradaException("/{id}", "TransacaoRecorrente nao encontrada"), new AcessoNegadoException());
+        TransacaoFixaDTO dto = new TransacaoFixaDTO(transacaoRecorrente);
+        transacaoFixaRepository.delete(transacaoRecorrente);
         return dto;
     }
 
 
-    private TransacaoFixa  saveAndValidate(String userId, TransacaoFixaSaveDTO dto) {
+    private TransacaoRecorrente saveAndValidate(String userId, TransacaoFixaSaveDTO dto) {
         Conta conta = contaValidateService.validateAndGet(dto.getContaId(), userId,
                 new EntidadeNaoEncontradaException("contaId: ", "Conta não encontrada"), new AcessoNegadoException());
 
@@ -82,9 +82,9 @@ public class TransacaoFixaService implements ITransacaoFixaService {
 
         Usuario usuario = usuarioValidateService.validateAndGet(userId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado"));
 
-        TransacaoFixa transacaoFixa = new TransacaoFixa(null, dto.getValor(), TipoTransacao.valueOf(dto.getTipoTransacao()), dto.getData(),
+        TransacaoRecorrente transacaoRecorrente = new TransacaoRecorrente(null, dto.getValor(), TipoTransacao.valueOf(dto.getTipoTransacao()), dto.getData(),
                 dto.getDescricao(), conta, categoria, Periodicidade.valueOf(dto.getPeriodicidade()), usuario);
 
-        return transacaoFixaRepository.save(transacaoFixa);
+        return transacaoFixaRepository.save(transacaoRecorrente);
     }
 }

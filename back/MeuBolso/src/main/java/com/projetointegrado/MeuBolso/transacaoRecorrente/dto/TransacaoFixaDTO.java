@@ -1,5 +1,5 @@
 package com.projetointegrado.MeuBolso.transacaoRecorrente.dto;
-import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoFixa;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,13 +12,13 @@ public class TransacaoFixaDTO {
     String descricao;
     Long contaId;
 
-    public TransacaoFixaDTO (TransacaoFixa transacaoFixa){
-        this.id = transacaoFixa.getId();
-        this.valor = transacaoFixa.getValor();
-        this.tipo = transacaoFixa.getTipo().name();
-        this.dataCadastro = transacaoFixa.getDataCadastro();
-        this.descricao = transacaoFixa.getDescricao();
-        this.contaId = transacaoFixa.getConta().getId();
+    public TransacaoFixaDTO (TransacaoRecorrente transacaoRecorrente){
+        this.id = transacaoRecorrente.getId();
+        this.valor = transacaoRecorrente.getValor();
+        this.tipo = transacaoRecorrente.getTipo().name();
+        this.dataCadastro = transacaoRecorrente.getDataCadastro();
+        this.descricao = transacaoRecorrente.getDescricao();
+        this.contaId = transacaoRecorrente.getConta().getId();
     }
 
     public Long getId() {

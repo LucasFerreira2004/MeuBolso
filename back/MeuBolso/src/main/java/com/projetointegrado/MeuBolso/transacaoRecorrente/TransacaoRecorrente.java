@@ -2,6 +2,8 @@ package com.projetointegrado.MeuBolso.transacaoRecorrente;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
+import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFactory;
+import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStrategy;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
@@ -12,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-public class TransacaoFixa {
+public class TransacaoRecorrente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -58,7 +60,7 @@ public class TransacaoFixa {
     @OneToMany(mappedBy = "transacaoFixa", cascade = CascadeType.REMOVE)
     private List<Transacao> transacoes;
 
-    public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario) {
+    public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario) {
         this.id = id;
         this.valor = valor;
         this.tipo = tipo;
@@ -71,7 +73,7 @@ public class TransacaoFixa {
         this.ultimaExecucao = null;
     }
 
-    public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario, Integer qtdRepeticoes) {
+    public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario, Integer qtdRepeticoes) {
         this.id = id;
         this.valor = valor;
         this.tipo = tipo;
@@ -83,9 +85,11 @@ public class TransacaoFixa {
         this.usuario = usuario;
         this.ultimaExecucao = null;
         this.qtdRepeticoes = qtdRepeticoes;
-        //this.dataFinal = ...; fazer receber o valor de retorno da função lá.
+        IAvancoDataStrategy avancoStrategy = AvancoDataFactory.getStrategy(this.periodicidade);
+        this.dataFinal = avancoStrategy.avancarData(this.dataCadastro, this.dataCadastro, this.qtdRepeticoes);
+
     }
-    public TransacaoFixa() {}
+    public TransacaoRecorrente() {}
 
     public List<Transacao> getTransacoes() {
         return transacoes;
@@ -173,5 +177,21 @@ public class TransacaoFixa {
 
     public void setUltimaExecucao(LocalDate ultimaExecucao) {
         this.ultimaExecucao = ultimaExecucao;
+    }
+
+    public LocalDate getDataFinal() {
+        return dataFinal;
+    }
+
+    public void setDataFinal(LocalDate dataFinal) {
+        this.dataFinal = dataFinal;
+    }
+
+    public Integer getQtdRepeticoes() {
+        return qtdRepeticoes;
+    }
+
+    public void setQtdRepeticoes(Integer qtdRepeticoes) {
+        this.qtdRepeticoes = qtdRepeticoes;
     }
 }

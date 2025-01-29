@@ -4,7 +4,7 @@ import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFact
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStrategy;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
-import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoFixa;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoFixaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,34 +26,34 @@ public class TransacaoRepeticaoService {
         System.out.println("TransacaoRepeticaoService -> gerarTransacoes");
         List<Transacao> transacoesNormais = transacaoRepository.findAllBeforeDate(data, userId);
 
-        List<TransacaoFixa> transacoesFixas = transacaoFixaRepository.findAllByUsuario(userId);
+        List<TransacaoRecorrente> transacoesFixas = transacaoFixaRepository.findAllByUsuario(userId);
         if (transacoesNormais.isEmpty() || transacoesFixas.isEmpty()) return null;
 
-        for (TransacaoFixa transacaoFixa : transacoesFixas) {
-            gerarTransacoesFixas(transacaoFixa, data);
+        for (TransacaoRecorrente transacaoRecorrente : transacoesFixas) {
+            gerarTransacoesFixas(transacaoRecorrente, data);
         }
 
         return transacoesNormais;
     }
-    private void gerarTransacoesFixas(TransacaoFixa transacaoFixa, LocalDate dataBusca) {
+    private void gerarTransacoesFixas(TransacaoRecorrente transacaoRecorrente, LocalDate dataBusca) {
         System.out.println("TransacaoRepeticaoService -> gerarTransacoesFixas");
-        IAvancoDataStrategy AvancoStrategy = AvancoDataFactory.getStrategy(transacaoFixa.getPeriodicidade());
+        IAvancoDataStrategy AvancoStrategy = AvancoDataFactory.getStrategy(transacaoRecorrente.getPeriodicidade());
         LocalDate dataUltimaExecucao;
-        if(transacaoFixa.getUltimaExecucao() != null){
-            dataUltimaExecucao = AvancoStrategy.avancarData(transacaoFixa.getUltimaExecucao(), transacaoFixa.getDataCadastro(), 1);
+        if(transacaoRecorrente.getUltimaExecucao() != null){
+            dataUltimaExecucao = AvancoStrategy.avancarData(transacaoRecorrente.getUltimaExecucao(), transacaoRecorrente.getDataCadastro(), 1);
         }else{
-            dataUltimaExecucao = transacaoFixa.getDataCadastro();
+            dataUltimaExecucao = transacaoRecorrente.getDataCadastro();
         }
 
         while (!dataUltimaExecucao.isAfter(dataBusca)) {
-            Transacao novaTransacao = new Transacao(transacaoFixa, dataUltimaExecucao);
+            Transacao novaTransacao = new Transacao(transacaoRecorrente, dataUltimaExecucao);
             transacaoRepository.save(novaTransacao);
-            transacaoFixa.setUltimaExecucao(dataUltimaExecucao);
+            transacaoRecorrente.setUltimaExecucao(dataUltimaExecucao);
 
-            dataUltimaExecucao = AvancoStrategy.avancarData(dataUltimaExecucao, transacaoFixa.getDataCadastro(), 1);
+            dataUltimaExecucao = AvancoStrategy.avancarData(dataUltimaExecucao, transacaoRecorrente.getDataCadastro(), 1);
         }
-        System.out.println("TransacaoRepeticaoService -> gerarTransacoesFixas -> ultimaExecucao = " + transacaoFixa.getUltimaExecucao());
-        transacaoFixaRepository.save(transacaoFixa);
+        System.out.println("TransacaoRepeticaoService -> gerarTransacoesFixas -> ultimaExecucao = " + transacaoRecorrente.getUltimaExecucao());
+        transacaoFixaRepository.save(transacaoRecorrente);
     }
 
 
