@@ -1,6 +1,5 @@
-package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
+package com.projetointegrado.MeuBolso.transacaoFixa;
 
-import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoRepeticaoExecutor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

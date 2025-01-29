@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
+package com.projetointegrado.MeuBolso.transacaoFixa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

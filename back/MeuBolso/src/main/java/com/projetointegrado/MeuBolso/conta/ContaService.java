@@ -16,7 +16,6 @@ import com.projetointegrado.MeuBolso.transacao.ITransacaoService;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
-import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoRepeticaoService;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
