@@ -1,15 +1,15 @@
 package com.projetointegrado.MeuBolso.repetirTransacao;
 
+import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFactory;
+import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStrategy;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
-import com.projetointegrado.MeuBolso.transacaoRecorrente.Periodicidade;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoFixa;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoFixaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @Service
@@ -37,46 +37,24 @@ public class TransacaoRepeticaoService {
     }
     private void gerarTransacoesFixas(TransacaoFixa transacaoFixa, LocalDate dataBusca) {
         System.out.println("TransacaoRepeticaoService -> gerarTransacoesFixas");
-        LocalDate dataUltimaExecucao = transacaoFixa.getUltimaExecucao() != null
-                ? avancarData(transacaoFixa.getUltimaExecucao(), transacaoFixa.getDataCadastro(), transacaoFixa.getPeriodicidade())
-                : transacaoFixa.getDataCadastro();
+        IAvancoDataStrategy AvancoStrategy = AvancoDataFactory.getStrategy(transacaoFixa.getPeriodicidade());
+        LocalDate dataUltimaExecucao;
+        if(transacaoFixa.getUltimaExecucao() != null){
+            dataUltimaExecucao = AvancoStrategy.avancarData(transacaoFixa.getUltimaExecucao(), transacaoFixa.getDataCadastro(), 1);
+        }else{
+            dataUltimaExecucao = transacaoFixa.getDataCadastro();
+        }
 
         while (!dataUltimaExecucao.isAfter(dataBusca)) {
             Transacao novaTransacao = new Transacao(transacaoFixa, dataUltimaExecucao);
             transacaoRepository.save(novaTransacao);
             transacaoFixa.setUltimaExecucao(dataUltimaExecucao);
 
-            dataUltimaExecucao = avancarData(dataUltimaExecucao, transacaoFixa.getDataCadastro(),transacaoFixa.getPeriodicidade());
+            dataUltimaExecucao = AvancoStrategy.avancarData(dataUltimaExecucao, transacaoFixa.getDataCadastro(), 1);
         }
         System.out.println("TransacaoRepeticaoService -> gerarTransacoesFixas -> ultimaExecucao = " + transacaoFixa.getUltimaExecucao());
         transacaoFixaRepository.save(transacaoFixa);
     }
 
-    private LocalDate avancarData(LocalDate dataAtual, LocalDate dataCadastro, Periodicidade periodicidade) {
-        System.out.println("TransacaoRepeticaoService -> avancarData");
-        switch (periodicidade) {
-            case DIARIO:
-                return dataAtual.plusDays(1);
-            case SEMANAL:
-                return dataAtual.plusWeeks(1);
-            case MENSAL:
-                try {
-                    LocalDate novaData = dataAtual.plusMonths(1); // Avança um mês
-                    int ultimoDiaDoMesAtual = novaData.lengthOfMonth();
-                    System.out.println(ultimoDiaDoMesAtual);
 
-                    if (dataCadastro.getDayOfMonth() > ultimoDiaDoMesAtual) {
-                        novaData = novaData.with(TemporalAdjusters.lastDayOfMonth());
-                    } else {
-                        novaData = novaData.withDayOfMonth(dataCadastro.getDayOfMonth());
-                    }
-                    return novaData;
-                } catch(Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-            default:
-                throw new IllegalArgumentException("Periodicidade desconhecida");
-        }
-    }
 }

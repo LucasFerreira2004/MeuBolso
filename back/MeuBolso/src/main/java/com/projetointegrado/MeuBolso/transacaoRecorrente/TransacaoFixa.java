@@ -71,6 +71,20 @@ public class TransacaoFixa {
         this.ultimaExecucao = null;
     }
 
+    public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario, Integer qtdRepeticoes) {
+        this.id = id;
+        this.valor = valor;
+        this.tipo = tipo;
+        this.dataCadastro = dataCadastro;
+        this.descricao = descricao;
+        this.conta = conta;
+        this.categoria = categoria;
+        this.periodicidade = periodicidade;
+        this.usuario = usuario;
+        this.ultimaExecucao = null;
+        this.qtdRepeticoes = qtdRepeticoes;
+        //this.dataFinal = ...; fazer receber o valor de retorno da função lá.
+    }
     public TransacaoFixa() {}
 
     public List<Transacao> getTransacoes() {
