@@ -23,7 +23,7 @@ public class TransacaoRepeticaoService {
 
     public List<Transacao> gerarTransacoes(LocalDate data, String userId) {
         // Obtém todas as transações normais no período
-        System.out.println("TransacaoRepeticaoService -> gerarTransacoes");
+        System.out.println("TransacaoRecorrenteService -> gerarTransacoes");
         List<Transacao> transacoesNormais = transacaoRepository.findAllBeforeDate(data, userId);
 
         List<TransacaoRecorrente> transacoesFixas = transacaoRecorrenteRepository.findAllByUsuario(userId);
@@ -36,7 +36,7 @@ public class TransacaoRepeticaoService {
         return transacoesNormais;
     }
     private void gerarTransacoesFixas(TransacaoRecorrente transacaoRecorrente, LocalDate dataBusca) {
-        System.out.println("TransacaoRepeticaoService -> gerarTransacoesFixas");
+        System.out.println("TransacaoRecorrenteService -> gerarTransacoesFixas");
         IAvancoDataStrategy AvancoStrategy = AvancoDataFactory.getStrategy(transacaoRecorrente.getPeriodicidade());
         LocalDate dataUltimaExecucao;
         if(transacaoRecorrente.getUltimaExecucao() != null){
@@ -52,7 +52,7 @@ public class TransacaoRepeticaoService {
 
             dataUltimaExecucao = AvancoStrategy.avancarData(dataUltimaExecucao, transacaoRecorrente.getDataCadastro(), 1);
         }
-        System.out.println("TransacaoRepeticaoService -> gerarTransacoesFixas -> ultimaExecucao = " + transacaoRecorrente.getUltimaExecucao());
+        System.out.println("TransacaoRecorrenteService -> gerarTransacoesFixas -> ultimaExecucao = " + transacaoRecorrente.getUltimaExecucao());
         transacaoRecorrenteRepository.save(transacaoRecorrente);
     }
 

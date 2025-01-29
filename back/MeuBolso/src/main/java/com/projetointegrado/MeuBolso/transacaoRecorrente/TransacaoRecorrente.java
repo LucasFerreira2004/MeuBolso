@@ -87,7 +87,6 @@ public class TransacaoRecorrente {
         this.qtdRepeticoes = qtdRepeticoes;
         IAvancoDataStrategy avancoStrategy = AvancoDataFactory.getStrategy(this.periodicidade);
         this.dataFinal = avancoStrategy.avancarData(this.dataCadastro, this.dataCadastro, this.qtdRepeticoes);
-
     }
     public TransacaoRecorrente() {}
 

@@ -3,7 +3,7 @@ package com.projetointegrado.MeuBolso.transacaoRecorrente.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public interface ITransacaoRepeticaoDTO{
+public interface ITransacaoRecorrenteDTO {
         BigDecimal valor();
         String tipoTransacao();
         LocalDate data();
@@ -11,4 +11,5 @@ public interface ITransacaoRepeticaoDTO{
         Long categoriaId();
         String descricao();
         String periodicidade();
+        Integer qtdRepeticao();
 }
