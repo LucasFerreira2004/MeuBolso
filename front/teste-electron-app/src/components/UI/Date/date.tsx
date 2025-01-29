@@ -56,18 +56,28 @@ const DatePicker: React.FC<DateProps> = ({ onMonthChange, onYearChange }) => {
 
   return (
     <div className={style.dates}>
-      <button onClick={goToPreviousMonth}>
-        <img src="/assets/iconsTransacoes/arrowL.svg" alt="Arrow Left" />
+      <button onClick={goToPreviousMonth} className={style.botao}>
+        <img src="/assets/iconsTransacoes/arrowL.svg" alt="Arrow Left" className={style.icone} />
       </button>
 
-      <select value={month} onChange={handleMonthChange} className={style.selecionarMes}>
+      <select 
+        value={month} 
+        onChange={handleMonthChange} 
+        className={style.selecionarMes}
+      >
         <option value="">Mês</option>
         {months.map((month, index) => (
-          <option key={index} value={(index + 1).toString().padStart(2, '0')}>{month}</option>
+          <option key={index} value={(index + 1).toString().padStart(2, '0')}>
+            {month}
+          </option>
         ))}
       </select>
 
-      <select value={year} onChange={handleYearChange} className={style.selecionarAno}>
+      <select 
+        value={year} 
+        onChange={handleYearChange} 
+        className={style.selecionarAno}
+      >
         <option value="">Ano</option>
         {[...Array(5)].map((_, index) => {
           const nextYear = currentYear + index;
@@ -75,8 +85,8 @@ const DatePicker: React.FC<DateProps> = ({ onMonthChange, onYearChange }) => {
         })}
       </select>
 
-      <button onClick={goToNextMonth}>
-        <img src="/assets/iconsTransacoes/arrowR.svg" alt="Arrow Right" />
+      <button onClick={goToNextMonth} className={style.botao}>
+        <img src="/assets/iconsTransacoes/arrowR.svg" alt="Arrow Right" className={style.icone} />
       </button>
     </div>
   );

@@ -1,47 +1,49 @@
 .dates {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px;
-    background-color: #f4f7fb;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  button {
-    background: transparent;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-  
-  button:hover {
-    transform: scale(1.1);
-  }
-  
-  button img {
-    width: 20px;
-    height: 20px;
-  }
-  
-  select {
-    padding: 8px 12px;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    cursor: pointer;
-    background-color: white;
-    transition: all 0.3s ease;
-  }
-  
-  select:focus {
-    outline: none;
-    border-color: #4f84e5;
-  }
-  
-  select option {
-    font-size: 14px;
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f4f7fb;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.botao {
+  background: transparent;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.botao:hover {
+  transform: scale(1.1);
+}
+
+.icone {
+  width: 20px; 
+  height: 20px;
+}
+
+.selecionarMes,
+.selecionarAno {
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.selecionarMes:focus,
+.selecionarAno:focus {
+  outline: none;
+  border-color: #4f84e5;
+}
+
+.selecionarMes option,
+.selecionarAno option {
+  font-size: 14px;
+}
