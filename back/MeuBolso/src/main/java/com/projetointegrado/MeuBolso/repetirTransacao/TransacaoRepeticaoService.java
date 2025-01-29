@@ -23,6 +23,9 @@ public class TransacaoRepeticaoService {
     @Autowired
     private TransacaoRecorrenteRepository transacaoRecorrenteRepository;
 
+    @Autowired
+    private GerarTransacoesFactory gerarTransacoesFactory;
+
     public List<Transacao> gerarTransacoes(LocalDate data, String userId) {
         // Obtém todas as transações normais no período
         System.out.println("TransacaoRecorrenteService -> gerarTransacoes");
@@ -34,10 +37,11 @@ public class TransacaoRepeticaoService {
         try {
             for (TransacaoRecorrente transacaoRecorrente : transacoesRecorrentes) {
                 IGerarTransacoesStrategy gerarTransacoesStrategy;
-                if (transacaoRecorrente.getDataFinal() == null)
-                    gerarTransacoesStrategy = GerarTransacoesFactory.gerarTransacoesStrategy(TipoRepeticao.FIXO);
-                else
-                    gerarTransacoesStrategy = GerarTransacoesFactory.gerarTransacoesStrategy(TipoRepeticao.PARCELAMENTO);
+                if (transacaoRecorrente.getDataFinal() == null) {
+                    gerarTransacoesStrategy = gerarTransacoesFactory.gerarTransacoesStrategy(TipoRepeticao.FIXO);
+                }else{
+                    gerarTransacoesStrategy = gerarTransacoesFactory.gerarTransacoesStrategy(TipoRepeticao.PARCELAMENTO);
+                }
                 gerarTransacoesStrategy.gerarTransacoes(transacaoRecorrente, data);
             }
         }catch (Exception e) {
