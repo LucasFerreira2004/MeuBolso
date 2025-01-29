@@ -1,7 +1,7 @@
-package com.projetointegrado.MeuBolso.transacaoFixa;
+package com.projetointegrado.MeuBolso.transacaoRecorrente;
 
-import com.projetointegrado.MeuBolso.transacaoFixa.dto.TransacaoFixaDTO;
-import com.projetointegrado.MeuBolso.transacaoFixa.dto.TransacaoFixaSaveDTO;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoFixaDTO;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoFixaSaveDTO;
 
 import java.util.List;
 

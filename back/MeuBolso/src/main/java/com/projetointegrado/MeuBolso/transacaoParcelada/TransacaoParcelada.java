@@ -4,7 +4,7 @@ import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
-import com.projetointegrado.MeuBolso.transacaoFixa.Periodicidade;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.Periodicidade;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 
@@ -71,6 +71,12 @@ public class TransacaoParcelada {
 
     public TransacaoParcelada() {}
 
+
+    private LocalDate calcularDataFinal(){
+        return null;
+    }
+
+    //getters e setters
     public Long getId() {
         return id;
     }

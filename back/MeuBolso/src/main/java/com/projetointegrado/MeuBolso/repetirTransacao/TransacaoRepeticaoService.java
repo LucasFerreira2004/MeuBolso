@@ -1,7 +1,10 @@
-package com.projetointegrado.MeuBolso.transacaoFixa;
+package com.projetointegrado.MeuBolso.repetirTransacao;
 
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.Periodicidade;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoFixa;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoFixaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +52,7 @@ public class TransacaoRepeticaoService {
         transacaoFixaRepository.save(transacaoFixa);
     }
 
-    private LocalDate avancarData(LocalDate dataAtual, LocalDate dataCadastro,Periodicidade periodicidade) {
+    private LocalDate avancarData(LocalDate dataAtual, LocalDate dataCadastro, Periodicidade periodicidade) {
         System.out.println("TransacaoRepeticaoService -> avancarData");
         switch (periodicidade) {
             case DIARIO:
