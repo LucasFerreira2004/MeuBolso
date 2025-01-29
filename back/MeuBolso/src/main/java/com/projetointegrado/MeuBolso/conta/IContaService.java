@@ -9,7 +9,7 @@ public interface IContaService {
     public ContaDTO findById(String idUsuario, Long id, LocalDate data);
     public List<ContaDTO> findAll(String idUsuario, LocalDate data);
     public List<ContaMinDTO> findAllMin(String idUsuario, LocalDate data);
-    public SaldoTotalDTO findoSaldo(String idUsuario, LocalDate data);
+    public SaldoTotalDTO findSaldo(String idUsuario, LocalDate data);
 
     public ContaDTO save(String userID, ContaPostDTO dto);
     public ContaDTO update(Long id, ContaPutDTO dto, String userId);
