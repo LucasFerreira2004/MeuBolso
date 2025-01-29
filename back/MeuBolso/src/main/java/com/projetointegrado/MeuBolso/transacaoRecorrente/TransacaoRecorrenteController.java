@@ -4,6 +4,7 @@ import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosExcept
 import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoFixaDTO;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.ITransacaoRecorrenteDTO;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoFixaSaveDTO;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoParceladaSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RestController()
 @RequestMapping(value = "/transacoesRecorrentes")
-public class TransacaoFixaController {
+public class TransacaoRecorrenteController {
     @Autowired
     private ITransacaoRecorrenteService transacaoRecorrenteService;
 
@@ -45,8 +46,29 @@ public class TransacaoFixaController {
         return transacaoRecorrenteService.save(userId, dto);
     }
 
-    @PutMapping("/{id}")
-    public TransacaoFixaDTO update (@PathVariable Long id, @Valid @RequestBody ITransacaoRecorrenteDTO dto, BindingResult bindingResult){
+    @PostMapping("/parceladas")
+    public TransacaoFixaDTO save (@Valid @RequestBody TransacaoParceladaSaveDTO dto, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
+        String userId = usuarioService.getUsuarioLogadoId();
+
+        return transacaoRecorrenteService.save(userId, dto);
+    }
+
+
+    @PutMapping("/fixas/{id}")
+    public TransacaoFixaDTO update (@PathVariable Long id, @Valid @RequestBody TransacaoFixaSaveDTO dto, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
+        String userId = usuarioService.getUsuarioLogadoId();
+
+        return transacaoRecorrenteService.update(userId, id, dto);
+    }
+
+    @PutMapping("/parceladas/{id}")
+    public TransacaoFixaDTO update (@PathVariable Long id, @Valid @RequestBody TransacaoParceladaSaveDTO dto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             throw new ValoresNaoPermitidosException(bindingResult);
         }

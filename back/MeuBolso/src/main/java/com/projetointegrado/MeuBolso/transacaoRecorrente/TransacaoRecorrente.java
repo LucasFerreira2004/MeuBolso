@@ -85,6 +85,7 @@ public class TransacaoRecorrente {
         this.usuario = usuario;
         this.ultimaExecucao = null;
         this.qtdRepeticoes = qtdRepeticoes;
+        if (qtdRepeticoes == null) return;
         IAvancoDataStrategy avancoStrategy = AvancoDataFactory.getStrategy(this.periodicidade);
         this.dataFinal = avancoStrategy.avancarData(this.dataCadastro, this.dataCadastro, this.qtdRepeticoes);
     }
