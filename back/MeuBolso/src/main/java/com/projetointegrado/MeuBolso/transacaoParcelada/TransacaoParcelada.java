@@ -66,7 +66,104 @@ public class TransacaoParcelada {
         this.categoria = categoria;
         this.usuario = usuario;
         this.periodicidade = periodicidade;
+        this.ultimaExecucao = null;
     }
 
     public TransacaoParcelada() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public TipoTransacao getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoTransacao tipo) {
+        this.tipo = tipo;
+    }
+
+    public LocalDate getDataInicial() {
+        return dataInicial;
+    }
+
+    public void setDataInicial(LocalDate dataInicial) {
+        this.dataInicial = dataInicial;
+    }
+
+    public LocalDate getDataFinal() {
+        return dataFinal;
+    }
+
+    public void setDataFinal(LocalDate dataFinal) {
+        this.dataFinal = dataFinal;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Periodicidade getPeriodicidade() {
+        return periodicidade;
+    }
+
+    public void setPeriodicidade(Periodicidade periodicidade) {
+        this.periodicidade = periodicidade;
+    }
+
+    public LocalDate getUltimaExecucao() {
+        return ultimaExecucao;
+    }
+
+    public void setUltimaExecucao(LocalDate ultimaExecucao) {
+        this.ultimaExecucao = ultimaExecucao;
+    }
+
+    public List<Transacao> getTransacoes() {
+        return transacoes;
+    }
+
+    public void setTransacoes(List<Transacao> transacoes) {
+        this.transacoes = transacoes;
+    }
 }
