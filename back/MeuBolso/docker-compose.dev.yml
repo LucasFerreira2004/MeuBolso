@@ -13,19 +13,20 @@ services:
     container_name: mb-api
     environment:
       # H2 Connection
-      SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
-      SPRING_DATASOURCE_USERNAME: sa
-      SPRING_DATASOURCE_PASSWORD:
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
 
       # H2 Client
-      SPRING_H2_CONSOLE_ENABLED: 'true'
-      SPRING_H2_CONSOLE_PATH: /h2-console
+      - SPRING_H2_CONSOLE_ENABLED=${SPRING_H2_CONSOLE_ENABLED}
+      - SPRING_H2_CONSOLE_PATH=${SPRING_H2_CONSOLE_PATH}
 
       # Show SQL
-      SPRING_JPA_SHOW_SQL: 'true'
-      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: 'true'
+      - SPRING_JPA_SHOW_SQL=${SPRING_JPA_SHOW_SQL}
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=${SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL}
     networks:
       - dev-network
+
 # ======================================================================================================================
 # REDE
 # ======================================================================================================================
