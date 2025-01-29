@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.transacaoRecorrente.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.projetointegrado.MeuBolso.globalConstraints.validEnum.ValidEnum;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.Periodicidade;
@@ -11,7 +12,7 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record TransacaoFixaSaveDTO (
+public record TransacaoFixaSaveDTO(
         @NotNull(message = "valor não pde ser nulo, deve ser do tipo BigDecimal. ex: 9.99")
         @DecimalMin(value = "0.01", message = "O valor da transação deve ser no mínimo 0.01")
         BigDecimal valor,
@@ -40,5 +41,9 @@ public record TransacaoFixaSaveDTO (
 
         @NotNull(message ="a periodicidade é obrigatória e deve ter o valor: DIARIO, SEMANAL ou MENSAL")
         @ValidEnum(value = Periodicidade.class, message = "tipos permitidos são DIARIO, SEMANAL ou MENSAL" )
-        String periodicidade
-) implements ITransacaoRepeticaoDTO{}
+        String periodicidade,
+
+        @JsonIgnore
+        Integer qtdRepeticao
+
+) implements ITransacaoRecorrenteDTO{}

@@ -8,7 +8,7 @@ import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoFixaDTO;
-import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoFixaSaveDTO;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.ITransacaoRecorrenteDTO;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @EnableScheduling
 @Service
-public class TransacaoFixaService implements ITransacaoFixaService {
+public class TransacaoRecorrenteService implements ITransacaoRecorrenteService {
     @Autowired
     private TransacaoRecorrenteRepository transacaoRecorrenteRepository;
 
@@ -48,14 +48,14 @@ public class TransacaoFixaService implements ITransacaoFixaService {
     }
 
     @Transactional
-    public TransacaoFixaDTO save(String userId, TransacaoFixaSaveDTO dto){
+    public TransacaoFixaDTO save(String userId, ITransacaoRecorrenteDTO dto){
         TransacaoRecorrente transacaoRecorrente = saveAndValidate(userId, dto);
 
         return new TransacaoFixaDTO(transacaoRecorrente);
     }
 
     @Transactional
-    public TransacaoFixaDTO update(String userId, Long id, TransacaoFixaSaveDTO dto){
+    public TransacaoFixaDTO update(String userId, Long id, ITransacaoRecorrenteDTO dto){
         if (transacaoRecorrenteRepository.findById(id).isEmpty())
             throw new EntidadeNaoEncontradaException("/{id}", "TransacaoRecorrente nao encontrada");
 
@@ -73,7 +73,7 @@ public class TransacaoFixaService implements ITransacaoFixaService {
     }
 
 
-    private TransacaoRecorrente saveAndValidate(String userId, TransacaoFixaSaveDTO dto) {
+    private TransacaoRecorrente saveAndValidate(String userId, ITransacaoRecorrenteDTO dto) {
         Conta conta = contaValidateService.validateAndGet(dto.contaId(), userId,
                 new EntidadeNaoEncontradaException("contaId: ", "Conta não encontrada"), new AcessoNegadoException());
 
@@ -83,7 +83,7 @@ public class TransacaoFixaService implements ITransacaoFixaService {
         Usuario usuario = usuarioValidateService.validateAndGet(userId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado"));
 
         TransacaoRecorrente transacaoRecorrente = new TransacaoRecorrente(null, dto.valor(), TipoTransacao.valueOf(dto.tipoTransacao()), dto.data(),
-                dto.descricao(), conta, categoria, Periodicidade.valueOf(dto.periodicidade()), usuario);
+                dto.descricao(), conta, categoria, Periodicidade.valueOf(dto.periodicidade()), usuario, dto.qtdRepeticao());
 
         return transacaoRecorrenteRepository.save(transacaoRecorrente);
     }

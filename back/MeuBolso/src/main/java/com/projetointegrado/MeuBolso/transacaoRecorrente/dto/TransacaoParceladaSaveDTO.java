@@ -8,7 +8,7 @@ import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record TransacaoParceladaDTO (
+public record TransacaoParceladaSaveDTO(
     @NotNull(message = "valor não pde ser nulo, deve ser do tipo BigDecimal. ex: 9.99")
     @DecimalMin(value = "0.01", message = "O valor da transação deve ser no mínimo 0.01")
     BigDecimal valor,
@@ -42,4 +42,4 @@ public record TransacaoParceladaDTO (
     @NotNull(message = "a quantidade de repetições não pode ser nula")
     @Min(value = 2, message = "a quantidade mínima de parcelas é 2")
     Integer qtdRepeticao
-    ) implements ITransacaoRepeticaoDTO{}
+    ) implements ITransacaoRecorrenteDTO {}
