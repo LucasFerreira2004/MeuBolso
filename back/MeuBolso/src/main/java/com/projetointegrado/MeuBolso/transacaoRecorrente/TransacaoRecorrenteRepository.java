@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TransacaoRecorrenteRepository extends JpaRepository<TransacaoRecorrente, Long> {
     @Query(nativeQuery = true, value = """
-        select * from transacao_fixa where usuario_id = :userId;
+        select * from TRANSACAO_RECORRENTE where usuario_id = :userId;
     """)
     public List<TransacaoRecorrente> findAllByUsuario(String userId);
 }
