@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import AddButton from "../../components/UI/AddButton/add-button";
 import Date from "../../components/UI/Date/date";
-import ModalAddTransacao from "../../components/ModalAddTransacao/modal-add-transacao";
 import style from "./transacoes.module.css";
 import CardTransacoes from "../../components/UI/CardTransacoes/card-transacoes";
+import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans";
 
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -152,11 +152,7 @@ function Transacoes() {
 
       {/* Renderização condicional do modal */}
       {isModalOpen && (
-        <div className={style.modalOverlay}>
-          <div className={style.modalContainer}>
-            <ModalAddTransacao onClose={toggleModal} />
-          </div>
-        </div>
+          <ModalTipoTrans onClose={toggleModal} />
       )}
     </div>
   );

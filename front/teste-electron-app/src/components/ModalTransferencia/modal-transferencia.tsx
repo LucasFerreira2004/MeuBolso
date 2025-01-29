@@ -3,7 +3,7 @@ import style from "./modal-transaferencia.module.css";
 
 function ModalTransferencia() {
   return (
-    <div className={style.containerModal}>
+    <div className={style.containerModalTrans}>
       <div className={style.headerModal}>
         <h1>Nova Transferência</h1>
         <img
