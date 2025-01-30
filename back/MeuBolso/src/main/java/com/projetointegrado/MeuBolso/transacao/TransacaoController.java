@@ -45,6 +45,14 @@ public class TransacaoController {
         return transacaoService.findSumDespesasInRangeByMonth(userLogadoId, data);
     }
 
+    @Operation(summary = "Retorna o somatório das receitas do inicio do mês até a data especificada")
+    @GetMapping("/somatorioReceitas")
+    public BigDecimal findSumReceitasInRangeByMonth(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
+        String userLogadoId = usuarioService.getUsuarioLogadoId();
+        return transacaoService.findSumReceitasInRangeByMonth(userLogadoId, data);
+    }
+
+
     @Operation(summary = "Permite cadastrar uma transacao")
     @PostMapping
     public TransacaoDTO save(@Valid @RequestBody TransacaoSaveDTO dto, BindingResult bindingResult) throws ValoresNaoPermitidosException {
