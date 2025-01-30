@@ -11,6 +11,7 @@ public interface OrcamentoRepository extends JpaRepository<Orcamento, Long> {
     @Query("SELECT o FROM Orcamento o WHERE o.usuario.id = :idUsuario")
     List<Orcamento> findAllByUsuario(String idUsuario);
 
-    @Query("SELECT o FROM Orcamento o WHERE o.categoria.id = :categoriaId")
-    Optional<Orcamento> findOrcamentoByCategoria(@Param("categoriaId") Long categoriaId);
+    @Query("SELECT o FROM Orcamento o WHERE o.categoria.id = :idCategoria AND o.usuario.id = :idUsuario")
+    Optional<Orcamento> findOrcamentoByCategoriaAndUsuario(@Param("idCategoria") Long idCategoria, @Param("idUsuario") String idUsuario);
+
 }

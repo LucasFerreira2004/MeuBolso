@@ -6,6 +6,8 @@ import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.orcamento.dto.OrcamentoDTO;
 import com.projetointegrado.MeuBolso.orcamento.dto.OrcamentoPostDTO;
+import com.projetointegrado.MeuBolso.orcamento.exception.CategoriaOrcamentoException;
+import com.projetointegrado.MeuBolso.orcamento.exception.OrcamentoDuplicadoException;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
 import jakarta.transaction.Transactional;
@@ -72,9 +74,13 @@ public class OrcamentoService implements IOrcamentoService{
         Categoria categoria = categoriaValidateService.validateAndGet(orcamentoDTO.getIdCategoria(), usuarioId,
                 new EntidadeNaoEncontradaException("{id}", "categoria nao encontrada"),
                 new AcessoNegadoException());
-        System.out.println("saveAndValidate: categoria -> construcao de orcamento");
+        System.out.println("saveAndValidate: categoria -> validacao unicidade");
 
         // Devo tratar aqui se existe outra orcamento com a mesma categoria, do mesmo usuario para o mesmo periodo
+        orcamentoValidateService.validateSamePeriod(categoria, usuario, orcamentoDTO.getMes(), orcamentoDTO.getAno(),
+                new OrcamentoDuplicadoException(),
+                new CategoriaOrcamentoException());
+        System.out.println("saveAndValidate: validacao unicidade -> construcao do orcamento");
 
         Orcamento orcamento;
         if (id != null) {
