@@ -36,7 +36,7 @@ public class CriarCategoriasIniciaisService {
             criarCategoriaExterna(usuario, "lazer", TipoCategoria.DESPESA, "57BEA1"),
             criarCategoriaExterna(usuario, "roupas", TipoCategoria.DESPESA, "5797BE"),
             criarCategoriaExterna(usuario, "saúde", TipoCategoria.DESPESA, "C92D78"),
-            criarCategoriaExterna(usuario, "pagamentos", TipoCategoria.DESPESA, "818181n")
+            criarCategoriaExterna(usuario, "pagamentos", TipoCategoria.DESPESA, "C19F13")
         );
         categoriaRepository.saveAll(categoriasPadrao);
     }
