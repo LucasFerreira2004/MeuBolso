@@ -8,7 +8,7 @@ interface TipoConta {
 
 interface DropDownTipoContaProps {
   toggleDropdownTipoConta: () => void;
-  setTipoConta: (id: number) => void;
+  setTipoConta: (id: number, nome: string) => void; // Alterado para enviar o nome também
 }
 
 const DropDownTipoConta = ({ toggleDropdownTipoConta, setTipoConta }: DropDownTipoContaProps) => {
@@ -38,9 +38,16 @@ const DropDownTipoConta = ({ toggleDropdownTipoConta, setTipoConta }: DropDownTi
     fetchTiposConta();
   }, []);
 
-  const handleSelectTipoConta = (id: number) => {
-    setTipoConta(id);
+  const handleSelectTipoConta = (id: number, nome: string) => {
+    setTipoConta(id, nome);  // Envia o ID e o nome para o componente pai
     toggleDropdownTipoConta();
+  };
+
+  const formatTipoConta = (tipo: string) => {
+    return tipo
+      .toLowerCase()  // transforma tudo para minúsculo
+      .replace(/_/g, ' ')  // substitui underscores por espaços
+      .replace(/\b\w/g, (char) => char.toUpperCase());  // deixa a primeira letra de cada palavra em maiúscula
   };
 
   return (
@@ -58,8 +65,8 @@ const DropDownTipoConta = ({ toggleDropdownTipoConta, setTipoConta }: DropDownTi
         {tiposConta.length > 0 ? (
           <ul className={style.dropdownList}>
             {tiposConta.map((tipo) => (
-              <li key={tipo.id} onClick={() => handleSelectTipoConta(tipo.id)}>
-                <a href="#">{tipo.tipoConta}</a>
+              <li key={tipo.id} onClick={() => handleSelectTipoConta(tipo.id, tipo.tipoConta)}>
+                <a href="#">{formatTipoConta(tipo.tipoConta)}</a>
               </li>
             ))}
           </ul>

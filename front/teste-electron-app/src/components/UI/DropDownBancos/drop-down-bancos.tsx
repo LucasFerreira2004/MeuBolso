@@ -11,7 +11,7 @@ interface Banco {
 
 interface DropDownBancosProps {
   toggleDropdownBancos: () => void;
-  setBanco: (id: number) => void;
+  setBanco: (id: number, nome: string) => void; // Alterei para passar o nome e o id
 }
 
 const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps) => {
@@ -43,8 +43,8 @@ const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps)
 
   if (!isOpen) return null;
 
-  const handleSelectBanco = (id: number) => {
-    setBanco(id);
+  const handleSelectBanco = (id: number, nome: string) => {
+    setBanco(id, nome);
     toggleDropdown();
   };
 
@@ -66,7 +66,7 @@ const DropDownBancos = ({ toggleDropdownBancos, setBanco }: DropDownBancosProps)
             id={banco.id}
             nome={banco.nome}
             iconeUrl={banco.iconeUrl}
-            onClick={() => handleSelectBanco(banco.id)} 
+            onClick={() => handleSelectBanco(banco.id, banco.nome)} 
           />
         ))}
       </ul>
