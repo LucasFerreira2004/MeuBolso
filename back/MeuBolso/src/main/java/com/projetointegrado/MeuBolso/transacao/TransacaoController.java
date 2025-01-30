@@ -1,6 +1,5 @@
 package com.projetointegrado.MeuBolso.transacao;
 
-import com.projetointegrado.MeuBolso.autorizacao.exception.ErrorResponseDTO;
 import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
@@ -8,18 +7,12 @@ import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import com.projetointegrado.MeuBolso.transacao.ITransacaoService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,19 +24,25 @@ public class TransacaoController {
     @Autowired
     private IUsuarioService usuarioService;
 
-    @Operation(summary = "Retorna todas as transacoes realizadas pelo usuario")
+    @Operation(summary = "Retorna todas as transacoes do inicio do mês até a data especificada")
     @GetMapping
     public List<TransacaoDTO> findAll(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
         String userLogadoId = usuarioService.getUsuarioLogadoId();
-        return transacaoService.findAllByMonth(userLogadoId, data);
+        return transacaoService.findAllInRangeByMonth(userLogadoId, data);
     }
 
     @Operation(summary = "Retorna uma transacao expecifica a partir de um id indicado")
     @GetMapping ("/{id}")
     public TransacaoDTO findById(@PathVariable Long id){
         String userLogadoId = usuarioService.getUsuarioLogadoId();
-
         return transacaoService.findById(userLogadoId, id);
+    }
+
+    @Operation(summary = "Retorna o somatório das despesas do inicio do mês até a data especificada")
+    @GetMapping("/somatorioDespesas")
+    public BigDecimal findSumDespesasInRangeByMonth(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
+        String userLogadoId = usuarioService.getUsuarioLogadoId();
+        return transacaoService.findSumDespesasInRangeByMonth(userLogadoId, data);
     }
 
     @Operation(summary = "Permite cadastrar uma transacao")
