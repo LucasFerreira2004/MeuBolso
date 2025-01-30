@@ -3,6 +3,7 @@ package com.projetointegrado.MeuBolso.categoria;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
 
+import com.projetointegrado.MeuBolso.categoria.exception.AtivaInalteradaException;
 import com.projetointegrado.MeuBolso.categoria.exception.CategoriaNaoEncontrada;
 import com.projetointegrado.MeuBolso.categoria.exception.ModificacaoCategoriaInternaException;
 import com.projetointegrado.MeuBolso.categoria.exception.NomeCadastradoException;
@@ -94,12 +95,16 @@ public class CategoriaService implements ICategoriaService {
     }
 
     @Transactional
-    public CategoriaDTO arquivar(String usuarioId, Long id) {
+    public CategoriaDTO atualizarStatusAtiva(String usuarioId, Long id, Boolean ativa) {
         Categoria categoria = categoriaValidateService.validateAndGet(id, usuarioId,
                 new CategoriaNaoEncontrada("/{id}", "categoria não encontrada"), new AcessoNegadoException());
         if (categoria.getInternaSistema())
             throw new ModificacaoCategoriaInternaException();
-        categoriaRepository.arquivarById(usuarioId, id);
+        if (ativa.equals(categoria.getAtiva()))
+            throw new AtivaInalteradaException("ativa");
+
+        categoria.setAtiva(ativa);
+        categoriaRepository.save(categoria);
         return new CategoriaDTO(categoria);
     }
 

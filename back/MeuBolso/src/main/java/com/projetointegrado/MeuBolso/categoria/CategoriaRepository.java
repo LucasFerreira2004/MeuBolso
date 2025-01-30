@@ -36,14 +36,4 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
         select * from categoria where LOWER(nome) like LOWER(:nome) AND usuario_id = :usuario_id;
     """)
     Categoria findByName(String usuario_id, String nome);
-
-    @Modifying
-    @Query(nativeQuery = true, value = """
-        update categoria
-        set ativa = false
-        where id = :id and ativa = true and usuario_id = :usuario_id and interna_sistema = false;
-    """)
-    void arquivarById (String usuario_id, Long id);
-
-
 }

@@ -3,16 +3,16 @@ package com.projetointegrado.MeuBolso.categoria.exception;
 public class ExceptionDTO {
     private String campo;
     private String message;
-    public ExceptionDTO(String status, String message) {
-        this.campo = status;
+    public ExceptionDTO(String campo, String message) {
+        this.campo = campo;
         this.message = message;
     }
 
-    public String getStatus() {
+    public String getCampo() {
         return campo;
     }
 
-    public void setStatus(String status) {
+    public void setCampo(String status) {
         this.campo = status;
     }
 
