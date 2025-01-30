@@ -33,4 +33,10 @@ public class CategoriaExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(dto, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(AtivaInalteradaException.class)
+    private ResponseEntity<ExceptionDTO> ativaInalteradaHandler(AtivaInalteradaException ex){
+        ExceptionDTO dto = new ExceptionDTO(ex.getCampo(), ex.getMessage());
+        return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+    }
+
 }
