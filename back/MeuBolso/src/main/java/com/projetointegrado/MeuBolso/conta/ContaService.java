@@ -16,7 +16,6 @@ import com.projetointegrado.MeuBolso.transacao.ITransacaoService;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
-import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoRepeticaoService;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
@@ -85,7 +84,7 @@ public class ContaService implements IContaService {
     }
 
     @Transactional(readOnly = true)
-    public SaldoTotalDTO findoSaldo(String idUsuario, LocalDate data) {
+    public SaldoTotalDTO findSaldo(String idUsuario, LocalDate data) {
         BigDecimal saldo = new BigDecimal(0);
         List<Conta> contas = contaRepository.findAllByUsuario(idUsuario);
         for (Conta c : contas){
