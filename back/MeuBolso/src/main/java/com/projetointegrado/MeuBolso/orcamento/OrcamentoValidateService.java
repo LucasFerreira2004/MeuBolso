@@ -11,8 +11,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 @Service
 public class OrcamentoValidateService {
     @Autowired
@@ -39,9 +37,10 @@ public class OrcamentoValidateService {
         if (categoria.getTipo() != TipoCategoria.DESPESA)
             throw categoriaOrcamentoException;
 
-        Orcamento orcamento = orcamentoRepository.findOrcamentoByCategoriaAndUsuario(categoria.getId(), usuario.getId()).orElse(null);
-
-        if (orcamento != null && Objects.equals(orcamento.getMes(), mes) && Objects.equals(orcamento.getAno(), ano))
+        System.out.println("validateSamePeriod: buscando no banco de dados");
+        Orcamento orcamento = orcamentoRepository.findByCategoriaUsuarioAndPeriodo(categoria.getId(), usuario.getId(), ano, mes).orElse(null);
+        System.out.println("validateSamePeriod: voltando da busca no banco de dados");
+        if (orcamento != null)
             throw orcamentoDuplicadoException;
     }
 }

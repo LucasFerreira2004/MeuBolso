@@ -47,14 +47,14 @@ public class OrcamentoService implements IOrcamentoService{
 
     @Transactional
     public OrcamentoDTO save(OrcamentoPostDTO orcamentoDto, String usuarioId) {
-        Orcamento orcamento = saveAndValidate(usuarioId, null, orcamentoDto);
-        return new OrcamentoDTO(orcamentoRepository.save(orcamento));
+        Orcamento orcamento = saveAndValidate(usuarioId, null, orcamentoDto, orcamentoDto.getPeriodo().getMonth().getValue(), orcamentoDto.getPeriodo().getYear());
+        return new OrcamentoDTO(orcamento);
     }
 
     @Transactional
     public OrcamentoDTO update(Long id, OrcamentoPostDTO orcamentoDto, String usuarioId) {
-        Orcamento orcamento = saveAndValidate(usuarioId, id, orcamentoDto);
-        return new OrcamentoDTO(orcamentoRepository.save(orcamento));
+        Orcamento orcamento = saveAndValidate(usuarioId, id, orcamentoDto, orcamentoDto.getPeriodo().getMonth().getValue(), orcamentoDto.getPeriodo().getYear());
+        return new OrcamentoDTO(orcamento);
     }
 
     @Transactional
@@ -66,40 +66,42 @@ public class OrcamentoService implements IOrcamentoService{
         return new OrcamentoDTO(orcamento);
     }
 
-    private Orcamento saveAndValidate(String usuarioId, Long id, OrcamentoPostDTO orcamentoDTO) {
+    private Orcamento saveAndValidate(String usuarioId, Long id, OrcamentoPostDTO orcamentoDTO, Integer mes, Integer ano) {
+        // Valida o usuário
         Usuario usuario = usuarioValidateService.validateAndGet(usuarioId,
                 new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
         System.out.println("saveAndValidate: usuario validado -> categoria");
 
+        // Valida a categoria
         Categoria categoria = categoriaValidateService.validateAndGet(orcamentoDTO.getIdCategoria(), usuarioId,
                 new EntidadeNaoEncontradaException("{id}", "categoria nao encontrada"),
                 new AcessoNegadoException());
         System.out.println("saveAndValidate: categoria -> validacao unicidade");
 
-        // Devo tratar aqui se existe outra orcamento com a mesma categoria, do mesmo usuario para o mesmo periodo
-        orcamentoValidateService.validateSamePeriod(categoria, usuario, orcamentoDTO.getMes(), orcamentoDTO.getAno(),
+        // Valida se existe outro orçamento com a mesma categoria, do mesmo usuário para o mesmo período
+        orcamentoValidateService.validateSamePeriod(categoria, usuario, mes, ano,
                 new OrcamentoDuplicadoException(),
                 new CategoriaOrcamentoException());
         System.out.println("saveAndValidate: validacao unicidade -> construcao do orcamento");
 
         Orcamento orcamento;
         if (id != null) {
-            // Busca a orcamento existente para atualizar
+            // Busca o orçamento existente para atualizar
             orcamento = orcamentoRepository.findById(id)
                     .orElseThrow(() -> new EntidadeNaoEncontradaException("{id}", "Orcamento não encontrada para atualização"));
 
-            // Atualiza os campos da orcamento existente
+            // Atualiza os campos do orçamento existente
             orcamento.setValorEstimado(orcamentoDTO.getValorEstimado());
             orcamento.setCategoria(categoria);
-            orcamento.setMes(orcamentoDTO.getMes());
-            orcamento.setAno(orcamentoDTO.getAno());
+            orcamento.setMes(mes);
+            orcamento.setAno(ano);
         } else {
-            // Cria nova orcamento se for um save
-            orcamento = new Orcamento(categoria, orcamentoDTO.getMes(), orcamentoDTO.getAno(), orcamentoDTO.getValorEstimado(), usuario);
+            // Cria novo orçamento se for um save
+            orcamento = new Orcamento(categoria, mes, ano, orcamentoDTO.getValorEstimado(), usuario);
         }
 
         System.out.println("saveAndValidate: construcao de orcamento -> salvamento");
         System.out.println(orcamento);
-        return orcamentoRepository.save(orcamento);
+        return orcamentoRepository.save(orcamento); // Salva o orçamento no banco de dados
     }
 }
