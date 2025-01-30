@@ -29,8 +29,14 @@ public class CategoriaService implements ICategoriaService {
     CategoriaValidateService categoriaValidateService;
 
     @Transactional(readOnly = true)
-    public List<CategoriaDTO> findAll(String usuarioId) {
+    public List<CategoriaDTO> findAllAtivas(String usuarioId) {
         List<Categoria> result = categoriaRepository.findAllAtivas(usuarioId);
+        return result.stream().map(CategoriaDTO::new).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoriaDTO> findAllArquivadas(String usuarioId) {
+        List<Categoria> result = categoriaRepository.findAllArquivadas(usuarioId);
         return result.stream().map(CategoriaDTO::new).toList();
     }
 

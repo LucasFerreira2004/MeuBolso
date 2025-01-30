@@ -23,8 +23,8 @@ public class categoriaController {
     private IUsuarioService usuarioService;
 
     @GetMapping
-    public List<CategoriaDTO> findCategoria() {
-        List<CategoriaDTO> result = categoriaService.findAll(usuarioService.getUsuarioLogadoId());
+    public List<CategoriaDTO> findAllAtivas() {
+        List<CategoriaDTO> result = categoriaService.findAllAtivas(usuarioService.getUsuarioLogadoId());
         return result;
     }
 
@@ -52,6 +52,17 @@ public class categoriaController {
         return categoriaService.update(usuarioService.getUsuarioLogadoId(), id, categoriaSaveDTO);
     }
 
+    //RotasRerentes específicas das arquivadas
+    @GetMapping("/arquivadas")
+    public List<CategoriaDTO> findAllArquivadas() {
+        try {
+            List<CategoriaDTO> result = categoriaService.findAllArquivadas(usuarioService.getUsuarioLogadoId());
+            return result;
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
     @PutMapping("/arquivadas/{id}")
     public CategoriaDTO arquivar(@PathVariable Long id) {
         return categoriaService.arquivar(usuarioService.getUsuarioLogadoId(), id);
