@@ -7,14 +7,12 @@ interface ModalTransacaoProps {
 }
 
 function ModalTipoTransacao({ onClose }: ModalTransacaoProps) {
-  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [isDespesasModalOpen, setIsDespesasModalOpen] = useState(false);
 
-  const openSecondModal = () => {
-    setIsSecondModalOpen(true);
-  };
-
-  const closeSecondModal = () => {
-    setIsSecondModalOpen(false);
+  // Função para fechar tudo (modal de despesas + modal de transação)
+  const closeAllModals = () => {
+    setIsDespesasModalOpen(false);
+    onClose(); // Fecha também o modal principal
   };
 
   return (
@@ -22,7 +20,7 @@ function ModalTipoTransacao({ onClose }: ModalTransacaoProps) {
       <div className={styles.modalOverlay} onClick={onClose}>
         <div
           className={styles.modalContent}
-          onClick={(e) => e.stopPropagation()} 
+          onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
         >
           <div className={styles.header}>
             <button className={styles.closeButton} onClick={onClose}>
@@ -36,7 +34,7 @@ function ModalTipoTransacao({ onClose }: ModalTransacaoProps) {
           <div className={styles.buttonsContainer}>
             <button
               className={styles.transactionButton}
-              onClick={openSecondModal}
+              onClick={() => setIsDespesasModalOpen(true)}
             >
               <img
                 src="/assets/iconsModal/setavermelha.svg"
@@ -57,7 +55,7 @@ function ModalTipoTransacao({ onClose }: ModalTransacaoProps) {
         </div>
       </div>
 
-      {isSecondModalOpen && <ModalDespesas onClose={closeSecondModal} />}
+      {isDespesasModalOpen && <ModalDespesas onCloseAll={closeAllModals} />}
     </>
   );
 }
