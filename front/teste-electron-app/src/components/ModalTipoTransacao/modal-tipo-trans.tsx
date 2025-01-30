@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./modal-tipo-trans.module.css";
 import ModalDespesas from "../ModalDespesas/modal-despesas";
+import ModalReceitas from "../ModalReceitas/modal-receitas";
 
 interface ModalTransacaoProps {
   onClose: () => void;
@@ -8,10 +9,12 @@ interface ModalTransacaoProps {
 
 function ModalTipoTransacao({ onClose }: ModalTransacaoProps) {
   const [isDespesasModalOpen, setIsDespesasModalOpen] = useState(false);
+  const [isReceitasModalOpen, setIsReceitasModalOpen] = useState(false);
 
-  // Função para fechar tudo (modal de despesas + modal de transação)
+  // Função para fechar tudo (modal de despesas/receitas + modal de transação)
   const closeAllModals = () => {
     setIsDespesasModalOpen(false);
+    setIsReceitasModalOpen(false);
     onClose(); // Fecha também o modal principal
   };
 
@@ -43,7 +46,10 @@ function ModalTipoTransacao({ onClose }: ModalTransacaoProps) {
               />
               <p className={styles.transactionText}>Despesas</p>
             </button>
-            <button className={styles.transactionButton}>
+            <button
+              className={styles.transactionButton}
+              onClick={() => setIsReceitasModalOpen(true)}
+            >
               <img
                 src="/assets/iconsModal/setaverde.svg"
                 alt="Receitas"
@@ -56,6 +62,7 @@ function ModalTipoTransacao({ onClose }: ModalTransacaoProps) {
       </div>
 
       {isDespesasModalOpen && <ModalDespesas onCloseAll={closeAllModals} />}
+      {isReceitasModalOpen && <ModalReceitas onCloseAll={closeAllModals} />}
     </>
   );
 }

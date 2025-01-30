@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
 import InputWithIcon from "../UI/InputsModal/input-modal";
-import style from "./modal-despesas.module.css";
+import style from "./modal-receitas.module.css";
 import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
 import DatePicker from "../UI/DatePicker/date-picker"; 
-import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
+import SelectedReceita from "../UI/SelectedReceitas/selected-receita";
 
-interface ModalADespesasProps {
-  onCloseAll: () => void; // Agora fecha tudo ao cadastrar
+interface ModalReceitasProps {
+  onCloseAll: () => void;
 }
 
-function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
+function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
   const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null);
@@ -18,8 +18,8 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
   const [data, setData] = useState<string>(""); 
   const [comentario, setComentario] = useState<string | null>(null);
 
-  // Tipo de transação fixo como 'DESPESA'
-  const tipoTransacao = "DESPESA";
+  // Tipo de transação fixo como 'RECEITA'
+  const tipoTransacao = "RECEITA";
 
   const formatarMoeda = (valor: string): string => {
     let valorNumerico = valor.replace(/\D/g, ""); 
@@ -51,7 +51,6 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
 
     const valorNumerico = removerFormatacaoMoeda(valor);
 
-    // Obtendo o token de autenticação
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("Token de autenticação não encontrado.");
@@ -79,11 +78,11 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
         }
       );
 
-      console.log("Transação adicionada:", response.data);
+      console.log("Receita adicionada:", response.data);
       onCloseAll(); // Fecha os dois modais ao cadastrar
     } catch (error) {
-      console.error("Erro ao adicionar transação:", error);
-      alert("Erro ao adicionar transação. Verifique os dados ou tente novamente.");
+      console.error("Erro ao adicionar receita:", error);
+      alert("Erro ao adicionar receita. Verifique os dados ou tente novamente.");
     }
   };
 
@@ -94,7 +93,7 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
     >
       <div className={style.modalContent}>
         <div className={style.headerModal}>
-          <h3>Despesas</h3>
+          <h3>Receitas</h3>
           <button className={style.closeButton} onClick={onCloseAll}>
             <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
@@ -102,34 +101,35 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
         <InputWithIcon
           label="Valor: "
           type="text"
-          iconSrc="/assets/iconsModalDelete/money.svg"
+          iconSrc="/assets/iconsModalReceitas/money.svg"
           placeholder="R$ 0,00"
           value={valor}
           onChange={handleChangeValor}
         />
         <InputWithIcon
           label="Descrição: "
-          iconSrc="/assets/iconsModalDelete/descrip.svg"
-          placeholder="Ex: Pagamento da fatura"
+          iconSrc="/assets/iconsModalReceitas/descrip.svg"
+          placeholder="Ex: Salário"
           value={descricao}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescricao(e.target.value)}
         />
-        <SelectedDespesas setCategoria={setCategoria} />
+        <SelectedReceita setCategoria={setCategoria} />
         <SelectBoxContas setConta={setConta} />
-        <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalDelete/date.svg"/>
+        <DatePicker value={data} onChange={setData} 
+        iconsrc="/assets/iconsModalReceitas/date.svg"/>
         <InputWithIcon
           label="Comentário: "
-          iconSrc="/assets/iconsModalDelete/comentario.svg"
+          iconSrc="/assets/iconsModalReceitas/comentario.svg"
           placeholder="Opcional"
           value={comentario || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComentario(e.target.value || null)}
         />
         <button onClick={handleSubmit} className={style.submitButton}>
-          Adicionar Transação
+          Adicionar Transacao
         </button>
       </div>
     </div>
   );
 }
 
-export default ModalDespesas;
+export default ModalReceitas;

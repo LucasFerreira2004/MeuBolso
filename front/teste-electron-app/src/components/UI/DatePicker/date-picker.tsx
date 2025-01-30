@@ -6,9 +6,10 @@ import styles from './date-picker.module.css';
 interface DatePickerProps {
   value: string;
   onChange: (date: string) => void;
+  iconsrc: string;
 }
 
-const CustomDatePicker: React.FC<DatePickerProps> = ({ value, onChange }) => {
+const CustomDatePicker: React.FC<DatePickerProps> = ({ value,iconsrc, onChange }) => {
   const handleDateChange = (date: Date | null) => {
     if (date) {
       const formattedDate = date.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
@@ -31,7 +32,7 @@ const CustomDatePicker: React.FC<DatePickerProps> = ({ value, onChange }) => {
           dateFormat="yyyy-MM-dd"
           placeholderText="EX: 2005/04/02"
         />
-        <img src="/assets/iconsModalDelete/date.svg" className={styles.iconDate}/>
+        <img src={iconsrc}className={styles.iconDate}/>
       </div>
     </div>
   );
