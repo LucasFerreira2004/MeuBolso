@@ -71,6 +71,17 @@ public class TransacaoService implements ITransacaoService {
         return sumDespesas;
     }
 
+    @Transactional(readOnly = true)
+    public BigDecimal findSumReceitasInRangeByMonth(String userId, LocalDate data) {
+        LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate dataFim = data;
+        List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
+        BigDecimal sumReceitas = transacoes.stream().filter(t -> t.getTipo().equals(TipoTransacao.RECEITA))
+                .map(t -> t.getValor())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return sumReceitas;
+    }
+
     @Transactional
     public TransacaoDTO save(String userId, TransacaoSaveDTO dto) {
         Transacao transacao = saveAndValidate(userId, null, dto);
