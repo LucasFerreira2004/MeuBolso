@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-despesas.module.css";
+import SelectBoxDespesas from "../UI/SelectedBoxContas/selected-box-contas";
 
 interface ModalADespesasProps {
   onClose: () => void;
@@ -11,7 +12,7 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
   const [valor] = useState<number>(0);
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<string>("");
-  const [conta, setConta] = useState<string>("");
+  const [conta] = useState<string>("");
   const [data, setData] = useState<string>("");
   const [comentario, setComentario] = useState<string | null>(null);
   const [tipoTransacao, setTipoTransacao] = useState<string>("");
@@ -43,9 +44,6 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
     setCategoria(e.target.value);
   };
 
-  const handleChangeConta = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setConta(e.target.value);
-  };
 
   const handleChangeData = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData(e.target.value);
@@ -90,13 +88,7 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
           value={categoria}
           onChange={handleChangeCategoria}
         />
-        <InputWithIcon
-          label="Conta: "
-          iconSrc="/assets/iconsModalDelete/bank.svg"
-          placeholder="Conta"
-          value={conta}
-          onChange={handleChangeConta}
-        />
+        <SelectBoxDespesas/>
         <InputWithIcon
           label="Data: "
           iconSrc="/assets/iconsModalDelete/date.svg"

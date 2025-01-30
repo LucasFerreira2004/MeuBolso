@@ -14,7 +14,7 @@ function Home() {
   const [bancos, setBancos] = useState<Banco[]>([]);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const dataReferencia = "2026-01-18"; // Data fixa para a consulta
+  const dataReferencia = "2200-01-18"; // Data fixa para a consulta
 
   const fetchData = async (url: string, errorMessage: string, setData: (data: any) => void) => {
     const token = localStorage.getItem("authToken");

@@ -1,0 +1,41 @@
+import React, { useState } from "react";
+
+interface Conta {
+  id: number;
+  nomeBanco: string;
+  iconeUrl: string;
+  saldo: number;
+}
+
+interface SelectBoxContasProps {
+  contas: Conta[];
+  onSelect: (contaId: number) => void;
+}
+
+const SelectBoxContas: React.FC<SelectBoxContasProps> = ({ contas, onSelect }) => {
+  const [contaSelecionada, setContaSelecionada] = useState<number | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const id = Number(e.target.value);
+    setContaSelecionada(id);
+    onSelect(id);
+  };
+
+  return (
+    <div>
+      <label>Conta:</label>
+      <select value={contaSelecionada || ""} onChange={handleChange}>
+        <option value="" disabled>
+          Selecione uma conta
+        </option>
+        {contas.map((conta) => (
+          <option key={conta.id} value={conta.id}>
+            {conta.nomeBanco} - Saldo: R$ {conta.saldo.toFixed(2)}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
+
+export default SelectBoxContas;
