@@ -1,8 +1,10 @@
 package com.projetointegrado.MeuBolso.transacaoRecorrente.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.projetointegrado.MeuBolso.globalConstraints.validEnum.ValidEnum;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.Periodicidade;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TipoRepeticao;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
@@ -41,5 +43,12 @@ public record TransacaoParceladaSaveDTO(
 
     @NotNull(message = "a quantidade de parcelas não pode ser nula")
     @Min(value = 2, message = "a quantidade mínima de parcelas é 2")
-    Integer qtdParcelas
-    ) implements ITransacaoRecorrenteDTO {}
+    Integer qtdParcelas,
+
+    @JsonIgnore
+    TipoRepeticao tipoRepeticao
+    ) implements ITransacaoRecorrenteDTO {
+    public TipoRepeticao tipoRepeticao(){
+        return TipoRepeticao.PARCELAMENTO;
+    }
+}

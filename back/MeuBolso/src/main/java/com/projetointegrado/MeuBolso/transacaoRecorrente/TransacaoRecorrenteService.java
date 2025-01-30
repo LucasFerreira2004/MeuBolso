@@ -83,7 +83,7 @@ public class TransacaoRecorrenteService implements ITransacaoRecorrenteService {
         Usuario usuario = usuarioValidateService.validateAndGet(userId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado"));
 
         TransacaoRecorrente transacaoRecorrente = new TransacaoRecorrente(null, dto.valor(), TipoTransacao.valueOf(dto.tipoTransacao()), dto.data(),
-                dto.descricao(), conta, categoria, Periodicidade.valueOf(dto.periodicidade()), usuario, dto.qtdParcelas());
+                dto.descricao(), conta, categoria, Periodicidade.valueOf(dto.periodicidade()), usuario, dto.qtdParcelas(), dto.tipoRepeticao());
 
         return transacaoRecorrenteRepository.save(transacaoRecorrente);
     }

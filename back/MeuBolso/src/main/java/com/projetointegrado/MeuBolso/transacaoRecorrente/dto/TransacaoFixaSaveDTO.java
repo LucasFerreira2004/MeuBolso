@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.projetointegrado.MeuBolso.globalConstraints.validEnum.ValidEnum;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.Periodicidade;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TipoRepeticao;
+import io.swagger.v3.core.util.Json;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -44,6 +46,12 @@ public record TransacaoFixaSaveDTO(
         String periodicidade,
 
         @JsonIgnore
-        Integer qtdParcelas
+        Integer qtdParcelas,
 
-) implements ITransacaoRecorrenteDTO{}
+        @JsonIgnore
+        TipoRepeticao tipoRepeticao
+) implements ITransacaoRecorrenteDTO{
+        public TipoRepeticao tipoRepeticao() {
+                return TipoRepeticao.FIXO;
+        }
+}

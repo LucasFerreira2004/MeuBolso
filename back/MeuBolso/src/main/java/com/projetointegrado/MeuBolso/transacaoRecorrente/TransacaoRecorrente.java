@@ -57,6 +57,9 @@ public class TransacaoRecorrente {
     @Column(name = "qtd_parcelas")
     private Integer qtdParcelas;
 
+    @Column(nullable = false, name = "tipo_repeticao")
+    private TipoRepeticao tipoRepeticao;
+
     @OneToMany(mappedBy = "transacaoRecorrente", cascade = CascadeType.REMOVE)
     private List<Transacao> transacoes;
 
@@ -73,7 +76,7 @@ public class TransacaoRecorrente {
         this.ultimaExecucao = null;
     }
 
-    public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario, Integer qtdParcelas) {
+    public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario, Integer qtdParcelas, TipoRepeticao tipoRepeticao) {
         this.id = id;
         this.valor = valor;
         this.tipo = tipo;
@@ -85,6 +88,7 @@ public class TransacaoRecorrente {
         this.usuario = usuario;
         this.ultimaExecucao = null;
         this.qtdParcelas = qtdParcelas;
+        this.tipoRepeticao = tipoRepeticao;
         if (qtdParcelas == null) return;
         IAvancoDataStrategy avancoStrategy = AvancoDataFactory.getStrategy(this.periodicidade);
         this.dataFinal = avancoStrategy.avancarData(this.dataCadastro, this.dataCadastro, this.qtdParcelas - 1);
@@ -193,5 +197,13 @@ public class TransacaoRecorrente {
 
     public void setQtdParcelas(Integer qtdParcelas) {
         this.qtdParcelas = qtdParcelas;
+    }
+
+    public TipoRepeticao getTipoRepeticao() {
+        return tipoRepeticao;
+    }
+
+    public void setTipoRepeticao(TipoRepeticao tipoRepeticao) {
+        this.tipoRepeticao = tipoRepeticao;
     }
 }
