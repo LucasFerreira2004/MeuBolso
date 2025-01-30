@@ -102,7 +102,6 @@ public class CategoriaService implements ICategoriaService {
             throw new ModificacaoCategoriaInternaException();
         if (ativa.equals(categoria.getAtiva()))
             throw new AtivaInalteradaException("ativa");
-
         categoria.setAtiva(ativa);
         categoriaRepository.save(categoria);
         return new CategoriaDTO(categoria);
