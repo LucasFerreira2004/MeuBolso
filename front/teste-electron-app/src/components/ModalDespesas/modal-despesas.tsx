@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-despesas.module.css";
-import SelectBoxDespesas from "../UI/SelectedBoxContas/selected-box-contas";
+import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
 import DatePicker from "../UI/DatePicker/date-picker"; 
+import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
 
 interface ModalADespesasProps {
   onClose: () => void;
@@ -12,8 +13,8 @@ interface ModalADespesasProps {
 function ModalDespesas({ onClose }: ModalADespesasProps) {
   const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
-  const [categoria, setCategoria] = useState<string>("");
-  const [conta] = useState<string>("");
+  const [categoria, setCategoria] = useState<number | null>(null); // Agora armazenando o ID da categoria
+  const [conta] = useState<string>(""); // Não está sendo utilizado, mas mantido para consistência
   const [data, setData] = useState<string>(""); 
   const [comentario, setComentario] = useState<string | null>(null);
   const [tipoTransacao, setTipoTransacao] = useState<string>("");
@@ -48,7 +49,7 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
         valor: valorNumerico, 
         data, 
         tipoTransacao,
-        categoriaId: parseInt(categoria), 
+        categoriaId: categoria, // Usando a categoria selecionada
         contaId: parseInt(conta), 
         comentario,
         descricao,
@@ -63,10 +64,6 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
 
   const handleChangeDescricao = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDescricao(e.target.value);
-  };
-
-  const handleChangeCategoria = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCategoria(e.target.value);
   };
 
   const handleChangeComentario = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,14 +98,9 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
           value={descricao}
           onChange={handleChangeDescricao}
         />
-        <InputWithIcon
-          label="Categoria: "
-          iconSrc="/assets/iconsModalDelete/hashtag.svg"
-          placeholder=" Categorias"
-          value={categoria}
-          onChange={handleChangeCategoria}
-        />
-        <SelectBoxDespesas />
+        <SelectedDespesas setCategoria={setCategoria} /> {/* Passando a função de setCategoria para SelectedDespesas */}
+
+        <SelectBoxContas />
 
         <DatePicker value={data} onChange={setData} />
 

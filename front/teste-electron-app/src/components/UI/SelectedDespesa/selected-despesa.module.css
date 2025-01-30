@@ -1,36 +1,37 @@
+
 .selectBoxContainer {
     display: flex;
     gap: 15px;
     margin-bottom: 16px;
     align-items: center;
-  }
-  
-  .selectBoxWrapper {
+}
+
+.selectBoxWrapper {
     display: flex;
     align-items: center;
     border-radius: 4px;
     width: 100%; 
-  }
-  
-  .selectBoxWrapper:hover {
+}
+
+.selectBoxWrapper:hover {
     border-color: #007bff;
-  }
-  
-  .selectBoxWrapper:focus-within {
+}
+
+.selectBoxWrapper:focus-within {
     border-color: #007bff;
-  }
-  
-  .selectBoxLabel {
+}
+
+.selectBoxLabel {
     font-size: 14px;
     margin-bottom: 8px;
     color: #333;
     margin-right: 10px;
-  }
-  
-  .selectBox {
+}
+
+.selectBox {
     flex: 1;
     border: none;
     background-color: transparent;
     outline: none;
     font-size: 16px;
-  }
+}
