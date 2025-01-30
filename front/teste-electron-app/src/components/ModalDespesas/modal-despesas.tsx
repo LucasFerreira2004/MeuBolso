@@ -14,10 +14,10 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
   const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null); // Agora armazenando o ID da categoria
-  const [conta] = useState<string>(""); // Não está sendo utilizado, mas mantido para consistência
+  const [conta, setConta] = useState<number | null>(null); // Alteração: Agora é um número (ID da conta)
   const [data, setData] = useState<string>(""); 
   const [comentario, setComentario] = useState<string | null>(null);
-  const [tipoTransacao, setTipoTransacao] = useState<string>("");
+  const [tipoTransacao, setTipoTransacao] = useState<string>("DESPESA"); // Default como 'DESPESA'
 
   const formatarMoeda = (valor: string): string => {
     let valorNumerico = valor.replace(/\D/g, ''); 
@@ -42,23 +42,47 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
   };
 
   const handleSubmit = async () => {
+    // Validação dos campos obrigatórios
+    if (!valor || !descricao || !categoria || !data || !tipoTransacao || !conta) {
+      alert("Preencha todos os campos obrigatórios!");
+      return;
+    }
+
     const valorNumerico = removerFormatacaoMoeda(valor);
 
+    // Obtenção do token de autenticação
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("Token de autenticação não encontrado.");
+      alert("Por favor, faça login novamente.");
+      return;
+    }
+
     try {
-      const response = await axios.post("http://localhost:8080/transacoes", {
-        valor: valorNumerico, 
-        data, 
-        tipoTransacao,
-        categoriaId: categoria, // Usando a categoria selecionada
-        contaId: parseInt(conta), 
-        comentario,
-        descricao,
-      });
+      const response = await axios.post(
+        "http://localhost:8080/transacoes",
+        {
+          valor: valorNumerico,
+          data,
+          tipoTransacao,
+          categoriaId: categoria,
+          contaId: conta,
+          comentario,
+          descricao,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Enviando o token de autenticação no cabeçalho
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       console.log("Transação adicionada:", response.data);
       onClose(); 
     } catch (error) {
       console.error("Erro ao adicionar transação:", error);
+      alert("Erro ao adicionar transação. Verifique os dados ou tente novamente.");
     }
   };
 
@@ -71,7 +95,7 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
   };
 
   const handleChangeTipoTransacao = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTipoTransacao(e.target.value);
+    setTipoTransacao(e.target.value); // Atualiza o tipo de transação
   };
 
   return (
@@ -100,7 +124,7 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
         />
         <SelectedDespesas setCategoria={setCategoria} /> {/* Passando a função de setCategoria para SelectedDespesas */}
 
-        <SelectBoxContas />
+        <SelectBoxContas setConta={setConta} /> {/* Passando a função de setConta */}
 
         <DatePicker value={data} onChange={setData} />
 
@@ -117,7 +141,8 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
               type="radio"
               name="tipoTransacao"
               value="DESPESA"
-              onChange={handleChangeTipoTransacao}
+              checked={tipoTransacao === "DESPESA"} // Marca "DESPESA" se for o valor selecionado
+              onChange={handleChangeTipoTransacao} // Atualiza o estado com o valor "DESPESA"
             />
             Despesa
           </label>
@@ -126,7 +151,8 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
               type="radio"
               name="tipoTransacao"
               value="RECEITA"
-              onChange={handleChangeTipoTransacao}
+              checked={tipoTransacao === "RECEITA"} // Marca "RECEITA" se for o valor selecionado
+              onChange={handleChangeTipoTransacao} // Atualiza o estado com o valor "RECEITA"
             />
             Receita
           </label>

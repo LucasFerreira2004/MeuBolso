@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import style from "./selected-box-contas.module.css"
+import style from "./selected-box-contas.module.css";
 
 interface Banco {
   nome: string;
@@ -16,9 +16,12 @@ interface Conta {
   };
 }
 
-function SelectBoxContas() {
+interface SelectBoxContasProps {
+  setConta: React.Dispatch<React.SetStateAction<number | null>>; // Adicionando a prop setConta
+}
+
+function SelectBoxContas({ setConta }: SelectBoxContasProps) { // Recebendo a prop setConta
   const [contas, setContas] = useState<Conta[]>([]);
-  const [, setSelectedConta] = useState<Conta | null>(null);
 
   const getDataAtual = (): string => {
     const data = new Date();
@@ -54,10 +57,10 @@ function SelectBoxContas() {
       })
       .then((data: Conta[]) => {
         setContas(data);
-        setSelectedConta(data.length > 0 ? data[0] : null);
+        setConta(data.length > 0 ? data[0].id : null); // Inicializa o setConta com o ID da primeira conta
       })
       .catch((error) => console.error("Erro ao buscar contas:", error));
-  }, []);
+  }, [setConta]);
 
   const options = contas.map((conta) => ({
     value: conta.id,
@@ -78,8 +81,7 @@ function SelectBoxContas() {
   }));
 
   const handleChange = (selectedOption: any) => {
-    const contaSelecionada = contas.find((conta) => conta.id === selectedOption.value) || null;
-    setSelectedConta(contaSelecionada);
+    setConta(selectedOption.value); // Atualiza a conta selecionada
   };
 
   return (
