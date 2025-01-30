@@ -17,7 +17,7 @@ label {
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 5px;
-  background-color: #f9f9f9;
+  background-color: #fff;
 }
 
 input {
@@ -37,7 +37,6 @@ input:focus {
   width: 20px;
   height: 20px;
   margin-left: 8px;
-  cursor: pointer;
 }
 
 .inputContainer:hover {

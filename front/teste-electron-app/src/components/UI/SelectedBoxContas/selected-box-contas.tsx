@@ -16,7 +16,7 @@ interface Conta {
   };
 }
 
-function SelectBoxDespesas() {
+function SelectBoxContas() {
   const [contas, setContas] = useState<Conta[]>([]);
   const [, setSelectedConta] = useState<Conta | null>(null);
 
@@ -98,4 +98,4 @@ function SelectBoxDespesas() {
   );
 }
 
-export default SelectBoxDespesas;
+export default SelectBoxContas;

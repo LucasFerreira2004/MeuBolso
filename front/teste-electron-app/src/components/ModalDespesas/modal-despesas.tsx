@@ -1,45 +1,64 @@
-// src/components/ModalDespesas/ModalDespesas.tsx
 import React, { useState } from "react";
 import axios from "axios";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-despesas.module.css";
 import SelectBoxDespesas from "../UI/SelectedBoxContas/selected-box-contas";
-import DatePicker from "../UI/DatePicker/date-picker"; // Componente atualizado
+import DatePicker from "../UI/DatePicker/date-picker"; 
 
 interface ModalADespesasProps {
   onClose: () => void;
 }
 
 function ModalDespesas({ onClose }: ModalADespesasProps) {
-  const [valor, setValor] = useState<number>(0); // Adicionei um estado para o valor
+  const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<string>("");
-  const [conta] = useState<string>(""); // Valor da conta
-  const [data, setData] = useState<string>(""); // Estado da data
+  const [conta] = useState<string>("");
+  const [data, setData] = useState<string>(""); 
   const [comentario, setComentario] = useState<string | null>(null);
   const [tipoTransacao, setTipoTransacao] = useState<string>("");
 
+  const formatarMoeda = (valor: string): string => {
+    let valorNumerico = valor.replace(/\D/g, ''); 
+    valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
+    valorNumerico = valorNumerico.replace('.', ',');
+    valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    return `R$ ${valorNumerico}`;
+  };
+
+  const removerFormatacaoMoeda = (valorFormatado: string): number => {
+    const valorNumerico = valorFormatado
+      .replace("R$ ", "")
+      .replace(/\./g, "")
+      .replace(",", ".");
+    return parseFloat(valorNumerico);
+  };
+
+  const handleChangeValor = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const valorDigitado = e.target.value;
+    const valorFormatado = formatarMoeda(valorDigitado);
+    setValor(valorFormatado); 
+  };
+
   const handleSubmit = async () => {
+    const valorNumerico = removerFormatacaoMoeda(valor);
+
     try {
       const response = await axios.post("http://localhost:8080/transacoes", {
-        valor,
-        data, // A data será enviada com a transação
+        valor: valorNumerico, 
+        data, 
         tipoTransacao,
-        categoriaId: parseInt(categoria), // Aqui você pode mudar para usar o ID correto
-        contaId: parseInt(conta), // Aqui você pode mudar para usar o ID correto
+        categoriaId: parseInt(categoria), 
+        contaId: parseInt(conta), 
         comentario,
         descricao,
       });
 
       console.log("Transação adicionada:", response.data);
-      onClose(); // Fecha o modal de Despesas após a transação ser adicionada
+      onClose(); 
     } catch (error) {
       console.error("Erro ao adicionar transação:", error);
     }
-  };
-
-  const handleChangeValor = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValor(parseFloat(e.target.value)); // Atualiza o estado do valor
   };
 
   const handleChangeDescricao = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,24 +87,24 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
           </button>
         </div>
         <InputWithIcon
-          label="Saldo: "
-          type="number"
+          label="Valor: "
+          type="text" 
           iconSrc="/assets/iconsModalDelete/money.svg"
           placeholder="R$ 0,00"
-          value={valor.toString()} // Use o estado `valor`
-          onChange={handleChangeValor} // Atualiza o estado `valor`
+          value={valor}
+          onChange={handleChangeValor} 
         />
         <InputWithIcon
           label="Descrição: "
           iconSrc="/assets/iconsModalDelete/descrip.svg"
-          placeholder="Descrição"
+          placeholder="Ex: Pagamento da fatura"
           value={descricao}
           onChange={handleChangeDescricao}
         />
         <InputWithIcon
           label="Categoria: "
           iconSrc="/assets/iconsModalDelete/hashtag.svg"
-          placeholder="Categoria"
+          placeholder=" Categorias"
           value={categoria}
           onChange={handleChangeCategoria}
         />
@@ -95,8 +114,8 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
 
         <InputWithIcon
           label="Comentário: "
-          iconSrc="/assets/iconsModalDelete/descrip.svg"
-          placeholder="Comentário"
+          iconSrc="/assets/iconsModalDelete/comentario.svg"
+          placeholder="Opcional"
           value={comentario || ""}
           onChange={handleChangeComentario}
         />

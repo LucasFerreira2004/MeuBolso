@@ -29,8 +29,9 @@ const CustomDatePicker: React.FC<DatePickerProps> = ({ value, onChange }) => {
           onChange={handleDateChange}
           className={styles.datePickerInput}
           dateFormat="yyyy-MM-dd"
-          placeholderText="Selecione uma data"
+          placeholderText="EX: 2005/04/02"
         />
+        <img src="/assets/iconsModalDelete/date.svg" className={styles.iconDate}/>
       </div>
     </div>
   );
