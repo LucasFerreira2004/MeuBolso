@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
@@ -49,13 +50,25 @@ public class TransacaoService implements ITransacaoService {
             throw new AcessoNegadoException();
         return new TransacaoDTO(transacao);
     }
+
     @Transactional(readOnly = true)
-    public List<TransacaoDTO> findAllByMonth(String userId, LocalDate data) {
+    public List<TransacaoDTO> findAllInRangeByMonth(String userId, LocalDate data) {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
-        LocalDate dataFim = data.with(TemporalAdjusters.lastDayOfMonth());
+        LocalDate dataFim = data;
         List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
         List<TransacaoDTO> transacaoDTOs = transacoes.stream().map(transacao -> new TransacaoDTO(transacao)).toList();
         return transacaoDTOs;
+    }
+
+    @Transactional(readOnly = true)
+    public BigDecimal findSumDespesasInRangeByMonth(String userId, LocalDate data) {
+        LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate dataFim = data;
+        List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
+        BigDecimal sumDespesas = transacoes.stream().filter(t -> t.getTipo().equals(TipoTransacao.DESPESA))
+                .map(t -> t.getValor())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return sumDespesas;
     }
 
     @Transactional

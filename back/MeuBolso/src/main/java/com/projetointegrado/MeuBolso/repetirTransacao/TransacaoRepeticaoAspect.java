@@ -16,7 +16,7 @@ public class TransacaoRepeticaoAspect {
         this.transacaoRepeticaoExecutor = transacaoRepeticaoExecutor;
     }
 
-    @Before("execution(* com.projetointegrado.MeuBolso.conta.ContaService.find*(..)) || execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findAll*(..))")
+    @Before("execution(* com.projetointegrado.MeuBolso.conta.ContaService.find*(..)) || execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findAll*(..)) || execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findSum*(..))")
     public void gerarTransacoesFixasAntesDasBuscas(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         LocalDate data = null;
