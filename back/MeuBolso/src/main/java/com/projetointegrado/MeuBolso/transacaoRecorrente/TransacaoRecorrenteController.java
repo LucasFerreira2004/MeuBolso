@@ -6,6 +6,7 @@ import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.ITransacaoRecorrent
 import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoFixaSaveDTO;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoParceladaSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,7 @@ public class TransacaoRecorrenteController {
     @Autowired
     private IUsuarioService usuarioService;
 
+    @Operation(summary = "Retorna todas as transações recorrentes, fixas ou parceladas")
     @GetMapping
     public List<TransacaoFixaDTO> findAll(){
         String userId = usuarioService.getUsuarioLogadoId();
@@ -29,13 +31,14 @@ public class TransacaoRecorrenteController {
         return transacaoRecorrenteService.findAll(userId);
     }
 
+    @Operation(summary = "Retorna uma transacao recorrente, fixa ou parcelada")
     @GetMapping("/{id}")
     public TransacaoFixaDTO findById(@PathVariable Long id){
         String userId = usuarioService.getUsuarioLogadoId();
 
         return transacaoRecorrenteService.findById(userId, id);
     }
-
+    @Operation(summary = "Salva uma transacao fixa")
     @PostMapping("/fixas")
     public TransacaoFixaDTO save (@Valid @RequestBody TransacaoFixaSaveDTO dto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -46,6 +49,7 @@ public class TransacaoRecorrenteController {
         return transacaoRecorrenteService.save(userId, dto);
     }
 
+    @Operation(summary = "Salva uma transacao parcelada")
     @PostMapping("/parceladas")
     public TransacaoFixaDTO save (@Valid @RequestBody TransacaoParceladaSaveDTO dto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -56,7 +60,7 @@ public class TransacaoRecorrenteController {
         return transacaoRecorrenteService.save(userId, dto);
     }
 
-
+    @Operation(summary = "Update em uma transacao fixa")
     @PutMapping("/fixas/{id}")
     public TransacaoFixaDTO update (@PathVariable Long id, @Valid @RequestBody TransacaoFixaSaveDTO dto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -67,6 +71,7 @@ public class TransacaoRecorrenteController {
         return transacaoRecorrenteService.update(userId, id, dto);
     }
 
+    @Operation(summary = "Update em uma transacao parcelada")
     @PutMapping("/parceladas/{id}")
     public TransacaoFixaDTO update (@PathVariable Long id, @Valid @RequestBody TransacaoParceladaSaveDTO dto, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -77,6 +82,7 @@ public class TransacaoRecorrenteController {
         return transacaoRecorrenteService.update(userId, id, dto);
     }
 
+    @Operation(summary = "Deleta uma transacao recorrente, fixa ou parcelada")
     @DeleteMapping("/{id}")
     public TransacaoFixaDTO delete (@PathVariable Long id){
         String userId = usuarioService.getUsuarioLogadoId();
