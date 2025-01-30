@@ -3,12 +3,13 @@ package com.projetointegrado.MeuBolso.orcamento;
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-@Table(name = "orcamento", uniqueConstraints = {@UniqueConstraint(columnNames = {"categoria_id"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id", "mes", "ano", "categoria_id"})})
 public class Orcamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,27 +18,37 @@ public class Orcamento {
     private String descricao;
 
     @OneToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, name = "categoria_id")
     private Categoria categoria;
 
-    private String mesAno;
+    @Column(nullable = false, name = "mes")
+    private Integer mes;
+
+    @Column(nullable = false, name = "ano")
+    private Integer ano;
+
+    @Column(nullable = false, name = "valor_estimado")
     private BigDecimal valorEstimado;
+
     private BigDecimal valorGasto;
     private BigDecimal valorRestante;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @Valid
+    @JoinColumn(nullable = false, name = "usuario_id")
     private Usuario usuario;
 
     public Orcamento() {
     }
 
-    public Orcamento(Categoria categoria, String mesAno, BigDecimal valorEstimado, Usuario usuario) {
+    public Orcamento(Categoria categoria, Integer mes, Integer ano, BigDecimal valorEstimado, Usuario usuario) {
         this.categoria = categoria;
-        this.descricao = categoria.getNome();
-        this.mesAno = mesAno;
+        this.mes = mes;
+        this.ano = ano;
         this.valorEstimado = valorEstimado;
         this.usuario = usuario;
+        this.valorGasto = BigDecimal.ZERO;
+        this.valorRestante = BigDecimal.ZERO;
     }
 
     public Long getId() {
@@ -61,12 +72,20 @@ public class Orcamento {
         this.setDescricao(categoria.getNome());
     }
 
-    public String getMesAno() {
-        return mesAno;
+    public Integer getMes() {
+        return mes;
     }
 
-    public void setMesAno(String mesAno) {
-        this.mesAno = mesAno;
+    public void setMes(Integer mes) {
+        this.mes = mes;
+    }
+
+    public Integer getAno() {
+        return ano;
+    }
+
+    public void setAno(Integer ano) {
+        this.ano = ano;
     }
 
     public BigDecimal getValorEstimado() {

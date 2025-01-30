@@ -8,7 +8,7 @@ import java.util.List;
 public interface IOrcamentoService {
     public List<OrcamentoDTO> findAll(String usuarioId);
     public OrcamentoDTO findById(Long id, String usuarioId);
-    public OrcamentoDTO save(String UserId, OrcamentoPostDTO orcamento);
+    public OrcamentoDTO save(OrcamentoPostDTO orcamento, String UsuarioId);
     public OrcamentoDTO update(Long id, OrcamentoPostDTO orcamento, String usuarioId);
-    public void deleteById(String usuarioId, Long id);
+    public OrcamentoDTO deleteById(String usuarioId, Long id);
 }

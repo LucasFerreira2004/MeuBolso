@@ -1,10 +1,13 @@
 package com.projetointegrado.MeuBolso.orcamento;
 
+import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
 import com.projetointegrado.MeuBolso.orcamento.dto.OrcamentoDTO;
 import com.projetointegrado.MeuBolso.orcamento.dto.OrcamentoPostDTO;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,20 +37,26 @@ public class OrcamentoController {
     }
 
     @PostMapping
-    public OrcamentoDTO save(@RequestBody OrcamentoPostDTO orcamento) {
+    public OrcamentoDTO save(@Valid @RequestBody OrcamentoPostDTO orcamentoDTO, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
         String usuarioId = usuarioService.getUsuarioLogadoId();
-        return orcamentoService.save(usuarioId, orcamento);
+        return orcamentoService.save(orcamentoDTO, usuarioId);
     }
 
     @PutMapping("/{orcamentoId}")
-    public OrcamentoDTO update(@PathVariable Long orcamentoId, @RequestBody OrcamentoPostDTO orcamento) {
+    public OrcamentoDTO update(@Valid @RequestBody OrcamentoPostDTO orcamentoDTO, BindingResult bindingResult, @PathVariable Long orcamentoId) {
+        if(bindingResult.hasErrors()) {
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
         String usuarioId = usuarioService.getUsuarioLogadoId();
-        return orcamentoService.update(orcamentoId, orcamento, usuarioId);
+        return orcamentoService.update(orcamentoId, orcamentoDTO, usuarioId);
     }
 
     @DeleteMapping("/{orcamentoId}")
-    public void delete(@PathVariable Long orcamentoId) {
+    public OrcamentoDTO delete(@PathVariable Long orcamentoId) {
         String usuarioId = usuarioService.getUsuarioLogadoId();
-        orcamentoService.deleteById(usuarioId, orcamentoId);
+        return orcamentoService.deleteById(usuarioId, orcamentoId);
     }
 }

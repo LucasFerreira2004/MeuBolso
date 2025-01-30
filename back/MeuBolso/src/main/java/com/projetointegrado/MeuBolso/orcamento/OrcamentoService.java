@@ -1,22 +1,18 @@
 package com.projetointegrado.MeuBolso.orcamento;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
-import com.projetointegrado.MeuBolso.categoria.CategoriaRepository;
+import com.projetointegrado.MeuBolso.categoria.CategoriaValidateService;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
+import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.orcamento.dto.OrcamentoDTO;
 import com.projetointegrado.MeuBolso.orcamento.dto.OrcamentoPostDTO;
-import com.projetointegrado.MeuBolso.orcamento.exception.CategoriaOrcamentoNaoEncontradaException;
-import com.projetointegrado.MeuBolso.orcamento.exception.CategoriaRepetidaException;
-import com.projetointegrado.MeuBolso.orcamento.exception.OrcamentoNaoEncontradoException;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
-import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
-import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
+import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class OrcamentoService implements IOrcamentoService{
@@ -25,10 +21,13 @@ public class OrcamentoService implements IOrcamentoService{
     private OrcamentoRepository orcamentoRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioValidateService usuarioValidateService;
 
     @Autowired
-    private CategoriaRepository categoriaRepository;
+    private CategoriaValidateService categoriaValidateService;
+
+    @Autowired
+    private OrcamentoValidateService orcamentoValidateService;
 
     @Transactional
     public List<OrcamentoDTO> findAll(String usuarioId) {
@@ -38,60 +37,63 @@ public class OrcamentoService implements IOrcamentoService{
 
     @Transactional
     public OrcamentoDTO findById(Long id, String usuarioId) {
-        Orcamento orcamento = orcamentoRepository.findById(id).orElseThrow(OrcamentoNaoEncontradoException::new);
-
-        if (!orcamento.getUsuario().getId().equals(usuarioId))
-            throw new AcessoNegadoException();
-
+        Orcamento orcamento = orcamentoValidateService.validateAndGet(id, usuarioId,
+                new EntidadeNaoEncontradaException("{id}", "Orcamento nao encontrado"),
+                new AcessoNegadoException());
         return new OrcamentoDTO(orcamento);
     }
 
     @Transactional
-    public OrcamentoDTO save(String usuarioId, OrcamentoPostDTO orcamento) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(UsuarioNaoEncontradoException::new);
-        Categoria categoria = categoriaRepository.findById(orcamento.getIdCategoria())
-                .orElseThrow(CategoriaOrcamentoNaoEncontradaException::new);
-
-        if (orcamentoRepository.findOrcamentoByCategoria(categoria.getId()).isPresent())
-            throw new CategoriaRepetidaException();
-        if (!categoria.getAtiva())
-            throw new CategoriaOrcamentoNaoEncontradaException();
-        if (!categoria.getUsuario().getId().equals(usuarioId))
-            throw new AcessoNegadoException();
-
-        Orcamento newOrcamento = new Orcamento(categoria, orcamento.getMesAno(), orcamento.getValorEstimado(), usuario);
-        return new OrcamentoDTO(orcamentoRepository.save(newOrcamento));
+    public OrcamentoDTO save(OrcamentoPostDTO orcamentoDto, String usuarioId) {
+        Orcamento orcamento = saveAndValidate(usuarioId, null, orcamentoDto);
+        return new OrcamentoDTO(orcamentoRepository.save(orcamento));
     }
 
     @Transactional
-    public OrcamentoDTO update(Long id, OrcamentoPostDTO orcamento, String usuarioId) {
-        Orcamento orcamentoAtual = orcamentoRepository.findById(id).orElseThrow(OrcamentoNaoEncontradoException::new);
-        Categoria categoria = categoriaRepository.findById(orcamento.getIdCategoria()).orElseThrow(CategoriaOrcamentoNaoEncontradaException::new);
-
-        if (!categoria.getAtiva())
-            throw new CategoriaOrcamentoNaoEncontradaException();
-        if (categoria.getUsuario() == null || !categoria.getUsuario().getId().equals(usuarioId))
-            throw new AcessoNegadoException();
-        if (!orcamentoAtual.getUsuario().getId().equals(usuarioId))
-            throw new AcessoNegadoException();
-        if (orcamentoRepository.findOrcamentoByCategoria(categoria.getId()).isPresent())
-            throw new CategoriaRepetidaException(categoria.getNome());
-
-        orcamentoAtual.setValorEstimado(orcamento.getValorEstimado());
-        orcamentoAtual.setMesAno(orcamento.getMesAno());
-        orcamentoAtual.setCategoria(categoria);
-
-        return new OrcamentoDTO(orcamentoRepository.save(orcamentoAtual));
+    public OrcamentoDTO update(Long id, OrcamentoPostDTO orcamentoDto, String usuarioId) {
+        Orcamento orcamento = saveAndValidate(usuarioId, id, orcamentoDto);
+        return new OrcamentoDTO(orcamentoRepository.save(orcamento));
     }
 
     @Transactional
-    public void deleteById(String usuarioId, Long id) {
-        Orcamento orcamentoEntity = orcamentoRepository.findById(id).orElseThrow(OrcamentoNaoEncontradoException::new);
+    public OrcamentoDTO deleteById(String usuarioId, Long id) {
+        Orcamento orcamento = orcamentoValidateService.validateAndGet(id, usuarioId,
+                new EntidadeNaoEncontradaException("{id}", "Orcamento nao encontrado"),
+                new AcessoNegadoException());
+        orcamentoRepository.delete(orcamento);
+        return new OrcamentoDTO(orcamento);
+    }
 
-        if(!Objects.equals(usuarioRepository.findById(usuarioId).orElse(null), orcamentoEntity.getUsuario()))
-            throw new AcessoNegadoException();
+    private Orcamento saveAndValidate(String usuarioId, Long id, OrcamentoPostDTO orcamentoDTO) {
+        Usuario usuario = usuarioValidateService.validateAndGet(usuarioId,
+                new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
+        System.out.println("saveAndValidate: usuario validado -> categoria");
 
-        orcamentoRepository.delete(orcamentoEntity);
+        Categoria categoria = categoriaValidateService.validateAndGet(orcamentoDTO.getIdCategoria(), usuarioId,
+                new EntidadeNaoEncontradaException("{id}", "categoria nao encontrada"),
+                new AcessoNegadoException());
+        System.out.println("saveAndValidate: categoria -> construcao de orcamento");
+
+        // Devo tratar aqui se existe outra orcamento com a mesma categoria, do mesmo usuario para o mesmo periodo
+
+        Orcamento orcamento;
+        if (id != null) {
+            // Busca a orcamento existente para atualizar
+            orcamento = orcamentoRepository.findById(id)
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("{id}", "Orcamento não encontrada para atualização"));
+
+            // Atualiza os campos da orcamento existente
+            orcamento.setValorEstimado(orcamentoDTO.getValorEstimado());
+            orcamento.setCategoria(categoria);
+            orcamento.setMes(orcamentoDTO.getMes());
+            orcamento.setAno(orcamentoDTO.getAno());
+        } else {
+            // Cria nova orcamento se for um save
+            orcamento = new Orcamento(categoria, orcamentoDTO.getMes(), orcamentoDTO.getAno(), orcamentoDTO.getValorEstimado(), usuario);
+        }
+
+        System.out.println("saveAndValidate: construcao de orcamento -> salvamento");
+        System.out.println(orcamento);
+        return orcamentoRepository.save(orcamento);
     }
 }
