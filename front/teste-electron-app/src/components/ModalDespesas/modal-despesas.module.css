@@ -41,17 +41,20 @@
   
   .radioGroup {
     display: flex;
-    flex-direction: column;
     gap: 10px;
   }
   
   .submitButton {
-    background-color: #4CAF50;
+    background-color: var(--main-color);
+    margin-left: 250px;
     color: white;
     padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+  }
+  .submitButton:hover{
+    background-color: var(--main-color-light);
   }
   
   .closeButton {

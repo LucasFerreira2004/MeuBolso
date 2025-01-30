@@ -1,19 +1,21 @@
+// src/components/ModalDespesas/ModalDespesas.tsx
 import React, { useState } from "react";
 import axios from "axios";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-despesas.module.css";
 import SelectBoxDespesas from "../UI/SelectedBoxContas/selected-box-contas";
+import DatePicker from "../UI/DatePicker/date-picker"; // Componente atualizado
 
 interface ModalADespesasProps {
   onClose: () => void;
 }
 
 function ModalDespesas({ onClose }: ModalADespesasProps) {
-  const [valor] = useState<number>(0);
+  const [valor, setValor] = useState<number>(0); // Adicionei um estado para o valor
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<string>("");
-  const [conta] = useState<string>("");
-  const [data, setData] = useState<string>("");
+  const [conta] = useState<string>(""); // Valor da conta
+  const [data, setData] = useState<string>(""); // Estado da data
   const [comentario, setComentario] = useState<string | null>(null);
   const [tipoTransacao, setTipoTransacao] = useState<string>("");
 
@@ -21,7 +23,7 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
     try {
       const response = await axios.post("http://localhost:8080/transacoes", {
         valor,
-        data,
+        data, // A data será enviada com a transação
         tipoTransacao,
         categoriaId: parseInt(categoria), // Aqui você pode mudar para usar o ID correto
         contaId: parseInt(conta), // Aqui você pode mudar para usar o ID correto
@@ -36,17 +38,16 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
     }
   };
 
+  const handleChangeValor = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValor(parseFloat(e.target.value)); // Atualiza o estado do valor
+  };
+
   const handleChangeDescricao = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDescricao(e.target.value);
   };
 
   const handleChangeCategoria = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCategoria(e.target.value);
-  };
-
-
-  const handleChangeData = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setData(e.target.value);
   };
 
   const handleChangeComentario = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,8 +72,8 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
           type="number"
           iconSrc="/assets/iconsModalDelete/money.svg"
           placeholder="R$ 0,00"
-          value={descricao}
-          onChange={handleChangeDescricao}
+          value={valor.toString()} // Use o estado `valor`
+          onChange={handleChangeValor} // Atualiza o estado `valor`
         />
         <InputWithIcon
           label="Descrição: "
@@ -88,15 +89,10 @@ function ModalDespesas({ onClose }: ModalADespesasProps) {
           value={categoria}
           onChange={handleChangeCategoria}
         />
-        <SelectBoxDespesas/>
-        <InputWithIcon
-          label="Data: "
-          iconSrc="/assets/iconsModalDelete/date.svg"
-          placeholder="Data"
-          type="date"
-          value={data}
-          onChange={handleChangeData}
-        />
+        <SelectBoxDespesas />
+
+        <DatePicker value={data} onChange={setData} />
+
         <InputWithIcon
           label="Comentário: "
           iconSrc="/assets/iconsModalDelete/descrip.svg"

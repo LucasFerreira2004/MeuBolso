@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
+import style from "./selected-box-contas.module.css"
 
 interface Banco {
   nome: string;
@@ -82,13 +83,15 @@ function SelectBoxDespesas() {
   };
 
   return (
-    <div className="container">
-      <div className="selectBox">
-        <label>Conta: </label>
+    <div className={style.selectBoxContainer}>
+      <div className={style.selectBoxWrapper}>
+        <label className={style.selectBoxLabel}>Conta:</label>
         <Select
           options={options}
           onChange={handleChange}
           placeholder="Selecione uma conta"
+          className={style.selectBox}
+          classNamePrefix="react-select"
         />
       </div>
     </div>
