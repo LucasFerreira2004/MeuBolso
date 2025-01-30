@@ -2,10 +2,9 @@ package com.projetointegrado.MeuBolso.repetirTransacao;
 
 import com.projetointegrado.MeuBolso.repetirTransacao.GerarTransacoesFixas.GerarTransacoesFactory;
 import com.projetointegrado.MeuBolso.repetirTransacao.GerarTransacoesFixas.IGerarTransacoesStrategy;
-import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFactory;
-import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStrategy;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TipoRepeticao;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +35,7 @@ public class TransacaoRepeticaoService {
 
         try {
             for (TransacaoRecorrente transacaoRecorrente : transacoesRecorrentes) {
-                IGerarTransacoesStrategy gerarTransacoesStrategy;
-                if (transacaoRecorrente.getDataFinal() == null) {
-                    gerarTransacoesStrategy = gerarTransacoesFactory.gerarTransacoesStrategy(TipoRepeticao.FIXO);
-                }else{
-                    gerarTransacoesStrategy = gerarTransacoesFactory.gerarTransacoesStrategy(TipoRepeticao.PARCELAMENTO);
-                }
+                IGerarTransacoesStrategy gerarTransacoesStrategy = gerarTransacoesFactory.gerarTransacoesStrategy(transacaoRecorrente.getTipoRepeticao());
                 gerarTransacoesStrategy.gerarTransacoes(transacaoRecorrente, data);
             }
         }catch (Exception e) {
