@@ -1,9 +1,12 @@
 package com.projetointegrado.MeuBolso.dashBoards;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
+import com.projetointegrado.MeuBolso.categoria.CategoriaValidateService;
 import com.projetointegrado.MeuBolso.categoria.TipoCategoria;
 import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaDadosDTO;
+import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaExpandedDTO;
 import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaMinDTO;
+import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
@@ -21,6 +24,9 @@ public class CategoriaDashboardService {
     private CategoriaDadosService categoriaDadosService;
 
     @Autowired
+    private CategoriaValidateService categoriaValidateService;
+
+    @Autowired
     private UsuarioValidateService usuarioValidateService;
 
     @Transactional
@@ -36,5 +42,12 @@ public class CategoriaDashboardService {
                     buscaInternaDTO.valor(), buscaInternaDTO.percentual()));
         }
         return valorTotalDTOs;
+    }
+
+    @Transactional
+    public CategoriaExpandedDTO findExpandedCategoria(String userId, Long id, LocalDate dataFinal) {
+        Categoria categoria = categoriaValidateService.validateAndGet(id, userId,
+                new EntidadeNaoEncontradaException("{id}", "categoria nao encontrada"), new AcessoNegadoException());
+        return categoriaDadosService.findExpandedCategoria(userId, categoria, dataFinal);
     }
 }

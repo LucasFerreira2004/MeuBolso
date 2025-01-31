@@ -31,9 +31,9 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
     @Query(nativeQuery = true, value = """
         select * from transacao 
-        where usuario_id = :userId and categoria_id = :categoria_id and data between :dataInicio and :dataFim
+        where usuario_id = :userId and categoria = :categoria_id and data between :dataInicial and :dataFinal
     """)
-    public List<Transacao> findAllInRangeByCategoria(LocalDate dataInicial, LocalDate dataFinal, Long categoria_id, String userId);
+    public List<Transacao> findAllInRangeByCategoria(String userId, LocalDate dataInicial, LocalDate dataFinal, Long categoria_id);
 
     @Query(nativeQuery = true, value = """
         select sum(transacao.valor) 
