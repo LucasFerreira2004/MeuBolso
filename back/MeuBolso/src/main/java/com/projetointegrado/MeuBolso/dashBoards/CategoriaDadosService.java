@@ -66,8 +66,8 @@ public class CategoriaDadosService {
         System.out.println("getDadosCategoria -> totalValorMensal:" + totalValorMensal);
         BigDecimal valorCategoria =  transacaoRepository.getSumInRangeByCategoria(dataInicial, dataFinal, categoria.getId(), userId); //mudar para ficar no service de transacao
         System.out.println("getDadosCategoria -> valorCategoria:" + valorCategoria);
-        if (valorCategoria == null || totalValorMensal == null)
-            return null;
+        if (valorCategoria == null || totalValorMensal == null || totalValorMensal.compareTo(BigDecimal.ZERO) == 0) return null;
+
         BigDecimal prctGasto = valorCategoria
                 .multiply(new BigDecimal(100))
                 .divide(totalValorMensal, 2, RoundingMode.HALF_DOWN);
