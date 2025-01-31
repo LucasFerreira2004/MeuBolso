@@ -38,7 +38,7 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     @Query(nativeQuery = true, value = """
         select sum(transacao.valor) 
         from transacao 
-        where usuario_id = :userId and categoria_id = :categoria_id and data between :dataInicio and :dataFim
+        where usuario_id = :userId and categoria = :categoria_id and data between :dataInicial and :dataFinal
     """)
     public BigDecimal getSomatorioInRangeByCategoria(LocalDate dataInicial, LocalDate dataFinal, Long categoria_id, String userId);
 }

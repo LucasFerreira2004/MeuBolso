@@ -1,6 +1,10 @@
-package com.projetointegrado.MeuBolso.categoria;
+package com.projetointegrado.MeuBolso.dashBoards;
 
-import com.projetointegrado.MeuBolso.categoria.dto.CategoriaBuscaInternaDTO;
+import com.projetointegrado.MeuBolso.categoria.Categoria;
+import com.projetointegrado.MeuBolso.categoria.CategoriaRepository;
+import com.projetointegrado.MeuBolso.categoria.ICategoriaService;
+import com.projetointegrado.MeuBolso.categoria.TipoCategoria;
+import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaBuscaInternaDTO;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
 import com.projetointegrado.MeuBolso.transacao.TransacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -34,10 +39,14 @@ public class CategoriaBuscasInternasService {
         List<CategoriaBuscaInternaDTO> dtos = new ArrayList<>();
 
         for (Categoria categoria : categorias) {
-            BigDecimal TotalGastosMensais = transacaoService.findSumDespesasInRangeByMonth(userId, dataFinal);
+            BigDecimal totalGastosMensais = transacaoService.findSumDespesasInRangeByMonth(userId, dataFinal);
             BigDecimal totalGastosCategoria =  transacaoRepository.getSomatorioInRangeByCategoria(dataInicial, dataFinal, categoria.getId(), userId); //mudar para ficar no service de transacao
-            BigDecimal prctGasto = totalGastosCategoria.multiply(new BigDecimal(100)).divide(TotalGastosMensais);
-            dtos.add(new CategoriaBuscaInternaDTO(categoria, TotalGastosMensais, prctGasto));
+            if (totalGastosCategoria == null || totalGastosMensais == null)
+                continue;
+            BigDecimal prctGasto = totalGastosCategoria
+                    .multiply(new BigDecimal(100))
+                    .divide(totalGastosMensais, 2, RoundingMode.HALF_UP);
+            dtos.add(new CategoriaBuscaInternaDTO(categoria, totalGastosMensais, prctGasto));
         }
         return dtos;
     }

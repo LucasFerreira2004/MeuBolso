@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.categoria.dto;
+package com.projetointegrado.MeuBolso.dashBoards.dto;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 
