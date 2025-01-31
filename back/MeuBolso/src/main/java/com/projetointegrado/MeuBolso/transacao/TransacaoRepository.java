@@ -43,9 +43,14 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     public BigDecimal getSumInRangeByCategoria(LocalDate dataInicial, LocalDate dataFinal, Long categoria_id, String userId);
 
     @Query(nativeQuery = true, value = """
-        select sum(transacao.valor)
-        from transacao 
-        where usuario_id = :userId and tipo = :tipo and data between :dataInicio and :dataFim
+        select sum(t.valor)
+        from transacao as t,
+             categoria as c
+        where c.id = t.categoria
+              and t.usuario_id = :userId 
+              and t.tipo = :tipo 
+              and t.data between :dataInicio and :dataFim
+              and c.interna_sistema = false;
     """)
     public BigDecimal getSumInRangeByTipo(LocalDate dataInicio, LocalDate dataFim, String userId, String tipo);
 }

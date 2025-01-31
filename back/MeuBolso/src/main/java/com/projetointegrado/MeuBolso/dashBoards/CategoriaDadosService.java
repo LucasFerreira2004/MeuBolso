@@ -43,14 +43,16 @@ public class CategoriaDadosService {
         List<CategoriaDadosDTO> dtos = new ArrayList<>();
 
         for (Categoria categoria : categorias) {
-            BigDecimal totalGastosMensais = transacaoRepository.getSumInRangeByTipo(dataInicial, dataFinal, userId, tipo.name());
-            BigDecimal gastosCategoria =  transacaoRepository.getSumInRangeByCategoria(dataInicial, dataFinal, categoria.getId(), userId); //mudar para ficar no service de transacao
-            if (gastosCategoria == null || totalGastosMensais == null)
+            BigDecimal totalValorMensal = transacaoRepository.getSumInRangeByTipo(dataInicial, dataFinal, userId, tipo.name());
+            System.out.println("getDadosCategoria -> totalValorMensal:" + totalValorMensal);
+            BigDecimal valorCategoria =  transacaoRepository.getSumInRangeByCategoria(dataInicial, dataFinal, categoria.getId(), userId); //mudar para ficar no service de transacao
+            System.out.println("getDadosCategoria -> valorCategoria:" + valorCategoria);
+            if (valorCategoria == null || totalValorMensal == null)
                 continue;
-            BigDecimal prctGasto = gastosCategoria
+            BigDecimal prctGasto = valorCategoria
                     .multiply(new BigDecimal(100))
-                    .divide(totalGastosMensais, 2, RoundingMode.HALF_DOWN);
-            dtos.add(new CategoriaDadosDTO(categoria, gastosCategoria, prctGasto));
+                    .divide(totalValorMensal, 2, RoundingMode.HALF_DOWN);
+            dtos.add(new CategoriaDadosDTO(categoria, valorCategoria, prctGasto));
         }
         return dtos;
     }
