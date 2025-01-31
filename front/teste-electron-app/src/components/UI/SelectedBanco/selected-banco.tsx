@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import style from "./selected-bancos.module.css";
+import style from "./selected-banco.module.css";
 
 interface Banco {
   id: number;
@@ -9,7 +9,7 @@ interface Banco {
 }
 
 interface SelectedBancosProps {
-  setBanco: (bancoId: number | null) => void;
+  setBanco: (bancoId: number | null) => void; // Prop esperada
 }
 
 function SelectedBancos({ setBanco }: SelectedBancosProps) {
@@ -67,7 +67,7 @@ function SelectedBancos({ setBanco }: SelectedBancosProps) {
 
   const handleChange = (selectedOption: any) => {
     const bancoSelecionado = selectedOption ? selectedOption.value : null;
-    setBanco(bancoSelecionado);  // Passando o ID do banco
+    setBanco(bancoSelecionado); // Passando o ID do banco
   };
 
   return (

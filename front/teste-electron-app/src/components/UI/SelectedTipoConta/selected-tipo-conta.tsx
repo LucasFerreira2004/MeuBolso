@@ -22,7 +22,7 @@ function SelectedTipoConta({ setTipoConta }: SelectedTipoContaProps) {
       return;
     }
 
-    const url = "http://localhost:8080/tipoConta/1"; // Ajuste o URL conforme necessário
+    const url = "http://localhost:8080/tipoConta"; // Ajuste o URL conforme necessário
 
     fetch(url, {
       method: "GET",
@@ -38,14 +38,23 @@ function SelectedTipoConta({ setTipoConta }: SelectedTipoContaProps) {
         return response.json();
       })
       .then((data: TipoConta[]) => {
-        setTiposConta(data);
+        console.log("Dados recebidos:", data);
+        // Verifica se os dados são um array válido
+        if (Array.isArray(data)) {
+          setTiposConta(data);
+        } else {
+          console.error("Resposta inválida: Esperado um array de tipos de conta.");
+        }
       })
-      .catch((error) => console.error("Erro ao buscar tipos de conta:", error));
+      .catch((error) => {
+        console.error("Erro ao buscar tipos de conta:", error);
+      });
   }, []);
 
+  // Formatação das opções para o componente Select
   const options = tiposConta.map((tipo) => ({
     value: tipo.id,
-    label: tipo.tipoConta.replace("_", " "), // Ajuste o nome se vier com "_"
+    label: tipo.tipoConta.replace("_", " "), // Ajuste o nome se necessário (ex: CONTA_CORRENTE => Conta Corrente)
   }));
 
   const handleChange = (selectedOption: any) => {
