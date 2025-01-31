@@ -43,6 +43,7 @@ public class Orcamento {
 
     public Orcamento(Categoria categoria, Integer mes, Integer ano, BigDecimal valorEstimado, Usuario usuario) {
         this.categoria = categoria;
+        this.descricao = categoria.getNome();
         this.mes = mes;
         this.ano = ano;
         this.valorEstimado = valorEstimado;
