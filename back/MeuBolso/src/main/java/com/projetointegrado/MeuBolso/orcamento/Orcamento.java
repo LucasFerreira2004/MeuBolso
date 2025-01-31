@@ -17,7 +17,7 @@ public class Orcamento {
 
     private String descricao;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false, name = "categoria_id")
     private Categoria categoria;
 
