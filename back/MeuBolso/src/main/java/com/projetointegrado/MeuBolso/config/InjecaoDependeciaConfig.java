@@ -12,8 +12,8 @@ import com.projetointegrado.MeuBolso.tipoConta.ITipoContaService;
 import com.projetointegrado.MeuBolso.tipoConta.TipoContaService;
 import com.projetointegrado.MeuBolso.transacao.ITransacaoService;
 import com.projetointegrado.MeuBolso.transacao.TransacaoService;
-import com.projetointegrado.MeuBolso.transacao.transacaoFixa.ITransacaoFixaService;
-import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoFixaService;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.ITransacaoRecorrenteService;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrenteService;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.context.annotation.Bean;
@@ -57,5 +57,5 @@ public class InjecaoDependeciaConfig {
     }
 
     @Bean
-    public ITransacaoFixaService TransacaoFixaService(){return new TransacaoFixaService();}
+    public ITransacaoRecorrenteService TransacaoFixaService(){return new TransacaoRecorrenteService();}
 }

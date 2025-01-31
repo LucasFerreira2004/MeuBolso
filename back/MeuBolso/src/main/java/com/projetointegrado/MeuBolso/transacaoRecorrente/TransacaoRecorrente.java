@@ -1,7 +1,9 @@
-package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
+package com.projetointegrado.MeuBolso.transacaoRecorrente;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
+import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFactory;
+import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStrategy;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
@@ -12,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-public class TransacaoFixa {
+public class TransacaoRecorrente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,15 +46,24 @@ public class TransacaoFixa {
 
     @Enumerated(EnumType.STRING)
     @Column (nullable = false)
-    private Periodicidade periodicidade; //ainda não está em uso
+    private Periodicidade periodicidade;
 
     @Column(nullable = true, name = "ultima_execucao")
     private LocalDate ultimaExecucao; //representa a data que foi chamada pela última vez para realizar a cricação de transacoes
 
-    @OneToMany(mappedBy = "transacaoFixa", cascade = CascadeType.REMOVE)
+    @Column(name = "data_final")
+    private LocalDate dataFinal;
+
+    @Column(name = "qtd_parcelas")
+    private Integer qtdParcelas;
+
+    @Column(nullable = false, name = "tipo_repeticao")
+    private TipoRepeticao tipoRepeticao;
+
+    @OneToMany(mappedBy = "transacaoRecorrente", cascade = CascadeType.REMOVE)
     private List<Transacao> transacoes;
 
-    public TransacaoFixa(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario) {
+    public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario) {
         this.id = id;
         this.valor = valor;
         this.tipo = tipo;
@@ -65,7 +76,24 @@ public class TransacaoFixa {
         this.ultimaExecucao = null;
     }
 
-    public TransacaoFixa() {}
+    public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario, Integer qtdParcelas, TipoRepeticao tipoRepeticao) {
+        this.id = id;
+        this.valor = valor;
+        this.tipo = tipo;
+        this.dataCadastro = dataCadastro;
+        this.descricao = descricao;
+        this.conta = conta;
+        this.categoria = categoria;
+        this.periodicidade = periodicidade;
+        this.usuario = usuario;
+        this.ultimaExecucao = null;
+        this.qtdParcelas = qtdParcelas;
+        this.tipoRepeticao = tipoRepeticao;
+        if (qtdParcelas == null) return;
+        IAvancoDataStrategy avancoStrategy = AvancoDataFactory.getStrategy(this.periodicidade);
+        this.dataFinal = avancoStrategy.avancarData(this.dataCadastro, this.dataCadastro, this.qtdParcelas - 1);
+    }
+    public TransacaoRecorrente() {}
 
     public List<Transacao> getTransacoes() {
         return transacoes;
@@ -153,5 +181,29 @@ public class TransacaoFixa {
 
     public void setUltimaExecucao(LocalDate ultimaExecucao) {
         this.ultimaExecucao = ultimaExecucao;
+    }
+
+    public LocalDate getDataFinal() {
+        return dataFinal;
+    }
+
+    public void setDataFinal(LocalDate dataFinal) {
+        this.dataFinal = dataFinal;
+    }
+
+    public Integer getQtdParcelas() {
+        return qtdParcelas;
+    }
+
+    public void setQtdParcelas(Integer qtdParcelas) {
+        this.qtdParcelas = qtdParcelas;
+    }
+
+    public TipoRepeticao getTipoRepeticao() {
+        return tipoRepeticao;
+    }
+
+    public void setTipoRepeticao(TipoRepeticao tipoRepeticao) {
+        this.tipoRepeticao = tipoRepeticao;
     }
 }

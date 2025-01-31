@@ -2,7 +2,7 @@ package com.projetointegrado.MeuBolso.transacao;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
-import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoFixa;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 
@@ -50,7 +50,7 @@ public class Transacao {
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "transacao_fixa_id")
-    private TransacaoFixa transacaoFixa;
+    private TransacaoRecorrente transacaoRecorrente;
 
     public Transacao(Long id, BigDecimal valor, LocalDate data, TipoTransacao tipo, Categoria categoria, Conta conta, String comentario, String descricao, Usuario usuario) {
         this.id = id;
@@ -64,17 +64,17 @@ public class Transacao {
         this.usuario = usuario;
     }
 
-    public Transacao (TransacaoFixa transacaoFixa, LocalDate data) {
+    public Transacao (TransacaoRecorrente transacaoRecorrente, LocalDate data) {
         this.id = null;
-        this.valor = transacaoFixa.getValor();
+        this.valor = transacaoRecorrente.getValor();
         this.data = data;
-        this.tipo = transacaoFixa.getTipo();
-        this.categoria = transacaoFixa.getCategoria();
-        this.conta = transacaoFixa.getConta();
+        this.tipo = transacaoRecorrente.getTipo();
+        this.categoria = transacaoRecorrente.getCategoria();
+        this.conta = transacaoRecorrente.getConta();
         this.comentario = null;
-        this.descricao = transacaoFixa.getDescricao();
-        this.usuario = transacaoFixa.getUsuario();
-        this.transacaoFixa = transacaoFixa;
+        this.descricao = transacaoRecorrente.getDescricao();
+        this.usuario = transacaoRecorrente.getUsuario();
+        this.transacaoRecorrente = transacaoRecorrente;
     }
 
     public Transacao() {
@@ -83,12 +83,12 @@ public class Transacao {
     // Getters e Setters
 
 
-    public TransacaoFixa getTransacaoFixa() {
-        return transacaoFixa;
+    public TransacaoRecorrente getTransacaoFixa() {
+        return transacaoRecorrente;
     }
 
-    public void setTransacaoFixa(TransacaoFixa transacaoFixa) {
-        this.transacaoFixa = transacaoFixa;
+    public void setTransacaoFixa(TransacaoRecorrente transacaoRecorrente) {
+        this.transacaoRecorrente = transacaoRecorrente;
     }
 
     public void setId(Long id) {

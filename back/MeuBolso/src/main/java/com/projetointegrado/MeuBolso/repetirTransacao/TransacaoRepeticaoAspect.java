@@ -1,6 +1,5 @@
-package com.projetointegrado.MeuBolso.transacao.transacaoFixa;
+package com.projetointegrado.MeuBolso.repetirTransacao;
 
-import com.projetointegrado.MeuBolso.transacao.transacaoFixa.TransacaoRepeticaoExecutor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -17,7 +16,7 @@ public class TransacaoRepeticaoAspect {
         this.transacaoRepeticaoExecutor = transacaoRepeticaoExecutor;
     }
 
-    @Before("execution(* com.projetointegrado.MeuBolso.conta.ContaService.find*(..)) || execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findAll(..))")
+    @Before("execution(* com.projetointegrado.MeuBolso.conta.ContaService.find*(..)) || execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findAll*(..)) || execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findSum*(..))")
     public void gerarTransacoesFixasAntesDasBuscas(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         LocalDate data = null;

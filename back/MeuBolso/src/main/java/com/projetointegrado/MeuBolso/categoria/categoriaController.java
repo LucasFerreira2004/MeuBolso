@@ -1,11 +1,14 @@
 package com.projetointegrado.MeuBolso.categoria;
 
+import com.projetointegrado.MeuBolso.categoria.dto.ArquivarCategoriaPatchDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
+import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +26,8 @@ public class categoriaController {
     private IUsuarioService usuarioService;
 
     @GetMapping
-    public List<CategoriaDTO> findCategoria() {
-        List<CategoriaDTO> result = categoriaService.findAll(usuarioService.getUsuarioLogadoId());
+    public List<CategoriaDTO> findAllAtivas() {
+        List<CategoriaDTO> result = categoriaService.findAllAtivas(usuarioService.getUsuarioLogadoId());
         return result;
     }
 
@@ -52,8 +55,18 @@ public class categoriaController {
         return categoriaService.update(usuarioService.getUsuarioLogadoId(), id, categoriaSaveDTO);
     }
 
-    @PutMapping("/arquivadas/{id}")
-    public CategoriaDTO arquivar(@PathVariable Long id) {
-        return categoriaService.arquivar(usuarioService.getUsuarioLogadoId(), id);
+    //RotasRerentes específicas das arquivadas
+    @GetMapping("/arquivadas")
+    public List<CategoriaDTO> findAllArquivadas() {
+        List<CategoriaDTO> result = categoriaService.findAllArquivadas(usuarioService.getUsuarioLogadoId());
+        return result;
+    }
+
+    @PatchMapping("/arquivadas/{id}")
+    public CategoriaDTO atualizarStatusAtiva(@PathVariable Long id, @RequestBody ArquivarCategoriaPatchDTO dto, BindingResult bindingResult) throws ValoresNaoPermitidosException {
+        if (bindingResult.hasErrors()) {
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
+        return categoriaService.atualizarStatusAtiva(usuarioService.getUsuarioLogadoId(), id, dto.ativa());
     }
 }
