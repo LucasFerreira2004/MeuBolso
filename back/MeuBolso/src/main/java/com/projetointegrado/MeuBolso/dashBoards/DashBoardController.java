@@ -39,7 +39,12 @@ public class DashBoardController {
 
     @GetMapping("/categoria/{id}")
     public CategoriaExpandedDTO getExpandedCategoria(@PathVariable Long id, @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
-        String userId = usuarioService.getUsuarioLogadoId();
-        return categoriaDashboardService.findExpandedCategoria(userId, id, data);
+        try {
+            String userId = usuarioService.getUsuarioLogadoId();
+            return categoriaDashboardService.findExpandedCategoria(userId, id, data);
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }
