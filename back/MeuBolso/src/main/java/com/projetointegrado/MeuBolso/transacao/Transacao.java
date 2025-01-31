@@ -10,6 +10,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Entity
@@ -66,7 +67,9 @@ public class Transacao {
 
     public Transacao (TransacaoRecorrente transacaoRecorrente, LocalDate data) {
         this.id = null;
-        this.valor = transacaoRecorrente.getValor();
+        BigDecimal qtdParcelas = new BigDecimal(transacaoRecorrente.getQtdParcelas());
+        this.valor = transacaoRecorrente.getValor()
+                .divide(qtdParcelas, 2, RoundingMode.DOWN);
         this.data = data;
         this.tipo = transacaoRecorrente.getTipo();
         this.categoria = transacaoRecorrente.getCategoria();

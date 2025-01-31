@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.repetirTransacao.GerarTransacoesFixas;
+package com.projetointegrado.MeuBolso.repetirTransacao.gerarTransacoes;
 
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFactory;
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStrategy;
@@ -12,14 +12,13 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 
 @Service
-public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
+public class ParceladasGerarTransacoes implements IGerarTransacoesStrategy{
     @Autowired
     private TransacaoRepository transacaoRepository;
 
     @Autowired
     private TransacaoRecorrenteRepository transacaoRecorrenteRepository;
 
-    @Override
     public void gerarTransacoes(TransacaoRecorrente transacaoRecorrente, LocalDate dataBusca) {
         System.out.println("TransacaoRecorrenteService -> gerarTransacoesFixas");
         IAvancoDataStrategy AvancoStrategy = AvancoDataFactory.getStrategy(transacaoRecorrente.getPeriodicidade());
@@ -30,14 +29,14 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
             dataUltimaExecucao = transacaoRecorrente.getDataCadastro();
         }
 
-        while (!dataUltimaExecucao.isAfter(dataBusca)) {
+        while (!dataUltimaExecucao.isAfter(dataBusca) && !dataUltimaExecucao.isAfter(transacaoRecorrente.getDataFinal())) {
             Transacao novaTransacao = new Transacao(transacaoRecorrente, dataUltimaExecucao);
             transacaoRepository.save(novaTransacao);
             transacaoRecorrente.setUltimaExecucao(dataUltimaExecucao);
 
             dataUltimaExecucao = AvancoStrategy.avancarData(dataUltimaExecucao, transacaoRecorrente.getDataCadastro(), 1);
         }
-        System.out.println("TransacaoRecorrenteService -> gerarTransacoesFixas -> ultimaExecucao = " + transacaoRecorrente.getUltimaExecucao());
+        System.out.println("TransacaoRecorrenteService -> gerarTransacoesParceladas -> ultimaExecucao = " + transacaoRecorrente.getUltimaExecucao());
         transacaoRecorrenteRepository.save(transacaoRecorrente);
     }
 }
