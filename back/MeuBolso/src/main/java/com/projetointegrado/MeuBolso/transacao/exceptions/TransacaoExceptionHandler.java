@@ -13,4 +13,10 @@ public class TransacaoExceptionHandler {
         ErrorResponseDTO dto = new ErrorResponseDTO("tipo transacao", "os tipos aceitos para tipo transacao devem ser RECEITA ou DESPESA");
         return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(MismatchTransacaoTypeException.class)
+    public ResponseEntity<ErrorResponseDTO> mismatchTransacaoTypeExceptionHandler(MismatchTransacaoTypeException ex){
+        ErrorResponseDTO dto = new ErrorResponseDTO(ex.getCampo(), ex.getMessage());
+        return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+    }
 }
