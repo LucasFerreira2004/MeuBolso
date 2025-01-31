@@ -16,6 +16,9 @@ function ModalTipoTransacao({ onClose }: ModalTransacaoProps) {
     setIsDespesasModalOpen(false);
     setIsReceitasModalOpen(false);
     onClose(); // Fecha também o modal principal
+
+    // Recarrega a página
+    window.location.reload();
   };
 
   return (

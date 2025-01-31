@@ -8,15 +8,19 @@ import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
+  const [despesas, setDespesas] = useState<number | null>(null);
+  const [receitas, setReceitas] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const dataReferencia = "2026-01-18"; // Data fixa para a consulta
+  const [mesSelecionado, setMesSelecionado] = useState<string>('01'); // Mês inicial fixo
 
-  const fetchSaldoTotal = async () => {
+  const fetchSaldoTotal = async (mes: string) => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       setError("Você precisa estar logado para acessar esta funcionalidade.");
       return;
     }
+
+    const dataReferencia = `2600-${mes}-01`; // Data fixa, apenas o mês é dinâmico
 
     try {
       const response = await fetch(
@@ -40,10 +44,73 @@ function Transacoes() {
     }
   };
 
-  // Função para formatar o saldo como moeda
+  // Função para buscar as despesas
+  const fetchDespesas = async (mes: string) => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      setError("Você precisa estar logado para acessar esta funcionalidade.");
+      return;
+    }
+
+    const dataReferencia = `2025-${mes}-31`; // Data para as despesas (ajustado para o final do mês)
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/transacoes/somatorioDespesas?data=${dataReferencia}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao carregar as despesas.");
+      }
+
+      const data = await response.json();
+      setDespesas(data.somatorio);
+    } catch (error) {
+      setError("Erro ao carregar as despesas.");
+      console.error(error);
+    }
+  };
+
+  // Função para buscar as receitas
+  const fetchReceitas = async (mes: string) => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      setError("Você precisa estar logado para acessar esta funcionalidade.");
+      return;
+    }
+
+    const dataReferencia = `2600-${mes}-31`; // Data para as receitas (ajustado para o final do mês)
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/transacoes/somatorioReceitas?data=${dataReferencia}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao carregar as receitas.");
+      }
+
+      const data = await response.json();
+      setReceitas(data.somatorio);
+    } catch (error) {
+      setError("Erro ao carregar as receitas.");
+      console.error(error);
+    }
+  };
+
   const formatarSaldo = (valor: number | null | undefined) => {
     if (valor == null) {
-      return "R$ 0,00"; // Valor padrão caso o saldo seja inválido
+      return "R$ 0,00"; 
     }
     return valor.toLocaleString("pt-BR", {
       style: "currency",
@@ -53,10 +120,9 @@ function Transacoes() {
 
   const handleMonthChange = (month: string) => {
     console.log("Mês selecionado:", month);
-  };
-
-  const handleYearChange = (year: string) => {
-    console.log("Ano selecionado:", year);
+    setMesSelecionado(month); 
+    fetchDespesas(month); 
+    fetchReceitas(month); 
   };
 
   const toggleModal = () => {
@@ -64,8 +130,10 @@ function Transacoes() {
   };
 
   useEffect(() => {
-    fetchSaldoTotal();
-  }, [dataReferencia]);
+    fetchSaldoTotal(mesSelecionado); 
+    fetchDespesas(mesSelecionado); 
+    fetchReceitas(mesSelecionado); 
+  }, [mesSelecionado]);
 
   return (
     <div className={style.containerTransacoes}>
@@ -91,7 +159,8 @@ function Transacoes() {
               className={style.iconT}
             />
             <p>
-              <span className={style.spanR}>Despesas: </span>R$ 3896.00
+              <span className={style.spanR}>Despesas: </span>
+              {despesas !== null ? formatarSaldo(despesas) : "Carregando..."}
             </p>
           </div>
           <div>
@@ -101,18 +170,18 @@ function Transacoes() {
               className={style.iconT}
             />
             <p>
-              <span className={style.spanT}>Receitas: </span>R$ 15316.00
+              <span className={style.spanT}>Receitas: </span>
+              {receitas !== null ? formatarSaldo(receitas) : "Carregando..."}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Exibição de erro */}
       {error && <div className={style.errorMessage}>{error}</div>}
 
       <div className={style.bodyTransacoes}>
         <div className={style.headerBodyT}>
-          <Date onMonthChange={handleMonthChange} onYearChange={handleYearChange} />
+          <Date onMonthChange={handleMonthChange} />
           <div className={style.search}>
             <input
               className={style.input}
@@ -135,7 +204,6 @@ function Transacoes() {
           </div>
         </div>
 
-        {/* Exibindo as transações */}
         <div className={style.transacoesList}>
           <CardTransacoes
             dia="28"
