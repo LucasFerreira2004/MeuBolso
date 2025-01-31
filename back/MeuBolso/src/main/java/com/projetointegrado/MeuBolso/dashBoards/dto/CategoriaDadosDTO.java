@@ -4,7 +4,7 @@ import com.projetointegrado.MeuBolso.categoria.Categoria;
 
 import java.math.BigDecimal;
 
-public record CategoriaBuscaInternaDTO(
+public record CategoriaDadosDTO(
         Categoria categoria,
         BigDecimal valor,
         BigDecimal percentual

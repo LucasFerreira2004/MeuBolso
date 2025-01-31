@@ -1,6 +1,6 @@
 package com.projetointegrado.MeuBolso.dashBoards;
 
-import com.projetointegrado.MeuBolso.dashBoards.dto.ValorTotalCategoriaDTO;
+import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaMinDTO;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,18 +14,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value ="/dashboards")
-public class DashBoardsController {
+public class DashBoardController {
     @Autowired
-    private CategoriaDashboardsService categoriaDashboardsService;
+    private CategoriaDashboardService categoriaDashboardService;
 
     @Autowired
     private UsuarioService usuarioService;
 
     @GetMapping("/despesasTotaisCategorias")
-    public List<ValorTotalCategoriaDTO> getDespesasCategorias(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+    public List<CategoriaMinDTO> getDespesasCategorias(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
         try {
             String userId = usuarioService.getUsuarioLogadoId();
-            return categoriaDashboardsService.findAllValorTotalCategoria(userId, data);
+            return categoriaDashboardService.findAllValorTotalCategoria(userId, data);
         }catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);

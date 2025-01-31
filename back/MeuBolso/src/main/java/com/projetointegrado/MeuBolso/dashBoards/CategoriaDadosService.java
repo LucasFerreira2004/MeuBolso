@@ -3,8 +3,7 @@ package com.projetointegrado.MeuBolso.dashBoards;
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.categoria.CategoriaRepository;
 import com.projetointegrado.MeuBolso.categoria.ICategoriaService;
-import com.projetointegrado.MeuBolso.categoria.TipoCategoria;
-import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaBuscaInternaDTO;
+import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaDadosDTO;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
 import com.projetointegrado.MeuBolso.transacao.TransacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CategoriaBuscasInternasService {
+public class CategoriaDadosService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
@@ -33,10 +32,10 @@ public class CategoriaBuscasInternasService {
     private TransacaoService transacaoService;
 
     @Transactional
-    public List<CategoriaBuscaInternaDTO> buscaCategoriasInternas(String userId, LocalDate dataFinal) {
+    public List<CategoriaDadosDTO> buscaCategoriasInternas(String userId, LocalDate dataFinal) {
         LocalDate dataInicial = dataFinal.with(TemporalAdjusters.firstDayOfMonth());
         List<Categoria> categorias = categoriaRepository.findAll();
-        List<CategoriaBuscaInternaDTO> dtos = new ArrayList<>();
+        List<CategoriaDadosDTO> dtos = new ArrayList<>();
 
         for (Categoria categoria : categorias) {
             BigDecimal totalGastosMensais = transacaoService.findSumDespesasInRangeByMonth(userId, dataFinal);
@@ -46,7 +45,7 @@ public class CategoriaBuscasInternasService {
             BigDecimal prctGasto = totalGastosCategoria
                     .multiply(new BigDecimal(100))
                     .divide(totalGastosMensais, 2, RoundingMode.HALF_UP);
-            dtos.add(new CategoriaBuscaInternaDTO(categoria, totalGastosMensais, prctGasto));
+            dtos.add(new CategoriaDadosDTO(categoria, totalGastosMensais, prctGasto));
         }
         return dtos;
     }

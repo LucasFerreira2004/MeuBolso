@@ -1,8 +1,8 @@
 package com.projetointegrado.MeuBolso.dashBoards;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
-import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaBuscaInternaDTO;
-import com.projetointegrado.MeuBolso.dashBoards.dto.ValorTotalCategoriaDTO;
+import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaDadosDTO;
+import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaMinDTO;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CategoriaDashboardsService {
+public class CategoriaDashboardService {
     @Autowired
-    private CategoriaBuscasInternasService categoriaBuscasInternasService;
+    private CategoriaDadosService categoriaDadosService;
 
     @Autowired
     private UsuarioValidateService usuarioValidateService;
 
     @Transactional
-    public List<ValorTotalCategoriaDTO> findAllValorTotalCategoria(String userId, LocalDate dataFinal) {
+    public List<CategoriaMinDTO> findAllValorTotalCategoria(String userId, LocalDate dataFinal) {
         usuarioValidateService.validate(userId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado"));
 
-        List<CategoriaBuscaInternaDTO> buscaInternaDTOs = categoriaBuscasInternasService.buscaCategoriasInternas(userId, dataFinal);
-        List<ValorTotalCategoriaDTO> valorTotalDTOs = new ArrayList<>();
-        for (CategoriaBuscaInternaDTO buscaInternaDTO: buscaInternaDTOs) {
+        List<CategoriaDadosDTO> buscaInternaDTOs = categoriaDadosService.buscaCategoriasInternas(userId, dataFinal);
+        List<CategoriaMinDTO> valorTotalDTOs = new ArrayList<>();
+        for (CategoriaDadosDTO buscaInternaDTO: buscaInternaDTOs) {
             Categoria categoria = buscaInternaDTO.categoria();
-            valorTotalDTOs.add(new ValorTotalCategoriaDTO(categoria.getId(), categoria.getCor(), categoria.getNome(),
+            valorTotalDTOs.add(new CategoriaMinDTO(categoria.getId(), categoria.getCor(), categoria.getNome(),
                     buscaInternaDTO.valor(), buscaInternaDTO.percentual()));
         }
         return valorTotalDTOs;
