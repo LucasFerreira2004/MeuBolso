@@ -9,14 +9,16 @@ function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const dataReferencia = "2026-01-18"; // Data fixa para a consulta
+  const [mesSelecionado, setMesSelecionado] = useState<string>('01'); // Mes inicial fixo
 
-  const fetchSaldoTotal = async () => {
+  const fetchSaldoTotal = async (mes: string) => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       setError("Você precisa estar logado para acessar esta funcionalidade.");
       return;
     }
+
+    const dataReferencia = `2026-${mes}-01`; // Data fixa, apenas o mês é dinâmico
 
     try {
       const response = await fetch(
@@ -53,10 +55,8 @@ function Transacoes() {
 
   const handleMonthChange = (month: string) => {
     console.log("Mês selecionado:", month);
-  };
-
-  const handleYearChange = (year: string) => {
-    console.log("Ano selecionado:", year);
+    setMesSelecionado(month); // Atualiza o mês
+    fetchSaldoTotal(month); // Recarrega o saldo para o mês selecionado
   };
 
   const toggleModal = () => {
@@ -64,8 +64,8 @@ function Transacoes() {
   };
 
   useEffect(() => {
-    fetchSaldoTotal();
-  }, [dataReferencia]);
+    fetchSaldoTotal(mesSelecionado); // Chama o fetch na montagem inicial
+  }, [mesSelecionado]);
 
   return (
     <div className={style.containerTransacoes}>
@@ -112,7 +112,7 @@ function Transacoes() {
 
       <div className={style.bodyTransacoes}>
         <div className={style.headerBodyT}>
-          <Date onMonthChange={handleMonthChange} onYearChange={handleYearChange} />
+          <Date onMonthChange={handleMonthChange} />
           <div className={style.search}>
             <input
               className={style.input}

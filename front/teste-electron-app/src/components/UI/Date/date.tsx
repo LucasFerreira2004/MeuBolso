@@ -3,55 +3,40 @@ import style from './date.module.css';
 
 interface DateProps {
   onMonthChange?: (month: string) => void;
-  onYearChange?: (year: string) => void;
 }
 
-const DatePicker: React.FC<DateProps> = ({ onMonthChange, onYearChange }) => {
+const DatePicker: React.FC<DateProps> = ({ onMonthChange }) => {
   const currentYear = new Date().getFullYear();
   const months = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
 
-  const [month, setMonth] = useState<string>('01');
-  const [year, setYear] = useState<string>(currentYear.toString());
+  const [month, setMonth] = useState<string>('01'); // Mes inicial
+  const [] = useState<string>(currentYear.toString()); // Ano fixo
 
   const handleMonthChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedMonth = e.target.value;
     setMonth(selectedMonth);
-    if (onMonthChange) onMonthChange(selectedMonth);
-  };
-
-  const handleYearChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectedYear = e.target.value;
-    setYear(selectedYear);
-    if (onYearChange) onYearChange(selectedYear);
+    if (onMonthChange) onMonthChange(selectedMonth); // Envia só o mês
   };
 
   const goToPreviousMonth = () => {
     let newMonth = parseInt(month) - 1;
-    let newYear = parseInt(year);
     if (newMonth < 1) {
-      newMonth = 12;
-      newYear -= 1;
+      newMonth = 12; // Retorna ao dezembro
     }
     setMonth(newMonth.toString().padStart(2, '0'));
-    setYear(newYear.toString());
     if (onMonthChange) onMonthChange(newMonth.toString().padStart(2, '0'));
-    if (onYearChange) onYearChange(newYear.toString());
   };
 
   const goToNextMonth = () => {
     let newMonth = parseInt(month) + 1;
-    let newYear = parseInt(year);
     if (newMonth > 12) {
-      newMonth = 1;
-      newYear += 1;
+      newMonth = 1; // Volta ao janeiro
     }
     setMonth(newMonth.toString().padStart(2, '0'));
-    setYear(newYear.toString());
     if (onMonthChange) onMonthChange(newMonth.toString().padStart(2, '0'));
-    if (onYearChange) onYearChange(newYear.toString());
   };
 
   return (
@@ -71,18 +56,6 @@ const DatePicker: React.FC<DateProps> = ({ onMonthChange, onYearChange }) => {
             {month}
           </option>
         ))}
-      </select>
-
-      <select 
-        value={year} 
-        onChange={handleYearChange} 
-        className={style.selecionarAno}
-      >
-        <option value="">Ano</option>
-        {[...Array(5)].map((_, index) => {
-          const nextYear = currentYear + index;
-          return <option key={nextYear} value={nextYear}>{nextYear}</option>;
-        })}
       </select>
 
       <button onClick={goToNextMonth} className={style.botao}>
