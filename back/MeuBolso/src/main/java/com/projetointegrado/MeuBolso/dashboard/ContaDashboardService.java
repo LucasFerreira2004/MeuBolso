@@ -28,6 +28,8 @@ public class ContaDashboardService {
         while(!dataAvanco.isAfter(dataFinal)) {
             BigDecimal saldo = contaService.findSaldo(userId, dataAvanco).getSaldo();
             dtos.add(new SaldoBalancoDTO(dataAvanco.getYear(), dataAvanco.getMonthValue(), saldo));
+
+            dataAvanco = avancoMensal.avancarData(dataAvanco, dataInicial, 1);
         }
         return dtos;
     }
