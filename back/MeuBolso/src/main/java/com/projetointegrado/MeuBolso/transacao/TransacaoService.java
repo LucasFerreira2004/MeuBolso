@@ -102,6 +102,8 @@ public class TransacaoService implements ITransacaoService {
             new EntidadeNaoEncontradaException("categoriaId", "Categoria nao encontrada"), new AcessoNegadoException());
 
     Usuario usuario = usuarioValidateService.validateAndGet(userId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
+
+    transacaoValidateService.validateTipo(userId, dto.getTipoTransacao(), dto.getCategoriaId());
     System.out.println("TransacaoService -> saveAndValidate : chegou ao fim das checagens");
 
     Transacao transacao = new Transacao(id, dto.getValor(), dto.getData(), dto.getTipoTransacao(),
