@@ -50,12 +50,16 @@ public class DashBoardController {
 
     @GetMapping("transacoes/balanco")
     public List<TransacaoBalancoDTO> getBalancoTransacoes(@RequestParam int anoInicial, @RequestParam int mesInicial, @RequestParam int anoFinal, @RequestParam int mesFinal) {
-        LocalDate dataInicial = LocalDate.of(anoInicial, mesInicial, 1);
-        LocalDate dataFinal = LocalDate.of(anoInicial, mesInicial, 1);
-        dataFinal = dataFinal.with(TemporalAdjusters.lastDayOfMonth());
+        try {
+            LocalDate dataInicial = LocalDate.of(anoInicial, mesInicial, 1);
+            LocalDate dataFinal = LocalDate.of(anoFinal, mesFinal, 1);
+            dataFinal = dataFinal.with(TemporalAdjusters.lastDayOfMonth());
 
-        String userId = usuarioService.getUsuarioLogadoId();
-
-        return transacoesDashboardsService.getTransacoesBalancos(userId, dataInicial, dataFinal)
+            String userId = usuarioService.getUsuarioLogadoId();
+            return transacoesDashboardsService.getTransacoesBalancos(userId, dataInicial, dataFinal);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -24,14 +24,18 @@ public class TransacoesDashboardsService {
     private TransacaoService transacaoService;
 
     public List<TransacaoBalancoDTO> getTransacoesBalancos(String userId, LocalDate dataInicial, LocalDate dataFinal) {
+        System.out.println("==============================> Gerar transacoes Balanco");
         IAvancoDataStrategy avancoMensal = AvancoDataFactory.getStrategy(Periodicidade.MENSAL);
         LocalDate dataAvanco = dataInicial.with(TemporalAdjusters.lastDayOfMonth());
         List<TransacaoBalancoDTO> dtos = new ArrayList<>();
+        System.out.println("dataavanco: "+dataAvanco);
+        System.out.println("dataFinal:" + dataFinal);
         while(!dataAvanco.isAfter(dataFinal)) {
             BigDecimal despesas = transacaoService.findSumDespesasInRangeByMonth(userId, dataAvanco);
             BigDecimal receitas  = transacaoService.findSumReceitasInRangeByMonth(userId, dataAvanco);
             dtos.add(new TransacaoBalancoDTO(dataAvanco.getYear(), dataAvanco.getMonthValue(), despesas, receitas));
             dataAvanco = avancoMensal.avancarData(dataAvanco, dataInicial, 1);
+            System.out.println("dataavanco: "+dataAvanco);
         }
         return dtos;
     }
