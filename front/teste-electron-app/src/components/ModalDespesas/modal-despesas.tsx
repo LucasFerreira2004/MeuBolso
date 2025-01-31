@@ -102,24 +102,24 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
         <InputWithIcon
           label="Valor: "
           type="text"
-          iconSrc="/assets/iconsModalDelete/money.svg"
+          iconSrc="/assets/iconsModalDespesas/money.svg"
           placeholder="R$ 0,00"
           value={valor}
           onChange={handleChangeValor}
         />
         <InputWithIcon
           label="Descrição: "
-          iconSrc="/assets/iconsModalDelete/descrip.svg"
+          iconSrc="/assets/iconsModalDespesas/descrip.svg"
           placeholder="Ex: Pagamento da fatura"
           value={descricao}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescricao(e.target.value)}
         />
         <SelectedDespesas setCategoria={setCategoria} />
         <SelectBoxContas setConta={setConta} />
-        <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalDelete/date.svg"/>
+        <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg"/>
         <InputWithIcon
           label="Comentário: "
-          iconSrc="/assets/iconsModalDelete/comentario.svg"
+          iconSrc="/assets/iconsModalDespesas/comentario.svg"
           placeholder="Opcional"
           value={comentario || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComentario(e.target.value || null)}
