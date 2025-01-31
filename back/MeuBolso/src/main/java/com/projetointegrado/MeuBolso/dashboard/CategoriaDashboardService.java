@@ -1,11 +1,10 @@
-package com.projetointegrado.MeuBolso.dashBoards;
+package com.projetointegrado.MeuBolso.dashboard;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.categoria.CategoriaValidateService;
-import com.projetointegrado.MeuBolso.categoria.TipoCategoria;
-import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaDadosDTO;
-import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaExpandedDTO;
-import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaMinDTO;
+import com.projetointegrado.MeuBolso.dashboard.dto.CategoriaDadosDTO;
+import com.projetointegrado.MeuBolso.dashboard.dto.CategoriaExpandedDTO;
+import com.projetointegrado.MeuBolso.dashboard.dto.CategoriaMinDTO;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
