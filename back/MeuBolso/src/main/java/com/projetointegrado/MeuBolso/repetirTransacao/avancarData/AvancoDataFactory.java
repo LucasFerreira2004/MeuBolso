@@ -11,6 +11,8 @@ public class AvancoDataFactory {
                 return new AvancoSemanal();
             case MENSAL:
                 return new AvancoMensal();
+            case ULTIMO_DIA_MES:
+                return new AvancoUltimoIDiaMes();
             default:
                 throw new IllegalArgumentException("Periodicidade desconhecida");
         }

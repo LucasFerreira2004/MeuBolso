@@ -21,14 +21,16 @@ public class ContaDashboardService {
     private ContaService contaService;
 
     public List<SaldoBalancoDTO> getBalancoSaldos(String userId, LocalDate dataInicial, LocalDate dataFinal) {
+        System.out.println("==============================> Gerar transacoes Balanco");
         IAvancoDataStrategy avancoMensal = AvancoDataFactory.getStrategy(Periodicidade.MENSAL);
         LocalDate dataAvanco = dataInicial.with(TemporalAdjusters.lastDayOfMonth());
         List<SaldoBalancoDTO> dtos = new ArrayList<>();
-
+        System.out.println("dataavanco: "+dataAvanco);
+        System.out.println("dataFinal:" + dataFinal);
         while(!dataAvanco.isAfter(dataFinal)) {
             BigDecimal saldo = contaService.findSaldo(userId, dataAvanco).getSaldo();
             dtos.add(new SaldoBalancoDTO(dataAvanco.getYear(), dataAvanco.getMonthValue(), saldo));
-
+            System.out.println("dataavanco: "+dataAvanco);
             dataAvanco = avancoMensal.avancarData(dataAvanco, dataInicial, 1);
         }
         return dtos;
