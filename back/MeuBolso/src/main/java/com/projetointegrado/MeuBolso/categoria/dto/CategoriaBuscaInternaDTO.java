@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 public record CategoriaBuscaInternaDTO(
         Categoria categoria,
-        BigDecimal somatorioTransacoesMensal,
-        BigDecimal percentualParticipacaoTransacoes
+        BigDecimal valor,
+        BigDecimal percentual
 ) {
 }
