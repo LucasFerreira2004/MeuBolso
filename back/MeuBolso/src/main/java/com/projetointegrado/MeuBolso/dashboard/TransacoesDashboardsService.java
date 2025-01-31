@@ -1,6 +1,6 @@
-package com.projetointegrado.MeuBolso.dashBoards;
+package com.projetointegrado.MeuBolso.dashboard;
 
-import com.projetointegrado.MeuBolso.dashBoards.dto.TransacaoBalancoDTO;
+import com.projetointegrado.MeuBolso.dashboard.dto.TransacaoBalancoDTO;
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFactory;
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStrategy;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;

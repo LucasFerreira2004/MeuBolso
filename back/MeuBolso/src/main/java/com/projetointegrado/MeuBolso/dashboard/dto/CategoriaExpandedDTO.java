@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.dashBoards.dto;
+package com.projetointegrado.MeuBolso.dashboard.dto;
 
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 

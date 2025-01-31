@@ -1,12 +1,12 @@
-package com.projetointegrado.MeuBolso.dashBoards;
+package com.projetointegrado.MeuBolso.dashboard;
 
-import com.projetointegrado.MeuBolso.dashBoards.dto.TransacaoBalancoDTO;
-import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaExpandedDTO;
-import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaMinDTO;
+import com.projetointegrado.MeuBolso.dashboard.dto.SaldoBalancoDTO;
+import com.projetointegrado.MeuBolso.dashboard.dto.TransacaoBalancoDTO;
+import com.projetointegrado.MeuBolso.dashboard.dto.CategoriaExpandedDTO;
+import com.projetointegrado.MeuBolso.dashboard.dto.CategoriaMinDTO;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value ="/dashboards")
-public class DashBoardController {
+public class DashboardController {
     @Autowired
     private CategoriaDashboardService categoriaDashboardService;
 
@@ -24,6 +24,9 @@ public class DashBoardController {
 
     @Autowired
     private TransacoesDashboardsService transacoesDashboardsService;
+
+    @Autowired
+    private ContaDashboardService contaDashboardService;
 
     @GetMapping("/despesasCategoria")
     public List<CategoriaMinDTO> getDespesasCategorias(@RequestParam int ano, @RequestParam int mes){
@@ -61,6 +64,21 @@ public class DashBoardController {
 
             String userId = usuarioService.getUsuarioLogadoId();
             return transacoesDashboardsService.getTransacoesBalancos(userId, dataInicial, dataFinal);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("saldo/balanco")
+    public List<SaldoBalancoDTO> getBalancoSaldos(@RequestParam int anoInicial, @RequestParam int mesInicial, @RequestParam int anoFinal, @RequestParam int mesFinal) {
+        try {
+            LocalDate dataInicial = LocalDate.of(anoInicial, mesInicial, 1);
+            LocalDate dataFinal = LocalDate.of(anoFinal, mesFinal, 1);
+            dataFinal = dataFinal.with(TemporalAdjusters.lastDayOfMonth());
+            String userId = usuarioService.getUsuarioLogadoId();
+
+            return contaDashboardService.getBalancoSaldos(userId, dataInicial, dataFinal);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);

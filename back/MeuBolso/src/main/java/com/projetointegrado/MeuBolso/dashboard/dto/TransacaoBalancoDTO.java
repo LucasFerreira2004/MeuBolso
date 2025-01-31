@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.dashBoards.dto;
+package com.projetointegrado.MeuBolso.dashboard.dto;
 
 import java.math.BigDecimal;
 
