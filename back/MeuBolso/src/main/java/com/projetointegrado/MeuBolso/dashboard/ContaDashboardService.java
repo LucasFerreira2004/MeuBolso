@@ -22,7 +22,7 @@ public class ContaDashboardService {
 
     public List<SaldoBalancoDTO> getBalancoSaldos(String userId, LocalDate dataInicial, LocalDate dataFinal) {
         System.out.println("==============================> Gerar transacoes Balanco");
-        IAvancoDataStrategy avancoMensal = AvancoDataFactory.getStrategy(Periodicidade.MENSAL);
+        IAvancoDataStrategy avancoMensal = AvancoDataFactory.getStrategy(Periodicidade.ULTIMO_DIA_MES);
         LocalDate dataAvanco = dataInicial.with(TemporalAdjusters.lastDayOfMonth());
         List<SaldoBalancoDTO> dtos = new ArrayList<>();
         System.out.println("dataavanco: "+dataAvanco);

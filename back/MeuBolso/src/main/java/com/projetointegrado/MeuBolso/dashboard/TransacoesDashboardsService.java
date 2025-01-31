@@ -25,7 +25,7 @@ public class TransacoesDashboardsService {
 
     public List<TransacaoBalancoDTO> getTransacoesBalancos(String userId, LocalDate dataInicial, LocalDate dataFinal) {
         System.out.println("==============================> Gerar transacoes Balanco");
-        IAvancoDataStrategy avancoMensal = AvancoDataFactory.getStrategy(Periodicidade.MENSAL);
+        IAvancoDataStrategy avancoMensal = AvancoDataFactory.getStrategy(Periodicidade.ULTIMO_DIA_MES);
         LocalDate dataAvanco = dataInicial.with(TemporalAdjusters.lastDayOfMonth());
         List<TransacaoBalancoDTO> dtos = new ArrayList<>();
         System.out.println("dataavanco: "+dataAvanco);
