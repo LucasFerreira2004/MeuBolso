@@ -1,6 +1,5 @@
 package com.projetointegrado.MeuBolso.dashboard;
 
-import com.projetointegrado.MeuBolso.conta.ContaRepository;
 import com.projetointegrado.MeuBolso.conta.ContaService;
 import com.projetointegrado.MeuBolso.dashboard.dto.SaldoBalancoDTO;
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFactory;
@@ -8,6 +7,7 @@ import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStr
 import com.projetointegrado.MeuBolso.transacaoRecorrente.Periodicidade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,7 +20,8 @@ public class ContaDashboardService {
     @Autowired
     private ContaService contaService;
 
-    public List<SaldoBalancoDTO> getBalancoSaldos(String userId, LocalDate dataInicial, LocalDate dataFinal) {
+    @Transactional
+    public List<SaldoBalancoDTO> findSaldosBalanco(String userId, LocalDate dataInicial, LocalDate dataFinal) {
         System.out.println("==============================> Gerar transacoes Balanco");
         IAvancoDataStrategy avancoMensal = AvancoDataFactory.getStrategy(Periodicidade.ULTIMO_DIA_MES);
         LocalDate dataAvanco = dataInicial.with(TemporalAdjusters.lastDayOfMonth());

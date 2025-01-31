@@ -63,7 +63,7 @@ public class DashboardController {
             dataFinal = dataFinal.with(TemporalAdjusters.lastDayOfMonth());
 
             String userId = usuarioService.getUsuarioLogadoId();
-            return transacoesDashboardsService.getTransacoesBalancos(userId, dataInicial, dataFinal);
+            return transacoesDashboardsService.findTransacoesBalanco(userId, dataInicial, dataFinal);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -78,7 +78,7 @@ public class DashboardController {
             dataFinal = dataFinal.with(TemporalAdjusters.lastDayOfMonth());
             String userId = usuarioService.getUsuarioLogadoId();
 
-            return contaDashboardService.getBalancoSaldos(userId, dataInicial, dataFinal);
+            return contaDashboardService.findSaldosBalanco(userId, dataInicial, dataFinal);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);

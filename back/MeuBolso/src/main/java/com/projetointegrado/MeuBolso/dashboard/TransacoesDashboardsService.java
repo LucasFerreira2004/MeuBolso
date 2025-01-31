@@ -8,6 +8,7 @@ import com.projetointegrado.MeuBolso.transacao.TransacaoService;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.Periodicidade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,7 +24,8 @@ public class TransacoesDashboardsService {
     @Autowired
     private TransacaoService transacaoService;
 
-    public List<TransacaoBalancoDTO> getTransacoesBalancos(String userId, LocalDate dataInicial, LocalDate dataFinal) {
+    @Transactional
+    public List<TransacaoBalancoDTO> findTransacoesBalanco(String userId, LocalDate dataInicial, LocalDate dataFinal) {
         System.out.println("==============================> Gerar transacoes Balanco");
         IAvancoDataStrategy avancoMensal = AvancoDataFactory.getStrategy(Periodicidade.ULTIMO_DIA_MES);
         LocalDate dataAvanco = dataInicial.with(TemporalAdjusters.lastDayOfMonth());

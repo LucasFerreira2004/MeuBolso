@@ -25,13 +25,7 @@ public class CategoriaDadosService {
     private CategoriaRepository categoriaRepository;
 
     @Autowired
-    private ICategoriaService categoriaService;
-
-    @Autowired
     private TransacaoRepository transacaoRepository;
-
-    @Autowired
-    private TransacaoService transacaoService;
 
     @Transactional
     public List<CategoriaDadosDTO> getDadosCategorias(String userId, LocalDate dataFinal, TipoTransacao tipo) {
@@ -73,4 +67,3 @@ public class CategoriaDadosService {
         return new CategoriaDadosDTO(categoria, valorCategoria, prctGasto);
     }
 }
-//CategoriaDadosDTO dto = getCategoriaDadosDTO(userId, dataInicial, dataFinal, tipoCategoria, categoria);
