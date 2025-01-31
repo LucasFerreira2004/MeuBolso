@@ -26,6 +26,7 @@ public class CategoriaDashboardService {
     @Transactional
     public List<CategoriaMinDTO> findAllValorTotalCategoria(String userId, LocalDate dataFinal, TipoTransacao tipo) {
         usuarioValidateService.validate(userId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado"));
+
         List<CategoriaDadosDTO> buscaInternaDTOs = categoriaDadosService.getDadosCategorias(userId, dataFinal, tipo);
         List<CategoriaMinDTO> valorTotalDTOs = new ArrayList<>();
 

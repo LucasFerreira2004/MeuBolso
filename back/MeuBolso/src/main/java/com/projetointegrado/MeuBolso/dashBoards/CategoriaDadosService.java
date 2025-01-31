@@ -36,11 +36,14 @@ public class CategoriaDadosService {
     @Transactional
     public List<CategoriaDadosDTO> getDadosCategorias(String userId, LocalDate dataFinal, TipoTransacao tipo) {
         LocalDate dataInicial = dataFinal.with(TemporalAdjusters.firstDayOfMonth());
-        List<Categoria> categorias = categoriaRepository.findAllNotInternByTipo(userId, TipoCategoria.valueOf(tipo.name()));
+        TipoCategoria tipoCategoria = TipoCategoria.valueOf(tipo.name());
+        System.out.println(tipoCategoria);
+        System.out.println(tipoCategoria.name());
+        List<Categoria> categorias = categoriaRepository.findAllNotInternByTipo(userId, tipoCategoria.name());
         List<CategoriaDadosDTO> dtos = new ArrayList<>();
 
         for (Categoria categoria : categorias) {
-            BigDecimal totalGastosMensais = transacaoRepository.getSumInRangeByTipo(dataInicial, dataFinal, userId, tipo);
+            BigDecimal totalGastosMensais = transacaoRepository.getSumInRangeByTipo(dataInicial, dataFinal, userId, tipo.name());
             BigDecimal gastosCategoria =  transacaoRepository.getSumInRangeByCategoria(dataInicial, dataFinal, categoria.getId(), userId); //mudar para ficar no service de transacao
             if (gastosCategoria == null || totalGastosMensais == null)
                 continue;
