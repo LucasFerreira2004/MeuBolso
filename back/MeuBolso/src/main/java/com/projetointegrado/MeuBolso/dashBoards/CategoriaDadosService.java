@@ -46,8 +46,8 @@ public class CategoriaDadosService {
                 continue;
             BigDecimal prctGasto = gastosCategoria
                     .multiply(new BigDecimal(100))
-                    .divide(totalGastosMensais, 2, RoundingMode.HALF_UP);
-            dtos.add(new CategoriaDadosDTO(categoria, totalGastosMensais, prctGasto));
+                    .divide(totalGastosMensais, 2, RoundingMode.HALF_DOWN);
+            dtos.add(new CategoriaDadosDTO(categoria, gastosCategoria, prctGasto));
         }
         return dtos;
     }

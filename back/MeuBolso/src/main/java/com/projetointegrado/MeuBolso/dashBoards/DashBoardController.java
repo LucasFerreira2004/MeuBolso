@@ -22,11 +22,22 @@ public class DashBoardController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/despesasTotaisCategorias")
+    @GetMapping("/despesasCategoria")
     public List<CategoriaMinDTO> getDespesasCategorias(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
         try {
             String userId = usuarioService.getUsuarioLogadoId();
             return categoriaDashboardService.findAllValorTotalCategoria(userId, data, TipoTransacao.DESPESA);
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/receitasCategoria")
+    public List<CategoriaMinDTO> getReceitasCategorias(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        try {
+            String userId = usuarioService.getUsuarioLogadoId();
+            return categoriaDashboardService.findAllValorTotalCategoria(userId, data, TipoTransacao.RECEITA);
         }catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
