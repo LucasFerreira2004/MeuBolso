@@ -26,24 +26,28 @@ public class DashBoardController {
     private TransacoesDashboardsService transacoesDashboardsService;
 
     @GetMapping("/despesasCategoria")
-    public List<CategoriaMinDTO> getDespesasCategorias(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
-        try {
-            String userId = usuarioService.getUsuarioLogadoId();
-            return categoriaDashboardService.findAllValorTotalCategoria(userId, data, TipoTransacao.DESPESA);
-        }catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    public List<CategoriaMinDTO> getDespesasCategorias(@RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
+
+        String userId = usuarioService.getUsuarioLogadoId();
+        return categoriaDashboardService.findAllValorTotalCategoria(userId, data, TipoTransacao.DESPESA);
     }
 
     @GetMapping("/receitasCategoria")
-    public List<CategoriaMinDTO> getReceitasCategorias(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+    public List<CategoriaMinDTO> getReceitasCategorias(@RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
+
         String userId = usuarioService.getUsuarioLogadoId();
         return categoriaDashboardService.findAllValorTotalCategoria(userId, data, TipoTransacao.RECEITA);
     }
 
     @GetMapping("/categoria/{id}")
-    public CategoriaExpandedDTO getExpandedCategoria(@PathVariable Long id, @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
+    public CategoriaExpandedDTO getExpandedCategoria(@PathVariable Long id, @RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
+
         String userId = usuarioService.getUsuarioLogadoId();
         return categoriaDashboardService.findExpandedCategoria(userId, id, data);
     }
