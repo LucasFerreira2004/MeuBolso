@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.dashBoards;
 
 import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaMinDTO;
+import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,7 +26,7 @@ public class DashBoardController {
     public List<CategoriaMinDTO> getDespesasCategorias(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
         try {
             String userId = usuarioService.getUsuarioLogadoId();
-            return categoriaDashboardService.findAllValorTotalCategoria(userId, data);
+            return categoriaDashboardService.findAllValorTotalCategoria(userId, data, TipoTransacao.DESPESA);
         }catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
