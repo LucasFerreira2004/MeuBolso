@@ -64,10 +64,7 @@ public class TransacaoService implements ITransacaoService {
     public BigDecimal findSumDespesasInRangeByMonth(String userId, LocalDate data) {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;
-        List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
-        BigDecimal sumDespesas = transacoes.stream().filter(t -> t.getTipo().equals(TipoTransacao.DESPESA))
-                .map(t -> t.getValor())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal sumDespesas = transacaoRepository.getSumInRangeByTipo(dataInicio, dataFim, userId, TipoTransacao.DESPESA.name());
         return sumDespesas;
     }
 
@@ -76,9 +73,7 @@ public class TransacaoService implements ITransacaoService {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;
         List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
-        BigDecimal sumReceitas = transacoes.stream().filter(t -> t.getTipo().equals(TipoTransacao.RECEITA))
-                .map(t -> t.getValor())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal sumReceitas = transacaoRepository.getSumInRangeByTipo(dataInicio, dataFim, userId, TipoTransacao.RECEITA.name());
         return sumReceitas;
     }
 
