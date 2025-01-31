@@ -56,15 +56,15 @@ const ModalEditCategoria: React.FC<ModalEditCategoriaProps> = ({ closeModal, cat
 
     if (result.success) {
       console.log("Categoria atualizada com sucesso!");
-      onCategoriaSaved();  // Chama a função de atualização da lista de categorias
-      closeModal();        // Fecha o modal
+      onCategoriaSaved();  
+      closeModal();        
     } else {
       console.error("Erro ao atualizar categoria:", result.error);
     }
   };
 
   return (
-    <div className={style.modalContainer}>
+    <div className={style.modalContainerCategoria}>
       <div className={style.modalHeader}>
         <h3>Editar Categoria</h3>
         <img

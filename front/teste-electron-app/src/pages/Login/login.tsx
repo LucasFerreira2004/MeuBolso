@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { saveToken } from "../../service/auth-service"; // Importe a função saveToken
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import style from "./login.module.css";
 
 // Definindo tipo para a resposta da API
@@ -9,14 +11,13 @@ interface LoginResponse {
 }
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     if (email === "" || password === "") {
-      setErrorMessage("Por favor, preencha todos os campos.");
+      toast.error("Por favor, preencha todos os campos.");
       return;
     }
 
@@ -40,14 +41,17 @@ function Login() {
       saveToken(token);
       console.log("Token salvo:", token);
 
-      // Redirecionar para a página inicial após login bem-sucedido
-      navigate("/home");
-    } catch (error: unknown) {
-      // Usando 'unknown' para o erro e validando antes de usá-lo
+      // Exibe um toast de sucesso e redireciona
+      toast.success("Login realizado com sucesso!");
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000); // Redireciona após 2 segundos
+    } catch (error) {
+      // Usando TypeScript para validar o tipo do erro
       if (error instanceof Error) {
-        setErrorMessage(error.message || "Erro ao realizar o login.");
+        toast.error(error.message || "Erro ao realizar o login.");
       } else {
-        setErrorMessage("Erro desconhecido.");
+        toast.error("Erro desconhecido.");
       }
     }
   };
@@ -86,14 +90,25 @@ function Login() {
           </div>
         </div>
 
-        {errorMessage && <p className={style.errorMessage}>{errorMessage}</p>}
-
         <Link to="/cadastro">
           <p className={style.plogin}>Crie uma conta</p>
         </Link>
         <button className={style.buttonC} onClick={handleLogin}>
           Entrar
         </button>
+
+        {/* Adicione o ToastContainer no final do componente */}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </div>
   );
