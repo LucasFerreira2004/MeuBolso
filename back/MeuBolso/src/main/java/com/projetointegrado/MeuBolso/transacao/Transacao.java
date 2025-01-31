@@ -67,9 +67,13 @@ public class Transacao {
 
     public Transacao (TransacaoRecorrente transacaoRecorrente, LocalDate data) {
         this.id = null;
-        BigDecimal qtdParcelas = new BigDecimal(transacaoRecorrente.getQtdParcelas());
-        this.valor = transacaoRecorrente.getValor()
-                .divide(qtdParcelas, 2, RoundingMode.DOWN);
+        if(transacaoRecorrente.getQtdParcelas() != null) {
+            BigDecimal qtdParcelas = new BigDecimal(transacaoRecorrente.getQtdParcelas());
+            this.valor = transacaoRecorrente.getValor()
+                    .divide(qtdParcelas, 2, RoundingMode.DOWN);
+        }else{
+            this.valor = transacaoRecorrente.getValor();
+        }
         this.data = data;
         this.tipo = transacaoRecorrente.getTipo();
         this.categoria = transacaoRecorrente.getCategoria();
