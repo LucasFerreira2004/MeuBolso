@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @RestController
@@ -26,7 +28,10 @@ public class TransacaoController {
 
     @Operation(summary = "Retorna todas as transacoes do inicio do mês até a data especificada")
     @GetMapping
-    public List<TransacaoDTO> findAll(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
+    public List<TransacaoDTO> findAll(@RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
+
         String userLogadoId = usuarioService.getUsuarioLogadoId();
         return transacaoService.findAllInRangeByMonth(userLogadoId, data);
     }
@@ -40,14 +45,20 @@ public class TransacaoController {
 
     @Operation(summary = "Retorna o somatório das despesas do inicio do mês até a data especificada")
     @GetMapping("/somatorioDespesas")
-    public BigDecimal findSumDespesasInRangeByMonth(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
+    public BigDecimal findSumDespesasInRangeByMonth(@RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
+
         String userLogadoId = usuarioService.getUsuarioLogadoId();
         return transacaoService.findSumDespesasInRangeByMonth(userLogadoId, data);
     }
 
     @Operation(summary = "Retorna o somatório das receitas do inicio do mês até a data especificada")
     @GetMapping("/somatorioReceitas")
-    public BigDecimal findSumReceitasInRangeByMonth(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
+    public BigDecimal findSumReceitasInRangeByMonth(@RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
+
         String userLogadoId = usuarioService.getUsuarioLogadoId();
         return transacaoService.findSumReceitasInRangeByMonth(userLogadoId, data);
     }

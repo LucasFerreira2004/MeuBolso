@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.repetirTransacao.GerarTransacoesFixas;
+package com.projetointegrado.MeuBolso.repetirTransacao.gerarTransacoes;
 
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFactory;
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStrategy;
@@ -12,13 +12,14 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 
 @Service
-public class ParceladasGerarTransacoes implements IGerarTransacoesStrategy{
+public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
     @Autowired
     private TransacaoRepository transacaoRepository;
 
     @Autowired
     private TransacaoRecorrenteRepository transacaoRecorrenteRepository;
 
+    @Override
     public void gerarTransacoes(TransacaoRecorrente transacaoRecorrente, LocalDate dataBusca) {
         System.out.println("TransacaoRecorrenteService -> gerarTransacoesFixas");
         IAvancoDataStrategy AvancoStrategy = AvancoDataFactory.getStrategy(transacaoRecorrente.getPeriodicidade());
@@ -29,7 +30,7 @@ public class ParceladasGerarTransacoes implements IGerarTransacoesStrategy{
             dataUltimaExecucao = transacaoRecorrente.getDataCadastro();
         }
 
-        while (!dataUltimaExecucao.isAfter(dataBusca) && !dataUltimaExecucao.isAfter(transacaoRecorrente.getDataFinal())) {
+        while (!dataUltimaExecucao.isAfter(dataBusca)) {
             Transacao novaTransacao = new Transacao(transacaoRecorrente, dataUltimaExecucao);
             transacaoRepository.save(novaTransacao);
             transacaoRecorrente.setUltimaExecucao(dataUltimaExecucao);
