@@ -4,11 +4,10 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    z-index: 10; 
+    z-index: 100; 
 }
   
   .modalContent {
@@ -20,8 +19,8 @@
     max-height: 120px;
     width: 100%;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    right: 180px;
-    top: 263px;
+    right: 200px;
+    top: 300px;
     max-width: 12vw;
     z-index: 20; 
   }
