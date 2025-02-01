@@ -24,7 +24,6 @@ public class ContaController {
 
     @GetMapping
     public List<ContaDTO> findAll(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
-
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
         return contaService.findAll(idUsuario, data);
