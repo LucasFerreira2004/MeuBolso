@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-despesas.module.css";
 import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
-import DatePicker from "../UI/DatePicker/date-picker"; 
+import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
 
 interface ModalADespesasProps {
-  onCloseAll: () => void; // Agora fecha tudo ao cadastrar
+  onCloseAll: () => void; 
 }
 
 function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
@@ -15,14 +16,13 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null);
   const [conta, setConta] = useState<number | null>(null);
-  const [data, setData] = useState<string>(""); 
+  const [data, setData] = useState<string>("");
   const [comentario, setComentario] = useState<string | null>(null);
 
-  // Tipo de transação fixo como 'DESPESA'
   const tipoTransacao = "DESPESA";
 
   const formatarMoeda = (valor: string): string => {
-    let valorNumerico = valor.replace(/\D/g, ""); 
+    let valorNumerico = valor.replace(/\D/g, "");
     valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
     valorNumerico = valorNumerico.replace(".", ",");
     valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
@@ -45,17 +45,16 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
 
   const handleSubmit = async () => {
     if (!valor || !descricao || !categoria || !data || !conta) {
-      alert("Preencha todos os campos obrigatórios!");
+      toast.error("Preencha todos os campos obrigatórios!");
       return;
     }
 
     const valorNumerico = removerFormatacaoMoeda(valor);
 
-    // Obtendo o token de autenticação
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("Token de autenticação não encontrado.");
-      alert("Por favor, faça login novamente.");
+      toast.error("Por favor, faça login novamente.");
       return;
     }
 
@@ -80,10 +79,11 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
       );
 
       console.log("Transação adicionada:", response.data);
+      toast.success("Transação adicionada com sucesso!");
       onCloseAll(); // Fecha os dois modais ao cadastrar
     } catch (error) {
       console.error("Erro ao adicionar transação:", error);
-      alert("Erro ao adicionar transação. Verifique os dados ou tente novamente.");
+      toast.error("Erro ao adicionar transação. Verifique os dados ou tente novamente.");
     }
   };
 
@@ -116,7 +116,7 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
         />
         <SelectedDespesas setCategoria={setCategoria} />
         <SelectBoxContas setConta={setConta} />
-        <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg"/>
+        <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg" />
         <InputWithIcon
           label="Comentário: "
           iconSrc="/assets/iconsModalDespesas/comentario.svg"

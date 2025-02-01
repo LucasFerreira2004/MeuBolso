@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-receitas.module.css";
 import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
-import DatePicker from "../UI/DatePicker/date-picker"; 
+import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedReceita from "../UI/SelectedReceitas/selected-receita";
 
 interface ModalReceitasProps {
@@ -15,14 +16,14 @@ function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null);
   const [conta, setConta] = useState<number | null>(null);
-  const [data, setData] = useState<string>(""); 
+  const [data, setData] = useState<string>("");
   const [comentario, setComentario] = useState<string | null>(null);
 
   // Tipo de transação fixo como 'RECEITA'
   const tipoTransacao = "RECEITA";
 
   const formatarMoeda = (valor: string): string => {
-    let valorNumerico = valor.replace(/\D/g, ""); 
+    let valorNumerico = valor.replace(/\D/g, "");
     valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
     valorNumerico = valorNumerico.replace(".", ",");
     valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
@@ -45,7 +46,7 @@ function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
 
   const handleSubmit = async () => {
     if (!valor || !descricao || !categoria || !data || !conta) {
-      alert("Preencha todos os campos obrigatórios!");
+      toast.error("Preencha todos os campos obrigatórios!");
       return;
     }
 
@@ -54,7 +55,7 @@ function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("Token de autenticação não encontrado.");
-      alert("Por favor, faça login novamente.");
+      toast.error("Por favor, faça login novamente.");
       return;
     }
 
@@ -79,10 +80,11 @@ function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
       );
 
       console.log("Receita adicionada:", response.data);
-      onCloseAll(); // Fecha os dois modais ao cadastrar
+      toast.success("Receita adicionada com sucesso!");
+      onCloseAll(); // Fecha os modais ao cadastrar
     } catch (error) {
       console.error("Erro ao adicionar receita:", error);
-      alert("Erro ao adicionar receita. Verifique os dados ou tente novamente.");
+      toast.error("Erro ao adicionar receita. Verifique os dados ou tente novamente.");
     }
   };
 
@@ -115,8 +117,7 @@ function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
         />
         <SelectedReceita setCategoria={setCategoria} />
         <SelectBoxContas setConta={setConta} />
-        <DatePicker value={data} onChange={setData} 
-        iconsrc="/assets/iconsModalReceitas/date.svg"/>
+        <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalReceitas/date.svg" />
         <InputWithIcon
           label="Comentário: "
           iconSrc="/assets/iconsModalReceitas/comentario.svg"
@@ -125,7 +126,7 @@ function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComentario(e.target.value || null)}
         />
         <button onClick={handleSubmit} className={style.submitButton}>
-          Adicionar Transacao
+          Adicionar Transação
         </button>
       </div>
     </div>
