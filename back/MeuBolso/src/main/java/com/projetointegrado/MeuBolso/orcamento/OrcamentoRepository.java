@@ -16,4 +16,9 @@ public interface OrcamentoRepository extends JpaRepository<Orcamento, Long> {
                                                          @Param("usuarioId") String usuarioId,
                                                          @Param("ano") int ano,
                                                          @Param("mes") int mes);
+
+    @Query(value = "SELECT * FROM orcamento o WHERE o.usuario_id = :usuarioId AND o.ano = :ano AND o.mes = :mes", nativeQuery = true)
+    List<Orcamento> findByUsuarioAndPeriodo(@Param("usuarioId") String usuarioId,
+                                            @Param("ano") int ano,
+                                            @Param("mes") int mes);
 }

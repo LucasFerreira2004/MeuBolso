@@ -1,11 +1,11 @@
 package com.projetointegrado.MeuBolso.transacao;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,4 +27,17 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
         select * from transacao where data <= :data and usuario_id = :userId;
     """)
     public List<Transacao> findAllBeforeDate(LocalDate data, String userId);
+
+    @Query(value = """
+    SELECT COALESCE(SUM(t.valor), 0) 
+    FROM transacao t 
+    WHERE t.categoria_id = :categoriaId 
+    AND t.usuario_id = :usuarioId 
+    AND t.data BETWEEN :dataInicio AND :dataFim
+    """, nativeQuery = true)
+    public BigDecimal calcularGastoPorCategoriaEPeriodo(@Param("categoriaId") Long categoriaId,
+                                                 @Param("usuarioId") String usuarioId,
+                                                 @Param("dataInicio") LocalDate dataInicio,
+                                                 @Param("dataFim") LocalDate dataFim);
+
 }

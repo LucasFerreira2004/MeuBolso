@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -30,6 +31,9 @@ public class OrcamentoService implements IOrcamentoService{
 
     @Autowired
     private OrcamentoValidateService orcamentoValidateService;
+
+    @Autowired
+    private AtualizacaoOrcamentoService atualizacaoOrcamentoService;
 
     @Transactional
     public List<OrcamentoDTO> findAll(String usuarioId) {
@@ -64,6 +68,18 @@ public class OrcamentoService implements IOrcamentoService{
                 new AcessoNegadoException());
         orcamentoRepository.delete(orcamento);
         return new OrcamentoDTO(orcamento);
+    }
+
+    @Transactional
+    public List<OrcamentoDTO> findOrcamentosByPeriodo(String usuarioId, LocalDate periodo) {
+        System.out.println("OrcamentoService: chamando o atualizarValores");
+        atualizacaoOrcamentoService.atualizarOrcamentos(usuarioId, periodo);
+
+        System.out.println("OrcamentoService: buscar orcamentos por periodo");
+        List<Orcamento> orcamentos = orcamentoRepository.findByUsuarioAndPeriodo(usuarioId, periodo.getYear(), periodo.getMonth().getValue());
+
+        System.out.println("OrcamentoService: retornando orcamentos");
+        return orcamentos.stream().map(OrcamentoDTO::new).toList();
     }
 
     private Orcamento saveAndValidate(String usuarioId, Long id, OrcamentoPostDTO orcamentoDTO, Integer mes, Integer ano) {

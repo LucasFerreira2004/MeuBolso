@@ -11,19 +11,21 @@ public class OrcamentoDTO {
     private BigDecimal valorEstimado;
     private BigDecimal valorGasto;
     private BigDecimal valorRestante;
-    private String mesAno;
+    private Integer mes;
+    private Integer ano;
     private CategoriaDTO categoriaDTO;
 
     public OrcamentoDTO() {
     }
 
-    public OrcamentoDTO(Long id, String descricao, BigDecimal valorEstimado, BigDecimal valorGasto, BigDecimal valorRestante, String mesAno, CategoriaDTO categoriaDTO) {
+    public OrcamentoDTO(Long id, String descricao, BigDecimal valorEstimado, BigDecimal valorGasto, BigDecimal valorRestante, Integer mes, Integer ano, CategoriaDTO categoriaDTO) {
         this.id = id;
         this.descricao = descricao;
         this.valorEstimado = valorEstimado;
         this.valorGasto = valorGasto;
         this.valorRestante = valorRestante;
-        this.mesAno = mesAno;
+        this.mes = mes;
+        this.ano = ano;
         this.categoriaDTO = categoriaDTO;
     }
 
@@ -33,6 +35,8 @@ public class OrcamentoDTO {
         this.valorEstimado = orcamento.getValorEstimado();
         this.valorGasto = orcamento.getValorGasto();
         this.valorRestante = orcamento.getValorRestante();
+        this.mes = orcamento.getMes();
+        this.ano = orcamento.getAno();
         this.categoriaDTO = new CategoriaDTO(orcamento.getCategoria());
     }
 
@@ -72,12 +76,24 @@ public class OrcamentoDTO {
         this.valorRestante = valorRestante;
     }
 
-    public String getMesAno() {
-        return mesAno;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
-    public void setMesAno(String mesAno) {
-        this.mesAno = mesAno;
+    public Integer getMes() {
+        return mes;
+    }
+
+    public void setMes(Integer mes) {
+        this.mes = mes;
+    }
+
+    public Integer getAno() {
+        return ano;
+    }
+
+    public void setAno(Integer ano) {
+        this.ano = ano;
     }
 
     public CategoriaDTO getCategoriaDTO() {

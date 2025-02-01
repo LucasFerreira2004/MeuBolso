@@ -121,6 +121,11 @@ public class Orcamento {
         this.usuario = usuario;
     }
 
+    public void atualizarValores(BigDecimal gastoTotal) {
+        this.valorGasto = gastoTotal;
+        this.valorRestante = this.valorEstimado.subtract(gastoTotal);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

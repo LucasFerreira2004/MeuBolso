@@ -7,9 +7,11 @@ import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -24,10 +26,16 @@ public class OrcamentoController {
     @Qualifier("usuarioService")
     private IUsuarioService usuarioService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<OrcamentoDTO> findAll() {
         String usuarioId = usuarioService.getUsuarioLogadoId();
         return orcamentoService.findAll(usuarioId);
+    }
+
+    @GetMapping()
+    public List<OrcamentoDTO> findOrcamentosByPeriodo(@RequestParam("periodo") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate periodo) {
+        String usuarioId = usuarioService.getUsuarioLogadoId();
+        return orcamentoService.findOrcamentosByPeriodo(usuarioId, periodo);
     }
 
     @GetMapping("/{orcamentoId}")
