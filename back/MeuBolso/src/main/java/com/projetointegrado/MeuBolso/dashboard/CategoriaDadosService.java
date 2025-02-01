@@ -1,15 +1,14 @@
-package com.projetointegrado.MeuBolso.dashBoards;
+package com.projetointegrado.MeuBolso.dashboard;
 
 import com.projetointegrado.MeuBolso.categoria.*;
-import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaDadosDTO;
-import com.projetointegrado.MeuBolso.dashBoards.dto.CategoriaExpandedDTO;
+import com.projetointegrado.MeuBolso.dashboard.dto.CategoriaDadosDTO;
+import com.projetointegrado.MeuBolso.dashboard.dto.CategoriaExpandedDTO;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
 import com.projetointegrado.MeuBolso.transacao.TransacaoService;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +25,7 @@ public class CategoriaDadosService {
     private CategoriaRepository categoriaRepository;
 
     @Autowired
-    private ICategoriaService categoriaService;
-
-    @Autowired
     private TransacaoRepository transacaoRepository;
-
-    @Autowired
-    private TransacaoService transacaoService;
 
     @Transactional
     public List<CategoriaDadosDTO> getDadosCategorias(String userId, LocalDate dataFinal, TipoTransacao tipo) {
@@ -74,4 +67,3 @@ public class CategoriaDadosService {
         return new CategoriaDadosDTO(categoria, valorCategoria, prctGasto);
     }
 }
-//CategoriaDadosDTO dto = getCategoriaDadosDTO(userId, dataInicial, dataFinal, tipoCategoria, categoria);
