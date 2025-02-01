@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.orcamento;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
+import com.projetointegrado.MeuBolso.categoria.CategoriaRepository;
 import com.projetointegrado.MeuBolso.categoria.CategoriaValidateService;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
@@ -34,6 +35,8 @@ public class OrcamentoService implements IOrcamentoService{
 
     @Autowired
     private AtualizacaoOrcamentoService atualizacaoOrcamentoService;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
     @Transactional
     public List<OrcamentoDTO> findAll(String usuarioId) {
@@ -51,13 +54,17 @@ public class OrcamentoService implements IOrcamentoService{
 
     @Transactional
     public OrcamentoDTO save(OrcamentoPostDTO orcamentoDto, String usuarioId) {
-        Orcamento orcamento = saveAndValidate(usuarioId, null, orcamentoDto, orcamentoDto.getPeriodo().getMonth().getValue(), orcamentoDto.getPeriodo().getYear());
+        Orcamento orcamento = saveAndValidate(usuarioId, null, orcamentoDto,
+                orcamentoDto.getPeriodo().getMonth().getValue(),
+                orcamentoDto.getPeriodo().getYear());
         return new OrcamentoDTO(orcamento);
     }
 
     @Transactional
     public OrcamentoDTO update(Long id, OrcamentoPostDTO orcamentoDto, String usuarioId) {
-        Orcamento orcamento = saveAndValidate(usuarioId, id, orcamentoDto, orcamentoDto.getPeriodo().getMonth().getValue(), orcamentoDto.getPeriodo().getYear());
+        Orcamento orcamento = updateAndValidate(usuarioId, id, orcamentoDto,
+                orcamentoDto.getPeriodo().getMonth().getValue(),
+                orcamentoDto.getPeriodo().getYear());
         return new OrcamentoDTO(orcamento);
     }
 
@@ -82,42 +89,46 @@ public class OrcamentoService implements IOrcamentoService{
         return orcamentos.stream().map(OrcamentoDTO::new).toList();
     }
 
-    private Orcamento saveAndValidate(String usuarioId, Long id, OrcamentoPostDTO orcamentoDTO, Integer mes, Integer ano) {
-        // Valida o usuário
+    @Transactional
+    public Orcamento saveAndValidate(String usuarioId, Long id, OrcamentoPostDTO orcamentoDTO, Integer mes, Integer ano) {
+        // Valida o usuário e a categoria (supondo que esses métodos já fazem a validação)
         Usuario usuario = usuarioValidateService.validateAndGet(usuarioId,
-                new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
-        System.out.println("saveAndValidate: usuario validado -> categoria");
-
-        // Valida a categoria
+                new EntidadeNaoEncontradaException("{token}", "usuário não encontrado a partir do token"));
         Categoria categoria = categoriaValidateService.validateAndGet(orcamentoDTO.getIdCategoria(), usuarioId,
-                new EntidadeNaoEncontradaException("{id}", "categoria nao encontrada"),
+                new EntidadeNaoEncontradaException("{id}", "categoria não encontrada"),
                 new AcessoNegadoException());
-        System.out.println("saveAndValidate: categoria -> validacao unicidade");
+        orcamentoValidateService.validateCategoria(categoria, new CategoriaOrcamentoException());
 
-        // Valida se existe outro orçamento com a mesma categoria, do mesmo usuário para o mesmo período
-        orcamentoValidateService.validateSamePeriod(categoria, usuario, mes, ano,
-                new OrcamentoDuplicadoException(),
-                new CategoriaOrcamentoException());
-        System.out.println("saveAndValidate: validacao unicidade -> construcao do orcamento");
+        // Valida a unicidade apenas para novo cadastro (id == null)
+        orcamentoValidateService.validateSamePeriod(categoria, usuarioId, mes, ano, id, new OrcamentoDuplicadoException());
 
-        Orcamento orcamento;
-        if (id != null) {
-            // Busca o orçamento existente para atualizar
-            orcamento = orcamentoRepository.findById(id)
-                    .orElseThrow(() -> new EntidadeNaoEncontradaException("{id}", "Orcamento não encontrada para atualização"));
-
-            // Atualiza os campos do orçamento existente
-            orcamento.setValorEstimado(orcamentoDTO.getValorEstimado());
-            orcamento.setCategoria(categoria);
-            orcamento.setMes(mes);
-            orcamento.setAno(ano);
-        } else {
-            // Cria novo orçamento se for um save
-            orcamento = new Orcamento(categoria, mes, ano, orcamentoDTO.getValorEstimado(), usuario);
-        }
-
-        System.out.println("saveAndValidate: construcao de orcamento -> salvamento");
-        System.out.println(orcamento);
-        return orcamentoRepository.save(orcamento); // Salva o orçamento no banco de dados
+        // Cria a nova orcamento
+        Orcamento orcamento = new Orcamento(categoria, mes, ano, orcamentoDTO.getValorEstimado(), usuario);
+        return orcamentoRepository.save(orcamento);
     }
+
+    @Transactional
+    public Orcamento updateAndValidate(String usuarioId, Long id, OrcamentoPostDTO orcamentoDTO, Integer mes, Integer ano) {
+        // Primeiro, valida que o orçamento existe e pertence ao usuário
+        Orcamento orcamentoExistente = orcamentoValidateService.validateAndGet(id, usuarioId,
+                new EntidadeNaoEncontradaException("{id}", "Orçamento não encontrado para atualização"),
+                new AcessoNegadoException("Acesso negado para atualizar este orçamento."));
+
+        Categoria categoria = categoriaValidateService.validateAndGet(orcamentoDTO.getIdCategoria(), usuarioId,
+                new EntidadeNaoEncontradaException("{id}", "categoria não encontrada"),
+                new AcessoNegadoException());
+        orcamentoValidateService.validateCategoria(categoria, new CategoriaOrcamentoException());
+
+        // Valida que, ao atualizar, não há duplicidade com outro orçamento
+        orcamentoValidateService.validateSamePeriod(categoria, usuarioId, mes, ano, id, new OrcamentoDuplicadoException());
+
+        // Atualiza os campos do orçamento existente
+        orcamentoExistente.setValorEstimado(orcamentoDTO.getValorEstimado());
+        orcamentoExistente.setMes(mes);
+        orcamentoExistente.setAno(ano);
+        orcamentoExistente.setCategoria(categoria); // Atualiza a categoria, se necessário
+
+        return orcamentoRepository.save(orcamentoExistente);
+    }
+
 }

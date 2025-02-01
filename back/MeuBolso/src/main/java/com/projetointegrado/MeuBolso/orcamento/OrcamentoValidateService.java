@@ -6,10 +6,10 @@ import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.orcamento.exception.CategoriaOrcamentoException;
 import com.projetointegrado.MeuBolso.orcamento.exception.OrcamentoDuplicadoException;
-import com.projetointegrado.MeuBolso.usuario.Usuario;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class OrcamentoValidateService {
@@ -31,16 +31,21 @@ public class OrcamentoValidateService {
         return orcamento;
     }
 
-    // Valida se existe uma categoria com a mesma categoria para o mesmo periodo
-    @Transactional
-    public void validateSamePeriod(Categoria categoria, Usuario usuario, Integer mes, Integer ano, OrcamentoDuplicadoException orcamentoDuplicadoException, CategoriaOrcamentoException categoriaOrcamentoException) {
+    // Se a categoria não for do tipo DESPESA, lança outra exceção (regra de negócio)
+    public void validateCategoria(Categoria categoria, CategoriaOrcamentoException categoriaOrcamentoException) {
         if (categoria.getTipo() != TipoCategoria.DESPESA)
             throw categoriaOrcamentoException;
+    }
 
-        System.out.println("validateSamePeriod: buscando no banco de dados");
-        Orcamento orcamento = orcamentoRepository.findByCategoriaUsuarioAndPeriodo(categoria.getId(), usuario.getId(), ano, mes).orElse(null);
-        System.out.println("validateSamePeriod: voltando da busca no banco de dados");
-        if (orcamento != null)
+    // Verifica se houve duplicidade de orçamentos para o mesmo usuário, categoria e período
+    public void validateSamePeriod(Categoria categoria, String usuarioId, Integer mes, Integer ano, Long idAtual,
+                                   OrcamentoDuplicadoException orcamentoDuplicadoException) {
+        // Busca um orçamento existente para o mesmo usuário, categoria e período
+        Optional<Orcamento> orcamento = orcamentoRepository.findByCategoriaUsuarioAndPeriodo(categoria.getId(), usuarioId, ano, mes);
+
+        // Se existir e for um registro diferente (ou seja, id diferente ou sendo um novo registro)
+        if (orcamento.isPresent() && !orcamento.get().getId().equals(idAtual)) {
             throw orcamentoDuplicadoException;
+        }
     }
 }
