@@ -17,19 +17,11 @@ interface Conta {
 }
 
 interface SelectBoxContasProps {
-  setConta: React.Dispatch<React.SetStateAction<number | null>>; // Adicionando a prop setConta
+  setConta: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-function SelectBoxContas({ setConta }: SelectBoxContasProps) { // Recebendo a prop setConta
+function SelectBoxContas({ setConta }: SelectBoxContasProps) {
   const [contas, setContas] = useState<Conta[]>([]);
-
-  const getDataAtual = (): string => {
-    const data = new Date();
-    const ano = data.getFullYear();
-    const mes = String(data.getMonth() + 1).padStart(2, "0");
-    const dia = String(data.getDate()).padStart(2, "0");
-    return `${ano}-${mes}-${dia}`;
-  };
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -39,7 +31,7 @@ function SelectBoxContas({ setConta }: SelectBoxContasProps) { // Recebendo a pr
       return;
     }
 
-    const dataReferencia = getDataAtual();
+    const dataReferencia = "2200-01-18";
     const url = `http://localhost:8080/contas?data=${dataReferencia}`;
 
     fetch(url, {
@@ -57,7 +49,7 @@ function SelectBoxContas({ setConta }: SelectBoxContasProps) { // Recebendo a pr
       })
       .then((data: Conta[]) => {
         setContas(data);
-        setConta(data.length > 0 ? data[0].id : null); // Inicializa o setConta com o ID da primeira conta
+        setConta(data.length > 0 ? data[0].id : null); 
       })
       .catch((error) => console.error("Erro ao buscar contas:", error));
   }, [setConta]);

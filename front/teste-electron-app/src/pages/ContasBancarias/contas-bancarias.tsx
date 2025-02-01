@@ -28,19 +28,10 @@ function ContasBancarias() {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [selectedContaId, setSelectedContaId] = useState<number | null>(null);
+  const [selectedContaData, setSelectedContaData] = useState<Conta | null>(null); // Dados da conta selecionada
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState<number | null>(null);
 
-  // Função para pegar a data atual no formato YYYY-MM-DD
-  const getDataAtual = () => {
-    const data = new Date();
-    const ano = data.getFullYear();
-    const mes = String(data.getMonth() + 1).padStart(2, "0");
-    const dia = String(data.getDate()).padStart(2, "0");
-    return `${ano}-${mes}-${dia}`;
-  };
-
-  // Função para buscar as contas da API
   const fetchContas = () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
@@ -48,7 +39,7 @@ function ContasBancarias() {
       return;
     }
 
-    const dataReferencia = getDataAtual();
+    const dataReferencia = "2200-01-18"; // Data fixa para a consulta
     const url = `http://localhost:8080/contas?data=${dataReferencia}`;
 
     fetch(url, {
@@ -74,22 +65,22 @@ function ContasBancarias() {
       });
   };
 
-  // Efeito para carregar as contas ao montar o componente
   useEffect(() => {
     fetchContas();
   }, []);
 
-  // Função para abrir o modal de exclusão
   const handleDeleteRequest = (contaId: number) => {
     setSelectedDeleteId(contaId);
     setOpenDeleteModal(true);
   };
 
-
-  // Função para abrir o modal de edição
   const handleEdit = (contaId: number) => {
-    setSelectedContaId(contaId);
-    setOpenEditModal(true);
+    const contaSelecionada = contas.find((conta) => conta.id === contaId);
+    if (contaSelecionada) {
+      setSelectedContaId(contaId);
+      setSelectedContaData(contaSelecionada);
+      setOpenEditModal(true);
+    }
   };
 
   return (
@@ -104,7 +95,6 @@ function ContasBancarias() {
         </div>
       </header>
 
-      {/* Modal de criação de conta */}
       {openCreateModal && (
         <ModalContas
           onCloseAll={() => {
@@ -114,18 +104,23 @@ function ContasBancarias() {
         />
       )}
 
-      {/* Modal de edição de conta */}
-      {openEditModal && selectedContaId !== null && (
+      {openEditModal && selectedContaId !== null && selectedContaData && (
         <ModalEditContas
           contaId={selectedContaId}
           onCloseAll={() => {
             setOpenEditModal(false);
             fetchContas();
           }}
+          initialData={{
+            saldo: selectedContaData.saldo,
+            id_banco: selectedContaData.id_banco,
+            id_tipo_conta: selectedContaData.id_tipo_conta,
+            data: selectedContaData.data,
+            descricao: selectedContaData.descricao,
+          }}
         />
       )}
 
-      {/* Lista de contas */}
       <main className={style.cardsContas}>
         {contas.length === 0 ? (
           <p>Não há contas disponíveis.</p>
@@ -140,7 +135,7 @@ function ContasBancarias() {
               altBanco={`Ícone do banco ${conta.banco.nome}`}
               data={conta.data}
               descricao={conta.descricao}
-              onDelete={() => handleDeleteRequest(conta.id)} // Chama a função para abrir o modal de exclusão
+              onDelete={() => handleDeleteRequest(conta.id)} 
               onEdit={() => handleEdit(conta.id)}
             />
           ))
@@ -149,16 +144,15 @@ function ContasBancarias() {
 
       {/* Modal de exclusão de conta */}
       {openDeleteModal && selectedDeleteId !== null && (
-  <ModalDeleteConta
-    contaId={selectedDeleteId}
-    onClose={() => setOpenDeleteModal(false)}
-    onConfirmDelete={() => {
-      setOpenDeleteModal(false);
-      fetchContas(); // ✅ Apenas atualiza a lista, sem outra requisição DELETE
-    }}
-  />
-)}
-
+        <ModalDeleteConta
+          contaId={selectedDeleteId}
+          onClose={() => setOpenDeleteModal(false)}
+          onConfirmDelete={() => {
+            setOpenDeleteModal(false);
+            fetchContas(); // Atualiza a lista de contas após a exclusão
+          }}
+        />
+      )}
     </div>
   );
 }
