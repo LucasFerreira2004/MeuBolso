@@ -79,13 +79,8 @@ public class OrcamentoService implements IOrcamentoService{
 
     @Transactional
     public List<OrcamentoDTO> findOrcamentosByPeriodo(String usuarioId, LocalDate periodo) {
-        System.out.println("OrcamentoService: chamando o atualizarValores");
         atualizacaoOrcamentoService.atualizarOrcamentos(usuarioId, periodo);
-
-        System.out.println("OrcamentoService: buscar orcamentos por periodo");
         List<Orcamento> orcamentos = orcamentoRepository.findByUsuarioAndPeriodo(usuarioId, periodo.getYear(), periodo.getMonth().getValue());
-
-        System.out.println("OrcamentoService: retornando orcamentos");
         return orcamentos.stream().map(OrcamentoDTO::new).toList();
     }
 
