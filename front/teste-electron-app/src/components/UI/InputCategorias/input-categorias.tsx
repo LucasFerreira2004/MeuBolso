@@ -18,7 +18,7 @@ const InputCategorias: React.FC<InputCategoriasProps> = ({ id, nome, tipo, cor, 
       {/* Ícone de cor */}
       <div className={style.iconeCor} style={{ backgroundColor: corHex }}></div> 
       {/* Exibição do nome da categoria com a cor entre parênteses */}
-      <a>{nome}</a>
+      <a className={style.a}>{nome}</a>
     </li>
   );
 };

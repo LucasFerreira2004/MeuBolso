@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { saveToken } from "../../service/auth-service"; // Importe a função saveToken
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import style from "./login.module.css";
 
 // Definindo tipo para a resposta da API
@@ -34,20 +34,17 @@ function Login() {
         throw new Error("Email ou senha incorretos.");
       }
 
-      const data: LoginResponse = await response.json(); // Tipando a resposta
+      const data: LoginResponse = await response.json();
       const token = data.token;
 
-      // Salvar o token no localStorage
       saveToken(token);
       console.log("Token salvo:", token);
 
-      // Exibe um toast de sucesso e redireciona
       toast.success("Login realizado com sucesso!");
       setTimeout(() => {
         navigate("/home");
-      }, 2000); // Redireciona após 2 segundos
+      }, 2000);
     } catch (error) {
-      // Usando TypeScript para validar o tipo do erro
       if (error instanceof Error) {
         toast.error(error.message || "Erro ao realizar o login.");
       } else {
@@ -90,9 +87,13 @@ function Login() {
           </div>
         </div>
 
-        <Link to="/cadastro">
-          <p className={style.plogin}>Crie uma conta</p>
-        </Link>
+        <div className={style.resgistrar}>
+          <p className={style.texto}>Não tem uma conta?</p>
+          <Link to="/cadastro">
+            <p className={style.link}>Registrar</p>
+          </Link>
+        </div>
+
         <button className={style.buttonC} onClick={handleLogin}>
           Entrar
         </button>
