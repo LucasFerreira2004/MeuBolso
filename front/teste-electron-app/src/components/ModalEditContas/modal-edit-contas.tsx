@@ -8,44 +8,43 @@ import DatePicker from "../UI/DatePicker/date-picker";
 
 interface ModalEditContasProps {
   onCloseAll: () => void; // Função para fechar o modal
-  contaId: number; // ID da conta para editar
+  contaId: number; // ID da conta que será editada
+  initialData: {
+    saldo: number;
+    id_banco: number;
+    id_tipo_conta: number;
+    data: string;
+    descricao: string;
+  }; // Dados iniciais da conta
 }
 
-function ModalEditContas({ onCloseAll, contaId }: ModalEditContasProps) {
-  const [saldo, setSaldo] = useState<string>("");
-  const [bancoId, setBancoId] = useState<number | null>(null);
-  const [tipoContaId, setTipoContaId] = useState<number | null>(null);
-  const [data, setData] = useState<string>("");
-  const [descricao, setDescricao] = useState<string>("");
+const getDataAtual = () => {
+  const data = new Date();
+  const ano = data.getFullYear();
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
+  const dia = String(data.getDate()).padStart(2, "0");
+  return `${ano}-${mes}-${dia}`;
+};
 
+function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasProps) {
+  const [saldo, setSaldo] = useState<string>(""); // Saldo da conta
+  const [bancoId, setBancoId] = useState<number | null>(null); // ID do banco
+  const [tipoContaId, setTipoContaId] = useState<number | null>(null); // ID do tipo de conta
+  const [data, setData] = useState<string>(getDataAtual()); // Data da conta
+  const [descricao, setDescricao] = useState<string>(""); // Descrição da conta
+
+  // Preenche os campos com os dados iniciais ao abrir o modal
   useEffect(() => {
-    // Carregar os dados da conta para edição
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      console.error("Token de autenticação não encontrado.");
-      return;
+    if (initialData) {
+      setSaldo(`R$ ${initialData.saldo.toFixed(2).replace(".", ",")}`);
+      setBancoId(initialData.id_banco);
+      setTipoContaId(initialData.id_tipo_conta);
+      setData(initialData.data);
+      setDescricao(initialData.descricao);
     }
+  }, [initialData]);
 
-    axios
-      .get(`http://localhost:8080/contas/${contaId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        const conta = response.data;
-        setSaldo(conta.saldo.toFixed(2));
-        setBancoId(conta.id_banco);
-        setTipoContaId(conta.id_tipo_conta);
-        setData(conta.data);
-        setDescricao(conta.descricao);
-      })
-      .catch((error) => {
-        console.error("Erro ao carregar dados da conta:", error);
-      });
-  }, [contaId]);
-
+  // Função para formatar o saldo como moeda
   const formatarMoeda = (valor: string): string => {
     let valorNumerico = valor.replace(/\D/g, "");
     valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
@@ -54,6 +53,7 @@ function ModalEditContas({ onCloseAll, contaId }: ModalEditContasProps) {
     return `R$ ${valorNumerico}`;
   };
 
+  // Função para remover a formatação de moeda
   const removerFormatacaoMoeda = (valorFormatado: string): number => {
     const valorNumerico = valorFormatado
       .replace("R$ ", "")
@@ -62,16 +62,19 @@ function ModalEditContas({ onCloseAll, contaId }: ModalEditContasProps) {
     return parseFloat(valorNumerico);
   };
 
+  // Função para atualizar o saldo
   const handleChangeSaldo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorDigitado = e.target.value;
     const valorFormatado = formatarMoeda(valorDigitado);
     setSaldo(valorFormatado);
   };
 
+  // Função para atualizar a descrição
   const handleChangeDescricao = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDescricao(e.target.value);
   };
 
+  // Função para enviar os dados atualizados para o backend
   const handleSubmit = async () => {
     if (!saldo || !bancoId || !tipoContaId || !data || !descricao) {
       alert("Preencha todos os campos obrigatórios!");
@@ -79,8 +82,8 @@ function ModalEditContas({ onCloseAll, contaId }: ModalEditContasProps) {
     }
 
     const saldoNumerico = removerFormatacaoMoeda(saldo);
-    const token = localStorage.getItem("authToken");
 
+    const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("Token de autenticação não encontrado.");
       alert("Por favor, faça login novamente.");
@@ -88,25 +91,28 @@ function ModalEditContas({ onCloseAll, contaId }: ModalEditContasProps) {
     }
 
     try {
-      const payload = {
-        saldo: saldoNumerico,
-        id_banco: bancoId,
-        id_tipo_conta: tipoContaId,
-        data,
-        descricao,
-      };
-
-      const response = await axios.put(`http://localhost:8080/contas/${contaId}`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+      const response = await axios.put(
+        `http://localhost:8080/contas/${contaId}`,
+        {
+          saldo: saldoNumerico,
+          id_banco: bancoId,
+          id_tipo_conta: tipoContaId,
+          data,
+          descricao,
         },
-      });
-      console.log("Conta editada:", response.data);
-      onCloseAll(); // Fecha o modal após a edição
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Conta atualizada:", response.data);
+      onCloseAll(); // Fecha o modal após a atualização
     } catch (error) {
-      console.error("Erro ao editar conta:", error);
-      alert("Erro ao editar conta. Verifique os dados ou tente novamente.");
+      console.error("Erro ao atualizar conta:", error);
+      alert("Erro ao atualizar conta. Verifique os dados ou tente novamente.");
     }
   };
 
