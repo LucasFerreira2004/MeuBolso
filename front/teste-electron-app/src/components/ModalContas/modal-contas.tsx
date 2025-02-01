@@ -10,13 +10,23 @@ interface ModalContasProps {
   onCloseAll: () => void; // Função para fechar o modal
 }
 
-function ModalContas({ onCloseAll }: ModalContasProps) {
-  const [saldo, setSaldo] = useState<string>("");
-  const [bancoId, setBancoId] = useState<number | null>(null);
-  const [tipoContaId, setTipoContaId] = useState<number | null>(null);
-  const [data, setData] = useState<string>("");
-  const [descricao, setDescricao] = useState<string>("");
+// Definindo a função getDataAtual antes de usá-la
+const getDataAtual = () => {
+  const data = new Date();
+  const ano = data.getFullYear();
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
+  const dia = String(data.getDate()).padStart(2, "0");
+  return `${ano}-${mes}-${dia}`;
+};
 
+function ModalContas({ onCloseAll }: ModalContasProps) {
+  const [saldo, setSaldo] = useState<string>(""); // Saldo da conta
+  const [bancoId, setBancoId] = useState<number | null>(null); // ID do banco
+  const [tipoContaId, setTipoContaId] = useState<number | null>(null); // ID do tipo de conta
+  const [data, setData] = useState<string>(getDataAtual()); // Inicializa com a data atual
+  const [descricao, setDescricao] = useState<string>(""); // Descrição da conta
+
+  // Função para formatar o saldo como moeda
   const formatarMoeda = (valor: string): string => {
     let valorNumerico = valor.replace(/\D/g, "");
     valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
@@ -25,6 +35,7 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
     return `R$ ${valorNumerico}`;
   };
 
+  // Função para remover a formatação de moeda
   const removerFormatacaoMoeda = (valorFormatado: string): number => {
     const valorNumerico = valorFormatado
       .replace("R$ ", "")
@@ -33,31 +44,38 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
     return parseFloat(valorNumerico);
   };
 
+  // Função para atualizar o saldo
   const handleChangeSaldo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorDigitado = e.target.value;
     const valorFormatado = formatarMoeda(valorDigitado);
     setSaldo(valorFormatado);
   };
 
+  // Função para atualizar a descrição
   const handleChangeDescricao = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDescricao(e.target.value);
   };
 
+  // Função para enviar os dados para o backend
   const handleSubmit = async () => {
     if (!saldo || !bancoId || !tipoContaId || !data || !descricao) {
       alert("Preencha todos os campos obrigatórios!");
       return;
     }
-
+  
+    // Se necessário, converta a data para o formato adequado
+    const dataFormatada = new Date(data);
+    const dataISO = dataFormatada.toISOString().split('T')[0]; // Formata como "YYYY-MM-DD"
+  
     const saldoNumerico = removerFormatacaoMoeda(saldo);
-
+  
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("Token de autenticação não encontrado.");
       alert("Por favor, faça login novamente.");
       return;
     }
-
+  
     try {
       const response = await axios.post(
         "http://localhost:8080/contas",
@@ -65,7 +83,7 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
           saldo: saldoNumerico,
           id_banco: bancoId,
           id_tipo_conta: tipoContaId,
-          data,
+          data: dataISO, // Envia a data no formato correto
           descricao,
         },
         {
@@ -75,7 +93,7 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
           },
         }
       );
-
+  
       console.log("Conta cadastrada:", response.data);
       onCloseAll(); // Fecha o modal após o cadastro
     } catch (error) {
@@ -83,7 +101,7 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
       alert("Erro ao cadastrar conta. Verifique os dados ou tente novamente.");
     }
   };
-
+  
   return (
     <div
       className={style.modalOverlay}
@@ -111,8 +129,8 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
         <SelectedTipoConta setTipoConta={setTipoContaId} />
 
         <DatePicker
-          value={data}
-          onChange={setData}
+          value={data} // Agora a data é inicializada corretamente
+          onChange={setData} // Atualiza o estado com a data selecionada
           iconsrc="/assets/iconsModalContas/date.svg"
         />
 

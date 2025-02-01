@@ -6,6 +6,8 @@ interface CardContasProps {
   saldo: number | null | undefined; 
   banco: string;
   altBanco: string;
+  data: string; // Propriedade para exibir a data
+  descricao: string; // Propriedade para exibir a descrição
   onDelete: () => void;
   onEdit: () => void;
 }
@@ -17,7 +19,15 @@ const formatarTipoConta = (tipo: string) => {
     .replace(/\b\w/g, (char) => char.toUpperCase());  
 };
 
-const CardContas: React.FC<CardContasProps> = ({ titulo, tipo, saldo, banco, altBanco, onDelete, onEdit }) => {
+const CardContas: React.FC<CardContasProps> = ({
+  titulo,
+  tipo,
+  saldo,
+  banco,
+  altBanco,
+  onDelete,
+  onEdit,
+}) => {
   const formatarSaldo = (valor: number | null | undefined) => {
     if (valor == null) {
       return "R$ 0,00"; 
@@ -27,7 +37,6 @@ const CardContas: React.FC<CardContasProps> = ({ titulo, tipo, saldo, banco, alt
       currency: "BRL",
     });
   };
-
   return (
     <div className={style.cardContas}>
       <div className={style.parteInfo}>

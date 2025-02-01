@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import CardContas from "../../components/UI/CardContas/card-contas";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./contas-bancarias.module.css";
-import ModalContas from "../../components/ModalContas/modal-contas"; // Importe o ModalContas
+import ModalEditContas from "../../components/ModalEditContas/modal-edit-contas";
+import ModalContas from "../../components/ModalContas/modal-contas";
+import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-conta"; // Modal de exclusão
 
 interface Conta {
+  data: any;
+  descricao: any;
   id: number;
   saldo: number;
   banco: {
@@ -21,8 +25,13 @@ interface Conta {
 
 function ContasBancarias() {
   const [contas, setContas] = useState<Conta[]>([]);
-  const [openAddModal, setOpenAddModal] = useState(false); // Estado para controlar o modal de adicionar contas
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [selectedContaId, setSelectedContaId] = useState<number | null>(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [selectedDeleteId, setSelectedDeleteId] = useState<number | null>(null);
 
+  // Função para pegar a data atual no formato YYYY-MM-DD
   const getDataAtual = () => {
     const data = new Date();
     const ano = data.getFullYear();
@@ -31,9 +40,9 @@ function ContasBancarias() {
     return `${ano}-${mes}-${dia}`;
   };
 
+  // Função para buscar as contas da API
   const fetchContas = () => {
     const token = localStorage.getItem("authToken");
-
     if (!token) {
       console.error("Token de autenticação não encontrado.");
       return;
@@ -58,7 +67,6 @@ function ContasBancarias() {
         return response.json();
       })
       .then((data) => {
-        console.log("Resposta do servidor:", data);
         setContas(data);
       })
       .catch((error) => {
@@ -66,9 +74,23 @@ function ContasBancarias() {
       });
   };
 
+  // Efeito para carregar as contas ao montar o componente
   useEffect(() => {
     fetchContas();
   }, []);
+
+  // Função para abrir o modal de exclusão
+  const handleDeleteRequest = (contaId: number) => {
+    setSelectedDeleteId(contaId);
+    setOpenDeleteModal(true);
+  };
+
+
+  // Função para abrir o modal de edição
+  const handleEdit = (contaId: number) => {
+    setSelectedContaId(contaId);
+    setOpenEditModal(true);
+  };
 
   return (
     <div className={style.contas}>
@@ -76,23 +98,34 @@ function ContasBancarias() {
         <h1>Contas Bancárias</h1>
         <div>
           <AddButton
-            texto="Adicionar Conta"
-            onClick={() => setOpenAddModal(true)} // Abre o modal de adicionar conta
+            onClick={() => setOpenCreateModal(true)}
+            texto={"Adicionar conta"}
           />
         </div>
       </header>
 
-      {/* Modal de Adicionar Contas */}
-      {openAddModal && (
+      {/* Modal de criação de conta */}
+      {openCreateModal && (
         <ModalContas
           onCloseAll={() => {
-            setOpenAddModal(false); // Fecha o modal após adicionar
-            fetchContas(); // Atualiza a lista de contas
+            setOpenCreateModal(false);
+            fetchContas();
           }}
         />
       )}
 
-      {/* Lista de Contas */}
+      {/* Modal de edição de conta */}
+      {openEditModal && selectedContaId !== null && (
+        <ModalEditContas
+          contaId={selectedContaId}
+          onCloseAll={() => {
+            setOpenEditModal(false);
+            fetchContas();
+          }}
+        />
+      )}
+
+      {/* Lista de contas */}
       <main className={style.cardsContas}>
         {contas.length === 0 ? (
           <p>Não há contas disponíveis.</p>
@@ -104,14 +137,28 @@ function ContasBancarias() {
               tipo={conta.tipo_conta.tipoConta.replace("_", " ")}
               saldo={conta.saldo}
               banco={conta.banco.iconeUrl || "/assets/iconsContas/default.svg"}
-              altBanco={`Banco ${conta.banco.nome}`} onDelete={function (): void {
-                throw new Error("Function not implemented.");
-              } } onEdit={function (): void {
-                throw new Error("Function not implemented.");
-              } }            />
+              altBanco={`Ícone do banco ${conta.banco.nome}`}
+              data={conta.data}
+              descricao={conta.descricao}
+              onDelete={() => handleDeleteRequest(conta.id)} // Chama a função para abrir o modal de exclusão
+              onEdit={() => handleEdit(conta.id)}
+            />
           ))
         )}
       </main>
+
+      {/* Modal de exclusão de conta */}
+      {openDeleteModal && selectedDeleteId !== null && (
+  <ModalDeleteConta
+    contaId={selectedDeleteId}
+    onClose={() => setOpenDeleteModal(false)}
+    onConfirmDelete={() => {
+      setOpenDeleteModal(false);
+      fetchContas(); // ✅ Apenas atualiza a lista, sem outra requisição DELETE
+    }}
+  />
+)}
+
     </div>
   );
 }
