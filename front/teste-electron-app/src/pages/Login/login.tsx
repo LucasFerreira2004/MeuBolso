@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { saveToken } from "../../service/auth-service"; // Importe a função saveToken
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { saveToken } from "../../service/auth-service";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import style from "./login.module.css";
@@ -14,6 +14,16 @@ function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Verifica se há uma mensagem de sucesso no estado da navegação
+  useEffect(() => {
+    if (location.state?.successMessage) {
+      toast.success(location.state.successMessage);
+      // Limpa o estado para evitar que o toast seja exibido novamente
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state]);
 
   const handleLogin = async () => {
     if (email === "" || password === "") {
