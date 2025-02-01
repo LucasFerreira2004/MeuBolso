@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import style from "./home.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
 import CardMetas from "../../components/UI/CardMetas/card-metas";
@@ -11,10 +14,22 @@ interface Banco {
 }
 
 function Home() {
+  const location = useLocation();
+  const { state } = location;
+
   const [bancos, setBancos] = useState<Banco[]>([]);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const dataReferencia = "2200-01-18"; // Data fixa para a consulta
+
+  // Exibe o toast de sucesso ao carregar a tela de Home
+  useEffect(() => {
+    if (state?.successMessage) {
+      toast.success(state.successMessage);
+      // Limpa o estado para evitar que o toast seja exibido novamente
+      window.history.replaceState({}, document.title);
+    }
+  }, [state]);
 
   const fetchData = async (url: string, errorMessage: string, setData: (data: any) => void) => {
     const token = localStorage.getItem("authToken");
@@ -108,7 +123,7 @@ function Home() {
                       alt={`Ícone ${banco.nomeBanco}`}
                       className={style.iconNubank}
                     />
-                    <p>{`${banco.nomeBanco}: ${formatarSaldo(banco.saldo)}`}</p> {/* Formatação do saldo do banco */}
+                    <p>{`${banco.nomeBanco}: ${formatarSaldo(banco.saldo)}`}</p>
                   </div>
                 ))
               )}
@@ -168,6 +183,19 @@ function Home() {
           </div>
         </div>
       </main>
+
+      {/* Adicione o ToastContainer no final do componente */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 }

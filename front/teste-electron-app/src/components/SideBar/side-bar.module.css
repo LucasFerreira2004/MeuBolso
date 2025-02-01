@@ -51,6 +51,10 @@
   background-color: var(--main-color-light);
   color: #000000;
 }
+.navLink{
+  text-decoration: none;
+  color: black;
+}
 
 .navItem img {
   width: 24px;

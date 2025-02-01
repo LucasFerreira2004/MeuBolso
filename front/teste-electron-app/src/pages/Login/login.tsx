@@ -40,10 +40,8 @@ function Login() {
       saveToken(token);
       console.log("Token salvo:", token);
 
-      toast.success("Login realizado com sucesso!");
-      setTimeout(() => {
-        navigate("/home");
-      }, 2000);
+      // Navega para a tela de Home com uma mensagem de sucesso
+      navigate("/home", { state: { successMessage: "Login realizado com sucesso!" } });
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message || "Erro ao realizar o login.");
