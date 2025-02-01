@@ -9,6 +9,7 @@ import App from "../App";
 import Transacoes from "../pages/Transacoes/transacoes";
 import Metas from "../pages/Metas/metas";
 import PrivateRoute from "../components/private-routes"; // Importa o PrivateRoute
+import Orcamentos from "../pages/Orcamentos/orcamentos";
 
 export const router = createBrowserRouter([
   {
@@ -68,6 +69,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Metas />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/orcamentos",
+        element: (
+          <PrivateRoute>
+            <Orcamentos />
           </PrivateRoute>
         ),
       },

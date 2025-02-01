@@ -56,6 +56,16 @@ function SideBar() {
                 Metas
               </li>
             </Link>
+            <Link to="/orcamentos" className={style.navLink}>
+              <li className={style.navItem}>
+                <img
+                  src="/assets/orcamentos.svg"
+                  alt="Ícone de Relatórios"
+                  className={style.icon}
+                />
+                Orçamentos
+              </li>
+            </Link>
             <Link to="/relatorios" className={style.navLink}>
               <li className={style.navItem}>
                 <img

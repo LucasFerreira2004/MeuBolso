@@ -1,0 +1,14 @@
+.orcamentos{
+    display: flex;
+    flex-direction: column;
+    margin-left: 300px;
+    padding-bottom: 40px;
+}
+.headerOrcamentos{
+    display: flex;
+    justify-content: space-between;
+}
+.headerOrcamentos div{
+    padding-top: 80px;
+    padding-right: 30px;
+}
