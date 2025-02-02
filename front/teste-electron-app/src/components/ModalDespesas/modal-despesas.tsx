@@ -58,6 +58,7 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
       return;
     }
   
+    // Dados comuns a todas as transações
     const transactionData: any = {
       valor: valorNumerico,
       data,
@@ -68,11 +69,15 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
       descricao,
     };
   
+    // Adicionar dados específicos para transações "FIXA"
     if (tipoTransacao === "FIXA") {
       transactionData.periodicidade = periodicidade;
-    } else if (tipoTransacao === "PARCELADA") {
-      transactionData.periodicidade = periodicidade;
+    }
+  
+    // Adicionar dados específicos para transações "PARCELADA"
+    if (tipoTransacao === "PARCELADA") {
       transactionData.qtdParcelas = qtdParcelas;
+      transactionData.periodicidade = periodicidade;
     }
   
     console.log("Dados da transação sendo enviados:", transactionData);
@@ -80,6 +85,7 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
     try {
       let url = "http://localhost:8080/transacoes";
   
+      // URLs diferentes para transações FIXA e PARCELADA
       if (tipoTransacao === "FIXA") {
         url = "http://localhost:8080/transacoesRecorrentes/fixas";
       } else if (tipoTransacao === "PARCELADA") {
@@ -111,6 +117,7 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
       toast.error("Erro ao adicionar transação. Verifique os dados ou tente novamente.");
     }
   };
+  
 
   return (
     <div
