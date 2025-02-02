@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './card-metas.module.css';
-import ProgressBar from '../UI/ProgressBar/progress-bar'
+import ProgressBar from '../ProgressBar/progress-bar'
 
 interface CardMetasProps {
   texto: string;

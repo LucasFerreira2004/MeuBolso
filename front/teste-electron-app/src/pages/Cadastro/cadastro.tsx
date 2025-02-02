@@ -1,34 +1,35 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import style from "./cadastro.module.css";
 
 function Cadastro() {
-  const [nome, setNome] = useState(""); // Campo nome adicionado
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleCadastro = async () => {
     if (nome === "" || email === "" || password === "" || repeatPassword === "") {
-      setErrorMessage("Por favor, preencha todos os campos.");
+      toast.error("Por favor, preencha todos os campos.");
       return;
     }
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
-      setErrorMessage("Por favor, insira um email válido.");
+      toast.error("Por favor, insira um email válido.");
       return;
     }
 
     if (password !== repeatPassword) {
-      setErrorMessage("As senhas não correspondem.");
+      toast.error("As senhas não correspondem.");
       return;
     }
 
     if (password.length < 6) {
-      setErrorMessage("A senha deve ter pelo menos 6 caracteres.");
+      toast.error("A senha deve ter pelo menos 6 caracteres.");
       return;
     }
 
@@ -38,21 +39,23 @@ function Cadastro() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ nome, email, senha: password }), // Adicionando "nome" no corpo da requisição
+        body: JSON.stringify({ nome, email, senha: password }),
       });
 
       if (!response.ok) {
         throw new Error("Erro ao cadastrar o usuário.");
       }
 
-      // Não há corpo na resposta do cadastro, então apenas redireciona
-      alert("Usuário cadastrado com sucesso!");
-      navigate("/");
-    } catch (error: unknown) {
+      // Exibe um toast de sucesso e redireciona
+      toast.success("Usuário cadastrado com sucesso!");
+      setTimeout(() => {
+        navigate("/");
+      }, 2000); // Redireciona após 2 segundos
+    } catch (error) {
       if (error instanceof Error) {
-        setErrorMessage(error.message || "Erro ao realizar o cadastro.");
+        toast.error(error.message || "Erro ao realizar o cadastro.");
       } else {
-        setErrorMessage("Erro desconhecido.");
+        toast.error("Erro desconhecido.");
       }
     }
   };
@@ -76,7 +79,7 @@ function Cadastro() {
               placeholder="Seu nome"
               className={style.input}
               value={nome}
-              onChange={(e) => setNome(e.target.value)} // Atualiza o campo nome
+              onChange={(e) => setNome(e.target.value)}
             />
           </div>
           <div className={style.inputEmail}>
@@ -111,8 +114,6 @@ function Cadastro() {
           </div>
         </div>
 
-        {errorMessage && <p className={style.errorMessage}>{errorMessage}</p>}
-
         <Link to="/" className={style.backToLogin}>
           Voltar para o login
         </Link>
@@ -120,6 +121,19 @@ function Cadastro() {
         <button className={style.buttonC} onClick={handleCadastro}>
           Cadastrar
         </button>
+
+        {/* Adicione o ToastContainer no final do componente */}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </div>
   );

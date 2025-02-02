@@ -15,12 +15,16 @@
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.9",
+    "date-fns": "^4.1.0",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.0",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
+    "react-datepicker": "^7.6.0",
+    "react-day-picker": "^9.5.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.2",
+    "react-select": "^5.10.0",
     "react-toastify": "^11.0.3",
     "recharts": "^2.14.1"
   },

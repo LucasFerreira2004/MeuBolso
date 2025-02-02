@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.repetirTransacao.GerarTransacoesFixas;
+package com.projetointegrado.MeuBolso.repetirTransacao.gerarTransacoes;
 
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TipoRepeticao;
 import org.springframework.beans.factory.annotation.Autowired;
