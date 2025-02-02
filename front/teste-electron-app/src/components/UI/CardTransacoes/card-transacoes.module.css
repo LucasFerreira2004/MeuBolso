@@ -1,0 +1,51 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Efeito de elevação */
+}
+
+.header {
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: bold;
+}
+
+header time {
+    font-style: italic;
+    color: #555;
+}
+
+.detalhes {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    margin: 10px;
+}
+
+.detalhes li {
+    font-size: 1rem;
+    color: #444;
+}
+
+.detalhes li strong {
+    color: #007BFF; /* Cor azul para destaque */
+}
+
+.detalhes li:nth-child(odd) {
+    background-color: #f9f9f9; /* Linhas alternadas com fundo diferente */
+    border-radius: 4px;
+}
+
+.detalhes li:nth-child(even) {
+    background-color: #f1f1f1;
+    border-radius: 4px;
+}

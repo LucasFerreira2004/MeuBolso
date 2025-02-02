@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import CardContas from "../../components/CardContas/card-contas";
+import CardContas from "../../components/UI/CardContas/card-contas";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./contas-bancarias.module.css";
 import ModalEditContas from "../../components/ModalEditContas/modal-edit-contas";
@@ -30,16 +30,45 @@ function ContasBancarias() {
   const [selectedContaToDelete, setSelectedContaToDelete] = useState<Conta | null>(null);
   const [openAddModal, setOpenAddModal] = useState(false);
 
+  // Função para obter a data atual no formato YYYY-MM-DD
+  const getDataAtual = () => {
+    const data = new Date();
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, "0"); // Meses são de 0 a 11
+    const dia = String(data.getDate()).padStart(2, "0");
+    return `${ano}-${mes}-${dia}`;
+  };
+
   const fetchContas = () => {
-    const token = localStorage.getItem("authToken"); 
-    axios
-      .get<Conta[]>("http://localhost:8080/contas", {
-        headers: {
-          Authorization: `Bearer ${token}`, 
-        },
-      })
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      console.error("Token de autenticação não encontrado.");
+      return;
+    }
+
+    // Usando a data atual na URL da requisição
+    const dataReferencia = getDataAtual(); // Data dinâmica
+    const url = `http://localhost:8080/contas?data=${dataReferencia}`;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
-        setContas(response.data);
+        if (!response.ok) {
+          return response.text().then((text) => {
+            throw new Error(`Erro ${response.status}: ${text}`);
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Resposta do servidor:", data);
+        setContas(data);
       })
       .catch((error) => {
         console.error("Erro ao buscar as contas:", error);
@@ -51,7 +80,7 @@ function ContasBancarias() {
   }, []);
 
   const handleEditClick = (conta: Conta) => {
-    setSelectedConta(conta); 
+    setSelectedConta(conta);
     setOpen(true);
   };
 
@@ -62,14 +91,14 @@ function ContasBancarias() {
 
   const handleCloseModal = () => {
     setOpen(false);
-    setSelectedConta(null); 
-    fetchContas(); 
+    setSelectedConta(null);
+    fetchContas();
   };
 
   const closeDeleteModal = () => {
     setOpenDeleteModal(false);
-    setSelectedContaToDelete(null); 
-    fetchContas(); 
+    setSelectedContaToDelete(null);
+    fetchContas();
   };
 
   const closeAddModal = () => {
@@ -77,14 +106,14 @@ function ContasBancarias() {
   };
 
   const handleAddConta = (novaConta: Conta) => {
-    setContas((prevContas) => [...prevContas, novaConta]); 
+    setContas((prevContas) => [...prevContas, novaConta]);
     closeAddModal();
-    fetchContas(); 
+    fetchContas();
   };
 
   const handleConfirmDelete = async (id: number) => {
     try {
-      console.log("Excluindo conta com ID:", id); //verificando id da conta
+      console.log("Excluindo conta com ID:", id); // Verificando ID da conta
       const token = localStorage.getItem("authToken");
       if (!token) {
         console.error("Token de autenticação não encontrado.");
@@ -105,7 +134,7 @@ function ContasBancarias() {
       console.error("Erro ao excluir a conta:", error);
     }
   };
-  
+
   return (
     <div className={style.contas}>
       <header className={style.headerContas}>
@@ -122,8 +151,8 @@ function ContasBancarias() {
       {openDeleteModal && selectedContaToDelete && (
         <ModalDeleteConta
           onClose={closeDeleteModal}
-          onConfirmDelete={handleConfirmDelete}  // Passando a função com ID
-          contaId={selectedContaToDelete.id} // Passando o ID da conta
+          onConfirmDelete={handleConfirmDelete}
+          contaId={selectedContaToDelete.id}
         />
       )}
 
@@ -144,7 +173,7 @@ function ContasBancarias() {
               banco={conta.banco.iconeUrl || '/assets/iconsContas/default.svg'}
               altBanco={`Banco ${conta.banco.nome}`}
               onDelete={() => handleDeleteClick(conta)}
-              onEdit={() => handleEditClick(conta)} 
+              onEdit={() => handleEditClick(conta)}
             />
           ))
         )}

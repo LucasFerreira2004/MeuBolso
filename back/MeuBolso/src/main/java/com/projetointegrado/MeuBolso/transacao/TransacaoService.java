@@ -64,10 +64,7 @@ public class TransacaoService implements ITransacaoService {
     public BigDecimal findSumDespesasInRangeByMonth(String userId, LocalDate data) {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;
-        List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
-        BigDecimal sumDespesas = transacoes.stream().filter(t -> t.getTipo().equals(TipoTransacao.DESPESA))
-                .map(t -> t.getValor())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal sumDespesas = transacaoRepository.getSumInRangeByTipo(dataInicio, dataFim, userId, TipoTransacao.DESPESA.name());
         return sumDespesas;
     }
 
@@ -76,9 +73,7 @@ public class TransacaoService implements ITransacaoService {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;
         List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
-        BigDecimal sumReceitas = transacoes.stream().filter(t -> t.getTipo().equals(TipoTransacao.RECEITA))
-                .map(t -> t.getValor())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal sumReceitas = transacaoRepository.getSumInRangeByTipo(dataInicio, dataFim, userId, TipoTransacao.RECEITA.name());
         return sumReceitas;
     }
 
@@ -102,6 +97,8 @@ public class TransacaoService implements ITransacaoService {
             new EntidadeNaoEncontradaException("categoriaId", "Categoria nao encontrada"), new AcessoNegadoException());
 
     Usuario usuario = usuarioValidateService.validateAndGet(userId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
+
+    transacaoValidateService.validateTipo(userId, dto.getTipoTransacao(), dto.getCategoriaId());
     System.out.println("TransacaoService -> saveAndValidate : chegou ao fim das checagens");
 
     Transacao transacao = new Transacao(id, dto.getValor(), dto.getData(), dto.getTipoTransacao(),

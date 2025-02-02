@@ -1,10 +1,9 @@
 package com.projetointegrado.MeuBolso.repetirTransacao;
 
-import com.projetointegrado.MeuBolso.repetirTransacao.GerarTransacoesFixas.GerarTransacoesFactory;
-import com.projetointegrado.MeuBolso.repetirTransacao.GerarTransacoesFixas.IGerarTransacoesStrategy;
+import com.projetointegrado.MeuBolso.repetirTransacao.gerarTransacoes.GerarTransacoesFactory;
+import com.projetointegrado.MeuBolso.repetirTransacao.gerarTransacoes.IGerarTransacoesStrategy;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
-import com.projetointegrado.MeuBolso.transacaoRecorrente.TipoRepeticao;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -80,7 +80,7 @@ function ModalAddCategoria({ closeModal, onCategoriaSaved }: ModalAddCategoriaPr
   };
 
   return (
-    <div className={style.modalContainer}>
+    <div className={style.modalContainerCategoria}>
       <div className={style.modalHeader}>
         <h3>Nova Categoria</h3>
         <img
