@@ -33,8 +33,8 @@ insert into categoria (nome, tipo_categoria, cor, usuario_id) values ('renda ext
 insert into categoria (nome, tipo_categoria, cor, usuario_id) values ('outros', 'receita', 'BC7D18', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');           /*13*/
 
 /*TRANSACAO*/
-insert into transacao (valor, data, descricao, tipo, categoria, conta_origem, usuario_id) values ('1000', '2024-12-01', 'venda bicicleta', 'receita', '12', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
-insert into transacao (valor, data, descricao, tipo, categoria, conta_origem, usuario_id) values ('16.28', '2024-12-01', 'açaí', 'despesa', '5', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
-insert into transacao (valor, data, descricao, tipo, categoria, conta_origem, usuario_id) values ('1412', '2024-12-05', 'salario', 'receita', '9', '2', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
-insert into transacao (valor, data, descricao, tipo, categoria, conta_origem, usuario_id) values ('123.55', '2024-12-10', 'conta luz', 'despesa', '1', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
-insert into transacao (valor, data, descricao, tipo, categoria, conta_origem, usuario_id) values ('76.20', '2024-12-11', 'conta água', 'despesa', '1', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
+insert into transacao (valor, data, descricao, tipo, categoria_id, conta_origem, usuario_id) values ('1000', '2024-12-01', 'venda bicicleta', 'receita', '12', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
+insert into transacao (valor, data, descricao, tipo, categoria_id, conta_origem, usuario_id) values ('16.28', '2024-12-01', 'açaí', 'despesa', '5', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
+insert into transacao (valor, data, descricao, tipo, categoria_id, conta_origem, usuario_id) values ('1412', '2024-12-05', 'salario', 'receita', '9', '2', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
+insert into transacao (valor, data, descricao, tipo, categoria_id, conta_origem, usuario_id) values ('123.55', '2024-12-10', 'conta luz', 'despesa', '1', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
+insert into transacao (valor, data, descricao, tipo, categoria_id, conta_origem, usuario_id) values ('76.20', '2024-12-11', 'conta água', 'despesa', '1', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
