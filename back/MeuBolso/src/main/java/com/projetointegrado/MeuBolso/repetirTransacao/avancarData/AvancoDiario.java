@@ -6,7 +6,7 @@ public class AvancoDiario implements IAvancoDataStrategy {
 
     @Override
     public LocalDate avancarData(LocalDate dataAtual, LocalDate dataCadastro, Integer qtdAvancos) {
-        dataCadastro = dataCadastro.plusDays(qtdAvancos);
-        return dataCadastro;
+        dataAtual = dataAtual.plusDays(qtdAvancos);
+        return dataAtual;
     }
 }

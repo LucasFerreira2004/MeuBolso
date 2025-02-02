@@ -31,7 +31,6 @@ public class TransacaoRepeticaoService {
 
         List<TransacaoRecorrente> transacoesRecorrentes = transacaoRecorrenteRepository.findAllByUsuario(userId);
         if (transacoesNormais.isEmpty() || transacoesRecorrentes.isEmpty()) return null;
-
         try {
             for (TransacaoRecorrente transacaoRecorrente : transacoesRecorrentes) {
                 IGerarTransacoesStrategy gerarTransacoesStrategy = gerarTransacoesFactory.gerarTransacoesStrategy(transacaoRecorrente.getTipoRepeticao());

@@ -1,9 +1,8 @@
 package com.projetointegrado.MeuBolso.transacao;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -53,4 +52,16 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
               and c.interna_sistema = false;
     """)
     public BigDecimal getSumInRangeByTipo(LocalDate dataInicio, LocalDate dataFim, String userId, String tipo);
+
+    @Query(value = """
+    select coalesce(sum(t.valor), 0) 
+    from transacao t 
+    where t.categoria_id = :categoriaId 
+    and t.usuario_id = :usuarioId 
+    and t.data between :dataInicio and :dataFim
+    """, nativeQuery = true)
+    public BigDecimal calcularGastoPorCategoriaEPeriodo(@Param("categoriaId") Long categoriaId,
+                                                        @Param("usuarioId") String usuarioId,
+                                                        @Param("dataInicio") LocalDate dataInicio,
+                                                        @Param("dataFim") LocalDate dataFim);
 }
