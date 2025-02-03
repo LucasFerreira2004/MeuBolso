@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"; 
 import AddButton from "../../components/UI/AddButton/add-button";
 import Date from "../../components/UI/Date/date";
 import style from "./transacoes.module.css";
@@ -38,7 +38,7 @@ function Transacoes() {
 
       const data = await response.json();
       console.log("Saldo Total:", data);
-      setSaldoTotal(data.saldo); // Acessa a propriedade 'saldo' do objeto
+      setSaldoTotal(data.saldo); 
     } catch (error) {
       setError("Erro ao carregar o saldo total.");
       console.error(error);
@@ -176,7 +176,7 @@ function Transacoes() {
       <div className={style.bodyTransacoes}>
         <div className={style.headerBodyT}>
           <Date onDateChange={handleDateChange} />
-          <div className={style.search}>
+          <div className={style.search}> 
             <input className={style.input} type="text" placeholder="Buscar..." />
             <img className={style.icon} src="/assets/iconsTransacoes/lupa.svg" alt="Lupa" />
             <img className={style.icon} src="/assets/iconsTransacoes/filter.svg" alt="Filter" />

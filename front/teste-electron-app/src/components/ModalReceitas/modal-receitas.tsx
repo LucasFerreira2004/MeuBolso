@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-receitas.module.css";
 import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
@@ -184,7 +185,7 @@ function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
             Parcelada
           </label>
         </div>
-
+  
         {(tipoTransacao === "FIXA" || tipoTransacao === "PARCELADA") && (
           <>
             <SelectedPeriodo
@@ -203,10 +204,23 @@ function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
             )}
           </>
         )}
-
+  
         <button onClick={handleSubmit} className={style.submitButton}>
           Adicionar Transação
         </button>
+  
+        {/* Adicione o ToastContainer aqui */}
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </div>
   );
