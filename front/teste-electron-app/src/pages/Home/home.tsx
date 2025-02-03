@@ -20,13 +20,11 @@ function Home() {
   const [bancos, setBancos] = useState<Banco[]>([]);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const dataReferencia = "2200-01-18"; // Data fixa para a consulta
+  const dataReferencia = "2200-01-18";
 
-  // Exibe o toast de sucesso ao carregar a tela de Home
   useEffect(() => {
     if (state?.successMessage) {
       toast.success(state.successMessage);
-      // Limpa o estado para evitar que o toast seja exibido novamente
       window.history.replaceState({}, document.title);
     }
   }, [state]);
@@ -57,10 +55,9 @@ function Home() {
     }
   };
 
-  // Função para formatar o saldo como moeda
   const formatarSaldo = (valor: number | null | undefined) => {
     if (valor == null) {
-      return "R$ 0,00"; // Valor padrão caso o saldo seja inválido
+      return "R$ 0,00";
     }
     return valor.toLocaleString("pt-BR", {
       style: "currency",
