@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"; 
 import AddButton from "../../components/UI/AddButton/add-button";
-import Date from "../../components/UI/Date/date";
 import style from "./transacoes.module.css";
 import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans";
 
@@ -10,8 +9,8 @@ function Transacoes() {
   const [despesas, setDespesas] = useState<number | null>(null);
   const [receitas, setReceitas] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [mesSelecionado, setMesSelecionado] = useState<string>('01');
-  const [anoSelecionado, setAnoSelecionado] = useState<string>('2025');
+  const [mesSelecionado] = useState<string>('01');
+  const [anoSelecionado] = useState<string>('2025');
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchSaldoTotal = async (mes: string) => {
@@ -109,11 +108,6 @@ function Transacoes() {
       : "R$ 0,00";
   };
 
-  const handleDateChange = (mes: string, ano: string) => {
-    console.log("Mês selecionado:", mes, "Ano selecionado:", ano);
-    setMesSelecionado(mes);
-    setAnoSelecionado(ano);
-  };
 
   const toggleModal = () => {
     setIsModalOpen((prev) => !prev);
@@ -175,7 +169,7 @@ function Transacoes() {
 
       <div className={style.bodyTransacoes}>
         <div className={style.headerBodyT}>
-          <Date onDateChange={handleDateChange} />
+         
           <div className={style.search}> 
             <input className={style.input} type="text" placeholder="Buscar..." />
             <img className={style.icon} src="/assets/iconsTransacoes/lupa.svg" alt="Lupa" />

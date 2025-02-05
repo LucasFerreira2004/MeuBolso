@@ -7,6 +7,8 @@ import AddButton from "../../components/UI/AddButton/add-button";
 import CardMetas from "../../components/UI/CardMetas/card-metas";
 import Example from "../../components/UI/Mycharts/my-charts";
 import DatePicker from "../../components/UI/Date/date";
+import Skeleton from "react-loading-skeleton"; // Importando o Skeleton
+import "react-loading-skeleton/dist/skeleton.css"; // Importando o estilo
 
 interface Banco {
   iconeUrl: string;
@@ -20,7 +22,7 @@ function Home() {
 
   const [bancos, setBancos] = useState<Banco[]>([]);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
-  const [error] = useState<string | null>(null);
+  const [] = useState<string | null>(null);
 
   const [mes, setMes] = useState(new Date().getMonth() + 1);
   const [ano, setAno] = useState(new Date().getFullYear());
@@ -110,7 +112,11 @@ function Home() {
             />
             <p className={style.pHeader}>
               <span className={style.sHeader}>Estimativa de Saldo: </span>
-              {isLoading ? "Carregando..." : formatarSaldo(saldoTotal)}
+              {isLoading ? (
+                <Skeleton width={150} height={20} />
+              ) : (
+                formatarSaldo(saldoTotal)
+              )}
             </p>
           </div>
           <AddButton texto="Adicionar Transação" onClick={() => {}} />
@@ -133,9 +139,8 @@ function Home() {
           <div className={style.cards1}>
             <div className={style.cardSaldo}>
               <h3>Saldo bancário</h3>
-              {error && <p>{error}</p>}
               {isLoading ? (
-                <p>Carregando dados...</p>
+                <Skeleton height={30} count={3} />
               ) : bancos.length === 0 ? (
                 <p>Nenhum dado encontrado.</p>
               ) : (
@@ -157,16 +162,27 @@ function Home() {
                 <h3>Visão geral de transações</h3>
                 <p>{`Mês: ${mes}, Ano: ${ano}`}</p>
               </div>
-              <div className={style.linesTransacoes}>
-                <img
-                  src="/assets/Hred.svg"
-                  alt="Ícone Hred"
-                  className={style.iconH}
-                />
-                <p className={style.spanRed}>
-                  <span>Gastos do dia: </span> R$ 54,00
-                </p>
-                <hr />
+              <div className={style.CLineTransacoes}>
+                <div className={style.linesTransacoes}>
+                  <img
+                    src="/assets/Hred.svg"
+                    alt="Ícone Hred"
+                    className={style.iconH}
+                  />
+                  <p className={style.spanRed}>
+                    <span>Gastos do dia: </span> R$ 54,00
+                  </p>
+                </div>
+                <div className={style.linesTransacoes}>
+                  <img
+                    src="/assets/Hred.svg"
+                    alt="Ícone Hred"
+                    className={style.iconH}
+                  />
+                  <p className={style.spanRed}>
+                    <span>Gastos do dia: </span> R$ 54,00
+                  </p>
+                </div>
               </div>
             </div>
           </div>
