@@ -1,85 +1,46 @@
-import React, { useState, ChangeEvent } from 'react';
-import style from './date.module.css';
+import React from "react";
+import styles from "./date.module.css";
 
-interface DateProps {
-  onDateChange?: (month: string, year: string) => void;
+interface DatePickerProps {
+  mes: number;
+  ano: number;
+  onChange: (mes: number, ano: number) => void;
 }
 
-const DatePicker: React.FC<DateProps> = ({ onDateChange }) => {
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const months = [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-  ];
+const DatePicker: React.FC<DatePickerProps> = ({ mes, ano, onChange }) => {
+  const alterarMes = (direcao: "anterior" | "proximo") => {
+    let novoMes = mes + (direcao === "proximo" ? 1 : -1);
+    let novoAno = ano;
 
-  const [month, setMonth] = useState<string>((currentDate.getMonth() + 1).toString().padStart(2, '0'));
-  const [year, setYear] = useState<string>(currentYear.toString());
-
-  const handleMonthChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectedMonth = e.target.value;
-    setMonth(selectedMonth);
-    if (onDateChange) onDateChange(selectedMonth, year);
-  };
-
-  const handleYearChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectedYear = e.target.value;
-    setYear(selectedYear);
-    if (onDateChange) onDateChange(month, selectedYear);
-  };
-
-  const goToPreviousMonth = () => {
-    let newMonth = parseInt(month) - 1;
-    let newYear = parseInt(year);
-
-    if (newMonth < 1) {
-      newMonth = 12;
-      newYear -= 1;
+    if (novoMes > 12) {
+      novoMes = 1;
+      novoAno++;
+    } else if (novoMes < 1) {
+      novoMes = 12;
+      novoAno--;
     }
 
-    setMonth(newMonth.toString().padStart(2, '0'));
-    setYear(newYear.toString());
-    if (onDateChange) onDateChange(newMonth.toString().padStart(2, '0'), newYear.toString());
-  };
-
-  const goToNextMonth = () => {
-    let newMonth = parseInt(month) + 1;
-    let newYear = parseInt(year);
-
-    if (newMonth > 12) {
-      newMonth = 1;
-      newYear += 1;
-    }
-
-    setMonth(newMonth.toString().padStart(2, '0'));
-    setYear(newYear.toString());
-    if (onDateChange) onDateChange(newMonth.toString().padStart(2, '0'), newYear.toString());
+    onChange(novoMes, novoAno);
   };
 
   return (
-    <div className={style.dates}>
-      <button onClick={goToPreviousMonth} className={style.botao}>
-        <img src="/assets/iconsTransacoes/arrowL.svg" alt="Arrow Left" className={style.icone} />
+    <div className={styles.datePicker}>
+      <button
+        className={styles.arrow}
+        onClick={() => alterarMes("anterior")}
+        aria-label="Mês anterior"
+      >
+        &lt;
       </button>
-
-      <select value={month} onChange={handleMonthChange} className={style.selecionarMes}>
-        {months.map((month, index) => (
-          <option key={index} value={(index + 1).toString().padStart(2, '0')}>
-            {month}
-          </option>
-        ))}
-      </select>
-
-      <select value={year} onChange={handleYearChange} className={style.selecionarAno}>
-        {Array.from({ length: 10 }, (_, i) => currentYear - 5 + i).map((yr) => (
-          <option key={yr} value={yr.toString()}>
-            {yr}
-          </option>
-        ))}
-      </select>
-
-      <button onClick={goToNextMonth} className={style.botao}>
-        <img src="/assets/iconsTransacoes/arrowR.svg" alt="Arrow Right" className={style.icone} />
+      <span className={styles.date}>
+        {mes.toString().padStart(2, "0")}/{ano}
+      </span>
+      <button
+        className={styles.arrow}
+        onClick={() => alterarMes("proximo")}
+        aria-label="Próximo mês"
+      >
+        &gt;
       </button>
     </div>
   );
