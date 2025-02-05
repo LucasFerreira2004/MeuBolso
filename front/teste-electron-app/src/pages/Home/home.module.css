@@ -10,6 +10,11 @@
   background-color: #fff;
   flex-grow: 1;
 }
+.headerContent{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 h1 {
   font-weight: 300;
@@ -39,11 +44,13 @@ h1 {
 
 .iconHeader {
   width: 30px;
+  margin-left: 8px;
 }
 
 .pHeader {
   margin-left: 10px;
   color: var(--main-color);
+  font-weight: 500;
 }
 
 .sHeader {
@@ -97,10 +104,25 @@ h1 {
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
-.cardSaldo h3{
+
+.cardSaldo h3 {
   font-weight: 600;
   font-size: 20px;
   margin: 4px 0px;
+}
+
+.cardSaldo .saldoFixo {
+  position: sticky; 
+  top: 0; 
+  background-color: #fff; 
+  z-index: 10;
+  padding-bottom: 8px; 
+  border-bottom: 1px solid #ddd;
+}
+
+.cardSaldo .bancosScroll {
+  overflow-y: auto; 
+  flex: 1; 
 }
 
 .hTitulo {

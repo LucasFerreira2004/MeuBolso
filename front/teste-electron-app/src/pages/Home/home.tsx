@@ -6,7 +6,7 @@ import style from "./home.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
 import CardMetas from "../../components/UI/CardMetas/card-metas";
 import Example from "../../components/UI/Mycharts/my-charts";
-import DatePicker from "../../components/UI/Date/date";
+import DatePicker, { meses } from "../../components/UI/Date/date";
 import Skeleton from "react-loading-skeleton"; // Importando o Skeleton
 import "react-loading-skeleton/dist/skeleton.css"; // Importando o estilo
 
@@ -101,6 +101,16 @@ function Home() {
           <h1>
             Bem-vindo <span className={style.userName}>Antonio</span>
           </h1>
+          <DatePicker
+            mes={mes}
+            ano={ano}
+            onChange={(novoMes, novoAno) => {
+              if (novoMes !== mes || novoAno !== ano) {
+                setMes(novoMes);
+                setAno(novoAno);
+              }
+            }}
+          />
         </div>
 
         <div className={style.subHeader}>
@@ -111,7 +121,7 @@ function Home() {
               className={style.iconHeader}
             />
             <p className={style.pHeader}>
-              <span className={style.sHeader}>Estimativa de Saldo: </span>
+              <span className={style.sHeader}>Saldo total: </span>
               {isLoading ? (
                 <Skeleton width={150} height={20} />
               ) : (
@@ -123,44 +133,39 @@ function Home() {
         </div>
       </header>
 
-      <DatePicker
-        mes={mes}
-        ano={ano}
-        onChange={(novoMes, novoAno) => {
-          if (novoMes !== mes || novoAno !== ano) {
-            setMes(novoMes);
-            setAno(novoAno);
-          }
-        }}
-      />
-
       <main className={style.body}>
         <div className={style.cards}>
           <div className={style.cards1}>
             <div className={style.cardSaldo}>
-              <h3>Saldo bancário</h3>
-              {isLoading ? (
-                <Skeleton height={30} count={3} />
-              ) : bancos.length === 0 ? (
-                <p>Nenhum dado encontrado.</p>
-              ) : (
-                bancos.map((banco) => (
-                  <div className={style.linebanks} key={banco.nomeBanco}>
-                    <img
-                      src={banco.iconeUrl}
-                      alt={`Ícone ${banco.nomeBanco}`}
-                      className={style.iconNubank}
-                    />
-                    <p>{`${banco.nomeBanco}: ${formatarSaldo(banco.saldo)}`}</p>
-                  </div>
-                ))
-              )}
+              <div className={style.saldoFixo}>
+                <h3>Saldo bancário</h3>
+              </div>
+              <div className={style.bancosScroll}>
+                {isLoading ? (
+                  <Skeleton height={30} count={3} />
+                ) : bancos.length === 0 ? (
+                  <p>Nenhum dado encontrado.</p>
+                ) : (
+                  bancos.map((banco) => (
+                    <div className={style.linebanks} key={banco.nomeBanco}>
+                      <img
+                        src={banco.iconeUrl}
+                        alt={`Ícone ${banco.nomeBanco}`}
+                        className={style.iconNubank}
+                      />
+                      <p>{`${banco.nomeBanco}: ${formatarSaldo(
+                        banco.saldo
+                      )}`}</p>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
 
             <div className={style.cardHistorico}>
               <div className={style.titulotransacoes}>
                 <h3>Visão geral de transações</h3>
-                <p>{`Mês: ${mes}, Ano: ${ano}`}</p>
+                <p>{`${meses[mes - 1]} de ${ano}`}</p>
               </div>
               <div className={style.CLineTransacoes}>
                 <div className={style.linesTransacoes}>
