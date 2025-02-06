@@ -54,7 +54,7 @@ public class Transacao {
     @JoinColumn(name = "transacao_fixa_id")
     private TransacaoRecorrente transacaoRecorrente;
 
-    @NotNull //adicionar not null para os demais campos?
+    //@NotNull //adicionar not null para os demais campos?
     @Enumerated(EnumType.STRING)
     private OrigemTransacao origemTransacao;
 
@@ -68,6 +68,7 @@ public class Transacao {
         this.comentario = comentario;
         this.descricao = descricao;
         this.usuario = usuario;
+        this.origemTransacao = origemTransacao;
     }
 
     public Transacao (TransacaoRecorrente transacaoRecorrente, LocalDate data, OrigemTransacao origemTransacao) {
@@ -87,6 +88,7 @@ public class Transacao {
         this.descricao = transacaoRecorrente.getDescricao();
         this.usuario = transacaoRecorrente.getUsuario();
         this.transacaoRecorrente = transacaoRecorrente;
+        this.origemTransacao = origemTransacao;
     }
 
     public Transacao() {

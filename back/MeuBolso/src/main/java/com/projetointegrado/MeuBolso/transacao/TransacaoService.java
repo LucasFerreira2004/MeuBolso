@@ -103,7 +103,7 @@ public class TransacaoService implements ITransacaoService {
 
     Transacao transacao = new Transacao(id, dto.getValor(), dto.getData(), dto.getTipoTransacao(),
                 categoria, conta, dto.getComentario(), dto.getDescricao(), usuario, OrigemTransacao.NORMAL);
-    System.out.println(transacao);
+    System.out.println(transacao.getOrigemTransacao().name());
     return transacaoRepository.save(transacao);
     }
 

@@ -17,9 +17,9 @@ public class TransacaoDTO {
     private ContaDTO contaDTO;
     private String comentario;
     private String descricao;
+    private String origem;
 
     public TransacaoDTO(Transacao transacao) {
-        //isso so funcionará se os atributos forem os mesmos e estiverem na mesma ordem que a entidade
         this.id = transacao.getId();
         this.valor = transacao.getValor();
         this.data_transacao = transacao.getData();
@@ -28,6 +28,7 @@ public class TransacaoDTO {
         this.contaDTO = new ContaDTO(transacao.getConta());
         this.comentario = transacao.getComentario();
         this.descricao = transacao.getDescricao();
+        this.origem = transacao.getOrigemTransacao().name();
     }
 
     //getters e setters
@@ -93,6 +94,14 @@ public class TransacaoDTO {
 
     public void setConta(ContaDTO conta) {
         this.contaDTO = conta;
+    }
+
+    public String getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(String origem) {
+        this.origem = origem;
     }
 
     @Override
