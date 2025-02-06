@@ -102,7 +102,7 @@ public class TransacaoService implements ITransacaoService {
     System.out.println("TransacaoService -> saveAndValidate : chegou ao fim das checagens");
 
     Transacao transacao = new Transacao(id, dto.getValor(), dto.getData(), dto.getTipoTransacao(),
-                categoria, conta, dto.getComentario(), dto.getDescricao(), usuario);
+                categoria, conta, dto.getComentario(), dto.getDescricao(), usuario, OrigemTransacao.NORMAL);
     System.out.println(transacao);
     return transacaoRepository.save(transacao);
     }

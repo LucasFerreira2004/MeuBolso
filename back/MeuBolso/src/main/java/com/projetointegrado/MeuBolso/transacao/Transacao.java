@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -53,9 +54,11 @@ public class Transacao {
     @JoinColumn(name = "transacao_fixa_id")
     private TransacaoRecorrente transacaoRecorrente;
 
-    private Enum
+    @NotNull //adicionar not null para os demais campos?
+    @Enumerated(EnumType.STRING)
+    private OrigemTransacao origemTransacao;
 
-    public Transacao(Long id, BigDecimal valor, LocalDate data, TipoTransacao tipo, Categoria categoria, Conta conta, String comentario, String descricao, Usuario usuario) {
+    public Transacao(Long id, BigDecimal valor, LocalDate data, TipoTransacao tipo, Categoria categoria, Conta conta, String comentario, String descricao, Usuario usuario, OrigemTransacao origemTransacao) {
         this.id = id;
         this.valor = valor;
         this.data = data;
@@ -67,7 +70,7 @@ public class Transacao {
         this.usuario = usuario;
     }
 
-    public Transacao (TransacaoRecorrente transacaoRecorrente, LocalDate data) {
+    public Transacao (TransacaoRecorrente transacaoRecorrente, LocalDate data, OrigemTransacao origemTransacao) {
         this.id = null;
         if(transacaoRecorrente.getQtdParcelas() != null) {
             BigDecimal qtdParcelas = new BigDecimal(transacaoRecorrente.getQtdParcelas());
@@ -172,4 +175,11 @@ public class Transacao {
         this.usuario = usuario;
     }
 
+    public OrigemTransacao getOrigemTransacao() {
+        return origemTransacao;
+    }
+
+    public void setOrigemTransacao(OrigemTransacao origemTransacao) {
+        this.origemTransacao = origemTransacao;
+    }
 }
