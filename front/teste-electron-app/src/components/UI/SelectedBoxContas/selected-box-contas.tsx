@@ -5,8 +5,8 @@ import style from "./selected-box-contas.module.css";
 interface Conta {
   id: number;
   saldo: number;
-  iconeUrl: string;  // Agora iconeUrl é diretamente uma propriedade de Conta
-  nomeBanco: string; // Nome do banco
+  iconeUrl: string;
+  nomeBanco: string;
 }
 
 interface SelectBoxContasProps {
@@ -26,7 +26,7 @@ function SelectBoxContas({ setConta, mes, ano }: SelectBoxContasProps) {
       return;
     }
 
-    const url = `http://localhost:8080/contas/min?ano=${ano}&mes=${mes}`;
+    const url = `http://localhost:8080/contas?ano=${ano}&mes=${mes}`;
 
     fetch(url, {
       method: "GET",
@@ -41,9 +41,15 @@ function SelectBoxContas({ setConta, mes, ano }: SelectBoxContasProps) {
         }
         return response.json();
       })
-      .then((data: Conta[]) => {
-        setContas(data);
-        setConta(data.length > 0 ? data[0].id : null); // Define a conta inicial
+      .then((data: any[]) => {
+        const contasMapeadas = data.map((conta) => ({
+          id: conta.id,
+          saldo: conta.saldo,
+          iconeUrl: conta.banco.iconeUrl, 
+          nomeBanco: conta.banco.nome, 
+        }));
+        setContas(contasMapeadas);
+        setConta(contasMapeadas.length > 0 ? contasMapeadas[0].id : null); 
       })
       .catch((error) => console.error("Erro ao buscar contas:", error));
   }, [mes, ano, setConta]);
@@ -71,7 +77,7 @@ function SelectBoxContas({ setConta, mes, ano }: SelectBoxContasProps) {
   }));
 
   const handleChange = (selectedOption: any) => {
-    setConta(selectedOption.value); // Atualiza a conta selecionada
+    setConta(selectedOption.value); 
   };
 
   return (

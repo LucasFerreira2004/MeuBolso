@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-despesas.module.css";
 import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
@@ -22,13 +23,13 @@ const formatarComoMoeda = (valor: string): string => {
   return `R$ ${valorNumerico.replace(".", ",")}`;
 };
 
-interface ModalADespesasProps {
+interface ModalDespesasProps {
   onCloseAll: () => void;
   mes: number;
   ano: number;
 }
 
-function ModalDespesas({ onCloseAll, mes, ano }: ModalADespesasProps) {
+function ModalDespesas({ onCloseAll, mes, ano }: ModalDespesasProps) {
   const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null);
@@ -50,16 +51,16 @@ function ModalDespesas({ onCloseAll, mes, ano }: ModalADespesasProps) {
       toast.error("Preencha todos os campos obrigatórios!");
       return;
     }
-  
+
     const valorNumerico = removerFormatacaoMoeda(valor);
     const token = localStorage.getItem("authToken");
-  
+
     if (!token) {
       console.error("Token de autenticação não encontrado.");
       toast.error("Por favor, faça login novamente.");
       return;
     }
-  
+
     // Dados comuns a todas as transações
     const transactionData: any = {
       valor: valorNumerico,
@@ -70,40 +71,40 @@ function ModalDespesas({ onCloseAll, mes, ano }: ModalADespesasProps) {
       comentario,
       descricao,
     };
-  
+
     // Adicionar dados específicos para transações "FIXA"
     if (tipoTransacao === "FIXA") {
       transactionData.periodicidade = periodicidade;
     }
-  
+
     // Adicionar dados específicos para transações "PARCELADA"
     if (tipoTransacao === "PARCELADA") {
       transactionData.qtdParcelas = qtdParcelas;
       transactionData.periodicidade = periodicidade;
     }
-  
+
     console.log("Dados da transação sendo enviados:", transactionData);
-  
+
     try {
       let url = "http://localhost:8080/transacoes";
-      
+
       if (tipoTransacao === "FIXA") {
         url = "http://localhost:8080/transacoesRecorrentes/fixas";
       } else if (tipoTransacao === "PARCELADA") {
         url = "http://localhost:8080/transacoesRecorrentes/parceladas";
       }
-  
+
       console.log("URL da requisição:", url);
-  
+
       const response = await axios.post(url, transactionData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
-  
+
       console.log("Resposta do servidor:", response.data);
-  
+
       if (response.status === 200 || response.status === 201) {
         toast.success("Transação adicionada com sucesso!");
         onCloseAll();
@@ -147,7 +148,7 @@ function ModalDespesas({ onCloseAll, mes, ano }: ModalADespesasProps) {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescricao(e.target.value)}
         />
         <SelectedDespesas setCategoria={setCategoria} />
-        <SelectBoxContas setConta={setConta} mes={mes} ano={ano} /> 
+        <SelectBoxContas setConta={setConta} mes={mes} ano={ano} />
         <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg" />
         <InputWithIcon
           label="Comentário: "
@@ -209,6 +210,19 @@ function ModalDespesas({ onCloseAll, mes, ano }: ModalADespesasProps) {
         <button onClick={handleSubmit} className={style.submitButton}>
           Adicionar Transação
         </button>
+
+        {/* Adicione o ToastContainer aqui */}
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </div>
   );
