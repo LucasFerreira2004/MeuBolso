@@ -1,0 +1,21 @@
+/* categorias-despesas.module.css */
+.chartContainer {
+    width: 80%; /* Ajuste a largura do gráfico */
+    max-width: 600px; /* Limite a largura máxima */
+    margin: 0 auto; /* Centraliza o gráfico */
+    padding: 20px; /* Adiciona um pouco de padding ao redor */
+  }
+  
+  .chartTitle {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px; /* Espaçamento abaixo do título */
+  }
+  
+  .loadingText {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #888;
+  }
+  
