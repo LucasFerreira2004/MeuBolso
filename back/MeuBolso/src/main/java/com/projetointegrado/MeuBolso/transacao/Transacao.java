@@ -53,6 +53,8 @@ public class Transacao {
     @JoinColumn(name = "transacao_fixa_id")
     private TransacaoRecorrente transacaoRecorrente;
 
+    private Enum
+
     public Transacao(Long id, BigDecimal valor, LocalDate data, TipoTransacao tipo, Categoria categoria, Conta conta, String comentario, String descricao, Usuario usuario) {
         this.id = id;
         this.valor = valor;
