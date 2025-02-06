@@ -86,8 +86,7 @@ function ModalDespesas({ onCloseAll, mes, ano }: ModalADespesasProps) {
   
     try {
       let url = "http://localhost:8080/transacoes";
-  
-      // URLs diferentes para transações FIXA e PARCELADA
+      
       if (tipoTransacao === "FIXA") {
         url = "http://localhost:8080/transacoesRecorrentes/fixas";
       } else if (tipoTransacao === "PARCELADA") {
@@ -148,7 +147,7 @@ function ModalDespesas({ onCloseAll, mes, ano }: ModalADespesasProps) {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescricao(e.target.value)}
         />
         <SelectedDespesas setCategoria={setCategoria} />
-        <SelectBoxContas setConta={setConta} mes={mes} ano={ano} /> {/* Passando mes e ano como props */}
+        <SelectBoxContas setConta={setConta} mes={mes} ano={ano} /> 
         <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg" />
         <InputWithIcon
           label="Comentário: "
