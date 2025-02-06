@@ -24,9 +24,11 @@ const formatarComoMoeda = (valor: string): string => {
 
 interface ModalADespesasProps {
   onCloseAll: () => void;
+  mes: number;
+  ano: number;
 }
 
-function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
+function ModalDespesas({ onCloseAll, mes, ano }: ModalADespesasProps) {
   const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null);
@@ -117,7 +119,6 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
       toast.error("Erro ao adicionar transação. Verifique os dados ou tente novamente.");
     }
   };
-  
 
   return (
     <div
@@ -147,7 +148,7 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescricao(e.target.value)}
         />
         <SelectedDespesas setCategoria={setCategoria} />
-        <SelectBoxContas setConta={setConta} />
+        <SelectBoxContas setConta={setConta} mes={mes} ano={ano} /> {/* Passando mes e ano como props */}
         <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg" />
         <InputWithIcon
           label="Comentário: "

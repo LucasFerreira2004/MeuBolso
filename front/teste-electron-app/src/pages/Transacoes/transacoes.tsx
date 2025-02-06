@@ -215,7 +215,7 @@ function Transacoes() {
           {/* Lista de transações */}
         </div>
       </div>
-      {isModalOpen && <ModalTipoTrans onClose={toggleModal} />}
+      {isModalOpen &&  <ModalTipoTrans mes={mes} ano={ano} onClose={toggleModal} />}
     </div>
   );
 }

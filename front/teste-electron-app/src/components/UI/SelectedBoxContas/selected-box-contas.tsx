@@ -2,25 +2,20 @@ import { useEffect, useState } from "react";
 import Select from "react-select";
 import style from "./selected-box-contas.module.css";
 
-interface Banco {
-  nome: string;
-  iconeUrl: string;
-}
-
 interface Conta {
   id: number;
   saldo: number;
-  banco: Banco;
-  tipo_conta: {
-    tipoConta: string;
-  };
+  iconeUrl: string;  // Agora iconeUrl é diretamente uma propriedade de Conta
+  nomeBanco: string; // Nome do banco
 }
 
 interface SelectBoxContasProps {
   setConta: React.Dispatch<React.SetStateAction<number | null>>;
+  mes: number;
+  ano: number;
 }
 
-function SelectBoxContas({ setConta }: SelectBoxContasProps) {
+function SelectBoxContas({ setConta, mes, ano }: SelectBoxContasProps) {
   const [contas, setContas] = useState<Conta[]>([]);
 
   useEffect(() => {
@@ -31,8 +26,7 @@ function SelectBoxContas({ setConta }: SelectBoxContasProps) {
       return;
     }
 
-    const dataReferencia = "2200-01-18";
-    const url = `http://localhost:8080/contas?data=${dataReferencia}`;
+    const url = `http://localhost:8080/contas/min?ano=${ano}&mes=${mes}`;
 
     fetch(url, {
       method: "GET",
@@ -49,24 +43,28 @@ function SelectBoxContas({ setConta }: SelectBoxContasProps) {
       })
       .then((data: Conta[]) => {
         setContas(data);
-        setConta(data.length > 0 ? data[0].id : null); 
+        setConta(data.length > 0 ? data[0].id : null); // Define a conta inicial
       })
       .catch((error) => console.error("Erro ao buscar contas:", error));
-  }, [setConta]);
+  }, [mes, ano, setConta]);
 
   const options = contas.map((conta) => ({
     value: conta.id,
     label: (
       <div style={{ display: "flex", alignItems: "center" }}>
-        <img
-          src={conta.banco.iconeUrl}
-          alt={conta.banco.nome}
-          width={20}
-          height={20}
-          style={{ marginRight: "10px" }}
-        />
+        {conta.iconeUrl ? (
+          <img
+            src={conta.iconeUrl}
+            alt={conta.nomeBanco}
+            width={20}
+            height={20}
+            style={{ marginRight: "10px" }}
+          />
+        ) : (
+          <span style={{ marginRight: "10px" }}>🛑</span> // Placeholder se não houver ícone
+        )}
         <span>
-          {conta.banco.nome} - Saldo: R$ {conta.saldo.toFixed(2)}
+          {conta.nomeBanco} - Saldo: R$ {conta.saldo.toFixed(2)}
         </span>
       </div>
     ),
