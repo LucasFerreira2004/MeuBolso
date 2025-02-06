@@ -63,6 +63,9 @@ public class TransacaoRecorrente {
     @OneToMany(mappedBy = "transacaoRecorrente", cascade = CascadeType.REMOVE)
     private List<Transacao> transacoes;
 
+    @Column(name = "ativa", nullable = false, columnDefinition = "boolean default true")
+    private Boolean ativa;
+
     public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario) {
         this.id = id;
         this.valor = valor;
@@ -205,5 +208,13 @@ public class TransacaoRecorrente {
 
     public void setTipoRepeticao(TipoRepeticao tipoRepeticao) {
         this.tipoRepeticao = tipoRepeticao;
+    }
+
+    public Boolean getAtiva() {
+        return ativa;
+    }
+
+    public void setAtiva(Boolean ativa) {
+        this.ativa = ativa;
     }
 }
