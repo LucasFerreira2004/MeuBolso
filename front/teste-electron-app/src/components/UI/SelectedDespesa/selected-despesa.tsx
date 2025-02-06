@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import style from "./selected-despesa.module.css"; // Renomeado para manter a consistência
+import style from "./selected-despesa.module.css";''
 
 interface Categoria {
   id: number;
@@ -10,7 +10,7 @@ interface Categoria {
 }
 
 interface SelectedDespesasProps {
-  setCategoria: (categoriaId: number | null) => void; // Função para passar a categoria selecionada para o pai
+  setCategoria: (categoriaId: number | null) => void;
 }
 
 function SelectedDespesas({ setCategoria }: SelectedDespesasProps) {
