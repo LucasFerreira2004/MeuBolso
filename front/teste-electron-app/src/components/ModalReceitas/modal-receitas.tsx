@@ -25,9 +25,11 @@ const formatarComoMoeda = (valor: string): string => {
 
 interface ModalReceitasProps {
   onCloseAll: () => void;
+  mes: number; // Adicionado
+  ano: number; // Adicionado
 }
 
-function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
+function ModalReceitas({ onCloseAll, mes, ano }: ModalReceitasProps) {
   const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null);
@@ -147,7 +149,7 @@ function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescricao(e.target.value)}
         />
         <SelectedReceita setCategoria={setCategoria} />
-        <SelectBoxContas setConta={setConta} />
+        <SelectBoxContas setConta={setConta} mes={mes} ano={ano} /> {/* Adicionado mes e ano */}
         <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalReceitas/date.svg" />
         <InputWithIcon
           label="Comentário: "
@@ -185,7 +187,7 @@ function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
             Parcelada
           </label>
         </div>
-  
+
         {(tipoTransacao === "FIXA" || tipoTransacao === "PARCELADA") && (
           <>
             <SelectedPeriodo
@@ -204,11 +206,11 @@ function ModalReceitas({ onCloseAll }: ModalReceitasProps) {
             )}
           </>
         )}
-  
+
         <button onClick={handleSubmit} className={style.submitButton}>
           Adicionar Transação
         </button>
-  
+
         {/* Adicione o ToastContainer aqui */}
         <ToastContainer
           position="top-right"

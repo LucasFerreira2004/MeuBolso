@@ -73,7 +73,7 @@ function ModalTipoTransacao({ onClose, mes, ano }: ModalTransacaoProps) {
       {isDespesasModalOpen && (
         <ModalDespesas mes={mes} ano={ano} onCloseAll={closeAllModals} />
       )}
-      {isReceitasModalOpen && <ModalReceitas onCloseAll={closeAllModals} />}
+      {isReceitasModalOpen && <ModalReceitas mes={mes} ano={ano} onCloseAll={closeAllModals} />}
     </>
   );
 }
