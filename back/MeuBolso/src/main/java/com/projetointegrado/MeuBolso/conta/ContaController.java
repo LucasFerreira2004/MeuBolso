@@ -73,8 +73,13 @@ public class ContaController {
 
     @DeleteMapping("/{id}")
     public ContaDTO delete(@PathVariable Long id){
-        String userId = usuarioService.getUsuarioLogadoId();
-        return contaService.delete(id, userId);
+        //try {
+            String userId = usuarioService.getUsuarioLogadoId();
+            return contaService.delete(id, userId);
+       // }catch (Exception e){
+//            e.printStackTrace();
+//            throw new RuntimeException(e);
+//        }
     }
 
 }
