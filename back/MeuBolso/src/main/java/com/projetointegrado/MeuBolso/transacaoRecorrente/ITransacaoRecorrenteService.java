@@ -7,8 +7,10 @@ import java.util.List;
 
 public interface ITransacaoRecorrenteService {
     public List<TransacaoRecorrenteDTO> findAll(String userId);
+    public List<TransacaoRecorrenteDTO> findAllArquivadas(String userId);
     public TransacaoRecorrenteDTO findById(String userId, Long id);
     public TransacaoRecorrenteDTO save(String userId, ITransacaoRecorrenteDTO dto);
     public TransacaoRecorrenteDTO update(String userId, Long id, ITransacaoRecorrenteDTO dto);
     public TransacaoRecorrenteDTO delete(String userId, Long id);
+    public TransacaoRecorrenteDTO atualizarStatusAtiva(String usuarioId, Long id, Boolean ativa);
 }

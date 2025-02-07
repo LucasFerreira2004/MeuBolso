@@ -77,6 +77,7 @@ public class TransacaoRecorrente {
         this.periodicidade = periodicidade;
         this.usuario = usuario;
         this.ultimaExecucao = null;
+        this.ativa = true;
     }
 
     public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario, Integer qtdParcelas, TipoRepeticao tipoRepeticao) {
@@ -95,6 +96,7 @@ public class TransacaoRecorrente {
         if (qtdParcelas == null) return;
         IAvancoDataStrategy avancoStrategy = AvancoDataFactory.getStrategy(this.periodicidade);
         this.dataFinal = avancoStrategy.avancarData(this.dataCadastro, this.dataCadastro, this.qtdParcelas - 1);
+        this.ativa = true;
     }
     public TransacaoRecorrente() {}
 

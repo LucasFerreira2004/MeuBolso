@@ -101,7 +101,7 @@ public class TransacaoRecorrenteService implements ITransacaoRecorrenteService {
        TransacaoRecorrente recorrente = transacaoRecorrenteValidateService.validateAndGet(id, usuarioId, new EntidadeNaoEncontradaException("{/id", "transacao recorrente nao encontrada"),
                new AcessoNegadoException());
         if (ativa.equals(recorrente.getAtiva()))
-            throw new AtivaInalteradaException("impossível arquivar uma categoria já arquivada ou desarquivar uma categoria já desarquivada", "ativa");
+            throw new AtivaInalteradaException("impossível arquivar uma transcao recorrente já arquivada ou desarquivar uma transacao recorrente já desarquivada", "ativa");
         recorrente.setAtiva(ativa);
         transacaoRecorrenteRepository.save(recorrente);
         return new TransacaoRecorrenteDTO(recorrente);

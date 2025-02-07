@@ -1,5 +1,7 @@
 package com.projetointegrado.MeuBolso.transacaoRecorrente;
 
+import com.projetointegrado.MeuBolso.categoria.dto.ArquivarCategoriaPatchDTO;
+import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoRecorrenteDTO;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoFixaSaveDTO;
@@ -28,6 +30,13 @@ public class TransacaoRecorrenteController {
         String userId = usuarioService.getUsuarioLogadoId();
 
         return transacaoRecorrenteService.findAll(userId);
+    }
+
+    @Operation(summary = "Retorna todas as transações recorrentes arquivadas, fixas ou parceladas")
+    @GetMapping("/arquivadas")
+    public List<TransacaoRecorrenteDTO> findAllArquivadas(){
+        String userId = usuarioService.getUsuarioLogadoId();
+        return transacaoRecorrenteService.findAllArquivadas(userId);
     }
 
     @Operation(summary = "Retorna uma transacao recorrente, fixa ou parcelada")
@@ -81,11 +90,20 @@ public class TransacaoRecorrenteController {
         return transacaoRecorrenteService.update(userId, id, dto);
     }
 
-    @Operation(summary = "Deleta uma transacao recorrente, fixa ou parcelada")
+    @Operation(summary = "Deleta uma transacao recorrente, fixa ou parcelada, deletando todas as transações associadas a ela")
     @DeleteMapping("/{id}")
     public TransacaoRecorrenteDTO delete (@PathVariable Long id){
         String userId = usuarioService.getUsuarioLogadoId();
 
         return transacaoRecorrenteService.delete(userId, id);
+    }
+
+    @Operation(summary = "Atualiza o status de ativo de uma transacao recorrente, fixa ou parcelada (permitindo assim o 'soft delete')")
+    @PatchMapping("/arquivadas/{id}")
+    public TransacaoRecorrenteDTO atualizarStatusAtiva(@PathVariable Long id, @RequestBody ArquivarCategoriaPatchDTO dto, BindingResult bindingResult) throws ValoresNaoPermitidosException {
+        if (bindingResult.hasErrors()) {
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
+        return transacaoRecorrenteService.atualizarStatusAtiva(usuarioService.getUsuarioLogadoId(), id, dto.ativa());
     }
 }
