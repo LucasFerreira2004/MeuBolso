@@ -56,6 +56,7 @@ public class TransacaoService implements ITransacaoService {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;
         List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
+        transacoes.forEach(t -> System.out.println(t.getData()));
         List<TransacaoDTO> transacaoDTOs = transacoes.stream().map(transacao -> new TransacaoDTO(transacao)).toList();
         return transacaoDTOs;
     }
