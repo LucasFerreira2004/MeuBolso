@@ -56,6 +56,7 @@ public class TransacaoService implements ITransacaoService {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;
         List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
+        transacoes.forEach(t -> System.out.println(t.getData()));
         List<TransacaoDTO> transacaoDTOs = transacoes.stream().map(transacao -> new TransacaoDTO(transacao)).toList();
         return transacaoDTOs;
     }
@@ -102,8 +103,8 @@ public class TransacaoService implements ITransacaoService {
     System.out.println("TransacaoService -> saveAndValidate : chegou ao fim das checagens");
 
     Transacao transacao = new Transacao(id, dto.getValor(), dto.getData(), dto.getTipoTransacao(),
-                categoria, conta, dto.getComentario(), dto.getDescricao(), usuario);
-    System.out.println(transacao);
+                categoria, conta, dto.getComentario(), dto.getDescricao(), usuario, OrigemTransacao.NORMAL);
+    System.out.println(transacao.getOrigemTransacao().name());
     return transacaoRepository.save(transacao);
     }
 

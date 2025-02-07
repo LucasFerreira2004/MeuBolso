@@ -4,6 +4,7 @@ import com.projetointegrado.MeuBolso.banco.Banco;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
 import com.projetointegrado.MeuBolso.tipoConta.TipoConta;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -42,8 +43,13 @@ public class Conta {
     @OneToMany(mappedBy = "conta", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Transacao> transacoes;
 
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<TransacaoRecorrente> transacoesRecorrentes;
+
    // @Transient //indica que o valor não será persistido no banco de dados.
     //private Date dataAtual;
+
+    //mapear as transacoes_recorrentes aqui.
 
     public Conta(Long id, TipoConta tipo_conta, Banco banco, String descricao, Usuario usuario) {
         this.id = id;
