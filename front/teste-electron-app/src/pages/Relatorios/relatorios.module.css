@@ -1,5 +1,6 @@
 .containerRelatorios {
     display: flex;
+    gap: 20px;
     flex-direction: column;
     height: 100vh; 
     margin-left: 260px;
@@ -14,4 +15,8 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.containerPizzas{
+    display: flex;
 }

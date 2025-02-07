@@ -105,7 +105,7 @@ const BalancoBancos: React.FC = () => {
     <div className={styles.container}>
       <h1>Balanço de Bancos</h1>
       <div className={styles.datePickers}>
-        <div>
+        <div className={styles.containerDate}>
           <h3>Data Inicial</h3>
           <DatePicker
             mes={dataInicial.mes}
@@ -113,7 +113,7 @@ const BalancoBancos: React.FC = () => {
             onChange={(mes, ano) => setDataInicial({ mes, ano })}
           />
         </div>
-        <div>
+        <div className={styles.containerDate}>
           <h3>Data Final</h3>
           <DatePicker
             mes={dataFinal.mes}

@@ -4,9 +4,7 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.4rem 1rem;
-  background-color: #f4f4f9;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   font-family: 'Arial', sans-serif;
   font-size: 0.875rem;
   max-width: 300px;
@@ -16,7 +14,7 @@
 
 .arrow {
   background-color: #ffffff;
-  border: 1px solid #dcdcdc;
+  border: none;
   border-radius: 50%;
   width: 28px;
   height: 28px;
@@ -48,8 +46,8 @@
 }
 
 .selector {
-  padding: 0.25rem 0.5rem;
-  font-size: 1rem;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.9rem;
   border-radius: 6px;
   border: 1px solid #ccc;
   background-color: #ffffff;
@@ -65,5 +63,5 @@
 
 .selector option {
   padding: 0.5rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }

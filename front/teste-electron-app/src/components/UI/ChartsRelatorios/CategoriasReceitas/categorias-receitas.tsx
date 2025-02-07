@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from 'chart.js';
-import styles from './categorias-receitas.module.css'; 
+import styles from './categorias-receitas.module.css';
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
-interface receitassCategoria {
+interface ReceitasCategoria {
   id: number;
   cor: string;
   nome: string;
@@ -19,7 +19,7 @@ interface CategoriasReceitasProps {
 }
 
 const CategoriasReceitas: React.FC<CategoriasReceitasProps> = ({ mes, ano }) => {
-  const [dados, setDados] = useState<receitassCategoria[]>([]);
+  const [dados, setDados] = useState<ReceitasCategoria[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const CategoriasReceitas: React.FC<CategoriasReceitasProps> = ({ mes, ano }) => 
         const url = `http://localhost:8080/dashboards/receitasCategoria?ano=${ano}&mes=${mes}`;
         const response = await fetch(url, {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
@@ -57,12 +57,13 @@ const CategoriasReceitas: React.FC<CategoriasReceitasProps> = ({ mes, ano }) => 
 
     fetchData();
   }, [ano, mes]);
+
   const chartData = {
-    labels: dados.map((d) => d.nome), 
+    labels: dados.map((d) => d.nome),
     datasets: [
       {
         label: 'Percentual',
-        data: dados.map((d) => d.percentual), 
+        data: dados.map((d) => d.percentual),
         backgroundColor: dados.map((d) => `#${d.cor}`),
         hoverBackgroundColor: dados.map((d) => `#${d.cor}`),
       },
@@ -79,8 +80,12 @@ const CategoriasReceitas: React.FC<CategoriasReceitasProps> = ({ mes, ano }) => 
       tooltip: {
         callbacks: {
           label: (context: any) => {
-            const percentual = context.raw as number;
-            return `${percentual.toFixed(2)}%`; 
+            const index = context.dataIndex; // Obtém o índice do item no tooltip
+            const categoria = dados[index]; // Recupera os dados da categoria
+            const valorTotal = categoria.valorTotal;
+            const percentual = categoria.percentual;
+
+            return `${categoria.nome}: R$ ${valorTotal.toFixed(2)} (${percentual.toFixed(2)}%)`;
           },
         },
       },
@@ -90,10 +95,16 @@ const CategoriasReceitas: React.FC<CategoriasReceitasProps> = ({ mes, ano }) => 
   return (
     <div className={styles.chartContainer}>
       {loading ? (
-        <p className={styles.loadingText}>Carregando dados...</p>
+        <div className={styles.skeletonContainer}>
+          <div className={styles.skeleton} />
+          <div className={styles.skeleton} />
+          <div className={styles.skeleton} />
+        </div>
+      ) : dados.length === 0 ? (
+        <p className={styles.emptyText}>Nenhuma informação disponível para o período selecionado.</p>
       ) : (
         <div>
-          <h2 className={styles.chartTitle}>Gráfico de Pizza de Percentual de Receitas por Categoria</h2>
+          <h2 className={styles.chartTitle}>Receitas por Categoria</h2>
           <Pie data={chartData} options={options} />
         </div>
       )}

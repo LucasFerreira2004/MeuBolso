@@ -99,9 +99,9 @@ const TotalBalanco: React.FC = () => {
 
   return (
     <div className={style.container}>
-      <h1 className={style.title}>Total Balanço</h1>
+      <h1 className={style.title}>Balanço total</h1>
       <div className={style.datePickerContainer}>
-        <div>
+        <div className={style.containerDate}>
           <h3>Data Inicial</h3>
           <DatePicker
             mes={dataInicial.mes}
@@ -109,7 +109,7 @@ const TotalBalanco: React.FC = () => {
             onChange={(mes, ano) => setDataInicial({ mes, ano })}
           />
         </div>
-        <div>
+        <div className={style.containerDate}>
           <h3>Data Final</h3>
           <DatePicker
             mes={dataFinal.mes}

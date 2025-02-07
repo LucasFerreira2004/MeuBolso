@@ -84,7 +84,6 @@ h1 {
   flex: 1;
   padding: 10px;
   background-color: #fff;
-  border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
@@ -100,7 +99,6 @@ h1 {
   max-height: 200px;
   padding: 10px;
   background-color: #fff;
-  border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
@@ -140,7 +138,6 @@ h1 {
   max-width: 65%;
   max-height: 200px;
   padding: 10px;
-  border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }

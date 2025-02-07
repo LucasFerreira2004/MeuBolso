@@ -57,6 +57,7 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
 
     fetchData();
   }, [ano, mes]);
+
   const chartData = {
     labels: dados.map((d) => d.nome), 
     datasets: [
@@ -79,8 +80,12 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
       tooltip: {
         callbacks: {
           label: (context: any) => {
-            const percentual = context.raw as number;
-            return `${percentual.toFixed(2)}%`; 
+            const index = context.dataIndex; // Obtém o índice do dado
+            const categoria = dados[index]; // Recupera a categoria correspondente
+            const valorTotal = categoria.valorTotal;
+            const percentual = categoria.percentual;
+
+            return `${categoria.nome}: R$ ${valorTotal.toFixed(2)} (${percentual.toFixed(2)}%)`;
           },
         },
       },
@@ -90,10 +95,16 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
   return (
     <div className={styles.chartContainer}>
       {loading ? (
-        <p className={styles.loadingText}>Carregando dados...</p>
+        <div className={styles.skeletonContainer}>
+          <div className={styles.skeleton} />
+          <div className={styles.skeleton} />
+          <div className={styles.skeleton} />
+        </div>
+      ) : dados.length === 0 ? (
+        <p className={styles.emptyText}>Nenhuma informação disponível para o período selecionado.</p>
       ) : (
-        <div>
-          <h2 className={styles.chartTitle}>Gráfico de Pizza de Percentual de Despesas por Categoria</h2>
+        <div className={styles.bodyCharts}>
+          <h2 className={styles.chartTitle}>Despesas por Categoria</h2>
           <Pie data={chartData} options={options} />
         </div>
       )}
