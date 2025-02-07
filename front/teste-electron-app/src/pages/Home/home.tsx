@@ -5,10 +5,10 @@ import "react-toastify/dist/ReactToastify.css";
 import style from "./home.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
 import CardMetas from "../../components/UI/CardMetas/card-metas";
-import Example from "../../components/UI/Mycharts/my-charts";
 import DatePicker, { meses } from "../../components/UI/Date/date";
 import Skeleton from "react-loading-skeleton"; // Importando o Skeleton
 import "react-loading-skeleton/dist/skeleton.css"; // Importando o estilo
+import TotalBalanco from "../../components/UI/ChartsRelatorios/TotalBalanco/total-balanco";
 
 interface Banco {
   iconeUrl: string;
@@ -199,7 +199,7 @@ function Home() {
 
           <div className={style.cards3}>
             <div className={style.graphic}>
-              <Example />
+              <TotalBalanco />
             </div>
           </div>
         </div>
