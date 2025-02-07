@@ -40,7 +40,7 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
         where tipo_categoria = 'receita' 
         and ativa = true 
         and usuario_id = :usuario_id 
-        and interna_sistema = false;
+        and interna_sistema = false
         order by nome asc;
     """)
     List<Categoria> findAllByReceita(String usuario_id);
@@ -50,7 +50,7 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
         where tipo_categoria = 'despesa' 
         and ativa = true 
         and usuario_id = :usuario_id 
-        and interna_sistema = false;
+        and interna_sistema = false
         order by nome asc;
     """)
     List<Categoria> findAllByDespesa(String usuario_id);
@@ -59,7 +59,7 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
         select * from categoria 
         where tipo_categoria = :tipo 
         and usuario_id = :usuario_id 
-        and interna_sistema = false;
+        and interna_sistema = false
         order by nome asc;
     """)
     List<Categoria> findAllNotInternByTipo(String usuario_id, String tipo);
