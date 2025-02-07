@@ -6,8 +6,7 @@ import com.projetointegrado.MeuBolso.autorizacao.dto.LoginResponseDTO;
 import com.projetointegrado.MeuBolso.autorizacao.token.TokenService;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
-import com.projetointegrado.MeuBolso.usuario.UsuarioService;
-import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
+import com.projetointegrado.MeuBolso.usuario.dto.UsuarioSaveDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,8 +44,8 @@ public class AutenticacaoController {
 
     @PostMapping("/cadastro")
     public ResponseEntity cadastrar(@RequestBody @Valid CadastroDTO data){
-        UsuarioDTO usuarioDTO = new UsuarioDTO(data.nome(), data.email(), data.senha());
-        usuarioService.save(usuarioDTO);
+        UsuarioSaveDTO usuarioSaveDTO = new UsuarioSaveDTO(data.nome(), data.email(), data.senha());
+        usuarioService.save(usuarioSaveDTO);
 
         return ResponseEntity.ok().build();
     }

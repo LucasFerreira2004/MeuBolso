@@ -1,9 +1,9 @@
 package com.projetointegrado.MeuBolso.usuario;
 
 import com.projetointegrado.MeuBolso.categoria.CriarCategoriasIniciaisService;
-import com.projetointegrado.MeuBolso.categoria.ICategoriaService;
-import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
+import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
+import com.projetointegrado.MeuBolso.usuario.dto.UsuarioSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.exception.EmailJaCadastradoException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,30 +23,31 @@ public class UsuarioService implements IUsuarioService {
     @Autowired
     private CriarCategoriasIniciaisService criarCategoriasIniciaisService;
 
+    @Autowired
+    private UsuarioValidateService usuarioValidateService;
+
     @Transactional
-    public UsuarioDTO save(UsuarioDTO usuarioDTO) {
-        if (usuarioRepository.findByEmail(usuarioDTO.getEmail()) != null)
+    public UsuarioSaveDTO save(UsuarioSaveDTO usuarioSaveDTO) {
+        if (usuarioRepository.findByEmail(usuarioSaveDTO.getEmail()) != null)
             throw new EmailJaCadastradoException();
-        String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioDTO.getSenha());
-        Usuario usuario = new Usuario(usuarioDTO.getNome(), usuarioDTO.getEmail(), encryptedPassword);
+        String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioSaveDTO.getSenha());
+        Usuario usuario = new Usuario(usuarioSaveDTO.getNome(), usuarioSaveDTO.getEmail(), encryptedPassword);
 
         usuario = usuarioRepository.save(usuario);
 
         criarCategoriasIniciaisService.criarCategorias(usuario.getId());
-        return new UsuarioDTO(usuario);
+        return new UsuarioSaveDTO(usuario);
     }
 
 
-    private List<UsuarioDTO> findAll() {
+    private List<UsuarioSaveDTO> findAll() {
         List<Usuario> list = usuarioRepository.findAll();
 
-        return list.stream().map(UsuarioDTO::new).toList();
+        return list.stream().map(UsuarioSaveDTO::new).toList();
     }
 
-    private UsuarioDTO findById(String id) {
-        Usuario usuario = usuarioRepository.findById(id).
-                orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-
+    public UsuarioDTO findById(String id) {
+        Usuario usuario = usuarioValidateService.validateAndGet(id, new EntidadeNaoEncontradaException("{token}", "usuário não encontrado"));
         return new UsuarioDTO(usuario);
     }
 
