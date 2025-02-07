@@ -20,12 +20,12 @@
 .divlogo {
   display: flex;
   justify-content: center;
-  padding: 10px 15px 0;
+  padding: 20px 25px 0;
   cursor: pointer;
 }
 
 .iconLogo {
-  width: 140px;
+  width: 100px;
 }
 
 .navList {

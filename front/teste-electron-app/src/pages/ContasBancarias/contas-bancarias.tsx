@@ -4,7 +4,8 @@ import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./contas-bancarias.module.css";
 import ModalEditContas from "../../components/ModalEditContas/modal-edit-contas";
 import ModalContas from "../../components/ModalContas/modal-contas";
-import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-conta"; // Modal de exclusão
+import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-conta";
+import DatePicker from "../../components/UI/Date/date";
 
 interface Conta {
   data: any;
@@ -28,9 +29,12 @@ function ContasBancarias() {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [selectedContaId, setSelectedContaId] = useState<number | null>(null);
-  const [selectedContaData, setSelectedContaData] = useState<Conta | null>(null); // Dados da conta selecionada
+  const [selectedContaData, setSelectedContaData] = useState<Conta | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState<number | null>(null);
+
+  const [mes, setMes] = useState(new Date().getMonth() + 1); // Mês atual (1-12)
+  const [ano, setAno] = useState(new Date().getFullYear()); // Ano atual
 
   const fetchContas = () => {
     const token = localStorage.getItem("authToken");
@@ -39,8 +43,9 @@ function ContasBancarias() {
       return;
     }
 
-    const dataReferencia = "2200-01-18"; // Data fixa para a consulta
-    const url = `http://localhost:8080/contas?data=${dataReferencia}`;
+
+    const url = `http://localhost:8080/contas?ano=${ano}&mes=${mes}`;
+
 
     fetch(url, {
       method: "GET",
@@ -67,7 +72,7 @@ function ContasBancarias() {
 
   useEffect(() => {
     fetchContas();
-  }, []);
+  }, [mes, ano]);
 
   const handleDeleteRequest = (contaId: number) => {
     setSelectedDeleteId(contaId);
@@ -85,6 +90,14 @@ function ContasBancarias() {
 
   return (
     <div className={style.contas}>
+      <DatePicker
+          mes={mes}
+          ano={ano}
+          onChange={(novoMes, novoAno) => {
+            setMes(novoMes);
+            setAno(novoAno);
+          }}
+        />
       <header className={style.headerContas}>
         <h1>Contas Bancárias</h1>
         <div>
@@ -135,21 +148,20 @@ function ContasBancarias() {
               altBanco={`Ícone do banco ${conta.banco.nome}`}
               data={conta.data}
               descricao={conta.descricao}
-              onDelete={() => handleDeleteRequest(conta.id)} 
+              onDelete={() => handleDeleteRequest(conta.id)}
               onEdit={() => handleEdit(conta.id)}
             />
           ))
         )}
       </main>
 
-      {/* Modal de exclusão de conta */}
       {openDeleteModal && selectedDeleteId !== null && (
         <ModalDeleteConta
           contaId={selectedDeleteId}
           onClose={() => setOpenDeleteModal(false)}
           onConfirmDelete={() => {
             setOpenDeleteModal(false);
-            fetchContas(); // Atualiza a lista de contas após a exclusão
+            fetchContas();
           }}
         />
       )}
