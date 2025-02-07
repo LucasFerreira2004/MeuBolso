@@ -36,15 +36,14 @@ public class UsuarioService implements IUsuarioService {
         return new UsuarioDTO(usuario);
     }
 
-    @Transactional(readOnly = true)
-    public List<UsuarioDTO> findAll() {
+
+    private List<UsuarioDTO> findAll() {
         List<Usuario> list = usuarioRepository.findAll();
 
         return list.stream().map(UsuarioDTO::new).toList();
     }
 
-    @Transactional(readOnly = true)
-    public UsuarioDTO findById(String id) {
+    private UsuarioDTO findById(String id) {
         Usuario usuario = usuarioRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 

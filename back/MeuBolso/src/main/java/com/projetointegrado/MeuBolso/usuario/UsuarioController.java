@@ -26,15 +26,4 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioDTO);
     }
 
-    @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> findAll() {
-        List<UsuarioDTO> list = usuarioService.findAll();
-        return ResponseEntity.ok(list);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> buscarUsuario(@PathVariable String id) {
-        Optional<UsuarioDTO> usuario = Optional.ofNullable(usuarioService.findById(id));
-        return usuario.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-    }
 }
