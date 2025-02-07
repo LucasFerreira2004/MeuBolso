@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import CategoriasDespesas from '../../components/UI/ChartsRelatorios/CategoriasDespesas/categorias-despesas';
 import DatePicker from '../../components/UI/Date/date'; // Importe o componente DatePicker
 import CategoriasReceitas from '../../components/UI/ChartsRelatorios/CategoriasReceitas/categorias-receitas';
+import TotalBalanco from '../../components/UI/ChartsRelatorios/TotalBalanco/total-balanco';
+import BalancoBancos from '../../components/UI/ChartsRelatorios/BalancoBancos/balanco-bancos';
 
 const Relatorios: React.FC = () => {
   const [mes, setMes] = useState(new Date().getMonth() + 1); // Mês atual (1-12)
@@ -24,6 +26,8 @@ const Relatorios: React.FC = () => {
       {/* Passe o mês e o ano selecionados para o componente CategoriasDespesas */}
       <CategoriasDespesas mes={mes} ano={ano} />
       <CategoriasReceitas mes={mes} ano={ano} />
+      <TotalBalanco/>
+      <BalancoBancos/>
     </div>
   );
 };
