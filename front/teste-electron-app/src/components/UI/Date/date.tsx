@@ -1,65 +1,104 @@
-import React, { useState, ChangeEvent } from 'react';
-import style from './date.module.css';
+import React, { useState } from "react";
+import styles from "./date.module.css";
 
-interface DateProps {
-  onMonthChange?: (month: string) => void;
+export const meses = [
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
+];
+
+interface DatePickerProps {
+  mes: number;
+  ano: number;
+  onChange: (mes: number, ano: number) => void;
 }
 
-const DatePicker: React.FC<DateProps> = ({ onMonthChange }) => {
-  const currentYear = new Date().getFullYear();
-  const months = [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-  ];
+const DatePicker: React.FC<DatePickerProps> = ({ mes, ano, onChange }) => {
+  const [mesSelecionado, setMesSelecionado] = useState(mes);
+  const [anoSelecionado, setAnoSelecionado] = useState(ano);
 
-  const [month, setMonth] = useState<string>('01'); // Mes inicial
-  const [] = useState<string>(currentYear.toString()); // Ano fixo
+  const alterarMes = (direcao: "anterior" | "proximo") => {
+    let novoMes = mesSelecionado + (direcao === "proximo" ? 1 : -1);
+    let novoAno = anoSelecionado;
 
-  const handleMonthChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectedMonth = e.target.value;
-    setMonth(selectedMonth);
-    if (onMonthChange) onMonthChange(selectedMonth); // Envia só o mês
+    if (novoMes > 12) {
+      novoMes = 1;
+      novoAno++;
+    } else if (novoMes < 1) {
+      novoMes = 12;
+      novoAno--;
+    }
+
+    setMesSelecionado(novoMes);
+    setAnoSelecionado(novoAno);
+    onChange(novoMes, novoAno);
   };
 
-  const goToPreviousMonth = () => {
-    let newMonth = parseInt(month) - 1;
-    if (newMonth < 1) {
-      newMonth = 12; // Retorna ao dezembro
-    }
-    setMonth(newMonth.toString().padStart(2, '0'));
-    if (onMonthChange) onMonthChange(newMonth.toString().padStart(2, '0'));
+  const handleSelectMes = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const novoMes = parseInt(e.target.value);
+    setMesSelecionado(novoMes);
+    onChange(novoMes, anoSelecionado);
   };
 
-  const goToNextMonth = () => {
-    let newMonth = parseInt(month) + 1;
-    if (newMonth > 12) {
-      newMonth = 1; // Volta ao janeiro
-    }
-    setMonth(newMonth.toString().padStart(2, '0'));
-    if (onMonthChange) onMonthChange(newMonth.toString().padStart(2, '0'));
+  const handleSelectAno = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const novoAno = parseInt(e.target.value);
+    setAnoSelecionado(novoAno);
+    onChange(mesSelecionado, novoAno);
   };
 
   return (
-    <div className={style.dates}>
-      <button onClick={goToPreviousMonth} className={style.botao}>
-        <img src="/assets/iconsTransacoes/arrowL.svg" alt="Arrow Left" className={style.icone} />
+    <div className={styles.datePicker}>
+      <button
+        className={styles.arrow}
+        onClick={() => alterarMes("anterior")}
+        aria-label="Mês anterior"
+      >
+        <img src="/assets/iconsTransacoes/arrowL.svg" alt="Seta anterior" />
       </button>
 
-      <select 
-        value={month} 
-        onChange={handleMonthChange} 
-        className={style.selecionarMes}
-      >
-        <option value="">Mês</option>
-        {months.map((month, index) => (
-          <option key={index} value={(index + 1).toString().padStart(2, '0')}>
-            {month}
-          </option>
-        ))}
-      </select>
+      <div className={styles.selectorContainer}>
+        <select
+          className={styles.selector}
+          value={mesSelecionado}
+          onChange={handleSelectMes}
+        >
+          {meses.map((mes, index) => (
+            <option key={index} value={index + 1}>
+              {mes}
+            </option>
+          ))}
+        </select>
 
-      <button onClick={goToNextMonth} className={style.botao}>
-        <img src="/assets/iconsTransacoes/arrowR.svg" alt="Arrow Right" className={style.icone} />
+        <select
+          className={styles.selector}
+          value={anoSelecionado}
+          onChange={handleSelectAno}
+        >
+          {Array.from({ length: 10 }, (_, i) => anoSelecionado - 5 + i).map(
+            (ano) => (
+              <option key={ano} value={ano}>
+                {ano}
+              </option>
+            )
+          )}
+        </select>
+      </div>
+
+      <button
+        className={styles.arrow}
+        onClick={() => alterarMes("proximo")}
+        aria-label="Próximo mês"
+      >
+        <img src="/assets/iconsTransacoes/arrowR.svg" alt="Seta próximo" />
       </button>
     </div>
   );

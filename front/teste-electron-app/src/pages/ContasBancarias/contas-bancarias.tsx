@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import CardContas from "../../components/UI/CardContas/card-contas";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./contas-bancarias.module.css";
 import ModalEditContas from "../../components/ModalEditContas/modal-edit-contas";
-import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-conta";
 import ModalContas from "../../components/ModalContas/modal-contas";
+import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-conta";
+import DatePicker from "../../components/UI/Date/date";
 
 interface Conta {
+  data: any;
+  descricao: any;
   id: number;
   saldo: number;
   banco: {
@@ -24,32 +26,26 @@ interface Conta {
 
 function ContasBancarias() {
   const [contas, setContas] = useState<Conta[]>([]);
-  const [open, setOpen] = useState(false);
-  const [selectedConta, setSelectedConta] = useState<Conta | null>(null);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [selectedContaId, setSelectedContaId] = useState<number | null>(null);
+  const [selectedContaData, setSelectedContaData] = useState<Conta | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [selectedContaToDelete, setSelectedContaToDelete] = useState<Conta | null>(null);
-  const [openAddModal, setOpenAddModal] = useState(false);
+  const [selectedDeleteId, setSelectedDeleteId] = useState<number | null>(null);
 
-  // Função para obter a data atual no formato YYYY-MM-DD
-  const getDataAtual = () => {
-    const data = new Date();
-    const ano = data.getFullYear();
-    const mes = String(data.getMonth() + 1).padStart(2, "0"); // Meses são de 0 a 11
-    const dia = String(data.getDate()).padStart(2, "0");
-    return `${ano}-${mes}-${dia}`;
-  };
+  const [mes, setMes] = useState(new Date().getMonth() + 1); // Mês atual (1-12)
+  const [ano, setAno] = useState(new Date().getFullYear()); // Ano atual
 
   const fetchContas = () => {
     const token = localStorage.getItem("authToken");
-
     if (!token) {
       console.error("Token de autenticação não encontrado.");
       return;
     }
 
-    // Usando a data atual na URL da requisição
-    const dataReferencia = getDataAtual(); // Data dinâmica
-    const url = `http://localhost:8080/contas?data=${dataReferencia}`;
+
+    const url = `http://localhost:8080/contas?ano=${ano}&mes=${mes}`;
+
 
     fetch(url, {
       method: "GET",
@@ -67,7 +63,6 @@ function ContasBancarias() {
         return response.json();
       })
       .then((data) => {
-        console.log("Resposta do servidor:", data);
         setContas(data);
       })
       .catch((error) => {
@@ -77,87 +72,66 @@ function ContasBancarias() {
 
   useEffect(() => {
     fetchContas();
-  }, []);
+  }, [mes, ano]);
 
-  const handleEditClick = (conta: Conta) => {
-    setSelectedConta(conta);
-    setOpen(true);
-  };
-
-  const handleDeleteClick = (conta: Conta) => {
-    setSelectedContaToDelete(conta);
+  const handleDeleteRequest = (contaId: number) => {
+    setSelectedDeleteId(contaId);
     setOpenDeleteModal(true);
   };
 
-  const handleCloseModal = () => {
-    setOpen(false);
-    setSelectedConta(null);
-    fetchContas();
-  };
-
-  const closeDeleteModal = () => {
-    setOpenDeleteModal(false);
-    setSelectedContaToDelete(null);
-    fetchContas();
-  };
-
-  const closeAddModal = () => {
-    setOpenAddModal(false);
-  };
-
-  const handleAddConta = (novaConta: Conta) => {
-    setContas((prevContas) => [...prevContas, novaConta]);
-    closeAddModal();
-    fetchContas();
-  };
-
-  const handleConfirmDelete = async (id: number) => {
-    try {
-      console.log("Excluindo conta com ID:", id); // Verificando ID da conta
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        console.error("Token de autenticação não encontrado.");
-        return;
-      }
-      const response = await axios.delete(`http://localhost:8080/contas/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.status === 200) {
-        setContas((prevContas) => prevContas.filter((item) => item.id !== id));
-        closeDeleteModal();
-      } else {
-        console.error("Erro ao excluir a conta. Status:", response.status);
-      }
-    } catch (error) {
-      console.error("Erro ao excluir a conta:", error);
+  const handleEdit = (contaId: number) => {
+    const contaSelecionada = contas.find((conta) => conta.id === contaId);
+    if (contaSelecionada) {
+      setSelectedContaId(contaId);
+      setSelectedContaData(contaSelecionada);
+      setOpenEditModal(true);
     }
   };
 
   return (
     <div className={style.contas}>
+      <DatePicker
+          mes={mes}
+          ano={ano}
+          onChange={(novoMes, novoAno) => {
+            setMes(novoMes);
+            setAno(novoAno);
+          }}
+        />
       <header className={style.headerContas}>
         <h1>Contas Bancárias</h1>
         <div>
-          <AddButton texto="Adicionar Conta" onClick={() => setOpenAddModal(true)} />
+          <AddButton
+            onClick={() => setOpenCreateModal(true)}
+            texto={"Adicionar conta"}
+          />
         </div>
       </header>
 
-      {open && selectedConta && (
-        <ModalEditContas closeModal={handleCloseModal} conta={selectedConta} refreshContas={fetchContas} />
-      )}
-
-      {openDeleteModal && selectedContaToDelete && (
-        <ModalDeleteConta
-          onClose={closeDeleteModal}
-          onConfirmDelete={handleConfirmDelete}
-          contaId={selectedContaToDelete.id}
+      {openCreateModal && (
+        <ModalContas
+          onCloseAll={() => {
+            setOpenCreateModal(false);
+            fetchContas();
+          }}
         />
       )}
 
-      {openAddModal && (
-        <ModalContas closeModal={closeAddModal} onAddConta={handleAddConta} />
+      {openEditModal && selectedContaId !== null && selectedContaData && (
+        <ModalEditContas
+          contaId={selectedContaId}
+          onCloseAll={() => {
+            setOpenEditModal(false);
+            fetchContas();
+          }}
+          initialData={{
+            saldo: selectedContaData.saldo,
+            id_banco: selectedContaData.id_banco,
+            id_tipo_conta: selectedContaData.id_tipo_conta,
+            data: selectedContaData.data,
+            descricao: selectedContaData.descricao,
+          }}
+        />
       )}
 
       <main className={style.cardsContas}>
@@ -168,16 +142,29 @@ function ContasBancarias() {
             <CardContas
               key={conta.id}
               titulo={conta.banco.nome}
-              tipo={conta.tipo_conta.tipoConta.replace('_', ' ')}
+              tipo={conta.tipo_conta.tipoConta.replace("_", " ")}
               saldo={conta.saldo}
-              banco={conta.banco.iconeUrl || '/assets/iconsContas/default.svg'}
-              altBanco={`Banco ${conta.banco.nome}`}
-              onDelete={() => handleDeleteClick(conta)}
-              onEdit={() => handleEditClick(conta)}
+              banco={conta.banco.iconeUrl || "/assets/iconsContas/default.svg"}
+              altBanco={`Ícone do banco ${conta.banco.nome}`}
+              data={conta.data}
+              descricao={conta.descricao}
+              onDelete={() => handleDeleteRequest(conta.id)}
+              onEdit={() => handleEdit(conta.id)}
             />
           ))
         )}
       </main>
+
+      {openDeleteModal && selectedDeleteId !== null && (
+        <ModalDeleteConta
+          contaId={selectedDeleteId}
+          onClose={() => setOpenDeleteModal(false)}
+          onConfirmDelete={() => {
+            setOpenDeleteModal(false);
+            fetchContas();
+          }}
+        />
+      )}
     </div>
   );
 }

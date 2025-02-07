@@ -1,0 +1,31 @@
+.container {
+  width: 95%;
+  height: auto;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+  text-align: left;
+  font-size: 29px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.datePickerContainer {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+}
+.containerDate{
+  text-align: center;
+}

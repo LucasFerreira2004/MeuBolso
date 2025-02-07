@@ -46,11 +46,8 @@ function Cadastro() {
         throw new Error("Erro ao cadastrar o usuário.");
       }
 
-      // Exibe um toast de sucesso e redireciona
-      toast.success("Usuário cadastrado com sucesso!");
-      setTimeout(() => {
-        navigate("/");
-      }, 2000); // Redireciona após 2 segundos
+      // Navega para a tela de Login com uma mensagem de sucesso
+      navigate("/", { state: { successMessage: "Usuário cadastrado com sucesso!" } });
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message || "Erro ao realizar o cadastro.");
@@ -114,9 +111,12 @@ function Cadastro() {
           </div>
         </div>
 
-        <Link to="/" className={style.backToLogin}>
-          Voltar para o login
-        </Link>
+        <div className={style.resgistrar}>
+          <p className={style.texto}>Ja tem uma conta?</p>
+          <Link to="/">
+            <p className={style.link}>Entrar</p>
+          </Link>
+        </div>
 
         <button className={style.buttonC} onClick={handleCadastro}>
           Cadastrar
