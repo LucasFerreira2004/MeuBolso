@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from 'chart.js';
-import styles from './categorias-despesas.module.css'; 
+import styles from './categorias-receitas.module.css'; 
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
-interface DespesaCategoria {
+interface receitassCategoria {
   id: number;
   cor: string;
   nome: string;
@@ -13,13 +13,13 @@ interface DespesaCategoria {
   percentual: number;
 }
 
-interface CategoriasDespesasProps {
+interface CategoriasReceitasProps {
   mes: number;
   ano: number;
 }
 
-const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => {
-  const [dados, setDados] = useState<DespesaCategoria[]>([]);
+const CategoriasReceitas: React.FC<CategoriasReceitasProps> = ({ mes, ano }) => {
+  const [dados, setDados] = useState<receitassCategoria[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
 
     const fetchData = async () => {
       try {
-        const url = `http://localhost:8080/dashboards/despesasCategoria?ano=${ano}&mes=${mes}`;
+        const url = `http://localhost:8080/dashboards/receitasCategoria?ano=${ano}&mes=${mes}`;
         const response = await fetch(url, {
           headers: {
             Authorization: `Bearer ${token}`, 
@@ -74,7 +74,7 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
     plugins: {
       title: {
         display: true,
-        text: `Despesas por Categoria - ${mes}/${ano}`,
+        text: `Receitas por Categoria - ${mes}/${ano}`,
       },
       tooltip: {
         callbacks: {
@@ -93,7 +93,7 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
         <p className={styles.loadingText}>Carregando dados...</p>
       ) : (
         <div>
-          <h2 className={styles.chartTitle}>Gráfico de Pizza de Percentual de Despesas por Categoria</h2>
+          <h2 className={styles.chartTitle}>Gráfico de Pizza de Percentual de Receitas por Categoria</h2>
           <Pie data={chartData} options={options} />
         </div>
       )}
@@ -101,4 +101,4 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
   );
 };
 
-export default CategoriasDespesas;
+export default CategoriasReceitas;
