@@ -22,6 +22,7 @@ public class CriarCategoriasIniciaisService {
             criarCategoriaInterna(usuario, "DepositoInicial*", TipoCategoria.RECEITA, "000"),
             criarCategoriaInterna(usuario, "ReajusteSaldoAumento*", TipoCategoria.RECEITA, "000"),
             criarCategoriaInterna(usuario, "ReajusteSaldoDecremento*", TipoCategoria.DESPESA, "000"),
+            criarCategoriaInterna(usuario, "Meta*", TipoCategoria.META, "000"),
 
             criarCategoriaExterna(usuario, "salário", TipoCategoria.RECEITA, "33A841"),
             criarCategoriaExterna(usuario, "investimentos", TipoCategoria.RECEITA, "0775BA"),

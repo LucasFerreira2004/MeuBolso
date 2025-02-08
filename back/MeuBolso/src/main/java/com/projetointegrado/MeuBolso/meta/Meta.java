@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.meta;
 
 import com.projetointegrado.MeuBolso.meta.dto.MetaDTO;
 import com.projetointegrado.MeuBolso.meta.dto.MetaPostDTO;
+import com.projetointegrado.MeuBolso.transacaoMeta.TransacaoMeta;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -9,6 +10,8 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -34,6 +37,9 @@ public class Meta {
     @ManyToOne(optional = false)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "meta")
+    private List<TransacaoMeta> transacoes = new ArrayList<>();
 
     public Meta(){
     }
@@ -103,6 +109,14 @@ public class Meta {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public List<TransacaoMeta> getTransacoes() {
+        return transacoes;
+    }
+
+    public void addTransacoes(TransacaoMeta transacao) {
+        this.transacoes.add(transacao);
     }
 
     @Override
