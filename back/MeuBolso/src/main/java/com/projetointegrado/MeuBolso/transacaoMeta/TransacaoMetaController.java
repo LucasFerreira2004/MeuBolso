@@ -18,12 +18,12 @@ public class TransacaoMetaController {
     @Autowired
     private IUsuarioService usuarioService;
 
-    @PostMapping("/{idMeta}")
-    public TransacaoDTO saveTransacao(@RequestBody TransacaoMetaSaveDTO dto, BindingResult bindingResult, @PathVariable Long idMeta) {
+    @PostMapping()
+    public TransacaoDTO save(@RequestBody TransacaoMetaSaveDTO dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValoresNaoPermitidosException(bindingResult);
         }
         String userId = usuarioService.getUsuarioLogadoId();
-        return transacaoMetaService.save(userId, dto, idMeta);
+        return transacaoMetaService.save(userId, dto);
     }
 }

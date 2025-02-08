@@ -10,17 +10,22 @@ import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaExcep
 import com.projetointegrado.MeuBolso.meta.Meta;
 import com.projetointegrado.MeuBolso.meta.MetaRepository;
 import com.projetointegrado.MeuBolso.meta.MetaValidateService;
+import com.projetointegrado.MeuBolso.meta.dto.MetaDTO;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
 import com.projetointegrado.MeuBolso.transacao.TransacaoValidateService;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
+import com.projetointegrado.MeuBolso.transacaoMeta.dto.TransacaoMetaDTO;
 import com.projetointegrado.MeuBolso.transacaoMeta.dto.TransacaoMetaSaveDTO;
 import com.projetointegrado.MeuBolso.transacaoMeta.exceptions.SaldoInsuficienteException;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TransacaoMetaService implements ITransacaoMetaService {
@@ -41,8 +46,8 @@ public class TransacaoMetaService implements ITransacaoMetaService {
     private CategoriaValidateService categoriaValidateService;
 
     @Transactional
-    public TransacaoDTO save(String userId, TransacaoMetaSaveDTO dto, Long metaId) {
-        Transacao transacao = saveAndValidate(userId, null, dto, metaId);
+    public TransacaoDTO save(String userId, TransacaoMetaSaveDTO dto) {
+        Transacao transacao = saveAndValidate(userId, null, dto, dto.getMetaId());
         return new TransacaoDTO(transacao);
     }
 
