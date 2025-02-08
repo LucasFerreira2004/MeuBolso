@@ -1,6 +1,8 @@
 package com.projetointegrado.MeuBolso.transacaoMeta;
 
-public interface ITransacaoMetaService {
-    TransacaoMeta criarTransacaoMeta(String userId, Long idMeta, TransacaoMetaSaveDTO dto);
+import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
+import com.projetointegrado.MeuBolso.transacaoMeta.dto.TransacaoMetaSaveDTO;
 
+public interface ITransacaoMetaService {
+    TransacaoDTO save(String userId, TransacaoMetaSaveDTO dto, Long metaId);
 }

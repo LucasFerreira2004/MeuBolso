@@ -15,34 +15,21 @@ import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
 import com.projetointegrado.MeuBolso.transacao.TransacaoValidateService;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
-import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
+import com.projetointegrado.MeuBolso.transacaoMeta.dto.TransacaoMetaSaveDTO;
 import com.projetointegrado.MeuBolso.transacaoMeta.exceptions.SaldoInsuficienteException;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
 @Service
-//public class TransacaoMetaService implements ITransacaoMetaService {
-public class TransacaoMetaService {
+public class TransacaoMetaService implements ITransacaoMetaService {
 
     @Autowired
     private TransacaoMetaRepository transacaoMetaRepository;
 
     @Autowired
     private TransacaoRepository transacaoRepository;
-
-    @Autowired
-    private ContaRepository contaRepository;
-
-    @Autowired
-    private MetaRepository metaRepository;
-
-    @Autowired
-    private TransacaoValidateService transacaoValidateService;
 
     @Autowired
     private MetaValidateService metaValidateService;
@@ -54,8 +41,12 @@ public class TransacaoMetaService {
     private CategoriaValidateService categoriaValidateService;
 
     @Transactional
-    public TransacaoDTO criarTransacaoMeta(String userId, TransacaoMetaSaveDTO dto, Long metaId) {
-        // Validações
+    public TransacaoDTO save(String userId, TransacaoMetaSaveDTO dto, Long metaId) {
+        Transacao transacao = saveAndValidate(userId, null, dto, metaId);
+        return new TransacaoDTO(transacao);
+    }
+
+    private Transacao saveAndValidate(String userId, Long id, TransacaoMetaSaveDTO dto, Long metaId) {
         Conta conta = contaValidateService.validateAndGet(dto.getContaId(), userId,
                 new EntidadeNaoEncontradaException("Conta nao encontrada"),
                 new AcessoNegadoException());
@@ -99,43 +90,7 @@ public class TransacaoMetaService {
         transacaoMeta.setMeta(meta);
         transacaoMetaRepository.save(transacaoMeta);
 
-        // Atualiza saldos (não valido)
-//        conta.setSaldo(conta.getSaldo().subtract(valor));
-//        meta.setSaldo(meta.getSaldo().add(valor));
-//        contaRepository.save(conta);
-//        metaRepository.save(meta);
-
         System.out.println("criaTransacaoMeta: transacao meta concluida");
-        return new TransacaoDTO(transacaoMeta);
+        return transacao;
     }
-
-//    @Transactional
-//    public TransacaoDTO save(String userId, TransacaoSaveDTO dto) {
-//        Transacao transacao = saveAndValidate(userId, null, dto);
-//        return new TransacaoDTO(transacao);
-//    }
-//
-//    @Transactional
-//    public TransacaoDTO update(String userId, Long id, TransacaoSaveDTO dto) {
-//        Transacao transacao = saveAndValidate(userId, id, dto);
-//        return new TransacaoDTO(transacao);
-//    }
-//
-//    private Transacao  saveAndValidate(String userId, Long id, TransacaoSaveDTO dto) {
-//        Conta conta = contaValidateService.validateAndGet(dto.getContaId(), userId,
-//                new EntidadeNaoEncontradaException("contaId", "conta nao encontrada"), new AcessoNegadoException());
-//
-//        Categoria categoria = categoriaValidateService.validateAndGet(dto.getCategoriaId(), userId,
-//                new EntidadeNaoEncontradaException("categoriaId", "Categoria nao encontrada"), new AcessoNegadoException());
-//
-//        Usuario usuario = usuarioValidateService.validateAndGet(userId, new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
-//
-//        transacaoValidateService.validateTipo(userId, dto.getTipoTransacao(), dto.getCategoriaId());
-//        System.out.println("TransacaoService -> saveAndValidate : chegou ao fim das checagens");
-//
-//        Transacao transacao = new Transacao(id, dto.getValor(), dto.getData(), dto.getTipoTransacao(),
-//                categoria, conta, dto.getComentario(), dto.getDescricao(), usuario);
-//        System.out.println(transacao);
-//        return transacaoRepository.save(transacao);
-//    }
 }

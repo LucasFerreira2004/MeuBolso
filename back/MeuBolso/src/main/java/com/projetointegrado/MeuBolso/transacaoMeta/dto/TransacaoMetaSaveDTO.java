@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.transacaoMeta;
+package com.projetointegrado.MeuBolso.transacaoMeta.dto;
 
 import com.projetointegrado.MeuBolso.globalConstraints.validEnum.ValidEnum;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
