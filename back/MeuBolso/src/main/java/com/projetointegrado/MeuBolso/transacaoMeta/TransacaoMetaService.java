@@ -45,10 +45,42 @@ public class TransacaoMetaService implements ITransacaoMetaService {
     @Autowired
     private CategoriaValidateService categoriaValidateService;
 
+    @Autowired
+    private TransacaoMetaValidateService transacaoMetaValidateService;
+
+    @Transactional
+    public List<TransacaoMetaDTO> findAll(String userId) {
+        List<TransacaoMeta> transacoesMeta = transacaoMetaRepository.findAllByUsuario(userId);
+        return transacoesMeta.stream().map(TransacaoMetaDTO::new).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public TransacaoMetaDTO findById(String userId, Long idTransacao) {
+        TransacaoMeta transacaoMeta = transacaoMetaValidateService.validateAndGet(idTransacao, userId,
+                new EntidadeNaoEncontradaException("{id}", "transacaoMeta nao encontrado a partir do id"),
+                new AcessoNegadoException());
+        return new TransacaoMetaDTO(transacaoMeta);
+    }
+
+    @Transactional
+    public TransacaoDTO update(String userId, Long idTransacao, TransacaoMetaSaveDTO dto) {
+        Transacao transacao = saveAndValidate(userId, idTransacao, dto, dto.getMetaId());
+        return new TransacaoDTO(transacao);
+    }
+
     @Transactional
     public TransacaoDTO save(String userId, TransacaoMetaSaveDTO dto) {
         Transacao transacao = saveAndValidate(userId, null, dto, dto.getMetaId());
         return new TransacaoDTO(transacao);
+    }
+
+    @Transactional
+    public TransacaoMetaDTO delete(String userId, Long idTransacao) {
+        TransacaoMeta transacaoMeta = transacaoMetaValidateService.validateAndGet(idTransacao, userId,
+                new EntidadeNaoEncontradaException("{id}", "transacaoMeta nao encontrado a partir do id"),
+                new AcessoNegadoException());
+        transacaoMetaRepository.delete(transacaoMeta);
+        return new TransacaoMetaDTO(transacaoMeta);
     }
 
     private Transacao saveAndValidate(String userId, Long id, TransacaoMetaSaveDTO dto, Long metaId) {

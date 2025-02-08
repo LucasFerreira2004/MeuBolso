@@ -10,20 +10,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransacaoMetaValidateService {
     @Autowired
-    private MetaRepository metaRepository;
+    private TransacaoMetaRepository transacaoMeta;
+    @Autowired
+    private TransacaoMetaRepository transacaoMetaRepository;
 
     public void validate(Long id, String userId, EntidadeNaoEncontradaException entidadeNaoEncontrada, AcessoNegadoException acessoNegadoException) {
-        Meta meta = metaRepository.findById(id).orElseThrow(() -> entidadeNaoEncontrada);
-        if (!meta.getUsuario().getId().equals(userId))
+        TransacaoMeta transacaoMeta = transacaoMetaRepository.findById(id).orElseThrow(() -> entidadeNaoEncontrada);
+        if (!transacaoMeta.getMeta().getUsuario().getId().equals(userId))
             throw acessoNegadoException;
     }
 
-    public Meta validateAndGet(Long id, String userId, EntidadeNaoEncontradaException entidadeNaoEncontrada, AcessoNegadoException acessoNegadoException) {
-        Meta meta = metaRepository.findById(id)
+    public TransacaoMeta validateAndGet(Long id, String userId, EntidadeNaoEncontradaException entidadeNaoEncontrada, AcessoNegadoException acessoNegadoException) {
+        TransacaoMeta transacaoMeta = transacaoMetaRepository.findById(id)
                 .orElseThrow(() -> entidadeNaoEncontrada);
-        if (!meta.getUsuario().getId().equals(userId))
+        if (!transacaoMeta.getMeta().getUsuario().getId().equals(userId))
             throw acessoNegadoException;
 
-        return meta;
+        return transacaoMeta;
     }
 }
