@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import CardContas from "../../components/UI/CardContas/card-contas";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./contas-bancarias.module.css";
@@ -8,8 +10,8 @@ import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-con
 import DatePicker from "../../components/UI/Date/date";
 
 interface Conta {
-  data: any;
-  descricao: any;
+  data: string;
+  descricao: string;
   id: number;
   saldo: number;
   banco: {
@@ -29,14 +31,12 @@ function ContasBancarias() {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [selectedContaId, setSelectedContaId] = useState<number | null>(null);
-  const [selectedContaData, setSelectedContaData] = useState<Conta | null>(
-    null
-  );
+  const [selectedContaData, setSelectedContaData] = useState<Conta | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState<number | null>(null);
 
-  const [mes, setMes] = useState(new Date().getMonth() + 1); // Mês atual (1-12)
-  const [ano, setAno] = useState(new Date().getFullYear()); // Ano atual
+  const [mes, setMes] = useState(new Date().getMonth() + 1);
+  const [ano, setAno] = useState(new Date().getFullYear());
 
   const fetchContas = () => {
     const token = localStorage.getItem("authToken");
@@ -88,12 +88,46 @@ function ContasBancarias() {
     }
   };
 
+  const showToast = (message: string, type: "success" | "error") => {
+    if (type === "success") {
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } else if (type === "error") {
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  };
+
   return (
     <div className={style.contas}>
+      {/* ToastContainer deve estar no nível mais alto da tela */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <header className={style.headerContas}>
-        
-          <h1>Contas Bancárias</h1>
-          <div className={style.Date}>
+        <h1>Contas Bancárias</h1>
+        <div className={style.Date}>
           <DatePicker
             mes={mes}
             ano={ano}
@@ -118,6 +152,7 @@ function ContasBancarias() {
             setOpenCreateModal(false);
             fetchContas();
           }}
+          showToast={showToast} // Passa a função showToast como prop
         />
       )}
 
@@ -127,6 +162,7 @@ function ContasBancarias() {
           onCloseAll={() => {
             setOpenEditModal(false);
             fetchContas();
+            showToast("Conta atualizada com sucesso!", "success");
           }}
           initialData={{
             saldo: selectedContaData.saldo,
@@ -166,6 +202,7 @@ function ContasBancarias() {
           onConfirmDelete={() => {
             setOpenDeleteModal(false);
             fetchContas();
+            showToast("Conta deletada com sucesso!", "success");
           }}
         />
       )}

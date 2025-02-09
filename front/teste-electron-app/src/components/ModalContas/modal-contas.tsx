@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-contas.module.css";
 import SelectedBancos from "../UI/SelectedBanco/selected-banco";
@@ -8,6 +9,7 @@ import DatePicker from "../UI/DatePicker/date-picker";
 
 interface ModalContasProps {
   onCloseAll: () => void;
+  showToast: (message: string, type: "success" | "error") => void;
 }
 
 const getDataAtual = () => {
@@ -18,7 +20,7 @@ const getDataAtual = () => {
   return `${ano}-${mes}-${dia}`;
 };
 
-function ModalContas({ onCloseAll }: ModalContasProps) {
+function ModalContas({ onCloseAll, showToast }: ModalContasProps) {
   const [saldo, setSaldo] = useState<string>("");
   const [bancoId, setBancoId] = useState<number | null>(null);
   const [tipoContaId, setTipoContaId] = useState<number | null>(null);
@@ -53,7 +55,7 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
 
   const handleSubmit = async () => {
     if (!saldo || !bancoId || !tipoContaId || !data || !descricao) {
-      alert("Preencha todos os campos obrigatórios!");
+      toast.error("Preencha todos os campos obrigatórios!");
       return;
     }
 
@@ -64,7 +66,7 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
 
     if (!token) {
       console.error("Token de autenticação não encontrado.");
-      alert("Por favor, faça login novamente.");
+      toast.error("Por favor, faça login novamente.");
       return;
     }
 
@@ -86,11 +88,13 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
         }
       );
 
-      console.log("Conta cadastrada:", response.data);
+      showToast("Conta cadastrada com sucesso!", "success");
       onCloseAll();
+
+      console.log("Conta cadastrada:", response.data);
     } catch (error) {
       console.error("Erro ao cadastrar conta:", error);
-      alert("Erro ao cadastrar conta. Verifique os dados ou tente novamente.");
+      toast.error("Erro ao cadastrar conta. Verifique os dados ou tente novamente.");
     }
   };
 

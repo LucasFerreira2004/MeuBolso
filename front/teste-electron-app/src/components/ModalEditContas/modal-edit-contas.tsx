@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-edit-contas.module.css";
 import SelectedBancos from "../UI/SelectedBanco/selected-banco";
@@ -27,12 +29,11 @@ const getDataAtual = () => {
 };
 
 function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasProps) {
-  const [saldo, setSaldo] = useState<string>(""); 
-  const [bancoId, setBancoId] = useState<number | null>(null); 
-  const [tipoContaId, setTipoContaId] = useState<number | null>(null); 
-  const [data, setData] = useState<string>(getDataAtual()); 
-  const [descricao, setDescricao] = useState<string>(""); 
-
+  const [saldo, setSaldo] = useState<string>("");
+  const [bancoId, setBancoId] = useState<number | null>(null);
+  const [tipoContaId, setTipoContaId] = useState<number | null>(null);
+  const [data, setData] = useState<string>(getDataAtual());
+  const [descricao, setDescricao] = useState<string>("");
 
   useEffect(() => {
     if (initialData) {
@@ -72,7 +73,7 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
 
   const handleSubmit = async () => {
     if (!saldo || !bancoId || !tipoContaId || !data || !descricao) {
-      alert("Preencha todos os campos obrigatórios!");
+      toast.error("Preencha todos os campos obrigatórios!");
       return;
     }
 
@@ -81,7 +82,7 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("Token de autenticação não encontrado.");
-      alert("Por favor, faça login novamente.");
+      toast.error("Por favor, faça login novamente.");
       return;
     }
 
@@ -103,11 +104,16 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
         }
       );
 
-      console.log("Conta atualizada:", response.data);
+      // Exibe o toast de sucesso
+      toast.success("Conta atualizada com sucesso!");
+
+      // Fecha o modal após a atualização bem-sucedida
       onCloseAll();
+
+      console.log("Conta atualizada:", response.data);
     } catch (error) {
       console.error("Erro ao atualizar conta:", error);
-      alert("Erro ao atualizar conta. Verifique os dados ou tente novamente.");
+      toast.error("Erro ao atualizar conta. Verifique os dados ou tente novamente.");
     }
   };
 
@@ -117,6 +123,19 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
       onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
     >
       <div className={style.modalContent}>
+        {/* ToastContainer para exibir os toasts */}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+
         <div className={style.headerModal}>
           <h3>Editar Conta</h3>
           <button className={style.closeButton} onClick={onCloseAll}>
