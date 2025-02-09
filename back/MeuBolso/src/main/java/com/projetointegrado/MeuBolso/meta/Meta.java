@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +35,9 @@ public class Meta {
     @Column(name = "descricao", nullable = false)
     private String descricao;
 
+    private String comentario;
+    private BigDecimal progresso;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
@@ -50,6 +54,19 @@ public class Meta {
         this.urlImg = urlImg;
         this.descricao = descricao;
         this.usuario = usuario;
+        this.comentario = null;
+        this.progresso = BigDecimal.ZERO;
+    }
+
+    public Meta(Long id, BigDecimal valorMeta, BigDecimal valorInvestido, String descricao, String urlImg, Usuario usuario, String comentario) {
+        this.id = id;
+        this.valorMeta = valorMeta;
+        this.valorInvestido = valorInvestido;
+        this.urlImg = urlImg;
+        this.descricao = descricao;
+        this.usuario = usuario;
+        this.comentario = comentario;
+        this.progresso = BigDecimal.ZERO;
     }
 
     public Meta(MetaDTO metaDTO) {
@@ -109,6 +126,28 @@ public class Meta {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
+
+    public BigDecimal getProgresso() {
+        return progresso;
+    }
+
+    public void setProgresso() {
+        if (this.valorMeta.compareTo(BigDecimal.ZERO) > 0) { // Evita divisão por zero
+            this.progresso = this.valorInvestido
+                    .divide(this.valorMeta, 4, RoundingMode.HALF_UP)                     .multiply(BigDecimal.valueOf(100))
+                    .setScale(2, RoundingMode.HALF_UP);
+        } else {
+            this.progresso = BigDecimal.ZERO; // Se a meta for 0, progresso é 0%
+        }
     }
 
     public List<TransacaoMeta> getTransacoes() {
