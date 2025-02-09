@@ -29,7 +29,9 @@ function ContasBancarias() {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [selectedContaId, setSelectedContaId] = useState<number | null>(null);
-  const [selectedContaData, setSelectedContaData] = useState<Conta | null>(null);
+  const [selectedContaData, setSelectedContaData] = useState<Conta | null>(
+    null
+  );
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState<number | null>(null);
 
@@ -43,9 +45,7 @@ function ContasBancarias() {
       return;
     }
 
-
     const url = `http://localhost:8080/contas?ano=${ano}&mes=${mes}`;
-
 
     fetch(url, {
       method: "GET",
@@ -90,17 +90,21 @@ function ContasBancarias() {
 
   return (
     <div className={style.contas}>
-      <DatePicker
-          mes={mes}
-          ano={ano}
-          onChange={(novoMes, novoAno) => {
-            setMes(novoMes);
-            setAno(novoAno);
-          }}
-        />
       <header className={style.headerContas}>
-        <h1>Contas Bancárias</h1>
-        <div>
+        
+          <h1>Contas Bancárias</h1>
+          <div className={style.Date}>
+          <DatePicker
+            mes={mes}
+            ano={ano}
+            onChange={(novoMes, novoAno) => {
+              setMes(novoMes);
+              setAno(novoAno);
+            }}
+          />
+        </div>
+
+        <div className={style.buttonAdd}>
           <AddButton
             onClick={() => setOpenCreateModal(true)}
             texto={"Adicionar conta"}

@@ -9,7 +9,7 @@ interface Banco {
 }
 
 interface SelectedBancosProps {
-  setBanco: (bancoId: number | null) => void; // Prop esperada
+  setBanco: (bancoId: number | null) => void; 
 }
 
 function SelectedBancos({ setBanco }: SelectedBancosProps) {

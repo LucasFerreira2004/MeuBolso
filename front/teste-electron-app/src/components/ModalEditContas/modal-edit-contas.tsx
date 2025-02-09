@@ -27,13 +27,13 @@ const getDataAtual = () => {
 };
 
 function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasProps) {
-  const [saldo, setSaldo] = useState<string>(""); // Saldo da conta
-  const [bancoId, setBancoId] = useState<number | null>(null); // ID do banco
-  const [tipoContaId, setTipoContaId] = useState<number | null>(null); // ID do tipo de conta
-  const [data, setData] = useState<string>(getDataAtual()); // Data da conta
-  const [descricao, setDescricao] = useState<string>(""); // Descrição da conta
+  const [saldo, setSaldo] = useState<string>(""); 
+  const [bancoId, setBancoId] = useState<number | null>(null); 
+  const [tipoContaId, setTipoContaId] = useState<number | null>(null); 
+  const [data, setData] = useState<string>(getDataAtual()); 
+  const [descricao, setDescricao] = useState<string>(""); 
 
-  // Preenche os campos com os dados iniciais ao abrir o modal
+
   useEffect(() => {
     if (initialData) {
       setSaldo(`R$ ${initialData.saldo.toFixed(2).replace(".", ",")}`);
@@ -44,7 +44,6 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
     }
   }, [initialData]);
 
-  // Função para formatar o saldo como moeda
   const formatarMoeda = (valor: string): string => {
     let valorNumerico = valor.replace(/\D/g, "");
     valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
@@ -53,7 +52,6 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
     return `R$ ${valorNumerico}`;
   };
 
-  // Função para remover a formatação de moeda
   const removerFormatacaoMoeda = (valorFormatado: string): number => {
     const valorNumerico = valorFormatado
       .replace("R$ ", "")
@@ -62,19 +60,16 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
     return parseFloat(valorNumerico);
   };
 
-  // Função para atualizar o saldo
   const handleChangeSaldo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorDigitado = e.target.value;
     const valorFormatado = formatarMoeda(valorDigitado);
     setSaldo(valorFormatado);
   };
 
-  // Função para atualizar a descrição
   const handleChangeDescricao = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDescricao(e.target.value);
   };
 
-  // Função para enviar os dados atualizados para o backend
   const handleSubmit = async () => {
     if (!saldo || !bancoId || !tipoContaId || !data || !descricao) {
       alert("Preencha todos os campos obrigatórios!");
@@ -109,7 +104,7 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
       );
 
       console.log("Conta atualizada:", response.data);
-      onCloseAll(); // Fecha o modal após a atualização
+      onCloseAll();
     } catch (error) {
       console.error("Erro ao atualizar conta:", error);
       alert("Erro ao atualizar conta. Verifique os dados ou tente novamente.");
@@ -132,7 +127,7 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
         <InputWithIcon
           label="Saldo: "
           type="text"
-          iconSrc="/assets/iconsModalContas/money.svg"
+          iconSrc="/assets/iconsModalConta/money.svg"
           placeholder="R$ 0,00"
           value={saldo}
           onChange={handleChangeSaldo}
@@ -145,12 +140,12 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
         <DatePicker
           value={data}
           onChange={setData}
-          iconsrc="/assets/iconsModalContas/date.svg"
+          iconsrc="/assets/iconsModalConta/date.svg"
         />
 
         <InputWithIcon
           label="Descrição: "
-          iconSrc="/assets/iconsModalContas/descricao.svg"
+          iconSrc="/assets/iconsModalConta/descricao.svg"
           placeholder="Ex: Conta Corrente"
           value={descricao}
           onChange={handleChangeDescricao}
