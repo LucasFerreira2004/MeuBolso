@@ -117,7 +117,6 @@ public class Meta {
         }
         this.valorInvestido = totalInvestido;
         setProgresso();
-        System.out.println("Valor investido atualizado com sucesso");
     }
 
     public String getUrlImg() {
@@ -165,7 +164,6 @@ public class Meta {
         } else {
             this.progresso = BigDecimal.ZERO;
         }
-        System.out.println("Progresso atualizado com sucesso");
     }
 
     public List<TransacaoMeta> getTransacoes() {
@@ -176,7 +174,6 @@ public class Meta {
         transacaoMeta.setMeta(this);
         this.transacoes.add(transacaoMeta);
         atualizarValorInvestido();
-        System.out.println("Transacao adicionada com sucesso");
     }
 
     // Metodo para remover uma transação (se necessário)

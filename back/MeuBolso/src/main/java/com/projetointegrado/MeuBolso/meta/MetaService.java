@@ -68,10 +68,8 @@ public class MetaService implements IMetaService {
     private Meta saveAndValidate(String usuarioId, Long id, MetaPostDTO metaDTO) {
         Usuario usuario = usuarioValidateService.validateAndGet(usuarioId,
                 new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
-        System.out.println("MetaSave: usuario encontrado -> validarMeta");
 
         metaValidateService.validateDescricaoUnica(metaDTO.getDescricao(), usuarioId, id, new DescricaoUnicaException());
-        System.out.println("MetaSave: meta validade -> criar meta");
 
         Meta meta;
         if (id != null) {
@@ -88,8 +86,6 @@ public class MetaService implements IMetaService {
             meta = new Meta(null, metaDTO.getValorMeta(), metaDTO.getDescricao(), metaDTO.getUrlImg(), usuario);
         }
 
-        System.out.println(meta);
-        System.out.println("Meta cadastrada com sucesso");
         return metaRepository.save(meta);
     }
 }
