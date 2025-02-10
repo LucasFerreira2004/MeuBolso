@@ -3,6 +3,7 @@ import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./transacoes.module.css";
 import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans";
 import DatePicker from "../../components/UI/Date/date";
+import CardTransacoes from "../../components/UI/CardTransacoes/card-transacoes";
 
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -10,9 +11,10 @@ function Transacoes() {
   const [despesas, setDespesas] = useState<number | null>(null);
   const [receitas, setReceitas] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [mes, setMes] = useState<number>(new Date().getMonth() + 1); // Começa no mês atual
-  const [ano, setAno] = useState<number>(new Date().getFullYear()); // Começa no ano atual
+  const [mes, setMes] = useState<number>(new Date().getMonth() + 1);
+  const [ano, setAno] = useState<number>(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [transacoes, setTransacoes] = useState<any[]>([]); // Lista de transações
 
   const fetchSaldoTotal = async (mes: number) => {
     const token = localStorage.getItem("authToken");
@@ -35,7 +37,6 @@ function Transacoes() {
       if (!response.ok) throw new Error("Erro ao carregar o saldo total.");
 
       const data = await response.json();
-      console.log("Saldo Total:", data);
       setSaldoTotal(data.saldo);
     } catch (error) {
       setError("Erro ao carregar o saldo total.");
@@ -64,7 +65,6 @@ function Transacoes() {
       if (!response.ok) throw new Error("Erro ao carregar as despesas.");
 
       const data = await response.json();
-      console.log("Despesas:", data);
       setDespesas(data.somatorio);
     } catch (error) {
       setError("Erro ao carregar as despesas.");
@@ -93,10 +93,38 @@ function Transacoes() {
       if (!response.ok) throw new Error("Erro ao carregar as receitas.");
 
       const data = await response.json();
-      console.log("Receitas:", data);
       setReceitas(data.somatorio);
     } catch (error) {
       setError("Erro ao carregar as receitas.");
+      console.error(error);
+    }
+  };
+
+  const fetchTransacoes = async (ano: number, mes: number) => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      setError("Você precisa estar logado para acessar esta funcionalidade.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/transacoes?ano=${ano}&mes=${mes}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) throw new Error("Erro ao carregar as transações.");
+
+      const data = await response.json();
+      setTransacoes(data); // Aqui já estará no formato correto
+      console.log("Transações recebidas da API:", data);
+    } catch (error) {
+      setError("Erro ao carregar as transações.");
       console.error(error);
     }
   };
@@ -121,6 +149,7 @@ function Transacoes() {
           fetchSaldoTotal(mes),
           fetchDespesas(ano, mes),
           fetchReceitas(ano, mes),
+          fetchTransacoes(ano, mes), // Chama a função para carregar as transações
         ]);
       } catch (error) {
         setError("Erro ao carregar os dados.");
@@ -212,10 +241,17 @@ function Transacoes() {
         </div>
 
         <div className={style.transacoesList}>
-          {/* Lista de transações */}
+          {isLoading ? (
+            <p>Carregando transações...</p>
+          ) : (
+            <CardTransacoes
+              transacoes={transacoes} // Passe as transações diretamente para o CardTransacoes
+            />
+          )}
         </div>
       </div>
-      {isModalOpen &&  <ModalTipoTrans mes={mes} ano={ano} onClose={toggleModal} />}
+
+      {isModalOpen && <ModalTipoTrans mes={mes} ano={ano} onClose={toggleModal} />}
     </div>
   );
 }
