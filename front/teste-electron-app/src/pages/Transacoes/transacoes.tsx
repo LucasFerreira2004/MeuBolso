@@ -14,7 +14,8 @@ function Transacoes() {
   const [mes, setMes] = useState<number>(new Date().getMonth() + 1);
   const [ano, setAno] = useState<number>(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [transacoes, setTransacoes] = useState<any[]>([]); // Lista de transações
+  const [, setTransacoes] = useState<any[]>([]);
+  const [transacoesAgrupadas, setTransacoesAgrupadas] = useState<any[]>([]);
 
   const fetchSaldoTotal = async (mes: number) => {
     const token = localStorage.getItem("authToken");
@@ -121,12 +122,33 @@ function Transacoes() {
       if (!response.ok) throw new Error("Erro ao carregar as transações.");
 
       const data = await response.json();
-      setTransacoes(data); // Aqui já estará no formato correto
-      console.log("Transações recebidas da API:", data);
+      setTransacoes(data); // Atualiza as transações
+      agruparTransacoesPorData(data); // Agrupar transações por data
     } catch (error) {
       setError("Erro ao carregar as transações.");
       console.error(error);
     }
+  };
+
+  // Função para agrupar transações por data
+  const agruparTransacoesPorData = (transacoes: any[]) => {
+    const transacoesPorData = transacoes.reduce((acc: any, transacao) => {
+      const data = transacao.data_transacao; // A data da transação
+
+      if (!acc[data]) {
+        acc[data] = [];
+      }
+      acc[data].push(transacao);
+
+      return acc;
+    }, {});
+
+    setTransacoesAgrupadas(
+      Object.entries(transacoesPorData).map(([data, transacoes]) => ({
+        data,
+        transacoes,
+      }))
+    );
   };
 
   const formatarSaldo = (valor: number | null | undefined): string => {
@@ -243,15 +265,25 @@ function Transacoes() {
         <div className={style.transacoesList}>
           {isLoading ? (
             <p>Carregando transações...</p>
+          ) : transacoesAgrupadas.length === 0 ? (
+            <p className={style.mensagemVazia}>
+              Não há transações para este período.
+            </p> // Mensagem caso não haja transações
           ) : (
-            <CardTransacoes
-              transacoes={transacoes} // Passe as transações diretamente para o CardTransacoes
-            />
+            transacoesAgrupadas.map((grupo, index) => (
+              <CardTransacoes
+                key={index}
+                transacoes={grupo.transacoes}
+                dataTransacao={grupo.data}
+              />
+            ))
           )}
         </div>
       </div>
 
-      {isModalOpen && <ModalTipoTrans mes={mes} ano={ano} onClose={toggleModal} />}
+      {isModalOpen && (
+        <ModalTipoTrans mes={mes} ano={ano} onClose={toggleModal} />
+      )}
     </div>
   );
 }
