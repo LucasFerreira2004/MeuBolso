@@ -10,6 +10,7 @@ public class MetaCardDTO {
     private String urlImg;
     private BigDecimal valorMeta;
     private BigDecimal valorInvestido;
+    private BigDecimal progresso;
 
     public MetaCardDTO() {
     }
@@ -20,6 +21,7 @@ public class MetaCardDTO {
         this.urlImg = metaEntity.getUrlImg();
         this.valorMeta = metaEntity.getValorMeta();
         this.valorInvestido = metaEntity.getValorInvestido();
+        this.progresso = metaEntity.getProgresso();
     }
 
     public Long getId() {
@@ -56,5 +58,13 @@ public class MetaCardDTO {
 
     public void setValorInvestido(BigDecimal valorInvestido) {
         this.valorInvestido = valorInvestido;
+    }
+
+    public BigDecimal getProgresso() {
+        return progresso;
+    }
+
+    public void setProgresso(BigDecimal progresso) {
+        this.progresso = progresso;
     }
 }

@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.meta;
 
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
+import com.projetointegrado.MeuBolso.meta.dto.MetaCardDTO;
 import com.projetointegrado.MeuBolso.meta.dto.MetaDTO;
 import com.projetointegrado.MeuBolso.meta.dto.MetaPostDTO;
 import com.projetointegrado.MeuBolso.meta.exception.DescricaoUnicaException;
@@ -29,6 +30,12 @@ public class MetaService implements IMetaService {
     public List<MetaDTO> findAll(String usuarioId) {
         List<Meta> meta = metaRepository.findAllByUsuario(usuarioId);
         return meta.stream().map(MetaDTO::new).toList();
+    }
+
+    @Override
+    public List<MetaCardDTO> findAllCards(String usuarioId) {
+        List<Meta> meta = metaRepository.findAllByUsuario(usuarioId);
+        return meta.stream().map(MetaCardDTO::new).toList();
     }
 
     @Transactional(readOnly = true)
