@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./transacoes.module.css";
 import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans";
+import ModalEditTrans from "../../components/ModalEditTrans/moda-edit-trans"; // Importe o modal de edição
 import DatePicker from "../../components/UI/Date/date";
 import CardTransacoes from "../../components/UI/CardTransacoes/card-transacoes";
 
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false); // Estado para o modal de edição
+  const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null); // ID da transação selecionada
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
   const [despesas, setDespesas] = useState<number | null>(null);
   const [receitas, setReceitas] = useState<number | null>(null);
@@ -161,6 +164,33 @@ function Transacoes() {
     setIsModalOpen((prev) => !prev);
   };
 
+  // Função para abrir o modal de edição
+  const handleEditClick = (id: number) => {
+    setSelectedTransactionId(id);
+    setIsEditModalOpen(true);
+  };
+
+  // Função para fechar o modal de edição
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedTransactionId(null);
+  };
+
+  // Função para atualizar a transação após a edição
+  const handleUpdateTransaction = (updatedTransaction: any) => {
+    // Atualiza a transação no estado agrupado
+    setTransacoesAgrupadas((prevTransacoes) => {
+      return prevTransacoes.map((grupo) => {
+        const updatedTransacoes = grupo.transacoes.map((transacao: any) =>
+          transacao.id === updatedTransaction.id ? updatedTransaction : transacao
+        );
+        return { ...grupo, transacoes: updatedTransacoes };
+      });
+    });
+
+    handleCloseEditModal();
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -268,13 +298,14 @@ function Transacoes() {
           ) : transacoesAgrupadas.length === 0 ? (
             <p className={style.mensagemVazia}>
               Não há transações para este período.
-            </p> // Mensagem caso não haja transações
+            </p>
           ) : (
             transacoesAgrupadas.map((grupo, index) => (
               <CardTransacoes
                 key={index}
                 transacoes={grupo.transacoes}
                 dataTransacao={grupo.data}
+                onEditClick={handleEditClick} 
               />
             ))
           )}
@@ -283,6 +314,16 @@ function Transacoes() {
 
       {isModalOpen && (
         <ModalTipoTrans mes={mes} ano={ano} onClose={toggleModal} />
+      )}
+
+      {isEditModalOpen && selectedTransactionId && (
+        <ModalEditTrans
+          mes={mes}
+          ano={ano}
+          transactionId={selectedTransactionId}
+          onCloseAll={handleCloseEditModal}
+          onTransactionUpdate={handleUpdateTransaction} 
+        />
       )}
     </div>
   );

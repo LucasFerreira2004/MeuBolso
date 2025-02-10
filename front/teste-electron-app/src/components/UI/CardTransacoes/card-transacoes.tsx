@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./card-transacoes.module.css";
-import ModalEditTrans from "../../ModalEditTrans/moda-edit-trans"; // Importe o modal de edição
 
 interface Transacao {
   id: number;
@@ -24,34 +23,33 @@ interface Transacao {
 interface CardTransacoesProps {
   transacoes: Transacao[];
   dataTransacao: string; // Data agrupada
+  onEditClick: (id: number) => void; // Função para notificar o componente pai
 }
 
-const CardTransacoes: React.FC<CardTransacoesProps> = ({ transacoes, dataTransacao }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [transactionId, setTransactionId] = useState<number | null>(null);
-
+const CardTransacoes: React.FC<CardTransacoesProps> = ({ transacoes, dataTransacao, onEditClick }) => {
   const formatarValor = (valor: number): string => {
     return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   };
 
   const [ano, mes, dia] = dataTransacao.split("-");
 
-  const handleEditClick = (id: number) => {
-    setTransactionId(id); // Armazenar o ID da transação que será editada
-    setModalOpen(true); // Abrir o modal
-  };
-
   return (
     <div className={styles.card}>
       <header>
-        <time>{`${dia} de ${new Intl.DateTimeFormat("pt-BR", { month: "long" }).format(new Date(`${ano}-${mes}-02`))} de ${ano}`}</time>
+        <time>{`${dia} de ${new Intl.DateTimeFormat("pt-BR", { month: "long" }).format(
+          new Date(`${ano}-${mes}-02`)
+        )} de ${ano}`}</time>
       </header>
       <ul className={styles.detalhes}>
         {transacoes.map((transacao) => {
           const valor = formatarValor(transacao.valor);
 
           return (
-            <li key={transacao.id} onClick={() => handleEditClick(transacao.id)} style={{ cursor: "pointer" }}>
+            <li
+              key={transacao.id}
+              onClick={() => onEditClick(transacao.id)} // Notifica o componente pai
+              style={{ cursor: "pointer" }}
+            >
               <strong>Descrição:</strong> {transacao.descricao} <br />
               {valor} <br />
               <strong>Categoria:</strong> {transacao.categoria?.nome} <br />
@@ -61,16 +59,6 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({ transacoes, dataTransac
           );
         })}
       </ul>
-
-      {/* Modal de edição */}
-      {modalOpen && transactionId && (
-        <ModalEditTrans
-          onCloseAll={() => setModalOpen(false)} // Fechar o modal
-          mes={parseInt(mes)}
-          ano={parseInt(ano)}
-          transactionId={transactionId} // Passar o ID da transação para editar
-        />
-      )}
     </div>
   );
 };

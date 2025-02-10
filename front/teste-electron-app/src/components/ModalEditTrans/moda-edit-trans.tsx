@@ -18,8 +18,8 @@ const removerFormatacaoMoeda = (valorFormatado: string): number => {
 };
 
 const formatarComoMoeda = (valor: string): string => {
-  let valorNumerico = valor.replace(/\D/g, "");
-  valorNumerico = (parseInt(valorNumerico) / 100).toFixed(2);
+  let valorNumerico = valor.replace(/\D/g, ""); 
+  valorNumerico = (parseInt(valorNumerico) / 100).toFixed(2); 
   return `R$ ${valorNumerico.replace(".", ",")}`;
 };
 
@@ -27,10 +27,11 @@ interface ModalEditTransProps {
   onCloseAll: () => void;
   mes: number;
   ano: number;
-  transactionId: number;  // Adicionar o ID da transação
+  transactionId: number;
+  onTransactionUpdate: (updatedTransaction: any) => void;  // Aceita um parâmetro
 }
 
-function ModalEditTrans({ onCloseAll, mes, ano, transactionId }: ModalEditTransProps) {
+function ModalEditTrans({ onCloseAll, mes, ano, transactionId, onTransactionUpdate }: ModalEditTransProps) {
   const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null);
@@ -42,7 +43,6 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId }: ModalEditTransP
   const [qtdParcelas, setQtdParcelas] = useState<number | null>(null);
 
   useEffect(() => {
-    // Carregar os dados da transação para editar
     const fetchTransaction = async () => {
       const token = localStorage.getItem("authToken");
   
@@ -66,7 +66,10 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId }: ModalEditTransP
         setConta(data.contaId);
         setData(data.data);
         setComentario(data.comentario);
-        setTipoTransacao(data.tipoTransacao);
+        
+        // Ajustando tipoTransacao ao valor recebido da API
+        setTipoTransacao(data.tipoTransacao || "NORMAL");
+        
         if (data.tipoTransacao === "FIXA" || data.tipoTransacao === "PARCELADA") {
           setPeriodicidade(data.periodicidade);
         }
@@ -78,11 +81,10 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId }: ModalEditTransP
         console.error(error);
       }
     };
-  
+
     fetchTransaction();
   }, [transactionId]);
   
-
   const handleChangeValor = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorDigitado = e.target.value;
     const valorFormatado = formatarComoMoeda(valorDigitado);
@@ -104,7 +106,6 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId }: ModalEditTransP
       return;
     }
 
-    // Dados comuns a todas as transações
     const transactionData: any = {
       valor: valorNumerico,
       data,
@@ -115,22 +116,17 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId }: ModalEditTransP
       descricao,
     };
 
-    // Adicionar dados específicos para transações "FIXA"
     if (tipoTransacao === "FIXA") {
       transactionData.periodicidade = periodicidade;
     }
 
-    // Adicionar dados específicos para transações "PARCELADA"
     if (tipoTransacao === "PARCELADA") {
       transactionData.qtdParcelas = qtdParcelas;
       transactionData.periodicidade = periodicidade;
     }
 
-    console.log("Dados da transação sendo enviados:", transactionData);
-
     try {
-      // Alterado para PUT conforme solicitado
-      const url = `http://localhost:8080/transacoes/${transactionId}`;  // Requisição PUT para atualizar os dados da transação
+      const url = `http://localhost:8080/transacoes/${transactionId}`; 
 
       const response = await axios.put(url, transactionData, {
         headers: {
@@ -139,23 +135,18 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId }: ModalEditTransP
         },
       });
 
-      console.log("Resposta do servidor:", response.data);
-
       if (response.status === 200) {
         toast.success("Transação atualizada com sucesso!");
+        onTransactionUpdate(response.data);  // Passando o valor atualizado
         onCloseAll();
       } else {
         toast.error("Erro ao atualizar transação. Verifique os dados ou tente novamente.");
       }
     } catch (error) {
       console.error("Erro ao atualizar transação:", error);
-      if (axios.isAxiosError(error)) {
-        console.log("Detalhes do erro:", error.response?.data);
-      }
       toast.error("Erro ao atualizar transação. Verifique os dados ou tente novamente.");
     }
   };
-
 
   return (
     <div
@@ -248,10 +239,9 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId }: ModalEditTransP
           Atualizar Transação
         </button>
 
-        {/* Adicione o ToastContainer aqui */}
         <ToastContainer
           position="top-right"
-          autoClose={5000}
+          autoClose={3000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick
