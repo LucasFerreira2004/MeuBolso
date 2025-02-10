@@ -22,42 +22,62 @@ interface Transacao {
 
 interface CardTransacoesProps {
   transacoes: Transacao[];
-  dataTransacao: string; // Data agrupada
-  onEditClick: (id: number) => void; // Função para notificar o componente pai
+  dataTransacao: string; 
+  onEditClick: (id: number) => void; 
 }
 
-const CardTransacoes: React.FC<CardTransacoesProps> = ({ transacoes, dataTransacao, onEditClick }) => {
+const CardTransacoes: React.FC<CardTransacoesProps> = ({
+  transacoes,
+  dataTransacao,
+  onEditClick,
+}) => {
+  const [ano, mes, dia] = dataTransacao.split("-");
+
   const formatarValor = (valor: number): string => {
-    return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    return valor.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
   };
 
-  const [ano, mes, dia] = dataTransacao.split("-");
+  const formatarData = (): string => {
+    const data = new Date(`${ano}-${mes}-${dia}`);
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }).format(data);
+  };
 
   return (
     <div className={styles.card}>
       <header>
-        <time>{`${dia} de ${new Intl.DateTimeFormat("pt-BR", { month: "long" }).format(
-          new Date(`${ano}-${mes}-02`)
-        )} de ${ano}`}</time>
+        <time>{formatarData()}</time>
       </header>
       <ul className={styles.detalhes}>
-        {transacoes.map((transacao) => {
-          const valor = formatarValor(transacao.valor);
+        {transacoes.length > 0 ? (
+          transacoes.map((transacao) => {
+            const valor = formatarValor(transacao.valor);
 
-          return (
-            <li
-              key={transacao.id}
-              onClick={() => onEditClick(transacao.id)} // Notifica o componente pai
-              style={{ cursor: "pointer" }}
-            >
-              <strong>Descrição:</strong> {transacao.descricao} <br />
-              {valor} <br />
-              <strong>Categoria:</strong> {transacao.categoria?.nome} <br />
-              <strong>Conta:</strong> {transacao.conta?.descricao} ({transacao.conta?.banco?.nome}) <br />
-              <strong>Tipo:</strong> {transacao.origem === "FIXA" ? "Fixa" : "Normal"}
-            </li>
-          );
-        })}
+            return (
+              <li
+                key={transacao.id}
+                onClick={() => onEditClick(transacao.id)}
+                style={{ cursor: "pointer" }}
+              >
+                <strong>Descrição:</strong> {transacao.descricao} <br />
+                <strong>Valor:</strong> {valor} <br />
+                <strong>Categoria:</strong> {transacao.categoria?.nome} <br />
+                <strong>Conta:</strong> {transacao.conta?.descricao} (
+                {transacao.conta?.banco?.nome}) <br />
+                <strong>Tipo:</strong>{" "}
+                {transacao.origem === "FIXA" ? "Fixa" : "Normal"}
+              </li>
+            );
+          })
+        ) : (
+          <p>Nenhuma transação encontrada.</p>
+        )}
       </ul>
     </div>
   );

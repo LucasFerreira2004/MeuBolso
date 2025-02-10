@@ -11,16 +11,15 @@ import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
 
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
-    .replace("R$ ", "")
-    .replace(/\./g, "")
+    .replace(/[^\d,.-]/g, "") 
     .replace(",", ".");
   return parseFloat(valorNumerico);
 };
 
-const formatarComoMoeda = (valor: string): string => {
-  let valorNumerico = valor.replace(/\D/g, ""); 
-  valorNumerico = (parseInt(valorNumerico) / 100).toFixed(2); 
-  return `R$ ${valorNumerico.replace(".", ",")}`;
+const formatarValor = (valor: string): string => {
+  const valorNumerico = parseFloat(valor.replace(/[^\d.-]/g, ""));
+  if (isNaN(valorNumerico)) return "R$ 0,00";
+  return valorNumerico.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 };
 
 interface ModalEditTransProps {
@@ -28,66 +27,75 @@ interface ModalEditTransProps {
   mes: number;
   ano: number;
   transactionId: number;
-  onTransactionUpdate: (updatedTransaction: any) => void;  // Aceita um parâmetro
+  onTransactionUpdate: (updatedTransaction: any) => void;
 }
 
-function ModalEditTrans({ onCloseAll, mes, ano, transactionId, onTransactionUpdate }: ModalEditTransProps) {
+const ModalEditTrans: React.FC<ModalEditTransProps> = ({
+  onCloseAll,
+  mes,
+  ano,
+  transactionId,
+  onTransactionUpdate,
+}) => {
   const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null);
   const [conta, setConta] = useState<number | null>(null);
   const [data, setData] = useState<string>("");
   const [comentario, setComentario] = useState<string | null>(null);
-  const [tipoTransacao, setTipoTransacao] = useState<"NORMAL" | "FIXA" | "PARCELADA">("NORMAL");
-  const [periodicidade, setPeriodicidade] = useState<"SEMANAL" | "MENSAL" | "DIARIO">("MENSAL");
+  const [tipoTransacao, setTipoTransacao] = useState<
+    "NORMAL" | "FIXA" | "PARCELADA"
+  >("NORMAL");
+  const [periodicidade, setPeriodicidade] = useState<
+    "SEMANAL" | "MENSAL" | "DIARIO"
+  >("MENSAL");
   const [qtdParcelas, setQtdParcelas] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchTransaction = async () => {
       const token = localStorage.getItem("authToken");
-  
+
       if (!token) {
         console.error("Token de autenticação não encontrado.");
         toast.error("Por favor, faça login novamente.");
         return;
       }
-  
+
       try {
-        const response = await axios.get(`http://localhost:8080/transacoes/${transactionId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `http://localhost:8080/transacoes/${transactionId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
         const data = response.data;
-  
-        setValor(formatarComoMoeda(data.valor.toString()));
-        setDescricao(data.descricao);
-        setCategoria(data.categoriaId);
-        setConta(data.contaId);
-        setData(data.data);
-        setComentario(data.comentario);
-        
-        // Ajustando tipoTransacao ao valor recebido da API
+        setValor(formatarValor(data.valor.toString()));
+        setDescricao(data.descricao || "");
+        setCategoria(data.categoriaId || null);
+        setConta(data.contaId || null);
+        setData(data.data || "");
+        setComentario(data.comentario || null);
         setTipoTransacao(data.tipoTransacao || "NORMAL");
-        
+
         if (data.tipoTransacao === "FIXA" || data.tipoTransacao === "PARCELADA") {
-          setPeriodicidade(data.periodicidade);
+          setPeriodicidade(data.periodicidade || "MENSAL");
         }
         if (data.tipoTransacao === "PARCELADA") {
-          setQtdParcelas(data.qtdParcelas);
+          setQtdParcelas(data.qtdParcelas || null);
         }
       } catch (error) {
         toast.error("Erro ao carregar os dados da transação.");
-        console.error(error);
+        console.error("Erro ao buscar transação:", error);
       }
     };
 
     fetchTransaction();
   }, [transactionId]);
-  
+
   const handleChangeValor = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorDigitado = e.target.value;
-    const valorFormatado = formatarComoMoeda(valorDigitado);
+    const valorFormatado = formatarValor(valorDigitado);
     setValor(valorFormatado);
   };
 
@@ -101,7 +109,6 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId, onTransactionUpda
     const token = localStorage.getItem("authToken");
 
     if (!token) {
-      console.error("Token de autenticação não encontrado.");
       toast.error("Por favor, faça login novamente.");
       return;
     }
@@ -109,7 +116,7 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId, onTransactionUpda
     const transactionData: any = {
       valor: valorNumerico,
       data,
-      tipoTransacao: tipoTransacao === "NORMAL" ? "DESPESA" : tipoTransacao === "FIXA" ? "DESPESA" : "DESPESA",
+      tipoTransacao: "DESPESA", 
       categoriaId: categoria,
       contaId: conta,
       comentario,
@@ -126,33 +133,55 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId, onTransactionUpda
     }
 
     try {
-      const url = `http://localhost:8080/transacoes/${transactionId}`; 
-
-      const response = await axios.put(url, transactionData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.put(
+        `http://localhost:8080/transacoes/${transactionId}`,
+        transactionData,
+        {
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        }
+      );
 
       if (response.status === 200) {
         toast.success("Transação atualizada com sucesso!");
-        onTransactionUpdate(response.data);  // Passando o valor atualizado
+        onTransactionUpdate(response.data);
         onCloseAll();
       } else {
-        toast.error("Erro ao atualizar transação. Verifique os dados ou tente novamente.");
+        toast.error("Erro ao atualizar a transação.");
       }
     } catch (error) {
-      console.error("Erro ao atualizar transação:", error);
-      toast.error("Erro ao atualizar transação. Verifique os dados ou tente novamente.");
+      toast.error("Erro ao atualizar a transação. Tente novamente.");
+      console.error("Erro ao enviar atualização:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      toast.error("Por favor, faça login novamente.");
+      return;
+    }
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/transacoes/${transactionId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.status === 200) {
+        toast.success("Transação excluída com sucesso!");
+        onCloseAll();
+      } else {
+        toast.error("Erro ao excluir a transação.");
+      }
+    } catch (error) {
+      toast.error("Erro ao excluir a transação. Tente novamente.");
+      console.error("Erro ao excluir transação:", error);
     }
   };
 
   return (
-    <div
-      className={style.modalOverlay}
-      onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
-    >
+    <div className={style.modalOverlay} onClick={(e) => e.stopPropagation()}>
       <div className={style.modalContent}>
         <div className={style.headerModal}>
           <h3>Editar Transação</h3>
@@ -160,6 +189,7 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId, onTransactionUpda
             <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
+
         <InputWithIcon
           label="Valor: "
           type="text"
@@ -168,22 +198,29 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId, onTransactionUpda
           value={valor}
           onChange={handleChangeValor}
         />
+
         <InputWithIcon
           label="Descrição: "
           iconSrc="/assets/iconsModalDespesas/descrip.svg"
           placeholder="Ex: Pagamento da fatura"
           value={descricao}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescricao(e.target.value)}
+          onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setDescricao(e.target.value)}
         />
+
         <SelectedDespesas setCategoria={setCategoria} />
         <SelectBoxContas setConta={setConta} mes={mes} ano={ano} />
-        <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg" />
+        <DatePicker
+          value={data}
+          onChange={setData}
+          iconsrc="/assets/iconsModalDespesas/date.svg"
+        />
+
         <InputWithIcon
           label="Comentário: "
           iconSrc="/assets/iconsModalDespesas/comentario.svg"
           placeholder="Opcional"
           value={comentario || ""}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComentario(e.target.value || null)}
+          onChange={(e: { target: { value: any; }; }) => setComentario(e.target.value || null)}
         />
 
         <div>
@@ -220,7 +257,9 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId, onTransactionUpda
           <>
             <SelectedPeriodo
               selectedValue={periodicidade}
-              onChange={(e) => setPeriodicidade(e.target.value as "DIARIO" | "SEMANAL" | "MENSAL")}
+              onChange={(e) =>
+                setPeriodicidade(e.target.value as "DIARIO" | "SEMANAL" | "MENSAL")
+              }
             />
             {tipoTransacao === "PARCELADA" && (
               <InputWithIcon
@@ -229,30 +268,31 @@ function ModalEditTrans({ onCloseAll, mes, ano, transactionId, onTransactionUpda
                 type="number"
                 placeholder="Ex: 12"
                 value={qtdParcelas || ""}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQtdParcelas(Number(e.target.value))}
+                onChange={(e: { target: { value: any; }; }) => setQtdParcelas(Number(e.target.value))}
               />
             )}
           </>
         )}
 
-        <button onClick={handleSubmit} className={style.submitButton}>
-          Atualizar Transação
-        </button>
+        <div className={style.Buttons}>
+          <button onClick={handleDelete} className={style.deleteButton}>
+            Excluir Transação
+          </button>
+          <button onClick={handleSubmit} className={style.submitButton}>
+            Atualizar Transação
+          </button>
+        </div>
 
         <ToastContainer
           position="top-right"
           autoClose={3000}
           hideProgressBar={false}
-          newestOnTop={false}
           closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
           pauseOnHover
         />
       </div>
     </div>
   );
-}
+};
 
 export default ModalEditTrans;

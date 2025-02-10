@@ -43,10 +43,15 @@
     display: flex;
     gap: 10px;
   }
+  .Buttons{
+    display: flex;
+    justify-content: end;
+    gap: 15px;
+    padding-top: 20px;
+  }
   
   .submitButton {
     background-color: var(--main-color);
-    margin-left: 250px;
     color: white;
     padding: 10px;
     border: none;
@@ -55,6 +60,17 @@
   }
   .submitButton:hover{
     background-color: var(--main-color-light);
+  }
+  .deleteButton{
+    background-color: #E63946; 
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .deleteButton:hover{
+    background-color: #c1283d;
   }
   
   .closeButton {
