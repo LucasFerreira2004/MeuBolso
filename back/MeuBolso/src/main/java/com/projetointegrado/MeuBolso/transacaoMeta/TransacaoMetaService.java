@@ -94,7 +94,7 @@ public class TransacaoMetaService implements ITransacaoMetaService {
                 new EntidadeNaoEncontradaException("Meta nao encontrada"),
                 new AcessoNegadoException());
 
-        Categoria categoria = categoriaValidateService.validateAndGet(dto.getCategoriaId(), userId,
+        Categoria categoria = categoriaValidateService.validateAndGet(17L, userId,
                 new EntidadeNaoEncontradaException("Categoria nao encontrada"),
                 new AcessoNegadoException());
 

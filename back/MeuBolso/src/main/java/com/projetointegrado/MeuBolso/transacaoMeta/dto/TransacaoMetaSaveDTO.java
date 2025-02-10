@@ -26,22 +26,16 @@ public class TransacaoMetaSaveDTO {
     @Positive(message = contaIdDefaultMessage)
     private Long contaId;
 
-    private final String categoriaIdDefaultMessage = "O id da categoria é obrigatório e deve ser um inteiro maior que 0";
-    @NotNull(message = categoriaIdDefaultMessage)
-    @Positive(message = categoriaIdDefaultMessage)
-    private Long categoriaId;
-
     private final String metaIdDefaultMessage = "O id da meta é obrigatório e deve ser um inteiro maior que 0";
     @NotNull(message = metaIdDefaultMessage)
     @Positive(message = metaIdDefaultMessage)
     private Long metaId;
 
-    public TransacaoMetaSaveDTO(BigDecimal valor, LocalDate data, String tipoTransacao, Long contaId, Long categoriaId, Long metaId) {
+    public TransacaoMetaSaveDTO(BigDecimal valor, LocalDate data, String tipoTransacao, Long contaId, Long metaId) {
         this.valor = valor;
         this.data = data;
         this.tipoTransacao = tipoTransacao;
         this.contaId = contaId;
-        this.categoriaId = categoriaId;
         this.metaId = metaId;
     }
 
@@ -80,14 +74,6 @@ public class TransacaoMetaSaveDTO {
         this.contaId = contaId;
     }
 
-    public Long getCategoriaId() {
-        return categoriaId;
-    }
-
-    public void setCategoriaId(Long categoriaId) {
-        this.categoriaId = categoriaId;
-    }
-
     public Long getMetaId() {
         return metaId;
     }
@@ -104,7 +90,6 @@ public class TransacaoMetaSaveDTO {
                 ", tipoTransacao='" + tipoTransacao + '\'' +
                 ", contaId='" + contaId + '\'' +
                 ", contaId=" + contaId +
-                ", categoriaId=" + categoriaId +
                 ", metaId=" + metaId +
                 '}';
     }
