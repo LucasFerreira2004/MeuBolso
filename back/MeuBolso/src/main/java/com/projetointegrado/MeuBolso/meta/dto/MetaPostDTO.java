@@ -18,6 +18,9 @@ public class MetaPostDTO {
     @Column(name = "descricao", nullable = false)
     private String descricao;
 
+    @Column(name = "comentario", nullable = true)
+    private String comentario;
+
     private String urlImg;
 
     public MetaPostDTO() {
@@ -27,10 +30,11 @@ public class MetaPostDTO {
         BeanUtils.copyProperties(meta, this);
     }
 
-    public MetaPostDTO(BigDecimal valorMeta, String descricao, String urlImg) {
+    public MetaPostDTO(BigDecimal valorMeta, String descricao, String urlImg, String comentario) {
         this.valorMeta = valorMeta;
         this.descricao = descricao;
         this.urlImg = urlImg;
+        this.comentario = comentario;
     }
 
     public BigDecimal getValorMeta() {
@@ -55,5 +59,13 @@ public class MetaPostDTO {
 
     public void setUrlImg(String urlImg) {
         this.urlImg = urlImg;
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
     }
 }

@@ -80,10 +80,11 @@ public class MetaService implements IMetaService {
             // Atualiza os campos da meta existente
             meta.setValorMeta(metaDTO.getValorMeta());
             meta.setDescricao(metaDTO.getDescricao());
+            meta.setComentario(metaDTO.getComentario());
             meta.setUrlImg(metaDTO.getUrlImg());
         } else {
             // Cria nova meta se for um save
-            meta = new Meta(null, metaDTO.getValorMeta(), metaDTO.getDescricao(), metaDTO.getUrlImg(), usuario);
+            meta = new Meta(null, metaDTO.getValorMeta(), metaDTO.getDescricao(), metaDTO.getUrlImg(), usuario, metaDTO.getComentario());
         }
 
         return metaRepository.save(meta);
