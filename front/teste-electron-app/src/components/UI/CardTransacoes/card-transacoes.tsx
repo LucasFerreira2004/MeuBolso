@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./card-transacoes.module.css";
+import ModalEditTrans from "../../ModalEditTrans/moda-edit-trans"; // Importe o modal de edição
 
 interface Transacao {
   id: number;
@@ -26,11 +27,19 @@ interface CardTransacoesProps {
 }
 
 const CardTransacoes: React.FC<CardTransacoesProps> = ({ transacoes, dataTransacao }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [transactionId, setTransactionId] = useState<number | null>(null);
+
   const formatarValor = (valor: number): string => {
     return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   };
 
   const [ano, mes, dia] = dataTransacao.split("-");
+
+  const handleEditClick = (id: number) => {
+    setTransactionId(id); // Armazenar o ID da transação que será editada
+    setModalOpen(true); // Abrir o modal
+  };
 
   return (
     <div className={styles.card}>
@@ -42,7 +51,7 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({ transacoes, dataTransac
           const valor = formatarValor(transacao.valor);
 
           return (
-            <li key={transacao.id}>
+            <li key={transacao.id} onClick={() => handleEditClick(transacao.id)} style={{ cursor: "pointer" }}>
               <strong>Descrição:</strong> {transacao.descricao} <br />
               {valor} <br />
               <strong>Categoria:</strong> {transacao.categoria?.nome} <br />
@@ -52,6 +61,16 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({ transacoes, dataTransac
           );
         })}
       </ul>
+
+      {/* Modal de edição */}
+      {modalOpen && transactionId && (
+        <ModalEditTrans
+          onCloseAll={() => setModalOpen(false)} // Fechar o modal
+          mes={parseInt(mes)}
+          ano={parseInt(ano)}
+          transactionId={transactionId} // Passar o ID da transação para editar
+        />
+      )}
     </div>
   );
 };
