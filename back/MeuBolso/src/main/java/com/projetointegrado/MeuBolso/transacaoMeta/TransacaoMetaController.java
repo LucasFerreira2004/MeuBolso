@@ -1,7 +1,6 @@
 package com.projetointegrado.MeuBolso.transacaoMeta;
 
 import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
-import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.transacaoMeta.dto.TransacaoMetaDTO;
 import com.projetointegrado.MeuBolso.transacaoMeta.dto.TransacaoMetaSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
@@ -16,7 +15,7 @@ import java.util.List;
 public class TransacaoMetaController {
 
     @Autowired
-    private TransacaoMetaService transacaoMetaService;
+    private ITransacaoMetaService transacaoMetaService;
 
     @Autowired
     private IUsuarioService usuarioService;
@@ -35,7 +34,7 @@ public class TransacaoMetaController {
     }
 
     @PutMapping("/{idTransacao}")
-    public TransacaoDTO update(@PathVariable Long idTransacao, @RequestBody TransacaoMetaSaveDTO dto, BindingResult bindingResult) {
+    public TransacaoMetaDTO update(@PathVariable Long idTransacao, @RequestBody TransacaoMetaSaveDTO dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValoresNaoPermitidosException(bindingResult);
         }
@@ -44,7 +43,7 @@ public class TransacaoMetaController {
     }
 
     @PostMapping()
-    public TransacaoDTO save(@RequestBody TransacaoMetaSaveDTO dto, BindingResult bindingResult) {
+    public TransacaoMetaDTO save(@RequestBody TransacaoMetaSaveDTO dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValoresNaoPermitidosException(bindingResult);
         }

@@ -1,9 +1,11 @@
 package com.projetointegrado.MeuBolso.meta.dto;
 
+import com.projetointegrado.MeuBolso.meta.Meta;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 
@@ -19,6 +21,10 @@ public class MetaPostDTO {
     private String urlImg;
 
     public MetaPostDTO() {
+    }
+
+    public MetaPostDTO(Meta meta) {
+        BeanUtils.copyProperties(meta, this);
     }
 
     public MetaPostDTO(BigDecimal valorMeta, String descricao, String urlImg) {

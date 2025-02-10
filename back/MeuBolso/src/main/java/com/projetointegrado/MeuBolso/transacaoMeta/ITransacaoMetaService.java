@@ -9,6 +9,8 @@ import java.util.List;
 public interface ITransacaoMetaService {
     public List<TransacaoMetaDTO> findAll(String userId);
     public TransacaoMetaDTO findById(String userId, Long idTransacao);
-    public TransacaoDTO update(String userId, Long idTransacao, TransacaoMetaSaveDTO dto);
-    public TransacaoDTO save(String userId, TransacaoMetaSaveDTO dto);
+    public TransacaoMetaDTO update(String userId, Long idTransacao, TransacaoMetaSaveDTO dto);
+    public TransacaoMetaDTO save(String userId, TransacaoMetaSaveDTO dto);
+    public List<TransacaoMetaDTO> findByMeta(Long metaId);
+    public TransacaoMetaDTO delete(String userId, Long idTransacao);
 }

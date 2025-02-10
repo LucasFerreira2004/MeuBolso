@@ -6,21 +6,18 @@ import com.projetointegrado.MeuBolso.meta.dto.MetaDTO;
 import com.projetointegrado.MeuBolso.meta.dto.MetaPostDTO;
 import com.projetointegrado.MeuBolso.meta.exception.DescricaoUnicaException;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
-import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 public class MetaService implements IMetaService {
     @Autowired
     private MetaRepository metaRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private UsuarioValidateService usuarioValidateService;
@@ -68,12 +65,13 @@ public class MetaService implements IMetaService {
         return new MetaDTO(meta);
     }
 
-
     private Meta saveAndValidate(String usuarioId, Long id, MetaPostDTO metaDTO) {
         Usuario usuario = usuarioValidateService.validateAndGet(usuarioId,
                 new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
+        System.out.println("MetaSave: usuario encontrado -> validarMeta");
 
         metaValidateService.validateDescricaoUnica(metaDTO.getDescricao(), usuarioId, id, new DescricaoUnicaException());
+        System.out.println("MetaSave: meta validade -> criar meta");
 
         Meta meta;
         if (id != null) {
@@ -91,6 +89,7 @@ public class MetaService implements IMetaService {
         }
 
         System.out.println(meta);
+        System.out.println("Meta cadastrada com sucesso");
         return metaRepository.save(meta);
     }
 }

@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.meta;
 
 import com.projetointegrado.MeuBolso.meta.dto.MetaDTO;
 import com.projetointegrado.MeuBolso.meta.dto.MetaPostDTO;
+import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacaoMeta.TransacaoMeta;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
@@ -42,13 +43,14 @@ public class Meta {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "meta")
+    @OneToMany(mappedBy = "meta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TransacaoMeta> transacoes = new ArrayList<>();
 
-    public Meta(){
+    public Meta() {
     }
 
     public Meta(Long id, BigDecimal valorMeta, String descricao, String urlImg, Usuario usuario) {
+        this.id = id;
         this.valorMeta = valorMeta;
         this.valorInvestido = BigDecimal.ZERO;
         this.urlImg = urlImg;
@@ -58,10 +60,10 @@ public class Meta {
         this.progresso = BigDecimal.ZERO;
     }
 
-    public Meta(Long id, BigDecimal valorMeta, BigDecimal valorInvestido, String descricao, String urlImg, Usuario usuario, String comentario) {
+    public Meta(Long id, BigDecimal valorMeta, String descricao, String urlImg, Usuario usuario, String comentario) {
         this.id = id;
         this.valorMeta = valorMeta;
-        this.valorInvestido = valorInvestido;
+        this.valorInvestido = BigDecimal.ZERO;
         this.urlImg = urlImg;
         this.descricao = descricao;
         this.usuario = usuario;
@@ -104,6 +106,20 @@ public class Meta {
         this.valorInvestido = valorInvestido;
     }
 
+    public void atualizarValorInvestido() {
+        BigDecimal totalInvestido = BigDecimal.ZERO;
+        for (TransacaoMeta tm : this.transacoes) {
+            if (tm.getTransacao().getTipo() == TipoTransacao.RECEITA) {
+                totalInvestido = totalInvestido.add(tm.getTransacao().getValor());
+            } else if (tm.getTransacao().getTipo() == TipoTransacao.DESPESA) {
+                totalInvestido = totalInvestido.subtract(tm.getTransacao().getValor());
+            }
+        }
+        this.valorInvestido = totalInvestido;
+        setProgresso();
+        System.out.println("Valor investido atualizado com sucesso");
+    }
+
     public String getUrlImg() {
         return urlImg;
     }
@@ -141,21 +157,33 @@ public class Meta {
     }
 
     public void setProgresso() {
-        if (this.valorMeta.compareTo(BigDecimal.ZERO) > 0) { // Evita divisão por zero
+        if (this.valorMeta != null && this.valorMeta.compareTo(BigDecimal.ZERO) > 0) {
             this.progresso = this.valorInvestido
-                    .divide(this.valorMeta, 4, RoundingMode.HALF_UP)                     .multiply(BigDecimal.valueOf(100))
+                    .divide(this.valorMeta, 4, RoundingMode.HALF_UP)
+                    .multiply(BigDecimal.valueOf(100))
                     .setScale(2, RoundingMode.HALF_UP);
         } else {
-            this.progresso = BigDecimal.ZERO; // Se a meta for 0, progresso é 0%
+            this.progresso = BigDecimal.ZERO;
         }
+        System.out.println("Progresso atualizado com sucesso");
     }
 
     public List<TransacaoMeta> getTransacoes() {
         return transacoes;
     }
 
-    public void addTransacoes(TransacaoMeta transacao) {
-        this.transacoes.add(transacao);
+    public void adicionarTransacao(TransacaoMeta transacaoMeta) {
+        transacaoMeta.setMeta(this);
+        this.transacoes.add(transacaoMeta);
+        atualizarValorInvestido();
+        System.out.println("Transacao adicionada com sucesso");
+    }
+
+    // Metodo para remover uma transação (se necessário)
+    public void removerTransacao(TransacaoMeta transacaoMeta) {
+        this.transacoes.remove(transacaoMeta);
+        transacaoMeta.setMeta(null);
+        atualizarValorInvestido();
     }
 
     @Override
