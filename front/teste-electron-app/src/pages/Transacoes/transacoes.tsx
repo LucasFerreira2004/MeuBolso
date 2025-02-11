@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./transacoes.module.css";
 import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans";
-import ModalEditTrans from "../../components/ModalEditTrans/moda-edit-trans"; // Importe o modal de edição
+import ModalEditTrans from "../../components/ModalEditTrans/moda-edit-trans"; 
 import DatePicker from "../../components/UI/Date/date";
 import CardTransacoes from "../../components/UI/CardTransacoes/card-transacoes";
 
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false); // Estado para o modal de edição
-  const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null); // ID da transação selecionada
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false); 
+  const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
+  const [totalDespesas, setTotalDespesas] = useState <number | null>(null);
+  const [totalRceitas, setTotalReceitas] = useState <number | null>(null);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
-  const [despesas, setDespesas] = useState<number | null>(null);
-  const [receitas, setReceitas] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [mes, setMes] = useState<number>(new Date().getMonth() + 1);
   const [ano, setAno] = useState<number>(new Date().getFullYear());
@@ -20,7 +20,7 @@ function Transacoes() {
   const [, setTransacoes] = useState<any[]>([]);
   const [transacoesAgrupadas, setTransacoesAgrupadas] = useState<any[]>([]);
 
-  const fetchSaldoTotal = async (mes: number) => {
+  const fetchSaldoTotal = async (ano: number, mes: number) => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       setError("Você precisa estar logado para acessar esta funcionalidade.");
@@ -48,6 +48,7 @@ function Transacoes() {
     }
   };
 
+
   const fetchDespesas = async (ano: number, mes: number) => {
     const token = localStorage.getItem("authToken");
     if (!token) {
@@ -66,12 +67,12 @@ function Transacoes() {
         }
       );
 
-      if (!response.ok) throw new Error("Erro ao carregar as despesas.");
+      if (!response.ok) throw new Error("Erro ao carregar o saldo total.");
 
       const data = await response.json();
-      setDespesas(data.somatorio);
+      setTotalDespesas(data.valor);
     } catch (error) {
-      setError("Erro ao carregar as despesas.");
+      setError("Erro ao carregar o saldo total.");
       console.error(error);
     }
   };
@@ -94,12 +95,12 @@ function Transacoes() {
         }
       );
 
-      if (!response.ok) throw new Error("Erro ao carregar as receitas.");
+      if (!response.ok) throw new Error("Erro ao carregar o saldo total.");
 
       const data = await response.json();
-      setReceitas(data.somatorio);
+      setTotalReceitas(data.valor);
     } catch (error) {
-      setError("Erro ao carregar as receitas.");
+      setError("Erro ao carregar o saldo total.");
       console.error(error);
     }
   };
@@ -125,8 +126,8 @@ function Transacoes() {
       if (!response.ok) throw new Error("Erro ao carregar as transações.");
 
       const data = await response.json();
-      setTransacoes(data); // Atualiza as transações
-      agruparTransacoesPorData(data); // Agrupar transações por data
+      setTransacoes(data);
+      agruparTransacoesPorData(data); 
     } catch (error) {
       setError("Erro ao carregar as transações.");
       console.error(error);
@@ -136,7 +137,7 @@ function Transacoes() {
   // Função para agrupar transações por data
   const agruparTransacoesPorData = (transacoes: any[]) => {
     const transacoesPorData = transacoes.reduce((acc: any, transacao) => {
-      const data = transacao.data_transacao; // A data da transação
+      const data = transacao.data_transacao;
 
       if (!acc[data]) {
         acc[data] = [];
@@ -164,21 +165,17 @@ function Transacoes() {
     setIsModalOpen((prev) => !prev);
   };
 
-  // Função para abrir o modal de edição
   const handleEditClick = (id: number) => {
     setSelectedTransactionId(id);
     setIsEditModalOpen(true);
   };
 
-  // Função para fechar o modal de edição
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setSelectedTransactionId(null);
   };
 
-  // Função para atualizar a transação após a edição
   const handleUpdateTransaction = (updatedTransaction: any) => {
-    // Atualiza a transação no estado agrupado
     setTransacoesAgrupadas((prevTransacoes) => {
       return prevTransacoes.map((grupo) => {
         const updatedTransacoes = grupo.transacoes.map((transacao: any) =>
@@ -198,10 +195,10 @@ function Transacoes() {
 
       try {
         await Promise.all([
-          fetchSaldoTotal(mes),
+          fetchSaldoTotal(ano, mes),
           fetchDespesas(ano, mes),
           fetchReceitas(ano, mes),
-          fetchTransacoes(ano, mes), // Chama a função para carregar as transações
+          fetchTransacoes(ano, mes), 
         ]);
       } catch (error) {
         setError("Erro ao carregar os dados.");
@@ -249,7 +246,7 @@ function Transacoes() {
             />
             <p>
               <span className={style.spanR}>Despesas: </span>
-              {isLoading ? "Carregando..." : formatarSaldo(despesas)}
+              {isLoading ? "Carregando..." : formatarSaldo(totalDespesas)}
             </p>
           </div>
           <div>
@@ -260,7 +257,7 @@ function Transacoes() {
             />
             <p>
               <span className={style.spanT}>Receitas: </span>
-              {isLoading ? "Carregando..." : formatarSaldo(receitas)}
+              {isLoading ? "Carregando..." : formatarSaldo(totalRceitas)}
             </p>
           </div>
         </div>
