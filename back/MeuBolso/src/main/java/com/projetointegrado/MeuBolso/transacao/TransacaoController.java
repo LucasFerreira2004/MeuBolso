@@ -3,17 +3,15 @@ package com.projetointegrado.MeuBolso.transacao;
 import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
+import com.projetointegrado.MeuBolso.transacao.dto.SumTransacoesDTO;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
@@ -45,7 +43,7 @@ public class TransacaoController {
 
     @Operation(summary = "Retorna o somatório das despesas do inicio do mês até a data especificada")
     @GetMapping("/somatorioDespesas")
-    public BigDecimal findSumDespesasInRangeByMonth(@RequestParam int ano, @RequestParam int mes){
+    public SumTransacoesDTO findSumDespesasInRangeByMonth(@RequestParam int ano, @RequestParam int mes){
         LocalDate data = LocalDate.of(ano, mes, 1);
         data = data.with(TemporalAdjusters.lastDayOfMonth());
 
@@ -55,7 +53,7 @@ public class TransacaoController {
 
     @Operation(summary = "Retorna o somatório das receitas do inicio do mês até a data especificada")
     @GetMapping("/somatorioReceitas")
-    public BigDecimal findSumReceitasInRangeByMonth(@RequestParam int ano, @RequestParam int mes){
+    public SumTransacoesDTO findSumReceitasInRangeByMonth(@RequestParam int ano, @RequestParam int mes){
         LocalDate data = LocalDate.of(ano, mes, 1);
         data = data.with(TemporalAdjusters.lastDayOfMonth());
 

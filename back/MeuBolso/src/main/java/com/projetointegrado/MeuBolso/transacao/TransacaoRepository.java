@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.transacao;
 
+import com.projetointegrado.MeuBolso.transacao.dto.SumTransacoesDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
