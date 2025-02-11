@@ -5,6 +5,7 @@ import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFact
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStrategy;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
 import com.projetointegrado.MeuBolso.transacao.TransacaoService;
+import com.projetointegrado.MeuBolso.transacao.dto.SumTransacoesDTO;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.Periodicidade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,8 @@ public class TransacoesDashboardsService {
         System.out.println("dataavanco: "+dataAvanco);
         System.out.println("dataFinal:" + dataFinal);
         while(!dataAvanco.isAfter(dataFinal)) {
-            BigDecimal despesas = transacaoService.findSumDespesasInRangeByMonth(userId, dataAvanco);
-            BigDecimal receitas  = transacaoService.findSumReceitasInRangeByMonth(userId, dataAvanco);
+            BigDecimal despesas = transacaoService.findSumDespesasInRangeByMonth(userId, dataAvanco).valor();
+            BigDecimal receitas  = transacaoService.findSumReceitasInRangeByMonth(userId, dataAvanco).valor();
             dtos.add(new TransacaoBalancoDTO(dataAvanco.getYear(), dataAvanco.getMonthValue(), despesas, receitas));
             dataAvanco = avancoMensal.avancarData(dataAvanco, dataInicial, 1);
             System.out.println("dataavanco: "+dataAvanco);

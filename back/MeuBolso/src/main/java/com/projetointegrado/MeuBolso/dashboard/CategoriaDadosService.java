@@ -6,8 +6,8 @@ import com.projetointegrado.MeuBolso.dashboard.dto.CategoriaExpandedDTO;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
-import com.projetointegrado.MeuBolso.transacao.TransacaoService;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
+import com.projetointegrado.MeuBolso.transacao.dto.SumTransacoesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +55,7 @@ public class CategoriaDadosService {
     }
 
     private CategoriaDadosDTO getCategoriaDadosDTO(String userId, LocalDate dataInicial, LocalDate dataFinal, TipoTransacao tipo, Categoria categoria) {
-        BigDecimal totalValorMensal = transacaoRepository.getSumInRangeByTipo(dataInicial, dataFinal, userId, tipo.name());
+        SumTransacoesDTO totalValorMensal = transacaoRepository.getSumInRangeByTipo(dataInicial, dataFinal, userId, tipo.name());
         System.out.println("getDadosCategoria -> totalValorMensal:" + totalValorMensal);
         BigDecimal valorCategoria =  transacaoRepository.getSumInRangeByCategoria(dataInicial, dataFinal, categoria.getId(), userId); //mudar para ficar no service de transacao
         System.out.println("getDadosCategoria -> valorCategoria:" + valorCategoria);
