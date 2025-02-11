@@ -2,19 +2,21 @@ package com.projetointegrado.MeuBolso.meta;
 
 import com.projetointegrado.MeuBolso.meta.dto.MetaDTO;
 import com.projetointegrado.MeuBolso.meta.dto.MetaPostDTO;
+import com.projetointegrado.MeuBolso.meta.notifications.MetaProgressEvent;
+import com.projetointegrado.MeuBolso.meta.notifications.NotificacaoMeta;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacaoMeta.TransacaoMeta;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"usuario_id", "descricao"}) })
@@ -45,6 +47,9 @@ public class Meta {
 
     @OneToMany(mappedBy = "meta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TransacaoMeta> transacoes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "meta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NotificacaoMeta> notificacoes = new ArrayList<>();
 
     public Meta() {
     }
@@ -117,6 +122,7 @@ public class Meta {
         }
         this.valorInvestido = totalInvestido;
         setProgresso();
+        verificarThresholds(); // Verifica se deve notificar
     }
 
     public String getUrlImg() {
@@ -176,7 +182,6 @@ public class Meta {
         atualizarValorInvestido();
     }
 
-    // Metodo para remover uma transação (se necessário)
     public void removerTransacao(TransacaoMeta transacaoMeta) {
         this.transacoes.remove(transacaoMeta);
         transacaoMeta.setMeta(null);
@@ -193,5 +198,41 @@ public class Meta {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    private void verificarThresholds() {
+        List<Integer> thresholds = List.of(50, 90, 100);
+
+        for (Integer threshold : thresholds) {
+            if (this.progresso.compareTo(new BigDecimal(threshold.toString())) >= 0
+                    && !notificacaoJaEnviada(threshold)) {
+
+                ApplicationEventPublisher eventPublisher = new ApplicationEventPublisher() {
+                    @Override
+                    public void publishEvent(@NotNull Object event) {
+                        if (event instanceof MetaProgressEvent metaEvent) {
+                            System.out.println("Meta ID: " + metaEvent.getMetaDescricao() + ", Progresso: " + metaEvent.getProgresso() + ", Threshold: " + metaEvent.getThreshold());
+                        }
+                    }
+                };
+                eventPublisher.publishEvent(new MetaProgressEvent(this.descricao, this.progresso, threshold));
+                System.out.println("Notificação enviada para threshold: " + threshold);
+                salvarNotificacao(threshold);
+            }
+        }
+    }
+
+    private boolean notificacaoJaEnviada(Integer threshold) {
+        return this.notificacoes.stream()
+                .anyMatch(n -> n.getThreshold().equals(threshold) && n.getNotificado());
+    }
+
+    private void salvarNotificacao(Integer threshold) {
+        NotificacaoMeta notificacao = new NotificacaoMeta();
+        notificacao.setThreshold(threshold);
+        notificacao.setNotificado(true);
+        notificacao.setMeta(this);
+
+        this.notificacoes.add(notificacao);
     }
 }
