@@ -55,7 +55,7 @@ public class CategoriaDadosService {
     }
 
     private CategoriaDadosDTO getCategoriaDadosDTO(String userId, LocalDate dataInicial, LocalDate dataFinal, TipoTransacao tipo, Categoria categoria) {
-        SumTransacoesDTO totalValorMensal = transacaoRepository.getSumInRangeByTipo(dataInicial, dataFinal, userId, tipo.name());
+        BigDecimal totalValorMensal = transacaoRepository.getSumInRangeByTipo(dataInicial, dataFinal, userId, tipo.name());
         System.out.println("getDadosCategoria -> totalValorMensal:" + totalValorMensal);
         BigDecimal valorCategoria =  transacaoRepository.getSumInRangeByCategoria(dataInicial, dataFinal, categoria.getId(), userId); //mudar para ficar no service de transacao
         System.out.println("getDadosCategoria -> valorCategoria:" + valorCategoria);
