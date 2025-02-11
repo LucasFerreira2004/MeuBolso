@@ -149,7 +149,7 @@ function ModalDespesas({ onCloseAll, mes, ano }: ModalDespesasProps) {
         />
         <SelectedDespesas setCategoria={setCategoria} />
         <SelectBoxContas setConta={setConta} mes={mes} ano={ano} />
-        <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg" />
+        <DatePicker label="Escolha uma data:" value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg" />
         <InputWithIcon
           label="Comentário: "
           iconSrc="/assets/iconsModalDespesas/comentario.svg"

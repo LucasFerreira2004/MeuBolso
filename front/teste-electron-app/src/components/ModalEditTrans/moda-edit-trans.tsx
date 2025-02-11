@@ -11,7 +11,7 @@ import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
 
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
-    .replace(/[^\d,.-]/g, "") 
+    .replace(/[^\d,.-]/g, "")
     .replace(",", ".");
   return parseFloat(valorNumerico);
 };
@@ -19,7 +19,10 @@ const removerFormatacaoMoeda = (valorFormatado: string): number => {
 const formatarValor = (valor: string): string => {
   const valorNumerico = parseFloat(valor.replace(/[^\d.-]/g, ""));
   if (isNaN(valorNumerico)) return "R$ 0,00";
-  return valorNumerico.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  return valorNumerico.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
 };
 
 interface ModalEditTransProps {
@@ -78,7 +81,10 @@ const ModalEditTrans: React.FC<ModalEditTransProps> = ({
         setComentario(data.comentario || null);
         setTipoTransacao(data.tipoTransacao || "NORMAL");
 
-        if (data.tipoTransacao === "FIXA" || data.tipoTransacao === "PARCELADA") {
+        if (
+          data.tipoTransacao === "FIXA" ||
+          data.tipoTransacao === "PARCELADA"
+        ) {
           setPeriodicidade(data.periodicidade || "MENSAL");
         }
         if (data.tipoTransacao === "PARCELADA") {
@@ -116,7 +122,7 @@ const ModalEditTrans: React.FC<ModalEditTransProps> = ({
     const transactionData: any = {
       valor: valorNumerico,
       data,
-      tipoTransacao: "DESPESA", 
+      tipoTransacao: "DESPESA",
       categoriaId: categoria,
       contaId: conta,
       comentario,
@@ -137,7 +143,10 @@ const ModalEditTrans: React.FC<ModalEditTransProps> = ({
         `http://localhost:8080/transacoes/${transactionId}`,
         transactionData,
         {
-          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
       );
 
@@ -204,12 +213,15 @@ const ModalEditTrans: React.FC<ModalEditTransProps> = ({
           iconSrc="/assets/iconsModalDespesas/descrip.svg"
           placeholder="Ex: Pagamento da fatura"
           value={descricao}
-          onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setDescricao(e.target.value)}
+          onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
+            setDescricao(e.target.value)
+          }
         />
 
         <SelectedDespesas setCategoria={setCategoria} />
         <SelectBoxContas setConta={setConta} mes={mes} ano={ano} />
         <DatePicker
+          label="Escolha uma data:"
           value={data}
           onChange={setData}
           iconsrc="/assets/iconsModalDespesas/date.svg"
@@ -220,7 +232,9 @@ const ModalEditTrans: React.FC<ModalEditTransProps> = ({
           iconSrc="/assets/iconsModalDespesas/comentario.svg"
           placeholder="Opcional"
           value={comentario || ""}
-          onChange={(e: { target: { value: any; }; }) => setComentario(e.target.value || null)}
+          onChange={(e: { target: { value: any } }) =>
+            setComentario(e.target.value || null)
+          }
         />
 
         <div>
@@ -258,7 +272,9 @@ const ModalEditTrans: React.FC<ModalEditTransProps> = ({
             <SelectedPeriodo
               selectedValue={periodicidade}
               onChange={(e) =>
-                setPeriodicidade(e.target.value as "DIARIO" | "SEMANAL" | "MENSAL")
+                setPeriodicidade(
+                  e.target.value as "DIARIO" | "SEMANAL" | "MENSAL"
+                )
               }
             />
             {tipoTransacao === "PARCELADA" && (
@@ -268,7 +284,9 @@ const ModalEditTrans: React.FC<ModalEditTransProps> = ({
                 type="number"
                 placeholder="Ex: 12"
                 value={qtdParcelas || ""}
-                onChange={(e: { target: { value: any; }; }) => setQtdParcelas(Number(e.target.value))}
+                onChange={(e: { target: { value: any } }) =>
+                  setQtdParcelas(Number(e.target.value))
+                }
               />
             )}
           </>

@@ -125,6 +125,7 @@ function ModalContas({ onCloseAll, showToast }: ModalContasProps) {
         <SelectedTipoConta setTipoConta={setTipoContaId} />
 
         <DatePicker
+         label="Data de Criação"
           value={data}
           onChange={setData}
           iconsrc="/assets/iconsModalConta/date.svg"

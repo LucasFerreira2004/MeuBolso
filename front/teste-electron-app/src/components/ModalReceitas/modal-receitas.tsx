@@ -150,7 +150,7 @@ function ModalReceitas({ onCloseAll, mes, ano }: ModalReceitasProps) {
         />
         <SelectedReceita setCategoria={setCategoria} />
         <SelectBoxContas setConta={setConta} mes={mes} ano={ano} /> {/* Adicionado mes e ano */}
-        <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalReceitas/date.svg" />
+        <DatePicker label="Escolha uma data: " value={data} onChange={setData} iconsrc="/assets/iconsModalReceitas/date.svg" />
         <InputWithIcon
           label="Comentário: "
           iconSrc="/assets/iconsModalReceitas/comentario.svg"
