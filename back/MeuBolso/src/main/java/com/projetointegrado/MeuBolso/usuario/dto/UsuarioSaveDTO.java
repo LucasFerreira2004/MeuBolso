@@ -18,6 +18,8 @@ public class UsuarioSaveDTO {
     @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.")
     private String senha;
 
+    private String foto_url;
+
     public UsuarioSaveDTO() {
     }
 
@@ -25,6 +27,7 @@ public class UsuarioSaveDTO {
         this.nome = usuario.getNome();
         this.email = usuario.getEmail();
         this.senha = usuario.getSenha();
+        this.foto_url = usuario.getFoto_url();
     }
 
     public UsuarioSaveDTO(String nome, String email, String senha) {
@@ -55,5 +58,13 @@ public class UsuarioSaveDTO {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getFoto_url() {
+        return foto_url;
+    }
+
+    public void setFoto_url(String foto_url) {
+        this.foto_url = foto_url;
     }
 }
