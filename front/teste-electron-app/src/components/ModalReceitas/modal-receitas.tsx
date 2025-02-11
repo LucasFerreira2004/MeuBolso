@@ -25,8 +25,8 @@ const formatarComoMoeda = (valor: string): string => {
 
 interface ModalReceitasProps {
   onCloseAll: () => void;
-  mes: number; // Adicionado
-  ano: number; // Adicionado
+  mes: number; 
+  ano: number; 
 }
 
 function ModalReceitas({ onCloseAll, mes, ano }: ModalReceitasProps) {
@@ -61,7 +61,6 @@ function ModalReceitas({ onCloseAll, mes, ano }: ModalReceitasProps) {
       return;
     }
 
-    // Dados comuns a todas as transações
     const transactionData: any = {
       valor: valorNumerico,
       data,
@@ -72,12 +71,10 @@ function ModalReceitas({ onCloseAll, mes, ano }: ModalReceitasProps) {
       descricao,
     };
 
-    // Adicionar dados específicos para transações "FIXA"
     if (tipoTransacao === "FIXA") {
       transactionData.periodicidade = periodicidade;
     }
 
-    // Adicionar dados específicos para transações "PARCELADA"
     if (tipoTransacao === "PARCELADA") {
       transactionData.qtdParcelas = qtdParcelas;
       transactionData.periodicidade = periodicidade;
@@ -88,7 +85,6 @@ function ModalReceitas({ onCloseAll, mes, ano }: ModalReceitasProps) {
     try {
       let url = "http://localhost:8080/transacoes";
 
-      // URLs diferentes para transações FIXA e PARCELADA
       if (tipoTransacao === "FIXA") {
         url = "http://localhost:8080/transacoesRecorrentes/fixas";
       } else if (tipoTransacao === "PARCELADA") {

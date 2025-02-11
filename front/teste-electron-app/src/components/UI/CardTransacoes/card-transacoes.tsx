@@ -41,13 +41,14 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
   };
 
   const formatarData = (): string => {
-    const data = new Date(`${ano}-${mes}-${dia}`);
+    const data = new Date(`${ano}-${mes}-${dia}T00:00:00`);
     return new Intl.DateTimeFormat("pt-BR", {
       day: "2-digit",
       month: "long",
       year: "numeric",
     }).format(data);
   };
+  
 
   return (
     <div className={styles.card}>
