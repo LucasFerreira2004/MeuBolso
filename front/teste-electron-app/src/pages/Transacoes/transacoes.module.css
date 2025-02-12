@@ -31,7 +31,13 @@ h3{
 .rowTransacoes p{
     margin: 0px;
 }
-
+.transacoesList {
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    text-align: center;
+  }
+  
 .iconT{
     height: 28px;
 }
@@ -48,31 +54,16 @@ h3{
     display: flex;
     flex-direction: column;
     border: 1px solid black;
-    border-radius: 10px;
+    border-radius: 10px 10px 0px 0px;
 }
 .headerBodyT{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px ;
     padding: 20px;
-}
-
-.search {
-    display: flex;
-    align-items: center;
-    background-color: #f0f0f0; /* cor de fundo suave */
-    padding: 0px 12px;
-    border-radius: 25px; /* bordas arredondadas */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* sombra suave */
-    max-width: 300px;
-    height: 40px;
-    width: 100%;
-    transition: all 0.3s ease;
-}
-
-.search:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* sombra mais forte ao passar o mouse */
+    border: 1px solid #ddd;
+    border-radius: 8px 8px 0px 0px;
+    background-color: var(--gray);
 }
 
 .input {

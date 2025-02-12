@@ -11,7 +11,9 @@ function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalDespesaOpen, setIsModalDespesaOpen] = useState<boolean>(false); // Estado para modal de despesa
   const [isModalReceitaOpen, setIsModalReceitaOpen] = useState<boolean>(false); // Estado para modal de receita
-  const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
+  const [selectedTransactionId, setSelectedTransactionId] = useState<
+    number | null
+  >(null);
   const [totalDespesas, setTotalDespesas] = useState<number | null>(null);
   const [totalReceitas, setTotalReceitas] = useState<number | null>(null);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
@@ -152,8 +154,8 @@ function Transacoes() {
       Object.entries(transacoesPorData).map(([data, transacoes]) => ({
         data,
         transacoes,
-      })
-    ));
+      }))
+    );
   };
 
   const formatarSaldo = (valor: number | null | undefined): string => {
@@ -186,7 +188,9 @@ function Transacoes() {
     setTransacoesAgrupadas((prevTransacoes) => {
       return prevTransacoes.map((grupo) => {
         const updatedTransacoes = grupo.transacoes.map((transacao: any) =>
-          transacao.id === updatedTransaction.id ? updatedTransaction : transacao
+          transacao.id === updatedTransaction.id
+            ? updatedTransaction
+            : transacao
         );
         return { ...grupo, transacoes: updatedTransacoes };
       });
@@ -221,16 +225,6 @@ function Transacoes() {
   return (
     <div className={style.containerTransacoes}>
       <h1>Transações</h1>
-      <DatePicker
-        mes={mes}
-        ano={ano}
-        onChange={(novoMes, novoAno) => {
-          if (novoMes !== mes || novoAno !== ano) {
-            setMes(novoMes);
-            setAno(novoAno);
-          }
-        }}
-      />
       <div className={style.headerTransacoes}>
         <h3>Estimativa do mês</h3>
         <div className={style.rowTransacoes}>
@@ -274,23 +268,16 @@ function Transacoes() {
 
       <div className={style.bodyTransacoes}>
         <div className={style.headerBodyT}>
-          <div className={style.search}>
-            <input
-              className={style.input}
-              type="text"
-              placeholder="Buscar..."
-            />
-            <img
-              className={style.icon}
-              src="/assets/iconsTransacoes/lupa.svg"
-              alt="Lupa"
-            />
-            <img
-              className={style.icon}
-              src="/assets/iconsTransacoes/filter.svg"
-              alt="Filter"
-            />
-          </div>
+          <DatePicker
+            mes={mes}
+            ano={ano}
+            onChange={(novoMes, novoAno) => {
+              if (novoMes !== mes || novoAno !== ano) {
+                setMes(novoMes);
+                setAno(novoAno);
+              }
+            }}
+          />
           <div>
             <AddButton texto="Realizar Transação" onClick={toggleModal} />
           </div>
@@ -309,7 +296,7 @@ function Transacoes() {
                 key={index}
                 transacoes={grupo.transacoes}
                 dataTransacao={grupo.data}
-                onEditClick={handleEditClick} 
+                onEditClick={handleEditClick}
               />
             ))
           )}

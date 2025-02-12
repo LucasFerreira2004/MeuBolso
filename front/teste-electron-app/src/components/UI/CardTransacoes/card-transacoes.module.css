@@ -2,15 +2,8 @@
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 10px 0;
-    transition: transform 0.3s ease-in-out;
-}
-
-.card:hover {
-    transform: translateY(-5px); 
+    border-bottom: 1px solid #ddd;
 }
 
 .header {
@@ -18,24 +11,55 @@
     color: #333;
     font-weight: bold;
 }
-
-header time {
-    font-style: italic;
-    color: #555;
+.time{
+    display: flex;
+    gap: 5px;
 }
 
+.time time {
+    font-style: italic;
+    color: #457B9D;
+}
+.label{
+    margin: 0px;
+    font-weight: 500;
+    font-size:medium;
+    cursor: pointer;
+}
+.linha{
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0px;
+    font-size: 1rem;;
+}
+.linha:hover {
+    transform: translateY(-3px); 
+}
 .detalhes {
     display: flex;
     flex-direction: column;
+    padding: 0px 60px;
+    margin: 10px 0px;
     gap: 10px;
     justify-content: space-between;
     list-style-type: none;
-    margin: 10px;
 }
 
-.detalhes li {
+.bolinhaDate{
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    background-color: #457B9D;
+}
+.bolinha{
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+}
+.individualLine{
     display: flex;
-    gap: 30px;
-    margin-top: 10px;
-    font-size: 1rem;
+    align-items: center;
+    gap: 5px;
 }

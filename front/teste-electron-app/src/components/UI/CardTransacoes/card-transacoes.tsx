@@ -51,7 +51,8 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
 
   return (
     <div className={styles.card}>
-      <header>
+      <header className={styles.time}>
+        <div className={styles.bolinhaDate}></div>
         <time>{formatarData()}</time>
       </header>
       <ul className={styles.detalhes}>
@@ -63,38 +64,35 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
               <li
                 key={transacao.id}
                 onClick={() => onEditClick(transacao.id, transacao.tipo)}
-                style={{ cursor: "pointer" }}
+                className={styles.linha}
               >
-                <div className={styles.individualLine}>
-                  <strong style={{ color: `#${transacao.categoria.cor}` }}>
-                    Descrição:
-                  </strong>{" "}
+                <div
+                  className={styles.individualLine}
+                  style={{ color: `#${transacao.categoria.cor}` }}
+                >
+                  <div
+                    className={styles.bolinha}
+                    style={{ backgroundColor: `#${transacao.categoria.cor}` }}
+                  ></div>
                   {transacao.descricao} <br />
                 </div>
-                <div className={styles.individualLine}>
-                  <strong style={{ color: `#${transacao.categoria.cor}` }}>
-                    Valor:
-                  </strong>{" "}
+                <div
+                  className={styles.individualLine}
+                  style={{ color: `#${transacao.categoria.cor}` }}
+                >
                   {valor} <br />
                 </div>
                 <div className={styles.individualLine}>
-                  <strong style={{ color: `#${transacao.categoria.cor}` }}>
-                    Categoria:
-                  </strong>{" "}
+                  <label className={styles.label}>Categoria:</label>{" "}
                   {transacao.categoria?.nome} <br />
                 </div>
                 <div className={styles.individualLine}>
-                  <strong style={{ color: `#${transacao.categoria.cor}` }}>
-                    Conta:
-                  </strong>{" "}
-                  {transacao.conta?.descricao} ({transacao.conta?.banco?.nome}){" "}
-                  <br />
+                  <label className={styles.label}>Conta:</label>{" "}
+                  {transacao.conta?.banco?.nome} <br />
                 </div>
                 <div className={styles.individualLine}>
-                  <strong style={{ color: `#${transacao.categoria.cor}` }}>
-                    Tipo:
-                  </strong>{" "}
-                  {transacao.origem === "FIXA" ? "Fixa" : "Normal"}
+                  <label className={styles.label}>Fixa:</label>{" "}
+                  {transacao.origem === "FIXA" ? "Sim" : "Não"}
                 </div>
               </li>
             );
