@@ -16,16 +16,16 @@ interface Transacao {
   };
   categoria: {
     nome: string;
+    cor: string;
   };
   data_transacao_formatada?: string;
 }
 
 interface CardTransacoesProps {
   transacoes: Transacao[];
-  dataTransacao: string; 
-  onEditClick: (id: number) => void; 
+  dataTransacao: string;
+  onEditClick: (id: number, tipo: string) => void; // Adicionar o tipo como segundo argumento
 }
-
 const CardTransacoes: React.FC<CardTransacoesProps> = ({
   transacoes,
   dataTransacao,
@@ -48,7 +48,6 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
       year: "numeric",
     }).format(data);
   };
-  
 
   return (
     <div className={styles.card}>
@@ -63,16 +62,40 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
             return (
               <li
                 key={transacao.id}
-                onClick={() => onEditClick(transacao.id)}
+                onClick={() => onEditClick(transacao.id, transacao.tipo)}
                 style={{ cursor: "pointer" }}
               >
-                <strong>Descrição:</strong> {transacao.descricao} <br />
-                <strong>Valor:</strong> {valor} <br />
-                <strong>Categoria:</strong> {transacao.categoria?.nome} <br />
-                <strong>Conta:</strong> {transacao.conta?.descricao} (
-                {transacao.conta?.banco?.nome}) <br />
-                <strong>Tipo:</strong>{" "}
-                {transacao.origem === "FIXA" ? "Fixa" : "Normal"}
+                <div className={styles.individualLine}>
+                  <strong style={{ color: `#${transacao.categoria.cor}` }}>
+                    Descrição:
+                  </strong>{" "}
+                  {transacao.descricao} <br />
+                </div>
+                <div className={styles.individualLine}>
+                  <strong style={{ color: `#${transacao.categoria.cor}` }}>
+                    Valor:
+                  </strong>{" "}
+                  {valor} <br />
+                </div>
+                <div className={styles.individualLine}>
+                  <strong style={{ color: `#${transacao.categoria.cor}` }}>
+                    Categoria:
+                  </strong>{" "}
+                  {transacao.categoria?.nome} <br />
+                </div>
+                <div className={styles.individualLine}>
+                  <strong style={{ color: `#${transacao.categoria.cor}` }}>
+                    Conta:
+                  </strong>{" "}
+                  {transacao.conta?.descricao} ({transacao.conta?.banco?.nome}){" "}
+                  <br />
+                </div>
+                <div className={styles.individualLine}>
+                  <strong style={{ color: `#${transacao.categoria.cor}` }}>
+                    Tipo:
+                  </strong>{" "}
+                  {transacao.origem === "FIXA" ? "Fixa" : "Normal"}
+                </div>
               </li>
             );
           })
@@ -83,5 +106,4 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
     </div>
   );
 };
-
 export default CardTransacoes;

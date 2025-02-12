@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./transacoes.module.css";
 import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans";
-import ModalEditTrans from "../../components/ModalEditTrans/moda-edit-trans"; 
+import ModalEditDespesa from "../../components/ModalEditDespesas/moda-edit-despesa"; // Importar modal de despesa
+// import ModalEditReceita from "../../components/ModalEditReceita/modal-edit-receita"; // Importar modal de receita
 import DatePicker from "../../components/UI/Date/date";
 import CardTransacoes from "../../components/UI/CardTransacoes/card-transacoes";
 
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false); 
+  const [isModalDespesaOpen, setIsModalDespesaOpen] = useState<boolean>(false); // Estado para modal de despesa
+  // const [isModalReceitaOpen, setIsModalReceitaOpen] = useState<boolean>(false); // Estado para modal de receita
   const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
-  const [totalDespesas, setTotalDespesas] = useState <number | null>(null);
-  const [totalRceitas, setTotalReceitas] = useState <number | null>(null);
+  const [totalDespesas, setTotalDespesas] = useState<number | null>(null);
+  const [totalReceitas, setTotalReceitas] = useState<number | null>(null);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [mes, setMes] = useState<number>(new Date().getMonth() + 1);
@@ -47,7 +49,6 @@ function Transacoes() {
       console.error(error);
     }
   };
-
 
   const fetchDespesas = async (ano: number, mes: number) => {
     const token = localStorage.getItem("authToken");
@@ -127,7 +128,7 @@ function Transacoes() {
 
       const data = await response.json();
       setTransacoes(data);
-      agruparTransacoesPorData(data); 
+      agruparTransacoesPorData(data);
     } catch (error) {
       setError("Erro ao carregar as transações.");
       console.error(error);
@@ -151,8 +152,8 @@ function Transacoes() {
       Object.entries(transacoesPorData).map(([data, transacoes]) => ({
         data,
         transacoes,
-      }))
-    );
+      })
+    ));
   };
 
   const formatarSaldo = (valor: number | null | undefined): string => {
@@ -165,13 +166,19 @@ function Transacoes() {
     setIsModalOpen((prev) => !prev);
   };
 
-  const handleEditClick = (id: number) => {
+  const handleEditClick = (id: number, tipo: string) => {
     setSelectedTransactionId(id);
-    setIsEditModalOpen(true);
+
+    if (tipo === "DESPESA") {
+      setIsModalDespesaOpen(true); // Abrir modal de despesa
+    } else if (tipo === "RECEITA") {
+      // setIsModalReceitaOpen(true); // Abrir modal de receita
+    }
   };
 
   const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
+    setIsModalDespesaOpen(false);
+    // setIsModalReceitaOpen(false);
     setSelectedTransactionId(null);
   };
 
@@ -198,7 +205,7 @@ function Transacoes() {
           fetchSaldoTotal(ano, mes),
           fetchDespesas(ano, mes),
           fetchReceitas(ano, mes),
-          fetchTransacoes(ano, mes), 
+          fetchTransacoes(ano, mes),
         ]);
       } catch (error) {
         setError("Erro ao carregar os dados.");
@@ -257,7 +264,7 @@ function Transacoes() {
             />
             <p>
               <span className={style.spanT}>Receitas: </span>
-              {isLoading ? "Carregando..." : formatarSaldo(totalRceitas)}
+              {isLoading ? "Carregando..." : formatarSaldo(totalReceitas)}
             </p>
           </div>
         </div>
@@ -302,7 +309,7 @@ function Transacoes() {
                 key={index}
                 transacoes={grupo.transacoes}
                 dataTransacao={grupo.data}
-                onEditClick={handleEditClick} 
+                onEditClick={handleEditClick} // Passar a função handleEditClick
               />
             ))
           )}
@@ -313,15 +320,25 @@ function Transacoes() {
         <ModalTipoTrans mes={mes} ano={ano} onClose={toggleModal} />
       )}
 
-      {isEditModalOpen && selectedTransactionId && (
-        <ModalEditTrans
+      {isModalDespesaOpen && selectedTransactionId && (
+        <ModalEditDespesa
           mes={mes}
           ano={ano}
           transactionId={selectedTransactionId}
-          onCloseAll={handleCloseEditModal}
-          onTransactionUpdate={handleUpdateTransaction} 
+          onClose={handleCloseEditModal}
+          onTransactionUpdate={handleUpdateTransaction}
         />
       )}
+
+      {/* {isModalReceitaOpen && selectedTransactionId && (
+        <ModalEditReceita
+          mes={mes}
+          ano={ano}
+          transactionId={selectedTransactionId}
+          onClose={handleCloseEditModal}
+          onTransactionUpdate={handleUpdateTransaction}
+        />
+      )} */}
     </div>
   );
 }

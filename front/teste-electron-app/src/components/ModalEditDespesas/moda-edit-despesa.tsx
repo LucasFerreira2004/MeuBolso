@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import InputWithIcon from "../UI/InputsModal/input-modal";
-import style from "./moda-edit-trans.module.css";
+import style from "./moda-edit-despesa.module.css";
 import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
 import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
@@ -25,16 +25,16 @@ const formatarValor = (valor: string): string => {
   });
 };
 
-interface ModalEditTransProps {
-  onCloseAll: () => void;
+interface ModalEditDespesasProps {
+  onClose: () => void; // Adicionar esta linha
   mes: number;
   ano: number;
   transactionId: number;
   onTransactionUpdate: (updatedTransaction: any) => void;
 }
 
-const ModalEditTrans: React.FC<ModalEditTransProps> = ({
-  onCloseAll,
+const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
+  onClose,
   mes,
   ano,
   transactionId,
@@ -153,7 +153,7 @@ const ModalEditTrans: React.FC<ModalEditTransProps> = ({
       if (response.status === 200) {
         toast.success("Transação atualizada com sucesso!");
         onTransactionUpdate(response.data);
-        onCloseAll();
+        onClose();
       } else {
         toast.error("Erro ao atualizar a transação.");
       }
@@ -179,7 +179,7 @@ const ModalEditTrans: React.FC<ModalEditTransProps> = ({
 
       if (response.status === 200) {
         toast.success("Transação excluída com sucesso!");
-        onCloseAll();
+        onClose();
       } else {
         toast.error("Erro ao excluir a transação.");
       }
@@ -194,7 +194,7 @@ const ModalEditTrans: React.FC<ModalEditTransProps> = ({
       <div className={style.modalContent}>
         <div className={style.headerModal}>
           <h3>Editar Transação</h3>
-          <button className={style.closeButton} onClick={onCloseAll}>
+          <button className={style.closeButton} onClick={onClose}>
             <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
@@ -313,4 +313,4 @@ const ModalEditTrans: React.FC<ModalEditTransProps> = ({
   );
 };
 
-export default ModalEditTrans;
+export default ModalEditDespesas;

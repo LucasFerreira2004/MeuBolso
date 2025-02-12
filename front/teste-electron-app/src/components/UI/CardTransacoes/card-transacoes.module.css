@@ -10,7 +10,7 @@
 }
 
 .card:hover {
-    transform: translateY(-5px); /* Efeito de elevação */
+    transform: translateY(-5px); 
 }
 
 .header {
@@ -26,26 +26,16 @@ header time {
 
 .detalhes {
     display: flex;
+    flex-direction: column;
+    gap: 10px;
     justify-content: space-between;
     list-style-type: none;
     margin: 10px;
 }
 
 .detalhes li {
+    display: flex;
+    gap: 30px;
+    margin-top: 10px;
     font-size: 1rem;
-    color: #444;
-}
-
-.detalhes li strong {
-    color: #007BFF; /* Cor azul para destaque */
-}
-
-.detalhes li:nth-child(odd) {
-    background-color: #f9f9f9; /* Linhas alternadas com fundo diferente */
-    border-radius: 4px;
-}
-
-.detalhes li:nth-child(even) {
-    background-color: #f1f1f1;
-    border-radius: 4px;
 }
