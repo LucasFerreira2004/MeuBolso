@@ -24,7 +24,7 @@ interface Transacao {
 interface CardTransacoesProps {
   transacoes: Transacao[];
   dataTransacao: string;
-  onEditClick: (id: number, tipo: string) => void; // Adicionar o tipo como segundo argumento
+  onEditClick: (id: number, tipo: string) => void;
 }
 const CardTransacoes: React.FC<CardTransacoesProps> = ({
   transacoes,

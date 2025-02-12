@@ -3,14 +3,14 @@ import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./transacoes.module.css";
 import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans";
 import ModalEditDespesa from "../../components/ModalEditDespesas/moda-edit-despesa"; // Importar modal de despesa
-// import ModalEditReceita from "../../components/ModalEditReceita/modal-edit-receita"; // Importar modal de receita
+import ModalEditReceita from "../../components/ModalEditReceita/modal-edit-receita"; // Importar modal de receita
 import DatePicker from "../../components/UI/Date/date";
 import CardTransacoes from "../../components/UI/CardTransacoes/card-transacoes";
 
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalDespesaOpen, setIsModalDespesaOpen] = useState<boolean>(false); // Estado para modal de despesa
-  // const [isModalReceitaOpen, setIsModalReceitaOpen] = useState<boolean>(false); // Estado para modal de receita
+  const [isModalReceitaOpen, setIsModalReceitaOpen] = useState<boolean>(false); // Estado para modal de receita
   const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
   const [totalDespesas, setTotalDespesas] = useState<number | null>(null);
   const [totalReceitas, setTotalReceitas] = useState<number | null>(null);
@@ -172,13 +172,13 @@ function Transacoes() {
     if (tipo === "DESPESA") {
       setIsModalDespesaOpen(true); // Abrir modal de despesa
     } else if (tipo === "RECEITA") {
-      // setIsModalReceitaOpen(true); // Abrir modal de receita
+      setIsModalReceitaOpen(true); // Abrir modal de receita
     }
   };
 
   const handleCloseEditModal = () => {
     setIsModalDespesaOpen(false);
-    // setIsModalReceitaOpen(false);
+    setIsModalReceitaOpen(false);
     setSelectedTransactionId(null);
   };
 
@@ -309,7 +309,7 @@ function Transacoes() {
                 key={index}
                 transacoes={grupo.transacoes}
                 dataTransacao={grupo.data}
-                onEditClick={handleEditClick} // Passar a função handleEditClick
+                onEditClick={handleEditClick} 
               />
             ))
           )}
@@ -330,7 +330,7 @@ function Transacoes() {
         />
       )}
 
-      {/* {isModalReceitaOpen && selectedTransactionId && (
+      {isModalReceitaOpen && selectedTransactionId && (
         <ModalEditReceita
           mes={mes}
           ano={ano}
@@ -338,7 +338,7 @@ function Transacoes() {
           onClose={handleCloseEditModal}
           onTransactionUpdate={handleUpdateTransaction}
         />
-      )} */}
+      )}
     </div>
   );
 }

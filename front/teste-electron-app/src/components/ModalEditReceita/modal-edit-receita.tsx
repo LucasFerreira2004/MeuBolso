@@ -3,11 +3,11 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import InputWithIcon from "../UI/InputsModal/input-modal";
-import style from "./moda-edit-despesa.module.css";
+import style from "./modal-edit-receita.module.css";
 import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
 import DatePicker from "../UI/DatePicker/date-picker";
-import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
 import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
+import SelectedReceita from "../UI/SelectedReceitas/selected-receita";
 
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
@@ -25,7 +25,7 @@ const formatarValor = (valor: string): string => {
   });
 };
 
-interface ModalEditDespesasProps {
+interface ModalEditReceitaProps {
   onClose: () => void;
   mes: number;
   ano: number;
@@ -33,7 +33,7 @@ interface ModalEditDespesasProps {
   onTransactionUpdate: (updatedTransaction: any) => void;
 }
 
-const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
+const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
   onClose,
   mes,
   ano,
@@ -122,7 +122,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
     const transactionData: any = {
       valor: valorNumerico,
       data,
-      tipoTransacao: "DESPESA",
+      tipoTransacao: "RECEITA",
       categoriaId: categoria,
       contaId: conta,
       comentario,
@@ -202,7 +202,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
         <InputWithIcon
           label="Valor: "
           type="text"
-          iconSrc="/assets/iconsModalDespesas/money.svg"
+          iconSrc="/assets/iconsModalReceitas/money.svg"
           placeholder="R$ 0,00"
           value={valor}
           onChange={handleChangeValor}
@@ -210,7 +210,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
 
         <InputWithIcon
           label="Descrição: "
-          iconSrc="/assets/iconsModalDespesas/descrip.svg"
+          iconSrc="/assets/iconsModalReceitas/descrip.svg"
           placeholder="Ex: Pagamento da fatura"
           value={descricao}
           onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
@@ -218,18 +218,18 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
           }
         />
 
-        <SelectedDespesas setCategoria={setCategoria} />
+        <SelectedReceita setCategoria={setCategoria} />
         <SelectBoxContas setConta={setConta} mes={mes} ano={ano} />
         <DatePicker
           label="Escolha uma data:"
           value={data}
           onChange={setData}
-          iconsrc="/assets/iconsModalDespesas/date.svg"
+          iconsrc="/assets/iconsModalReceitas/date.svg"
         />
 
         <InputWithIcon
           label="Comentário: "
-          iconSrc="/assets/iconsModalDespesas/comentario.svg"
+          iconSrc="/assets/iconsModalReceitas/comentario.svg"
           placeholder="Opcional"
           value={comentario || ""}
           onChange={(e: { target: { value: any } }) =>
@@ -280,7 +280,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
             {tipoTransacao === "PARCELADA" && (
               <InputWithIcon
                 label="Quantidade de Parcelas:"
-                iconSrc="/assets/iconsModalDespesas/parcelas.svg"
+                iconSrc="/assets/iconsModalReceitas/parcelas.svg"
                 type="number"
                 placeholder="Ex: 12"
                 value={qtdParcelas || ""}
@@ -313,4 +313,4 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
   );
 };
 
-export default ModalEditDespesas;
+export default ModalEditReceita;
