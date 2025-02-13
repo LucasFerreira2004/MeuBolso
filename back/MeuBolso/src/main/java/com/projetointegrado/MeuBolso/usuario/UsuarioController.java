@@ -1,15 +1,13 @@
 package com.projetointegrado.MeuBolso.usuario;
 
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
+import com.projetointegrado.MeuBolso.usuario.dto.UsuarioSaveDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -20,21 +18,15 @@ public class UsuarioController {
     private IUsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
-        usuarioService.save(usuarioDTO);
+    public ResponseEntity<UsuarioSaveDTO> criarUsuario(@RequestBody @Valid UsuarioSaveDTO usuarioSaveDTO) {
+        usuarioService.save(usuarioSaveDTO);
         ResponseEntity.ok("Usuário cadastrado com sucesso");
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSaveDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> findAll() {
-        List<UsuarioDTO> list = usuarioService.findAll();
-        return ResponseEntity.ok(list);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> buscarUsuario(@PathVariable String id) {
-        Optional<UsuarioDTO> usuario = Optional.ofNullable(usuarioService.findById(id));
-        return usuario.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public UsuarioDTO findUsuario(){
+        String userId = usuarioService.getUsuarioLogadoId();
+        return usuarioService.findById(userId);
     }
 }

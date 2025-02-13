@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-contas.module.css";
 import SelectedBancos from "../UI/SelectedBanco/selected-banco";
@@ -7,10 +8,10 @@ import SelectedTipoConta from "../UI/SelectedTipoConta/selected-tipo-conta";
 import DatePicker from "../UI/DatePicker/date-picker";
 
 interface ModalContasProps {
-  onCloseAll: () => void; // Função para fechar o modal
+  onCloseAll: () => void;
+  showToast: (message: string, type: "success" | "error") => void;
 }
 
-// Definindo a função getDataAtual antes de usá-la
 const getDataAtual = () => {
   const data = new Date();
   const ano = data.getFullYear();
@@ -19,14 +20,13 @@ const getDataAtual = () => {
   return `${ano}-${mes}-${dia}`;
 };
 
-function ModalContas({ onCloseAll }: ModalContasProps) {
-  const [saldo, setSaldo] = useState<string>(""); // Saldo da conta
-  const [bancoId, setBancoId] = useState<number | null>(null); // ID do banco
-  const [tipoContaId, setTipoContaId] = useState<number | null>(null); // ID do tipo de conta
-  const [data, setData] = useState<string>(getDataAtual()); // Inicializa com a data atual
-  const [descricao, setDescricao] = useState<string>(""); // Descrição da conta
+function ModalContas({ onCloseAll, showToast }: ModalContasProps) {
+  const [saldo, setSaldo] = useState<string>("");
+  const [bancoId, setBancoId] = useState<number | null>(null);
+  const [tipoContaId, setTipoContaId] = useState<number | null>(null);
+  const [data, setData] = useState<string>(getDataAtual());
+  const [descricao, setDescricao] = useState<string>("");
 
-  // Função para formatar o saldo como moeda
   const formatarMoeda = (valor: string): string => {
     let valorNumerico = valor.replace(/\D/g, "");
     valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
@@ -35,7 +35,6 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
     return `R$ ${valorNumerico}`;
   };
 
-  // Função para remover a formatação de moeda
   const removerFormatacaoMoeda = (valorFormatado: string): number => {
     const valorNumerico = valorFormatado
       .replace("R$ ", "")
@@ -44,38 +43,33 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
     return parseFloat(valorNumerico);
   };
 
-  // Função para atualizar o saldo
   const handleChangeSaldo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorDigitado = e.target.value;
     const valorFormatado = formatarMoeda(valorDigitado);
     setSaldo(valorFormatado);
   };
 
-  // Função para atualizar a descrição
   const handleChangeDescricao = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDescricao(e.target.value);
   };
 
-  // Função para enviar os dados para o backend
   const handleSubmit = async () => {
     if (!saldo || !bancoId || !tipoContaId || !data || !descricao) {
-      alert("Preencha todos os campos obrigatórios!");
+      toast.error("Preencha todos os campos obrigatórios!");
       return;
     }
-  
-    // Se necessário, converta a data para o formato adequado
+
     const dataFormatada = new Date(data);
-    const dataISO = dataFormatada.toISOString().split('T')[0]; // Formata como "YYYY-MM-DD"
-  
+    const dataISO = dataFormatada.toISOString().split("T")[0];
     const saldoNumerico = removerFormatacaoMoeda(saldo);
-  
     const token = localStorage.getItem("authToken");
+
     if (!token) {
       console.error("Token de autenticação não encontrado.");
-      alert("Por favor, faça login novamente.");
+      toast.error("Por favor, faça login novamente.");
       return;
     }
-  
+
     try {
       const response = await axios.post(
         "http://localhost:8080/contas",
@@ -83,7 +77,7 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
           saldo: saldoNumerico,
           id_banco: bancoId,
           id_tipo_conta: tipoContaId,
-          data: dataISO, // Envia a data no formato correto
+          data: dataISO,
           descricao,
         },
         {
@@ -93,15 +87,17 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
           },
         }
       );
-  
+
+      showToast("Conta cadastrada com sucesso!", "success");
+      onCloseAll();
+
       console.log("Conta cadastrada:", response.data);
-      onCloseAll(); // Fecha o modal após o cadastro
     } catch (error) {
       console.error("Erro ao cadastrar conta:", error);
-      alert("Erro ao cadastrar conta. Verifique os dados ou tente novamente.");
+      toast.error("Erro ao cadastrar conta. Verifique os dados ou tente novamente.");
     }
   };
-  
+
   return (
     <div
       className={style.modalOverlay}
@@ -118,7 +114,7 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
         <InputWithIcon
           label="Saldo: "
           type="text"
-          iconSrc="/assets/iconsModalContas/money.svg"
+          iconSrc="/assets/iconsModalConta/money.svg"
           placeholder="R$ 0,00"
           value={saldo}
           onChange={handleChangeSaldo}
@@ -129,14 +125,15 @@ function ModalContas({ onCloseAll }: ModalContasProps) {
         <SelectedTipoConta setTipoConta={setTipoContaId} />
 
         <DatePicker
-          value={data} // Agora a data é inicializada corretamente
-          onChange={setData} // Atualiza o estado com a data selecionada
-          iconsrc="/assets/iconsModalContas/date.svg"
+         label="Data de Criação"
+          value={data}
+          onChange={setData}
+          iconsrc="/assets/iconsModalConta/date.svg"
         />
 
         <InputWithIcon
           label="Descrição: "
-          iconSrc="/assets/iconsModalContas/descricao.svg"
+          iconSrc="/assets/iconsModalConta/descricao.svg"
           placeholder="Ex: Conta Corrente"
           value={descricao}
           onChange={handleChangeDescricao}

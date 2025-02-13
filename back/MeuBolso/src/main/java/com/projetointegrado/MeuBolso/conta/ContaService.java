@@ -108,7 +108,12 @@ public class ContaService implements IContaService {
         Conta conta = new Conta(null, tipo, banco, dto.getDescricao(), usuario);
         conta = contaRepository.save(conta);
         Categoria categoria = categoriaRepository.findByName(userID,"DepositoInicial*");
-        TransacaoDTO transacaodto = transacaoService.save(userID, new TransacaoSaveDTO(dto.getSaldo(), dto.getData(), "RECEITA", categoria.getId(), conta.getId(), "DepositoInicial"));
+        try {
+            TransacaoDTO transacaodto = transacaoService.save(userID, new TransacaoSaveDTO(dto.getSaldo(), dto.getData(), "RECEITA", categoria.getId(), conta.getId(), "DepositoInicial"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         return new ContaDTO(conta);
     }
 

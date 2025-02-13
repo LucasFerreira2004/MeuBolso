@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @RestController
@@ -23,29 +24,36 @@ public class ContaController {
 
 
     @GetMapping
-    public List<ContaDTO> findAll(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
-
+    public List<ContaDTO> findAll(@RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
         return contaService.findAll(idUsuario, data);
     }
 
     @GetMapping("/{id}")
-    public ContaDTO findById(@PathVariable Long id, @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data){
+    public ContaDTO findById(@PathVariable Long id, @RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
         return contaService.findById(idUsuario, id, data);
     }
 
     @GetMapping("/min")
-    public List<ContaMinDTO> findMin(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+    public List<ContaMinDTO> findMin(@RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
         String idUsuario = usuarioService.getUsuarioLogadoId();
 
         return contaService.findAllMin(idUsuario, data);
     }
 
     @GetMapping("/saldoTotal")
-    public SaldoTotalDTO findSaldoTotal(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+    public SaldoTotalDTO findSaldoTotal(@RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
         String idUsuario = usuarioService.getUsuarioLogadoId();
         return contaService.findSaldo(idUsuario, data);
 
@@ -65,8 +73,13 @@ public class ContaController {
 
     @DeleteMapping("/{id}")
     public ContaDTO delete(@PathVariable Long id){
-        String userId = usuarioService.getUsuarioLogadoId();
-        return contaService.delete(id, userId);
+        //try {
+            String userId = usuarioService.getUsuarioLogadoId();
+            return contaService.delete(id, userId);
+       // }catch (Exception e){
+//            e.printStackTrace();
+//            throw new RuntimeException(e);
+//        }
     }
 
 }

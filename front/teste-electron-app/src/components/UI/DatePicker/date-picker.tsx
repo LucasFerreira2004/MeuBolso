@@ -5,11 +5,12 @@ import styles from './date-picker.module.css';
 
 interface DatePickerProps {
   value: string;
+  label: string;
   onChange: (date: string) => void;
   iconsrc: string;
 }
 
-const CustomDatePicker: React.FC<DatePickerProps> = ({ value, iconsrc, onChange }) => {
+const CustomDatePicker: React.FC<DatePickerProps> = ({ value,label, iconsrc, onChange }) => {
   const handleDateChange = (date: Date | null) => {
     if (date) {
       const formattedDate = date.toISOString().split('T')[0];
@@ -24,7 +25,7 @@ const CustomDatePicker: React.FC<DatePickerProps> = ({ value, iconsrc, onChange 
   return (
     <div className={styles.datePickerContainer}>
       <label htmlFor="datepicker" className={styles.datePickerLabel}>
-        Escolha uma data:
+        {label}
       </label>
       <div className={styles.datePickerInputContainer}>
         <DatePicker

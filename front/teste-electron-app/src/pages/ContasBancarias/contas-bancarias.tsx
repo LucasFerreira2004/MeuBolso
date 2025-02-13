@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import CardContas from "../../components/UI/CardContas/card-contas";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./contas-bancarias.module.css";
 import ModalEditContas from "../../components/ModalEditContas/modal-edit-contas";
 import ModalContas from "../../components/ModalContas/modal-contas";
-import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-conta"; // Modal de exclusão
+import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-conta";
+import DatePicker from "../../components/UI/Date/date";
 
 interface Conta {
-  data: any;
-  descricao: any;
+  data: string;
+  descricao: string;
   id: number;
   saldo: number;
   banco: {
@@ -28,9 +31,12 @@ function ContasBancarias() {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [selectedContaId, setSelectedContaId] = useState<number | null>(null);
-  const [selectedContaData, setSelectedContaData] = useState<Conta | null>(null); // Dados da conta selecionada
+  const [selectedContaData, setSelectedContaData] = useState<Conta | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState<number | null>(null);
+
+  const [mes, setMes] = useState(new Date().getMonth() + 1);
+  const [ano, setAno] = useState(new Date().getFullYear());
 
   const fetchContas = () => {
     const token = localStorage.getItem("authToken");
@@ -39,8 +45,7 @@ function ContasBancarias() {
       return;
     }
 
-    const dataReferencia = "2200-01-18"; // Data fixa para a consulta
-    const url = `http://localhost:8080/contas?data=${dataReferencia}`;
+    const url = `http://localhost:8080/contas?ano=${ano}&mes=${mes}`;
 
     fetch(url, {
       method: "GET",
@@ -67,7 +72,7 @@ function ContasBancarias() {
 
   useEffect(() => {
     fetchContas();
-  }, []);
+  }, [mes, ano]);
 
   const handleDeleteRequest = (contaId: number) => {
     setSelectedDeleteId(contaId);
@@ -83,11 +88,57 @@ function ContasBancarias() {
     }
   };
 
+  const showToast = (message: string, type: "success" | "error") => {
+    if (type === "success") {
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } else if (type === "error") {
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  };
+
   return (
     <div className={style.contas}>
+      {/* ToastContainer deve estar no nível mais alto da tela */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <header className={style.headerContas}>
         <h1>Contas Bancárias</h1>
-        <div>
+        <div className={style.Date}>
+          <DatePicker
+            mes={mes}
+            ano={ano}
+            onChange={(novoMes, novoAno) => {
+              setMes(novoMes);
+              setAno(novoAno);
+            }}
+          />
+        </div>
+
+        <div className={style.buttonAdd}>
           <AddButton
             onClick={() => setOpenCreateModal(true)}
             texto={"Adicionar conta"}
@@ -101,6 +152,7 @@ function ContasBancarias() {
             setOpenCreateModal(false);
             fetchContas();
           }}
+          showToast={showToast} // Passa a função showToast como prop
         />
       )}
 
@@ -110,6 +162,7 @@ function ContasBancarias() {
           onCloseAll={() => {
             setOpenEditModal(false);
             fetchContas();
+            showToast("Conta atualizada com sucesso!", "success");
           }}
           initialData={{
             saldo: selectedContaData.saldo,
@@ -135,21 +188,21 @@ function ContasBancarias() {
               altBanco={`Ícone do banco ${conta.banco.nome}`}
               data={conta.data}
               descricao={conta.descricao}
-              onDelete={() => handleDeleteRequest(conta.id)} 
+              onDelete={() => handleDeleteRequest(conta.id)}
               onEdit={() => handleEdit(conta.id)}
             />
           ))
         )}
       </main>
 
-      {/* Modal de exclusão de conta */}
       {openDeleteModal && selectedDeleteId !== null && (
         <ModalDeleteConta
           contaId={selectedDeleteId}
           onClose={() => setOpenDeleteModal(false)}
           onConfirmDelete={() => {
             setOpenDeleteModal(false);
-            fetchContas(); // Atualiza a lista de contas após a exclusão
+            fetchContas();
+            showToast("Conta deletada com sucesso!", "success");
           }}
         />
       )}

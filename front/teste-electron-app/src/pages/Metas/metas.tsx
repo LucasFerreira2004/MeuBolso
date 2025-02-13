@@ -20,5 +20,4 @@ function Metas() {
 
     );
 }
-``
 export default Metas;

@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.transacaoRecorrente.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.projetointegrado.MeuBolso.globalConstraints.NotBlankIfPresent.NotBlankIfPresent;
 import com.projetointegrado.MeuBolso.globalConstraints.validEnum.ValidEnum;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.Periodicidade;
@@ -37,9 +38,8 @@ public record TransacaoFixaSaveDTO(
         @NotBlank(message = "a descricao e obrigatoria e deve ser uma string valida.")
         String descricao,
 
-        //    private final String comentarioDefaultMessage = "o comentario deve ser uma string valida.";
-        //    @NotNull(message = comentarioDefaultMessage)
-        //    private String comentario; TRATAR A CRIACAO DE COMENTARIO E CRIAR NOTATION PARA NULO OU STRING VALIDAz
+        @NotBlankIfPresent(message = "o comentario é opcional (pode receber valor null), mas caso atribuído com string deve receber uma não vazia.")
+        String comentario,
 
         @NotNull(message ="a periodicidade é obrigatória e deve ter o valor: DIARIO, SEMANAL ou MENSAL")
         @ValidEnum(value = Periodicidade.class, message = "tipos permitidos são DIARIO, SEMANAL ou MENSAL" )

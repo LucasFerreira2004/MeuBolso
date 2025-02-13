@@ -4,6 +4,7 @@
     top: 0;
     left: 0;
     width: 100vw;
+    height: 100vh; 
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -11,7 +12,7 @@
 }
   
   .modalContent {
-    position: absolute;
+    position: fixed; 
     background-color: #fff;
     border-radius: 8px;
     padding: 10px;
