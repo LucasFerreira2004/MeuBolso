@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.meta;
 
 import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
+import com.projetointegrado.MeuBolso.meta.dto.MetaCardDTO;
 import com.projetointegrado.MeuBolso.meta.dto.MetaDTO;
 import com.projetointegrado.MeuBolso.meta.dto.MetaPostDTO;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
@@ -28,6 +29,12 @@ public class MetaController {
     public List<MetaDTO> findAll() {
         String usuarioId = usuarioService.getUsuarioLogadoId();
         return metaService.findAll(usuarioId);
+    }
+
+    @GetMapping("/cards")
+    public List<MetaCardDTO> findAllCards() {
+        String usuarioId = usuarioService.getUsuarioLogadoId();
+        return metaService.findAllCards(usuarioId);
     }
 
     @GetMapping("/{metaId}")

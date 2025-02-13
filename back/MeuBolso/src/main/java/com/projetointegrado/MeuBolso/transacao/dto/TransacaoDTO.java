@@ -4,6 +4,7 @@ import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
+import com.projetointegrado.MeuBolso.transacaoMeta.TransacaoMeta;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,6 +30,18 @@ public class TransacaoDTO {
         this.comentario = transacao.getComentario();
         this.descricao = transacao.getDescricao();
         this.origem = transacao.getOrigemTransacao().name();
+    }
+
+    public TransacaoDTO(TransacaoMeta transacao) {
+        //isso so funcionará se os atributos forem os mesmos e estiverem na mesma ordem que a entidade
+        this.id = transacao.getId();
+        this.valor = transacao.getTransacao().getValor();
+        this.data_transacao = transacao.getTransacao().getData();
+        this.tipo = transacao.getTransacao().getTipo();
+        this.categoriaDTO = new CategoriaDTO(transacao.getTransacao().getCategoria());
+        this.contaDTO = new ContaDTO(transacao.getTransacao().getConta());
+        this.comentario = transacao.getTransacao().getComentario();
+        this.descricao = transacao.getTransacao().getDescricao();
     }
 
     //getters e setters

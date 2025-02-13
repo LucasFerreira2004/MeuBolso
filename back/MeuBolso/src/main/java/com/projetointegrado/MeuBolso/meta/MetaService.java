@@ -2,25 +2,23 @@ package com.projetointegrado.MeuBolso.meta;
 
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
+import com.projetointegrado.MeuBolso.meta.dto.MetaCardDTO;
 import com.projetointegrado.MeuBolso.meta.dto.MetaDTO;
 import com.projetointegrado.MeuBolso.meta.dto.MetaPostDTO;
 import com.projetointegrado.MeuBolso.meta.exception.DescricaoUnicaException;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
-import com.projetointegrado.MeuBolso.usuario.UsuarioRepository;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 public class MetaService implements IMetaService {
     @Autowired
     private MetaRepository metaRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private UsuarioValidateService usuarioValidateService;
@@ -32,6 +30,12 @@ public class MetaService implements IMetaService {
     public List<MetaDTO> findAll(String usuarioId) {
         List<Meta> meta = metaRepository.findAllByUsuario(usuarioId);
         return meta.stream().map(MetaDTO::new).toList();
+    }
+
+    @Override
+    public List<MetaCardDTO> findAllCards(String usuarioId) {
+        List<Meta> meta = metaRepository.findAllByUsuario(usuarioId);
+        return meta.stream().map(MetaCardDTO::new).toList();
     }
 
     @Transactional(readOnly = true)
@@ -68,7 +72,6 @@ public class MetaService implements IMetaService {
         return new MetaDTO(meta);
     }
 
-
     private Meta saveAndValidate(String usuarioId, Long id, MetaPostDTO metaDTO) {
         Usuario usuario = usuarioValidateService.validateAndGet(usuarioId,
                 new EntidadeNaoEncontradaException("{token}", "usuario nao encontrado a partir do token"));
@@ -84,13 +87,13 @@ public class MetaService implements IMetaService {
             // Atualiza os campos da meta existente
             meta.setValorMeta(metaDTO.getValorMeta());
             meta.setDescricao(metaDTO.getDescricao());
+            meta.setComentario(metaDTO.getComentario());
             meta.setUrlImg(metaDTO.getUrlImg());
         } else {
             // Cria nova meta se for um save
-            meta = new Meta(null, metaDTO.getValorMeta(), metaDTO.getDescricao(), metaDTO.getUrlImg(), usuario);
+            meta = new Meta(null, metaDTO.getValorMeta(), metaDTO.getDescricao(), metaDTO.getUrlImg(), usuario, metaDTO.getComentario());
         }
 
-        System.out.println(meta);
         return metaRepository.save(meta);
     }
 }
