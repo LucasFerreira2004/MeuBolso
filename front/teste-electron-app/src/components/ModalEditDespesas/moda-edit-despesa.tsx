@@ -11,18 +11,18 @@ import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
 
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
-    .replace(/[^\d,.-]/g, "")
+    .replace("R$ ", "")
+    .replace(/\./g, "")
     .replace(",", ".");
   return parseFloat(valorNumerico);
 };
 
 const formatarValor = (valor: string): string => {
-  const valorNumerico = parseFloat(valor.replace(/[^\d.-]/g, ""));
-  if (isNaN(valorNumerico)) return "R$ 0,00";
-  return valorNumerico.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
+  let valorNumerico = valor.replace(/\D/g, "");
+  valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
+  valorNumerico = valorNumerico.replace(".", ",");
+  valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  return `R$ ${valorNumerico}`;
 };
 
 interface ModalEditDespesasProps {

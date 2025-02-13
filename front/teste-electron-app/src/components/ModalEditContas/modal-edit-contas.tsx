@@ -157,6 +157,7 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
         <SelectedTipoConta setTipoConta={setTipoContaId} />
 
         <DatePicker
+        label="Escolha uma data: "
           value={data}
           onChange={setData}
           iconsrc="/assets/iconsModalConta/date.svg"
