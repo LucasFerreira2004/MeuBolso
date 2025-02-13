@@ -1,9 +1,11 @@
 package com.projetointegrado.MeuBolso.usuario.dto;
 
 import com.projetointegrado.MeuBolso.usuario.Usuario;
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 public class UsuarioSaveDTO {
     @NotBlank(message = "O nome é obrigatório.")
@@ -18,7 +20,8 @@ public class UsuarioSaveDTO {
     @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.")
     private String senha;
 
-    private String img_url;
+    @Lob
+    private MultipartFile img_url;
 
     public UsuarioSaveDTO() {
     }
@@ -27,7 +30,6 @@ public class UsuarioSaveDTO {
         this.nome = usuario.getNome();
         this.email = usuario.getEmail();
         this.senha = usuario.getSenha();
-        this.img_url = usuario.getImg_url();
     }
 
     public UsuarioSaveDTO(String nome, String email, String senha) {
@@ -60,7 +62,7 @@ public class UsuarioSaveDTO {
         this.senha = senha;
     }
 
-    public String getImg_url() {
+    public MultipartFile getImg_url() {
         return img_url;
     }
 

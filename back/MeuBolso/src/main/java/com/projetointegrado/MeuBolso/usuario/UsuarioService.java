@@ -27,7 +27,7 @@ public class UsuarioService implements IUsuarioService {
     private UsuarioValidateService usuarioValidateService;
 
     @Transactional
-    public UsuarioSaveDTO save(UsuarioSaveDTO usuarioSaveDTO) {
+    public UsuarioDTO save(UsuarioSaveDTO usuarioSaveDTO) {
         if (usuarioRepository.findByEmail(usuarioSaveDTO.getEmail()) != null)
             throw new EmailJaCadastradoException();
         String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioSaveDTO.getSenha());
@@ -36,22 +36,21 @@ public class UsuarioService implements IUsuarioService {
         usuario = usuarioRepository.save(usuario);
 
         criarCategoriasIniciaisService.criarCategorias(usuario.getId());
-        return new UsuarioSaveDTO(usuario);
+        return new UsuarioDTO(usuario);
     }
 
-    public UsuarioSaveDTO update(String userId, UsuarioSaveDTO usuarioSaveDTO) {
+    public UsuarioDTO update(String userId, UsuarioSaveDTO usuarioSaveDTO) {
         String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioSaveDTO.getSenha());
         Usuario usuario = new Usuario(usuarioSaveDTO.getNome(), usuarioSaveDTO.getEmail(), encryptedPassword, usuarioSaveDTO.getImg_url()); //mudar para passar que o getImag_url seja na verdade um byteCode da imamgem e eu possa gerar a url depois, creio que deve ser responsabilidade de outra classe para que possa ser reaproveitada.
 
         usuario = usuarioRepository.save(usuario);
-        return new UsuarioSaveDTO(usuario);
+        return new UsuarioDTO(usuario);
     }
 
 
-    private List<UsuarioSaveDTO> findAll() {
+    private List<UsuarioDTO> findAll() {
         List<Usuario> list = usuarioRepository.findAll();
-
-        return list.stream().map(UsuarioSaveDTO::new).toList();
+        return list.stream().map(UsuarioDTO::new).toList();
     }
 
     public UsuarioDTO findById(String id) {
