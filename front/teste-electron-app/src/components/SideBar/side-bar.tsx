@@ -46,7 +46,7 @@ function SideBar() {
                 Transações
               </li>
             </Link>
-            <Link to="/metas" className={style.navLink}>
+            {/* <Link to="/metas" className={style.navLink}>
               <li className={style.navItem}>
                 <img
                   src="/assets/pig-bank.svg"
@@ -55,7 +55,7 @@ function SideBar() {
                 />
                 Metas
               </li>
-            </Link>
+            </Link> */}
             <Link to="/orcamentos" className={style.navLink}>
               <li className={style.navItem}>
                 <img

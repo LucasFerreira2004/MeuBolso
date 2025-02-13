@@ -35,6 +35,7 @@ function ModalTipoTransacao({ onClose, mes, ano }: ModalTransacaoProps) {
           onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
         >
           <div className={styles.header}>
+          <h3>Selecione o tipo da transacao</h3>
             <button className={styles.closeButton} onClick={onClose}>
               <img
                 src="/assets/iconsModal/iconX.svg"

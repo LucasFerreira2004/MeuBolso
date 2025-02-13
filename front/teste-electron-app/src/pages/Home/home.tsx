@@ -4,11 +4,13 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import style from "./home.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
-// import CardMetas from "../../components/UI/CardMetas/card-metas";
 import DatePicker, { meses } from "../../components/UI/Date/date";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import TotalBalanco from "../../components/UI/ChartsRelatorios/TotalBalanco/total-balanco";
+import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans"; // Importar modal de tipo de transação
+import ModalEditDespesa from "../../components/ModalEditDespesas/moda-edit-despesa"; // Importar modal de despesa
+import ModalEditReceita from "../../components/ModalEditReceita/modal-edit-receita"; // Importar modal de receita
 
 interface Banco {
   iconeUrl: string;
@@ -19,15 +21,19 @@ interface Banco {
 function Home() {
   const location = useLocation();
   const { state } = location;
-
   const [bancos, setBancos] = useState<Banco[]>([]);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
   const [totalDespesas, setTotalDespesas] = useState<number | null>(null);
   const [totalReceitas, setTotalReceitas] = useState<number | null>(null);
-
   const [mes, setMes] = useState(new Date().getMonth() + 1);
   const [ano, setAno] = useState(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState(false);
+
+  // Estados para controlar os modais
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalDespesaOpen, setIsModalDespesaOpen] = useState<boolean>(false);
+  const [isModalReceitaOpen, setIsModalReceitaOpen] = useState<boolean>(false);
+  const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
 
   useEffect(() => {
     if (state?.successMessage) {
@@ -43,9 +49,7 @@ function Home() {
   ) => {
     const token = localStorage.getItem("authToken");
     if (!token) {
-      toast.error(
-        "Você precisa estar logado para acessar esta funcionalidade."
-      );
+      toast.error("Você precisa estar logado para acessar esta funcionalidade.");
       return;
     }
 
@@ -79,6 +83,21 @@ function Home() {
       style: "currency",
       currency: "BRL",
     });
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen((prev) => !prev);
+  };
+
+
+  const handleCloseEditModal = () => {
+    setIsModalDespesaOpen(false);
+    setIsModalReceitaOpen(false);
+    setSelectedTransactionId(null);
+  };
+
+  const handleUpdateTransaction = () => {
+    handleCloseEditModal();
   };
 
   useEffect(() => {
@@ -142,7 +161,12 @@ function Home() {
               )}
             </p>
           </div>
-          <AddButton texto="Adicionar Transação" onClick={() => {}} />
+          <div className={style.cardButton}>
+          <AddButton texto="Adicionar Transação" onClick={toggleModal} />
+          {isModalOpen && (
+            <ModalTipoTrans mes={mes} ano={ano} onClose={toggleModal} />
+          )}
+          </div>
         </div>
       </header>
 
@@ -166,9 +190,7 @@ function Home() {
                         alt={`Ícone ${banco.nomeBanco}`}
                         className={style.iconNubank}
                       />
-                      <p>{`${banco.nomeBanco}: ${formatarSaldo(
-                        banco.saldo
-                      )}`}</p>
+                      <p>{`${banco.nomeBanco}: ${formatarSaldo(banco.saldo)}`}</p>
                     </div>
                   ))
                 )}
@@ -215,11 +237,6 @@ function Home() {
             </div>
           </div>
 
-          {/* <div className={style.cards2}>
-            <h2>Metas</h2>
-            <CardMetas imagem="/assets/moto.svg" texto="Meta para moto" />
-          </div> */}
-
           <div className={style.cards3}>
             <div className={style.graphic}>
               <TotalBalanco />
@@ -227,6 +244,28 @@ function Home() {
           </div>
         </div>
       </main>
+
+      {/* Modais */}
+
+      {isModalDespesaOpen && selectedTransactionId && (
+        <ModalEditDespesa
+          mes={mes}
+          ano={ano}
+          transactionId={selectedTransactionId}
+          onClose={handleCloseEditModal}
+          onTransactionUpdate={handleUpdateTransaction}
+        />
+      )}
+
+      {isModalReceitaOpen && selectedTransactionId && (
+        <ModalEditReceita
+          mes={mes}
+          ano={ano}
+          transactionId={selectedTransactionId}
+          onClose={handleCloseEditModal}
+          onTransactionUpdate={handleUpdateTransaction}
+        />
+      )}
 
       <ToastContainer
         position="top-right"
