@@ -26,6 +26,7 @@ interface CardTransacoesProps {
   dataTransacao: string;
   onEditClick: (id: number, tipo: string) => void;
 }
+
 const CardTransacoes: React.FC<CardTransacoesProps> = ({
   transacoes,
   dataTransacao,
@@ -59,6 +60,12 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
         {transacoes.length > 0 ? (
           transacoes.map((transacao) => {
             const valor = formatarValor(transacao.valor);
+            const corTransacao =
+              transacao.tipo === "DESPESA"
+                ? "#C63A22" // vermelho
+                : transacao.tipo === "RECEITA"
+                ? "#2A9D8F" // verde
+                : `#${transacao.categoria.cor}`;
 
             return (
               <li
@@ -68,17 +75,17 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
               >
                 <div
                   className={styles.individualLine}
-                  style={{ color: `#${transacao.categoria.cor}` }}
+                  style={{ color: corTransacao }}
                 >
                   <div
                     className={styles.bolinha}
-                    style={{ backgroundColor: `#${transacao.categoria.cor}` }}
+                    style={{ backgroundColor: corTransacao }}
                   ></div>
                   {transacao.descricao} <br />
                 </div>
                 <div
                   className={styles.individualLine}
-                  style={{ color: `#${transacao.categoria.cor}` }}
+                  style={{ color: corTransacao }}
                 >
                   {valor} <br />
                 </div>
@@ -104,4 +111,5 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
     </div>
   );
 };
+
 export default CardTransacoes;

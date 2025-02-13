@@ -104,10 +104,8 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
         }
       );
 
-      // Exibe o toast de sucesso
       toast.success("Conta atualizada com sucesso!");
 
-      // Fecha o modal após a atualização bem-sucedida
       onCloseAll();
 
       console.log("Conta atualizada:", response.data);
