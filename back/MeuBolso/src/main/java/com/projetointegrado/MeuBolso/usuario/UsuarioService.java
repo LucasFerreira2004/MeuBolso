@@ -39,6 +39,14 @@ public class UsuarioService implements IUsuarioService {
         return new UsuarioSaveDTO(usuario);
     }
 
+    public UsuarioSaveDTO update(String userId, UsuarioSaveDTO usuarioSaveDTO) {
+        String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioSaveDTO.getSenha());
+        Usuario usuario = new Usuario(usuarioSaveDTO.getNome(), usuarioSaveDTO.getEmail(), encryptedPassword, usuarioSaveDTO.getImg_url()); //mudar para passar que o getImag_url seja na verdade um byteCode da imamgem e eu possa gerar a url depois, creio que deve ser responsabilidade de outra classe para que possa ser reaproveitada.
+
+        usuario = usuarioRepository.save(usuario);
+        return new UsuarioSaveDTO(usuario);
+    }
+
 
     private List<UsuarioSaveDTO> findAll() {
         List<Usuario> list = usuarioRepository.findAll();

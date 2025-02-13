@@ -7,4 +7,5 @@ public interface IUsuarioService {
     public UsuarioSaveDTO save(UsuarioSaveDTO usuarioSaveDTO);
     public String getUsuarioLogadoId();
     public UsuarioDTO findById(String id);
+    public UsuarioSaveDTO update(String userId, UsuarioSaveDTO usuarioSaveDTO);
 }

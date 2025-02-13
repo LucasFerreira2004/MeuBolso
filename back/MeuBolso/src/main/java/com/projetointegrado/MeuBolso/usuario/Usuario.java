@@ -25,7 +25,7 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private String senha;
 
-    private String foto_url;
+    private String img_url;
 
     public Usuario() {
     }
@@ -43,12 +43,12 @@ public class Usuario implements UserDetails {
         this.senha = senha;
     }
 
-    public Usuario(String id, String nome, String email, String senha, String foto_url) {
+    public Usuario(String id, String nome, String email, String senha, String img_url) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
-        this.foto_url = foto_url;
+        this.img_url = img_url;
     }
 
     public String getId() {
@@ -83,12 +83,12 @@ public class Usuario implements UserDetails {
         this.senha = senha;
     }
 
-    public String getFoto_url() {
-        return foto_url;
+    public String getImg_url() {
+        return img_url;
     }
 
-    public void setFoto_url(String foto_url) {
-        this.foto_url = foto_url;
+    public void setImg_url(String foto_url) {
+        this.img_url = foto_url;
     }
 
     //métodos do userDetails
