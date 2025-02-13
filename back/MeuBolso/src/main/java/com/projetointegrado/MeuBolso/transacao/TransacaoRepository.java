@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.transacao;
 
+import com.projetointegrado.MeuBolso.transacao.dto.SumTransacoesDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,25 +13,35 @@ import java.util.List;
 @Repository
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     @Query(nativeQuery = true, value = """
-        select * from transacao where usuario_id = :userId;
+        select * from transacao 
+        where usuario_id = :userId
+        order by data desc, id desc;
     """)
     public List<Transacao> findAllByUsuario(String userId);
 
 
     @Query(nativeQuery = true, value = """
         select * from transacao 
-        where usuario_id = :userId and data between :dataInicio and :dataFim;
+        where usuario_id = :userId 
+        and data between :dataInicio and :dataFim
+        order by data desc, id desc;
     """)
     public List<Transacao> findAllInRange(LocalDate dataInicio, LocalDate dataFim, String userId);
 
     @Query(nativeQuery = true, value = """
-        select * from transacao where data <= :data and usuario_id = :userId;
+        select * from transacao 
+        where data <= :data 
+        and usuario_id = :userId
+        order by data desc, id desc;
     """)
     public List<Transacao> findAllBeforeDate(LocalDate data, String userId);
 
     @Query(nativeQuery = true, value = """
         select * from transacao 
-        where usuario_id = :userId and categoria_id = :categoria_id and data between :dataInicial and :dataFinal
+        where usuario_id = :userId 
+        and categoria_id = :categoria_id 
+        and data between :dataInicial and :dataFinal
+        order by data desc, id desc;
     """)
     public List<Transacao> findAllInRangeByCategoria(String userId, LocalDate dataInicial, LocalDate dataFinal, Long categoria_id);
 

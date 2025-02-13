@@ -2,12 +2,13 @@ package com.projetointegrado.MeuBolso.transacaoRecorrente;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.categoria.CategoriaValidateService;
+import com.projetointegrado.MeuBolso.categoria.exception.AtivaInalteradaException;
 import com.projetointegrado.MeuBolso.conta.Conta;
 import com.projetointegrado.MeuBolso.conta.ContaValidateService;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
-import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoFixaDTO;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.TransacaoRecorrenteDTO;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.dto.ITransacaoRecorrenteDTO;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
@@ -36,38 +37,43 @@ public class TransacaoRecorrenteService implements ITransacaoRecorrenteService {
     private TransacaoRecorrenteValidateService transacaoRecorrenteValidateService;
 
     @Transactional(readOnly = true)
-    public List<TransacaoFixaDTO> findAll(String userId){
-        return transacaoRecorrenteRepository.findAllByUsuario(userId).stream().map(x -> new TransacaoFixaDTO(x)).toList();
+    public List<TransacaoRecorrenteDTO> findAll(String userId){
+        return transacaoRecorrenteRepository.findAllByUsuario(userId).stream().map(x -> new TransacaoRecorrenteDTO(x)).toList();
     }
 
     @Transactional(readOnly = true)
-    public TransacaoFixaDTO findById(String userId, Long id){
+    public List<TransacaoRecorrenteDTO> findAllArquivadas(String userId){
+        return transacaoRecorrenteRepository.findAllArquivadasByUsuario(userId).stream().map(t -> new TransacaoRecorrenteDTO(t)).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public TransacaoRecorrenteDTO findById(String userId, Long id){
         TransacaoRecorrente transacao = transacaoRecorrenteValidateService.validateAndGet(id, userId,
                 new EntidadeNaoEncontradaException("/{id}", "TransacaoRecorrente nao encontrada"), new AcessoNegadoException());
-        return new TransacaoFixaDTO(transacao);
+        return new TransacaoRecorrenteDTO(transacao);
     }
 
     @Transactional
-    public TransacaoFixaDTO save(String userId, ITransacaoRecorrenteDTO dto){
+    public TransacaoRecorrenteDTO save(String userId, ITransacaoRecorrenteDTO dto){
         TransacaoRecorrente transacaoRecorrente = saveAndValidate(userId, dto);
 
-        return new TransacaoFixaDTO(transacaoRecorrente);
+        return new TransacaoRecorrenteDTO(transacaoRecorrente);
     }
 
     @Transactional
-    public TransacaoFixaDTO update(String userId, Long id, ITransacaoRecorrenteDTO dto){
+    public TransacaoRecorrenteDTO update(String userId, Long id, ITransacaoRecorrenteDTO dto){
         if (transacaoRecorrenteRepository.findById(id).isEmpty())
             throw new EntidadeNaoEncontradaException("/{id}", "TransacaoRecorrente nao encontrada");
 
         TransacaoRecorrente fixa = saveAndValidate(userId, dto);
-        return new TransacaoFixaDTO(fixa);
+        return new TransacaoRecorrenteDTO(fixa);
     }
 
     @Transactional
-    public TransacaoFixaDTO delete(String userId, Long id) {
+    public TransacaoRecorrenteDTO delete(String userId, Long id) {
         TransacaoRecorrente transacaoRecorrente = transacaoRecorrenteValidateService.validateAndGet(id, userId,
                 new EntidadeNaoEncontradaException("/{id}", "TransacaoRecorrente nao encontrada"), new AcessoNegadoException());
-        TransacaoFixaDTO dto = new TransacaoFixaDTO(transacaoRecorrente);
+        TransacaoRecorrenteDTO dto = new TransacaoRecorrenteDTO(transacaoRecorrente);
         transacaoRecorrenteRepository.delete(transacaoRecorrente);
         return dto;
     }
@@ -88,5 +94,16 @@ public class TransacaoRecorrenteService implements ITransacaoRecorrenteService {
                 dto.descricao(), conta, categoria, Periodicidade.valueOf(dto.periodicidade()), usuario, dto.qtdParcelas(), dto.tipoRepeticao());
 
         return transacaoRecorrenteRepository.save(transacaoRecorrente);
+    }
+
+    @Transactional
+    public TransacaoRecorrenteDTO atualizarStatusAtiva(String usuarioId, Long id, Boolean ativa) {
+       TransacaoRecorrente recorrente = transacaoRecorrenteValidateService.validateAndGet(id, usuarioId, new EntidadeNaoEncontradaException("{/id", "transacao recorrente nao encontrada"),
+               new AcessoNegadoException());
+        if (ativa.equals(recorrente.getAtiva()))
+            throw new AtivaInalteradaException("impossível arquivar uma transcao recorrente já arquivada ou desarquivar uma transacao recorrente já desarquivada", "ativa");
+        recorrente.setAtiva(ativa);
+        transacaoRecorrenteRepository.save(recorrente);
+        return new TransacaoRecorrenteDTO(recorrente);
     }
 }

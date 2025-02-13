@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { saveToken } from "../../service/auth-service"; // Importe a função saveToken
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { saveToken } from "../../service/auth-service";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import style from "./login.module.css";
 
 // Definindo tipo para a resposta da API
@@ -14,6 +14,16 @@ function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Verifica se há uma mensagem de sucesso no estado da navegação
+  useEffect(() => {
+    if (location.state?.successMessage) {
+      toast.success(location.state.successMessage);
+      // Limpa o estado para evitar que o toast seja exibido novamente
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state]);
 
   const handleLogin = async () => {
     if (email === "" || password === "") {
@@ -34,20 +44,15 @@ function Login() {
         throw new Error("Email ou senha incorretos.");
       }
 
-      const data: LoginResponse = await response.json(); // Tipando a resposta
+      const data: LoginResponse = await response.json();
       const token = data.token;
 
-      // Salvar o token no localStorage
       saveToken(token);
       console.log("Token salvo:", token);
 
-      // Exibe um toast de sucesso e redireciona
-      toast.success("Login realizado com sucesso!");
-      setTimeout(() => {
-        navigate("/home");
-      }, 2000); // Redireciona após 2 segundos
+      // Navega para a tela de Home com uma mensagem de sucesso
+      navigate("/home", { state: { successMessage: "Login realizado com sucesso!" } });
     } catch (error) {
-      // Usando TypeScript para validar o tipo do erro
       if (error instanceof Error) {
         toast.error(error.message || "Erro ao realizar o login.");
       } else {
@@ -90,9 +95,13 @@ function Login() {
           </div>
         </div>
 
-        <Link to="/cadastro">
-          <p className={style.plogin}>Crie uma conta</p>
-        </Link>
+        <div className={style.resgistrar}>
+          <p className={style.texto}>Não tem uma conta?</p>
+          <Link to="/cadastro">
+            <p className={style.link}>Registrar</p>
+          </Link>
+        </div>
+
         <button className={style.buttonC} onClick={handleLogin}>
           Entrar
         </button>

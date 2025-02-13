@@ -9,6 +9,7 @@ import App from "../App";
 import Transacoes from "../pages/Transacoes/transacoes";
 import Metas from "../pages/Metas/metas";
 import PrivateRoute from "../components/private-routes"; // Importa o PrivateRoute
+import Relatorios from "../pages/Relatorios/relatorios";
 
 export const router = createBrowserRouter([
   {
@@ -75,7 +76,7 @@ export const router = createBrowserRouter([
         path: "/relatorios",
         element: (
           <PrivateRoute>
-            <PageTeste />
+            <Relatorios />
           </PrivateRoute>
         ),
       },

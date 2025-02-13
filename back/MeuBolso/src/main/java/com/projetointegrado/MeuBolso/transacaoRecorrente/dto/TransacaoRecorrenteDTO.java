@@ -4,7 +4,7 @@ import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class TransacaoFixaDTO {
+public class TransacaoRecorrenteDTO {
     Long id;
     BigDecimal valor;
     String tipo;
@@ -12,7 +12,7 @@ public class TransacaoFixaDTO {
     String descricao;
     Long contaId;
 
-    public TransacaoFixaDTO (TransacaoRecorrente transacaoRecorrente){
+    public TransacaoRecorrenteDTO(TransacaoRecorrente transacaoRecorrente){
         this.id = transacaoRecorrente.getId();
         this.valor = transacaoRecorrente.getValor();
         this.tipo = transacaoRecorrente.getTipo().name();

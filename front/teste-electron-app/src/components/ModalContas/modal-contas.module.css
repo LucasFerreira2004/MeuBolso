@@ -1,117 +1,48 @@
-/* Estilo do ícone da seta */
-.iconLogoArrow {
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-    margin-left: 10px;
-    transition: transform 0.3s ease; /* Transição suave para a rotação */
-  }
-  
-  /* Estilo para quando o ícone for rotacionado */
-  .rotated {
-    transform: rotate(90deg); /* Rotaciona o ícone 90 graus */
-  }
-  
-  /* Estilos gerais do modal e outros componentes */
-  .containerModalContas {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Centraliza o modal */
-    width: 400px;
-    background-color: #fff;
-    z-index: 999;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-  }
-  
-  /* Cabeçalho do modal */
-  .headerModalContas {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.2rem;
-    padding-bottom: 10px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .headerModalContas img {
-    cursor: pointer;
-  }
-  .headerModalContas p {
-    margin: 0px;
-  }
-  /* Container do dropdown */
-  .divDropContas {
-    display: flex;
-  }
-  
-  /* Estilo do input de valor */
-  .formModalContas .inputValor {
-    width: calc(100% - 20px); /* Ajusta o input para que ele não ocupe toda a largura */
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    margin-bottom: 15px;
-    box-sizing: border-box; /* Inclui o padding e border no cálculo da largura */
-  }
-  
-  .formModalContas .inputValor{
-    width: calc(100% - 20px); /* Ajusta o input para que ele não ocupe toda a largura */
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    margin-bottom: 15px;
-    box-sizing: border-box; /* Inclui o padding e border no cálculo da largura */
-  }
-  /* Estilo do botão salvar */
-  .saveButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--main-color);
-    width: 100%;
-    border: none;
-    padding: 12px;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 500;
-    margin-top: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .saveButton:hover {
-    background-color: var(--main-color-light);
-  }
-  
-  /* Estilo do overlay */
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 998;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .formGroup{
-    display: flex;
-    gap: 8px;
-    margin: 10px;
-    height: 30px;
-  }
-  .formGroup input{
-    border: none;
-  }
-  
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Garante que o modal fique acima de outros elementos */
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.headerModal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.submitButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.submitButton:hover {
+  background-color: #0056b3;
+}

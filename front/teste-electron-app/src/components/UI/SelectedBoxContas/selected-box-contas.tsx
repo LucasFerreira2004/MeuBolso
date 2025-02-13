@@ -2,34 +2,21 @@ import { useEffect, useState } from "react";
 import Select from "react-select";
 import style from "./selected-box-contas.module.css";
 
-interface Banco {
-  nome: string;
-  iconeUrl: string;
-}
-
 interface Conta {
   id: number;
   saldo: number;
-  banco: Banco;
-  tipo_conta: {
-    tipoConta: string;
-  };
+  iconeUrl: string;
+  nomeBanco: string;
 }
 
 interface SelectBoxContasProps {
-  setConta: React.Dispatch<React.SetStateAction<number | null>>; // Adicionando a prop setConta
+  setConta: React.Dispatch<React.SetStateAction<number | null>>;
+  mes: number;
+  ano: number;
 }
 
-function SelectBoxContas({ setConta }: SelectBoxContasProps) { // Recebendo a prop setConta
+function SelectBoxContas({ setConta, mes, ano }: SelectBoxContasProps) {
   const [contas, setContas] = useState<Conta[]>([]);
-
-  const getDataAtual = (): string => {
-    const data = new Date();
-    const ano = data.getFullYear();
-    const mes = String(data.getMonth() + 1).padStart(2, "0");
-    const dia = String(data.getDate()).padStart(2, "0");
-    return `${ano}-${mes}-${dia}`;
-  };
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -39,8 +26,7 @@ function SelectBoxContas({ setConta }: SelectBoxContasProps) { // Recebendo a pr
       return;
     }
 
-    const dataReferencia = getDataAtual();
-    const url = `http://localhost:8080/contas?data=${dataReferencia}`;
+    const url = `http://localhost:8080/contas?ano=${ano}&mes=${mes}`;
 
     fetch(url, {
       method: "GET",
@@ -55,33 +41,43 @@ function SelectBoxContas({ setConta }: SelectBoxContasProps) { // Recebendo a pr
         }
         return response.json();
       })
-      .then((data: Conta[]) => {
-        setContas(data);
-        setConta(data.length > 0 ? data[0].id : null); // Inicializa o setConta com o ID da primeira conta
+      .then((data: any[]) => {
+        const contasMapeadas = data.map((conta) => ({
+          id: conta.id,
+          saldo: conta.saldo,
+          iconeUrl: conta.banco.iconeUrl, 
+          nomeBanco: conta.banco.nome, 
+        }));
+        setContas(contasMapeadas);
+        setConta(contasMapeadas.length > 0 ? contasMapeadas[0].id : null); 
       })
       .catch((error) => console.error("Erro ao buscar contas:", error));
-  }, [setConta]);
+  }, [mes, ano, setConta]);
 
   const options = contas.map((conta) => ({
     value: conta.id,
     label: (
       <div style={{ display: "flex", alignItems: "center" }}>
-        <img
-          src={conta.banco.iconeUrl}
-          alt={conta.banco.nome}
-          width={20}
-          height={20}
-          style={{ marginRight: "10px" }}
-        />
+        {conta.iconeUrl ? (
+          <img
+            src={conta.iconeUrl}
+            alt={conta.nomeBanco}
+            width={20}
+            height={20}
+            style={{ marginRight: "10px" }}
+          />
+        ) : (
+          <span style={{ marginRight: "10px" }}>🛑</span> // Placeholder se não houver ícone
+        )}
         <span>
-          {conta.banco.nome} - Saldo: R$ {conta.saldo.toFixed(2)}
+          {conta.nomeBanco} - Saldo: R$ {conta.saldo.toFixed(2)}
         </span>
       </div>
     ),
   }));
 
   const handleChange = (selectedOption: any) => {
-    setConta(selectedOption.value); // Atualiza a conta selecionada
+    setConta(selectedOption.value); 
   };
 
   return (

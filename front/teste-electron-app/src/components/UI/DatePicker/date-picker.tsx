@@ -9,15 +9,17 @@ interface DatePickerProps {
   iconsrc: string;
 }
 
-const CustomDatePicker: React.FC<DatePickerProps> = ({ value,iconsrc, onChange }) => {
+const CustomDatePicker: React.FC<DatePickerProps> = ({ value, iconsrc, onChange }) => {
   const handleDateChange = (date: Date | null) => {
     if (date) {
-      const formattedDate = date.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
+      const formattedDate = date.toISOString().split('T')[0];
       onChange(formattedDate);
     } else {
-      onChange(""); // Limpa a data
+      onChange("");
     }
   };
+
+  const maxDate = new Date();
 
   return (
     <div className={styles.datePickerContainer}>
@@ -31,8 +33,9 @@ const CustomDatePicker: React.FC<DatePickerProps> = ({ value,iconsrc, onChange }
           className={styles.datePickerInput}
           dateFormat="yyyy-MM-dd"
           placeholderText="EX: 2005/04/02"
+          maxDate={maxDate}
         />
-        <img src={iconsrc}className={styles.iconDate}/>
+        <img src={iconsrc} className={styles.iconDate} alt="Ícone de calendário" />
       </div>
     </div>
   );

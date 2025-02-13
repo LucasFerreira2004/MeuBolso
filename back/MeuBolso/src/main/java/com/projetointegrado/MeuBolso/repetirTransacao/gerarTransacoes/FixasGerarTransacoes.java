@@ -2,6 +2,7 @@ package com.projetointegrado.MeuBolso.repetirTransacao.gerarTransacoes;
 
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFactory;
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStrategy;
+import com.projetointegrado.MeuBolso.transacao.OrigemTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
@@ -31,7 +32,7 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
         }
 
         while (!dataUltimaExecucao.isAfter(dataBusca)) {
-            Transacao novaTransacao = new Transacao(transacaoRecorrente, dataUltimaExecucao);
+            Transacao novaTransacao = new Transacao(transacaoRecorrente, dataUltimaExecucao, OrigemTransacao.FIXA);
             transacaoRepository.save(novaTransacao);
             transacaoRecorrente.setUltimaExecucao(dataUltimaExecucao);
 
