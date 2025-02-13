@@ -20,9 +20,6 @@ public class UsuarioSaveDTO {
     @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.")
     private String senha;
 
-    @Lob
-    private MultipartFile img_url;
-
     public UsuarioSaveDTO() {
     }
 
@@ -60,13 +57,5 @@ public class UsuarioSaveDTO {
 
     public void setSenha(String senha) {
         this.senha = senha;
-    }
-
-    public MultipartFile getImg_url() {
-        return img_url;
-    }
-
-    public void setImg_url(String img_url) {
-        this.img_url = img_url;
     }
 }

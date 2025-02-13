@@ -1,16 +1,17 @@
 package com.projetointegrado.MeuBolso.usuario;
 
+import com.projetointegrado.MeuBolso.ArmazenamentoImagens.IStorageService;
 import com.projetointegrado.MeuBolso.categoria.CriarCategoriasIniciaisService;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.exception.EmailJaCadastradoException;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,6 +27,9 @@ public class UsuarioService implements IUsuarioService {
     @Autowired
     private UsuarioValidateService usuarioValidateService;
 
+    @Autowired
+    private IStorageService imgStorageService;
+
     @Transactional
     public UsuarioDTO save(UsuarioSaveDTO usuarioSaveDTO) {
         if (usuarioRepository.findByEmail(usuarioSaveDTO.getEmail()) != null)
@@ -39,9 +43,19 @@ public class UsuarioService implements IUsuarioService {
         return new UsuarioDTO(usuario);
     }
 
-    public UsuarioDTO update(String userId, UsuarioSaveDTO usuarioSaveDTO) {
+    @Transactional
+    public UsuarioDTO update(String userId, UsuarioSaveDTO usuarioSaveDTO, MultipartFile img) {
         String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioSaveDTO.getSenha());
-        Usuario usuario = new Usuario(usuarioSaveDTO.getNome(), usuarioSaveDTO.getEmail(), encryptedPassword, usuarioSaveDTO.getImg_url()); //mudar para passar que o getImag_url seja na verdade um byteCode da imamgem e eu possa gerar a url depois, creio que deve ser responsabilidade de outra classe para que possa ser reaproveitada.
+        String imgUrl = null;
+        if (img != null) {
+            try {
+                imgUrl = imgStorageService.uploadFile(img);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        }
+        Usuario usuario = new Usuario(userId, usuarioSaveDTO.getNome(), usuarioSaveDTO.getEmail(), encryptedPassword, imgUrl);
 
         usuario = usuarioRepository.save(usuario);
         return new UsuarioDTO(usuario);
