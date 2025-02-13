@@ -2,8 +2,12 @@ package com.projetointegrado.MeuBolso.orcamento.dto;
 
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.orcamento.Orcamento;
+import com.projetointegrado.MeuBolso.orcamento.notifications.NotificacaoOrcamento;
+import com.projetointegrado.MeuBolso.orcamento.notifications.NotificacaoOrcamentoDTO;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrcamentoDTO {
     private Long id;
@@ -15,11 +19,13 @@ public class OrcamentoDTO {
     private Integer mes;
     private Integer ano;
     private CategoriaDTO categoriaDTO;
+    private List<NotificacaoOrcamentoDTO> notificacoes = new ArrayList<>();
 
     public OrcamentoDTO() {
     }
 
-    public OrcamentoDTO(Long id, String descricao, BigDecimal valorEstimado, BigDecimal valorGasto, BigDecimal valorRestante, BigDecimal progresso, Integer mes, Integer ano, CategoriaDTO categoriaDTO) {
+    public OrcamentoDTO(Long id, String descricao, BigDecimal valorEstimado, BigDecimal valorGasto, BigDecimal valorRestante, BigDecimal progresso,
+                        Integer mes, Integer ano, CategoriaDTO categoriaDTO, List<NotificacaoOrcamento> notificacoes) {
         this.id = id;
         this.descricao = descricao;
         this.valorEstimado = valorEstimado;
@@ -29,6 +35,7 @@ public class OrcamentoDTO {
         this.mes = mes;
         this.ano = ano;
         this.categoriaDTO = categoriaDTO;
+        this.setNotificacoes(notificacoes);
     }
 
     public OrcamentoDTO(Orcamento orcamento) {
@@ -41,6 +48,7 @@ public class OrcamentoDTO {
         this.mes = orcamento.getMes();
         this.ano = orcamento.getAno();
         this.categoriaDTO = new CategoriaDTO(orcamento.getCategoria());
+        this.setNotificacoes(orcamento.getNotificacoes());
     }
 
     public Long getId() {
@@ -114,5 +122,13 @@ public class OrcamentoDTO {
     public void setCategoriaDTO(CategoriaDTO categoriaDTO) {
         this.categoriaDTO = categoriaDTO;
         this.setDescricao();
+    }
+
+    public List<NotificacaoOrcamentoDTO> getNotificacoes() {
+        return notificacoes;
+    }
+
+    public void setNotificacoes(List<NotificacaoOrcamento> notificacoes) {
+        this.notificacoes = notificacoes.stream().map(NotificacaoOrcamentoDTO::new).toList();
     }
 }

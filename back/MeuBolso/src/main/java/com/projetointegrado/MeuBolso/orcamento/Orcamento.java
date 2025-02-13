@@ -1,12 +1,16 @@
 package com.projetointegrado.MeuBolso.orcamento;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
+import com.projetointegrado.MeuBolso.meta.notifications.NotificacaoMeta;
+import com.projetointegrado.MeuBolso.orcamento.notifications.NotificacaoOrcamento;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -39,6 +43,9 @@ public class Orcamento {
     @Valid
     @JoinColumn(nullable = false, name = "usuario_id")
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "orcamento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NotificacaoOrcamento> notificacoes = new ArrayList<>();
 
     public Orcamento() {
     }
@@ -143,6 +150,48 @@ public class Orcamento {
         } else {
             this.progresso = BigDecimal.ZERO;
         }
+    }
+
+    public List<NotificacaoOrcamento> getNotificacoes() {
+        return notificacoes;
+    }
+
+    public void setNotificacoes(List<NotificacaoOrcamento> notificacoes) {
+        this.notificacoes = notificacoes;
+    }
+
+    public void verificarThresholds() {
+        // Supondo que this.valorEstimado seja o total definido e valorGasto seja o que já foi usado
+        if (this.valorEstimado == null || this.valorEstimado.compareTo(BigDecimal.ZERO) == 0) {
+            return;
+        }
+        BigDecimal progresso = valorGasto
+                .divide(this.valorEstimado, 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
+
+        // thresholds que queremos verificar
+        List<Integer> thresholds = List.of(50, 90, 100);
+
+        for (Integer threshold : thresholds) {
+            if (progresso.compareTo(new BigDecimal(threshold)) >= 0 && !notificacaoJaEnviada(threshold)) {
+                // Dispara notificação e Marca como notificado
+                // Ex: eventPublisher.publishEvent(new OrcamentoProgressEvent(this.id, progresso, threshold));
+                salvarNotificacao(threshold);
+            }
+        }
+    }
+
+    private boolean notificacaoJaEnviada(int threshold) {
+        return this.notificacoes.stream()
+                .anyMatch(n -> n.getThreshold() == threshold && n.isNotificado());
+    }
+
+    private void salvarNotificacao(Integer threshold) {
+        NotificacaoOrcamento notificacao = new NotificacaoOrcamento();
+        notificacao.setThreshold(threshold);
+        notificacao.setNotificado(true);
+        notificacao.setOrcamento(this);
+        this.notificacoes.add(notificacao);
     }
 
     @Override
