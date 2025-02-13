@@ -11,6 +11,7 @@ public class OrcamentoDTO {
     private BigDecimal valorEstimado;
     private BigDecimal valorGasto;
     private BigDecimal valorRestante;
+    private BigDecimal progresso;
     private Integer mes;
     private Integer ano;
     private CategoriaDTO categoriaDTO;
@@ -18,12 +19,13 @@ public class OrcamentoDTO {
     public OrcamentoDTO() {
     }
 
-    public OrcamentoDTO(Long id, String descricao, BigDecimal valorEstimado, BigDecimal valorGasto, BigDecimal valorRestante, Integer mes, Integer ano, CategoriaDTO categoriaDTO) {
+    public OrcamentoDTO(Long id, String descricao, BigDecimal valorEstimado, BigDecimal valorGasto, BigDecimal valorRestante, BigDecimal progresso, Integer mes, Integer ano, CategoriaDTO categoriaDTO) {
         this.id = id;
         this.descricao = descricao;
         this.valorEstimado = valorEstimado;
         this.valorGasto = valorGasto;
         this.valorRestante = valorRestante;
+        this.progresso = progresso;
         this.mes = mes;
         this.ano = ano;
         this.categoriaDTO = categoriaDTO;
@@ -35,6 +37,7 @@ public class OrcamentoDTO {
         this.valorEstimado = orcamento.getValorEstimado();
         this.valorGasto = orcamento.getValorGasto();
         this.valorRestante = orcamento.getValorRestante();
+        this.progresso = orcamento.getProgresso();
         this.mes = orcamento.getMes();
         this.ano = orcamento.getAno();
         this.categoriaDTO = new CategoriaDTO(orcamento.getCategoria());
@@ -74,6 +77,14 @@ public class OrcamentoDTO {
 
     public void setValorRestante(BigDecimal valorRestante) {
         this.valorRestante = valorRestante;
+    }
+
+    public BigDecimal getProgresso() {
+        return progresso;
+    }
+
+    public void setProgresso(BigDecimal progresso) {
+        this.progresso = progresso;
     }
 
     public void setDescricao(String descricao) {

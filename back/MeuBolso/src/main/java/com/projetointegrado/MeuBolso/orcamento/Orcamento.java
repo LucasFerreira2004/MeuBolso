@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 @Entity
@@ -32,6 +33,7 @@ public class Orcamento {
 
     private BigDecimal valorGasto;
     private BigDecimal valorRestante;
+    private BigDecimal progresso;
 
     @ManyToOne
     @Valid
@@ -50,6 +52,7 @@ public class Orcamento {
         this.usuario = usuario;
         this.valorGasto = BigDecimal.ZERO;
         this.valorRestante = BigDecimal.ZERO;
+        this.progresso = BigDecimal.ZERO;
     }
 
     public Long getId() {
@@ -121,9 +124,25 @@ public class Orcamento {
         this.usuario = usuario;
     }
 
-    public void atualizarValores(BigDecimal gastoTotal) {
+    public void updateValores(BigDecimal gastoTotal) {
         this.valorGasto = gastoTotal;
         this.valorRestante = this.valorEstimado.subtract(gastoTotal);
+        this.updateProgresso();
+    }
+
+    public BigDecimal getProgresso() {
+        return progresso;
+    }
+
+    public void updateProgresso() {
+        if (this.valorEstimado != null && this.valorEstimado.compareTo(BigDecimal.ZERO) > 0) {
+            this.progresso = this.valorGasto
+                    .divide(this.valorEstimado, 4, RoundingMode.HALF_UP)
+                    .multiply(BigDecimal.valueOf(100))
+                    .setScale(2, RoundingMode.HALF_UP);
+        } else {
+            this.progresso = BigDecimal.ZERO;
+        }
     }
 
     @Override

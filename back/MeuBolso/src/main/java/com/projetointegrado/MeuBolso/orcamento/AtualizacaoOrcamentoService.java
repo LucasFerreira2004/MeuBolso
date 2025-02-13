@@ -31,8 +31,7 @@ public class AtualizacaoOrcamentoService {
                     orcamento.getCategoria().getId(), usuarioId, dataInicio, dataFim
             );
 
-            orcamento.setValorGasto(gastoTotal);
-            orcamento.setValorRestante(orcamento.getValorEstimado().subtract(gastoTotal));
+            orcamento.updateValores(gastoTotal);
 
             orcamentoRepository.save(orcamento);
         });
