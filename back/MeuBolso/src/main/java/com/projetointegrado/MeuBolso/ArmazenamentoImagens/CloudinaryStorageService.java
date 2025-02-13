@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.ArmazenamentoImagens;
 
+import com.projetointegrado.MeuBolso.ArmazenamentoImagens.Exceptions.ImagemGrandeException;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +23,7 @@ public class CloudinaryStorageService implements IStorageService {
     public String uploadFile(MultipartFile file) {
         long maxSize = 2 * 1024 * 1024; // 2MB em bytes
         if (file.getSize() > maxSize) {
-            throw new IllegalArgumentException("A imagem excede o tamanho máximo permitido de 2MB.");
+            throw new ImagemGrandeException(file.getOriginalFilename(), " imagem excede o tamanho máximo permitido de 2MB.");
         }
 
             try {
@@ -37,7 +38,7 @@ public class CloudinaryStorageService implements IStorageService {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 Thumbnails.of(image)
                         .size(250, 250) // Redimensiona para no máximo 800x800
-                        .outputFormat("jpg") // Converte para WEBP
+                        .outputFormat("png") // Converte para jpg
                         .outputQuality(0.8) // Ajusta qualidade
                         .toOutputStream(outputStream);
 
