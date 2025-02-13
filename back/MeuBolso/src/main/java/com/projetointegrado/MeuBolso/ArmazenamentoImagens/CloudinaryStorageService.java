@@ -26,36 +26,36 @@ public class CloudinaryStorageService implements IStorageService {
             throw new ImagemGrandeException(file.getOriginalFilename(), " imagem excede o tamanho máximo permitido de 2MB.");
         }
 
-            try {
-                InputStream inputStream = file.getInputStream();
-                BufferedImage image = ImageIO.read(inputStream);
-                String contentType = file.getContentType();
-                if (contentType == null || (!contentType.equals("image/png") && !contentType.equals("image/jpeg"))) {
-                    throw new IllegalArgumentException("Apenas arquivos PNG e JPG são permitidos!");
-                }
-
-                // Converte para JPG e reduz tamanho
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                Thumbnails.of(image)
-                        .size(250, 250) // Redimensiona para no máximo 800x800
-                        .outputFormat("png") // Converte para jpg
-                        .outputQuality(0.8) // Ajusta qualidade
-                        .toOutputStream(outputStream);
-
-                // Faz o upload para o Cloudinary
-                Map uploadResult = cloudinary.uploader().upload(
-                        outputStream.toByteArray(),
-                        ObjectUtils.asMap("resource_type", "image",
-                                                    "format", "webp")
-                );
-
-                // Retorna a URL da imagem no Cloudinary
-                return (String) uploadResult.get("secure_url");
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException("Erro ao fazer upload da imagem!", e);
+        try {
+            InputStream inputStream = file.getInputStream();
+            BufferedImage image = ImageIO.read(inputStream);
+            String contentType = file.getContentType();
+            if (contentType == null || (!contentType.equals("image/png") && !contentType.equals("image/jpeg"))) {
+                throw new IllegalArgumentException("Apenas arquivos PNG e JPG são permitidos!");
             }
+
+            // Converte para JPG e reduz tamanho
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            Thumbnails.of(image)
+                    .size(250, 250) // Redimensiona para no máximo 800x800
+                    .outputFormat("png") // Converte para jpg
+                    .outputQuality(0.8) // Ajusta qualidade
+                    .toOutputStream(outputStream);
+
+            // Faz o upload para o Cloudinary
+            Map uploadResult = cloudinary.uploader().upload(
+                    outputStream.toByteArray(),
+                    ObjectUtils.asMap("resource_type", "image",
+                                                "format", "webp")
+            );
+
+            // Retorna a URL da imagem no Cloudinary
+            return (String) uploadResult.get("secure_url");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao fazer upload da imagem!", e);
+        }
     }
 
 }
