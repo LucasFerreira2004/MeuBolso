@@ -4,10 +4,10 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import style from "./home.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
-import CardMetas from "../../components/UI/CardMetas/card-metas";
+// import CardMetas from "../../components/UI/CardMetas/card-metas";
 import DatePicker, { meses } from "../../components/UI/Date/date";
-import Skeleton from "react-loading-skeleton"; // Importando o Skeleton
-import "react-loading-skeleton/dist/skeleton.css"; // Importando o estilo
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import TotalBalanco from "../../components/UI/ChartsRelatorios/TotalBalanco/total-balanco";
 
 interface Banco {
@@ -22,7 +22,8 @@ function Home() {
 
   const [bancos, setBancos] = useState<Banco[]>([]);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
-  const [] = useState<string | null>(null);
+  const [totalDespesas, setTotalDespesas] = useState<number | null>(null);
+  const [totalReceitas, setTotalReceitas] = useState<number | null>(null);
 
   const [mes, setMes] = useState(new Date().getMonth() + 1);
   const [ano, setAno] = useState(new Date().getFullYear());
@@ -92,6 +93,18 @@ function Home() {
       "Erro ao carregar o saldo total.",
       (data) => setSaldoTotal(data.saldo)
     );
+
+    fetchData(
+      `http://localhost:8080/transacoes/somatorioDespesas?ano=${ano}&mes=${mes}`,
+      "Erro ao carregar o total de despesas.",
+      (data) => setTotalDespesas(data.valor)
+    );
+
+    fetchData(
+      `http://localhost:8080/transacoes/somatorioReceitas?ano=${ano}&mes=${mes}`,
+      "Erro ao carregar o total de receitas.",
+      (data) => setTotalReceitas(data.valor)
+    );
   }, [ano, mes]);
 
   return (
@@ -144,7 +157,7 @@ function Home() {
                 {isLoading ? (
                   <Skeleton height={30} count={3} />
                 ) : bancos.length === 0 ? (
-                  <p>Nenhum dado encontrado.</p>
+                  <p>Nenhuma conta Criada.</p>
                 ) : (
                   bancos.map((banco) => (
                     <div className={style.linebanks} key={banco.nomeBanco}>
@@ -175,27 +188,37 @@ function Home() {
                     className={style.iconH}
                   />
                   <p className={style.spanRed}>
-                    <span>Gastos do dia: </span> R$ 54,00
+                    <span>Total Despesas: </span>
+                    {isLoading ? (
+                      <Skeleton width={80} />
+                    ) : (
+                      formatarSaldo(totalDespesas)
+                    )}
                   </p>
                 </div>
                 <div className={style.linesTransacoes}>
                   <img
-                    src="/assets/Hred.svg"
-                    alt="Ícone Hred"
+                    src="/assets/Hgreen.svg"
+                    alt="Ícone Hgreen"
                     className={style.iconH}
                   />
-                  <p className={style.spanRed}>
-                    <span>Gastos do dia: </span> R$ 54,00
+                  <p className={style.spanGreen}>
+                    <span>Total Receitas: </span>
+                    {isLoading ? (
+                      <Skeleton width={80} />
+                    ) : (
+                      formatarSaldo(totalReceitas)
+                    )}
                   </p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className={style.cards2}>
+          {/* <div className={style.cards2}>
             <h2>Metas</h2>
             <CardMetas imagem="/assets/moto.svg" texto="Meta para moto" />
-          </div>
+          </div> */}
 
           <div className={style.cards3}>
             <div className={style.graphic}>

@@ -235,7 +235,7 @@ function Transacoes() {
               className={style.iconT}
             />
             <p>
-              <span className={style.spanM}>Estimativa de Saldo: </span>
+              <span className={style.spanM}>Saldo total: </span>
               {isLoading ? "Carregando..." : formatarSaldo(saldoTotal)}
             </p>
           </div>
