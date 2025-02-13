@@ -1,14 +1,30 @@
-.orcamentos{
-    display: flex;
-    flex-direction: column;
-    margin-left: 300px;
-    padding-bottom: 40px;
+.orcamentos {
+  display: flex;
+  flex-direction: column;
+  margin-left: 300px;
+  padding-bottom: 40px;
 }
-.headerOrcamentos{
-    display: flex;
-    justify-content: space-between;
+.headerOrcamentos {
+  display: flex;
+  justify-content: space-between;
 }
-.headerOrcamentos div{
-    padding-top: 80px;
-    padding-right: 30px;
+.mainContainer {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 1300px;
+  background-color: black;
+}
+
+.dateWrapper {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  flex-grow: 1;
 }
