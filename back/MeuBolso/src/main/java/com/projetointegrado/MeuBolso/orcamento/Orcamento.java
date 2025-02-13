@@ -187,10 +187,14 @@ public class Orcamento {
     }
 
     private void salvarNotificacao(Integer threshold) {
+        // Remove notificações com thresholds menores
+        this.notificacoes.removeIf(n -> n.getThreshold() < threshold);
+
         NotificacaoOrcamento notificacao = new NotificacaoOrcamento();
         notificacao.setThreshold(threshold);
         notificacao.setNotificado(true);
         notificacao.setOrcamento(this);
+
         this.notificacoes.add(notificacao);
     }
 
