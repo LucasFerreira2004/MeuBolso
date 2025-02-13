@@ -7,6 +7,7 @@ import com.projetointegrado.MeuBolso.conta.ContaValidateService;
 import com.projetointegrado.MeuBolso.globalExceptions.AcessoNegadoException;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.meta.*;
+import com.projetointegrado.MeuBolso.transacao.OrigemTransacao;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
@@ -112,7 +113,8 @@ public class TransacaoMetaService implements ITransacaoMetaService {
                 conta,
                 null,
                 ("meta: " + meta.getDescricao()),
-                meta.getUsuario()
+                meta.getUsuario(),
+                OrigemTransacao.NORMAL
         );
         transacaoRepository.save(transacao);
 
