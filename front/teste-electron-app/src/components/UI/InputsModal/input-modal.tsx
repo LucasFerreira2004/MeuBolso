@@ -2,7 +2,7 @@ import style from './InputWithIcon.module.css';
 
 interface InputWithIconProps {
   label: string;
-  iconSrc: string;
+  iconSrc?: string ;
   placeholder?: string;
   [key: string]: unknown;
 }

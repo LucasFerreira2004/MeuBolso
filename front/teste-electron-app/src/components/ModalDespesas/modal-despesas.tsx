@@ -197,7 +197,6 @@ function ModalDespesas({ onCloseAll, mes, ano }: ModalDespesasProps) {
             {tipoTransacao === "PARCELADA" && (
               <InputWithIcon
                 label="Quantidade de Parcelas:"
-                iconSrc="/assets/iconsModalDespesas/parcelas.svg"
                 type="number"
                 placeholder="Ex: 12"
                 value={qtdParcelas || ""}
