@@ -1,8 +1,11 @@
 package com.projetointegrado.MeuBolso.transacaoRecorrente;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface TransacaoRecorrenteRepository extends JpaRepository<TransacaoRecorrente, Long> {
@@ -21,4 +24,13 @@ public interface TransacaoRecorrenteRepository extends JpaRepository<TransacaoRe
         order by (data_cadastro) desc;
     """)
     public List<TransacaoRecorrente> findAllArquivadasByUsuario(String userId);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = """
+        delete from TRANSACAO
+        where transacao_recorrente_id = :id
+        and data > :data
+    """)
+    public void deleteAllAfterDate(Long id, LocalDate data);
 }

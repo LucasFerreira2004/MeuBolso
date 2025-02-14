@@ -51,7 +51,7 @@ public class Transacao {
     private Usuario usuario;
 
     @ManyToOne(optional = true)
-    @JoinColumn(name = "transacao_fixa_id")
+    @JoinColumn(name = "transacao_recorrente_id")
     private TransacaoRecorrente transacaoRecorrente;
 
     @Enumerated(EnumType.STRING)
