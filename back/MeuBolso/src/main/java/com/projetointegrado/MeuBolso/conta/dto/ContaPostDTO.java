@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ContaPostDTO {
+
     private BigDecimal saldo;
     private Long id_banco;
     private Long id_tipo_conta;
-    private LocalDate data;
     private String descricao;
 
     public String getDescricao() {
@@ -16,14 +16,6 @@ public class ContaPostDTO {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
     }
 
     public BigDecimal getSaldo() {
