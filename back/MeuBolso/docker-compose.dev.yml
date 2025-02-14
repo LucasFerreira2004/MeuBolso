@@ -22,6 +22,9 @@ services:
 
       SPRING_JPA_SHOW_SQL: 'true'
       SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: 'true'
+
+      # Cloudinary
+      CLOUDINARY_URL: ${CLOUDINARY_URL}
     networks:
       - dev-network
 
