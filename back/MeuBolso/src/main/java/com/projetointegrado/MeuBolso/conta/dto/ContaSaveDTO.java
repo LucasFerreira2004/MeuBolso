@@ -18,7 +18,6 @@ public abstract class ContaSaveDTO {
     @NotNull(message = "Tipo da conta não pode ser vazio")
     private Long id_tipo_conta;
 
-    @NotNull(message = "Descrição não pode ser vazia")
     @NotBlank(message = "Descrição não pode ser vazia")
     private String descricao;
 
