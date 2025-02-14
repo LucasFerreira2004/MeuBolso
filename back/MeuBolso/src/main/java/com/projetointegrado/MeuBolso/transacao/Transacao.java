@@ -54,7 +54,6 @@ public class Transacao {
     @JoinColumn(name = "transacao_fixa_id")
     private TransacaoRecorrente transacaoRecorrente;
 
-    //@NotNull //adicionar not null para os demais campos?
     @Enumerated(EnumType.STRING)
     private OrigemTransacao origemTransacao;
 
@@ -95,8 +94,6 @@ public class Transacao {
     }
 
     // Getters e Setters
-
-
     public TransacaoRecorrente getTransacaoFixa() {
         return transacaoRecorrente;
     }
