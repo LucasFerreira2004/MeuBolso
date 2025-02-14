@@ -19,7 +19,7 @@ public class TransacaoRepeticaoAspect {
     @Before("execution(* com.projetointegrado.MeuBolso.conta.ContaService.find*(..)) || execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findAll*(..)) " +
             "|| execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findSum*(..)) || execution(* com.projetointegrado.MeuBolso.dashboard.CategoriaDashboardService.find*(..))" +
             "|| execution(* com.projetointegrado.MeuBolso.dashboard.ContaDashboardService.find*(..)) || execution(* com.projetointegrado.MeuBolso.dashboard.TransacoesDashboardsService.find*(..))")
-    public void gerarTransacoesFixasAntesDasBuscas(JoinPoint joinPoint) {
+    public void gerarTransacoesRecorrentes(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         LocalDate data = null;
         String usuarioId = null;
