@@ -1,9 +1,11 @@
 package com.projetointegrado.MeuBolso.usuario.dto;
 
 import com.projetointegrado.MeuBolso.usuario.Usuario;
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 public class UsuarioSaveDTO {
     @NotBlank(message = "O nome é obrigatório.")
