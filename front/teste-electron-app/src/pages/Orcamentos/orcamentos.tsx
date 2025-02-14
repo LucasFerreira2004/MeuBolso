@@ -1,6 +1,8 @@
 import { useState } from "react";
 import DatePicker from "../../components/UI/Date/date";
 import style from "./orcamentos.module.css";
+import TotalOrcamentos from "../../components/UI/CardsOrcamentos/card-total";
+import AddButton from "../../components/UI/AddButton/add-button";
 
 function ContasBancarias() {
   const [mes, setMes] = useState(new Date().getMonth() + 1);
@@ -20,10 +22,16 @@ function ContasBancarias() {
             }}
           />
         </div>
+        <AddButton
+          texto="Adicionar orçamento"
+          onClick={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
       </header>
       <main className={style.mainContainer}>
       <div className={style.cards}>
-          
+        <TotalOrcamentos/>
         </div>
       </main>
     </div>
