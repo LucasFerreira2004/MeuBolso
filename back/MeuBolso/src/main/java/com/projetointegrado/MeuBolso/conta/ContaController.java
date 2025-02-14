@@ -1,10 +1,13 @@
 package com.projetointegrado.MeuBolso.conta;
 
 import com.projetointegrado.MeuBolso.conta.dto.*;
+import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -60,13 +63,19 @@ public class ContaController {
     }
 
     @PostMapping
-    public ContaDTO save(@RequestBody ContaPostDTO contaPostDTO){ //adicionar @Valid depois.
+    public ContaDTO save(@RequestBody @Valid ContaPostDTO contaPostDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
         String userId = usuarioService.getUsuarioLogadoId();
         return contaService.save(userId, contaPostDTO);
     }
 
     @PutMapping("/{id}")
-    public ContaDTO update(@PathVariable Long id, @RequestBody ContaPutDTO contaPostDTO){ //aterar para criar transacao de correcao de valor
+    public ContaDTO update(@PathVariable Long id, @RequestBody @Valid ContaPutDTO contaPostDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
         String userId = usuarioService.getUsuarioLogadoId();
         return contaService.update(id, contaPostDTO, userId);
     }

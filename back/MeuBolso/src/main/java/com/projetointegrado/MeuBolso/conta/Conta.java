@@ -40,22 +40,22 @@ public class Conta {
     @JoinColumn(nullable = false, name = "usuario_id")
     private Usuario usuario;
 
+    @Column(nullable = false)
+    private BigDecimal saldoInicial;
+
     @OneToMany(mappedBy = "conta", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Transacao> transacoes;
 
     @OneToMany(mappedBy = "conta", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<TransacaoRecorrente> transacoesRecorrentes;
 
-   // @Transient //indica que o valor não será persistido no banco de dados.
-    //private Date dataAtual;
 
-    //mapear as transacoes_recorrentes aqui.
-
-    public Conta(Long id, TipoConta tipo_conta, Banco banco, String descricao, Usuario usuario) {
+    public Conta(Long id, TipoConta tipo_conta, Banco banco, String descricao, BigDecimal saldoInicial ,Usuario usuario) {
         this.id = id;
         this.tipo_conta = tipo_conta;
         this.banco = banco;
         this.descricao = descricao;
+        this.saldoInicial = saldoInicial;
         this.usuario = usuario;
         this.transacoes = new ArrayList<>();
     }
@@ -76,7 +76,7 @@ public class Conta {
     }
 
     public BigDecimal getSaldo(LocalDate data) {
-        BigDecimal saldo = BigDecimal.ZERO;
+        BigDecimal saldo = saldoInicial;
         if (transacoes == null || transacoes.isEmpty()) return saldo;
         for (Transacao transacao : transacoes) {
             if (!transacao.getData().isAfter(data)) { //retorna true para todas as datas antes de data
@@ -88,9 +88,6 @@ public class Conta {
         }
         return saldo;
     }
-//    public void setSaldo(BigDecimal saldo) {
-//        this.saldo = saldo; //tirar essa lógica depois.
-//    }
 
     public TipoConta getTipo_conta() {
         return tipo_conta;
@@ -123,14 +120,6 @@ public class Conta {
     public void setTransacoes(List<Transacao> transacoes) {
         this.transacoes = transacoes;
     }
-
-//    public Date getDataAtual() {
-//        return dataAtual;
-//    }
-//
-//    public void setDataAtual(Date dataAtual) {
-//        this.dataAtual = dataAtual;
-//    }
 
     public String getDescricao() {
         return descricao;
