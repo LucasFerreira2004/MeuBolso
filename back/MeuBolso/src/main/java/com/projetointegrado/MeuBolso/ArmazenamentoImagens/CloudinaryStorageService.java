@@ -3,6 +3,7 @@ package com.projetointegrado.MeuBolso.ArmazenamentoImagens;
 import com.projetointegrado.MeuBolso.ArmazenamentoImagens.Exceptions.ImagemGrandeException;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.http.converter.json.GsonBuilderUtils;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.cloudinary.*;
 import com.cloudinary.utils.ObjectUtils;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+@Service
 public class CloudinaryStorageService implements IStorageService {
     private final Dotenv dotenv = Dotenv.load();
     private final String CLOUDINARY_URL = System.getenv("CLOUDINARY_URL") != null
