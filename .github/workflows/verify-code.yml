@@ -23,7 +23,10 @@ jobs:
           distribution: 'temurin'
 
       - name: Configurar variáveis de ambiente
-        run: echo "CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}" >> $GITHUB_ENV
+        run: |
+          echo "CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}" >> $GITHUB_ENV
+          echo "CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}" >> $GITHUB_ENV && cat $GITHUB_ENV
+
         
       - name: Run Maven Verify
         run: mvn -f back/MeuBolso/pom.xml --batch-mode --update-snapshots verify
