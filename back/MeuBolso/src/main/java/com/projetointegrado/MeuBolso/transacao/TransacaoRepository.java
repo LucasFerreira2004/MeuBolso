@@ -57,7 +57,7 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
         from transacao as t,
              categoria as c
         where c.id = t.categoria_id
-              and t.usuario_id = :userId 
+              and t.usuario_id = :userId  
               and t.tipo = :tipo 
               and t.data between :dataInicio and :dataFim
               and c.interna_sistema = false;

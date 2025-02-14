@@ -94,11 +94,11 @@ public class Transacao {
     }
 
     // Getters e Setters
-    public TransacaoRecorrente getTransacaoFixa() {
+    public TransacaoRecorrente getTransacaoRecorrente() {
         return transacaoRecorrente;
     }
 
-    public void setTransacaoFixa(TransacaoRecorrente transacaoRecorrente) {
+    public void setTransacaoRecorrente(TransacaoRecorrente transacaoRecorrente) {
         this.transacaoRecorrente = transacaoRecorrente;
     }
 
