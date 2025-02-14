@@ -1,9 +1,9 @@
-import styles from "./modal-add-orcamento.module.css";
+import styles from "./modal-edit-orcamento.module.css";
 import DatePicker from "../UI/DatePicker/date-picker";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
 
-type ModalAddOrcamentoProps = {
+type ModalEditOrcamentoProps = {
   valor: string;
   data: string; 
   onCloseAll: () => void;
@@ -12,14 +12,14 @@ type ModalAddOrcamentoProps = {
   setData: (data: string) => void;
 };
 
-function ModalAddOrcamento({
+function ModalEditOrcamento({
   valor,
   data,
   onCloseAll,
   handleChangeValor,
   setCategoria,
   setData,
-}: ModalAddOrcamentoProps) {
+}: ModalEditOrcamentoProps) {
   return (
     <div
       className={styles.modalOverlay}
@@ -27,7 +27,7 @@ function ModalAddOrcamento({
     >
       <div className={styles.modalContent}>
         <div className={styles.headerModal}>
-          <h3>Novo orçamento</h3>
+          <h3>Editar orçamento</h3>
           <button className={styles.closeButton} onClick={onCloseAll}>
             <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
@@ -55,4 +55,4 @@ function ModalAddOrcamento({
   );
 }
 
-export default ModalAddOrcamento;
+export default ModalEditOrcamento;
