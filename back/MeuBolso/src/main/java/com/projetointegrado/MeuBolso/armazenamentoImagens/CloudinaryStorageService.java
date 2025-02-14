@@ -1,8 +1,7 @@
-package com.projetointegrado.MeuBolso.ArmazenamentoImagens;
+package com.projetointegrado.MeuBolso.armazenamentoImagens;
 
-import com.projetointegrado.MeuBolso.ArmazenamentoImagens.Exceptions.ImagemGrandeException;
+import com.projetointegrado.MeuBolso.armazenamentoImagens.Exceptions.ImagemGrandeException;
 import net.coobird.thumbnailator.Thumbnails;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.cloudinary.*;
@@ -12,7 +11,6 @@ import io.github.cdimascio.dotenv.Dotenv;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 

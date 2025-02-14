@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.ArmazenamentoImagens;
+package com.projetointegrado.MeuBolso.armazenamentoImagens;
 
 import org.springframework.web.multipart.MultipartFile;
 

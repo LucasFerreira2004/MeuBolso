@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.ArmazenamentoImagens.Exceptions;
+package com.projetointegrado.MeuBolso.armazenamentoImagens.Exceptions;
 
 public class ImagemGrandeException extends RuntimeException {
     private String campo;

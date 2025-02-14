@@ -1,7 +1,7 @@
 package com.projetointegrado.MeuBolso.config;
 
-import com.projetointegrado.MeuBolso.ArmazenamentoImagens.CloudinaryStorageService;
-import com.projetointegrado.MeuBolso.ArmazenamentoImagens.IStorageService;
+import com.projetointegrado.MeuBolso.armazenamentoImagens.CloudinaryStorageService;
+import com.projetointegrado.MeuBolso.armazenamentoImagens.IStorageService;
 import com.projetointegrado.MeuBolso.autorizacao.token.ITokenService;
 import com.projetointegrado.MeuBolso.autorizacao.token.TokenService;
 import com.projetointegrado.MeuBolso.banco.BancoService;

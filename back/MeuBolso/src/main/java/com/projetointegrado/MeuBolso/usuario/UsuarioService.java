@@ -1,6 +1,6 @@
 package com.projetointegrado.MeuBolso.usuario;
 
-import com.projetointegrado.MeuBolso.ArmazenamentoImagens.IStorageService;
+import com.projetointegrado.MeuBolso.armazenamentoImagens.IStorageService;
 import com.projetointegrado.MeuBolso.categoria.CriarCategoriasIniciaisService;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;

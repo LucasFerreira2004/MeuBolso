@@ -1,4 +1,4 @@
-package com.projetointegrado.MeuBolso.ArmazenamentoImagens.Exceptions;
+package com.projetointegrado.MeuBolso.armazenamentoImagens.Exceptions;
 
 import com.projetointegrado.MeuBolso.autorizacao.exception.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
