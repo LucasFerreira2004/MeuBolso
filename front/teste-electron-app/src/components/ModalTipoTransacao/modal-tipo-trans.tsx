@@ -5,21 +5,20 @@ import ModalReceitas from "../ModalReceitas/modal-receitas";
 
 interface ModalTransacaoProps {
   onClose: () => void;
-  mes: number; // Adicionando mes como prop
-  ano: number; // Adicionando ano como prop
+  mes: number; 
+  ano: number; 
 }
 
 function ModalTipoTransacao({ onClose, mes, ano }: ModalTransacaoProps) {
   const [isDespesasModalOpen, setIsDespesasModalOpen] = useState(false);
   const [isReceitasModalOpen, setIsReceitasModalOpen] = useState(false);
-  const [, setSelectedMes] = useState(mes); // Armazenando mes
-  const [, setSelectedAno] = useState(ano); // Armazenando ano
+  const [, setSelectedMes] = useState(mes); 
+  const [, setSelectedAno] = useState(ano); 
 
-  // Função para fechar tudo (modal de despesas/receitas + modal de transação)
   const closeAllModals = () => {
     setIsDespesasModalOpen(false);
     setIsReceitasModalOpen(false);
-    onClose(); // Fecha também o modal principal
+    onClose(); 
   };
 
   useEffect(() => {
@@ -35,6 +34,7 @@ function ModalTipoTransacao({ onClose, mes, ano }: ModalTransacaoProps) {
           onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
         >
           <div className={styles.header}>
+            <h3>Selecione o tipo da transacao</h3>
             <button className={styles.closeButton} onClick={onClose}>
               <img
                 src="/assets/iconsModal/iconX.svg"
@@ -73,7 +73,9 @@ function ModalTipoTransacao({ onClose, mes, ano }: ModalTransacaoProps) {
       {isDespesasModalOpen && (
         <ModalDespesas mes={mes} ano={ano} onCloseAll={closeAllModals} />
       )}
-      {isReceitasModalOpen && <ModalReceitas mes={mes} ano={ano} onCloseAll={closeAllModals} />}
+      {isReceitasModalOpen && (
+        <ModalReceitas mes={mes} ano={ano} onCloseAll={closeAllModals} />
+      )}
     </>
   );
 }

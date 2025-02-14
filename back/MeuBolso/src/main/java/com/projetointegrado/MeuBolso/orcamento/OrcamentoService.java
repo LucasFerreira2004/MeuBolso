@@ -86,7 +86,7 @@ public class OrcamentoService implements IOrcamentoService{
 
     @Transactional
     public Orcamento saveAndValidate(String usuarioId, Long id, OrcamentoPostDTO orcamentoDTO, Integer mes, Integer ano) {
-        // Valida o usuário e a categoria (supondo que esses métodos já fazem a validação)
+        // Valida o usuario e a categoria (supondo que esses métodos já fazem a validação)
         Usuario usuario = usuarioValidateService.validateAndGet(usuarioId,
                 new EntidadeNaoEncontradaException("{token}", "usuário não encontrado a partir do token"));
         Categoria categoria = categoriaValidateService.validateAndGet(orcamentoDTO.getIdCategoria(), usuarioId,
@@ -98,13 +98,14 @@ public class OrcamentoService implements IOrcamentoService{
         orcamentoValidateService.validateSamePeriod(categoria, usuarioId, mes, ano, id, new OrcamentoDuplicadoException());
 
         // Cria a nova orcamento
-        Orcamento orcamento = new Orcamento(categoria, mes, ano, orcamentoDTO.getValorEstimado(), usuario);
+        Orcamento orcamento = new Orcamento(null, categoria, mes, ano, orcamentoDTO.getValorEstimado(), usuario);
+
         return orcamentoRepository.save(orcamento);
     }
 
     @Transactional
     public Orcamento updateAndValidate(String usuarioId, Long id, OrcamentoPostDTO orcamentoDTO, Integer mes, Integer ano) {
-        // Primeiro, valida que o orçamento existe e pertence ao usuário
+        // Primeiro, valida que o orçamento existe e pertence ao usuario
         Orcamento orcamentoExistente = orcamentoValidateService.validateAndGet(id, usuarioId,
                 new EntidadeNaoEncontradaException("{id}", "Orçamento não encontrado para atualização"),
                 new AcessoNegadoException("Acesso negado para atualizar este orçamento."));

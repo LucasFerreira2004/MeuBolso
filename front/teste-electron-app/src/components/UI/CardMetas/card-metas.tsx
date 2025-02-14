@@ -1,10 +1,10 @@
 import React from 'react';
 import style from './card-metas.module.css';
-import ProgressBar from '../ProgressBar/progress-bar'
+import { ProgressBar } from '../ProgressBar/progress-bar'; 
 
 interface CardMetasProps {
   texto: string;
-  imagem: string; // Caminho ou URL para a imagem
+  imagem: string;
 }
 
 const CardMetas: React.FC<CardMetasProps> = ({ texto, imagem }) => {
@@ -13,7 +13,7 @@ const CardMetas: React.FC<CardMetasProps> = ({ texto, imagem }) => {
       <div className={style.cardContent}>
         <img src={imagem} alt={texto} className={style.cardImage} />
         <p className={style.cardText}>{texto}</p>
-        <ProgressBar />
+        <ProgressBar value={24} /> 
       </div>
     </div>
   );

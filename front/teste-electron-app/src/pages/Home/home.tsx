@@ -4,11 +4,11 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import style from "./home.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
-import CardMetas from "../../components/UI/CardMetas/card-metas";
 import DatePicker, { meses } from "../../components/UI/Date/date";
-import Skeleton from "react-loading-skeleton"; // Importando o Skeleton
-import "react-loading-skeleton/dist/skeleton.css"; // Importando o estilo
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import TotalBalanco from "../../components/UI/ChartsRelatorios/TotalBalanco/total-balanco";
+import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans"; // Importar modal de tipo de transação
 
 interface Banco {
   iconeUrl: string;
@@ -19,14 +19,14 @@ interface Banco {
 function Home() {
   const location = useLocation();
   const { state } = location;
-
   const [bancos, setBancos] = useState<Banco[]>([]);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
-  const [] = useState<string | null>(null);
-
+  const [totalDespesas, setTotalDespesas] = useState<number | null>(null);
+  const [totalReceitas, setTotalReceitas] = useState<number | null>(null);
   const [mes, setMes] = useState(new Date().getMonth() + 1);
   const [ano, setAno] = useState(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (state?.successMessage) {
@@ -80,6 +80,10 @@ function Home() {
     });
   };
 
+  const toggleModal = () => {
+    setIsModalOpen((prev) => !prev);
+  };
+
   useEffect(() => {
     fetchData(
       `http://localhost:8080/contas/min?ano=${ano}&mes=${mes}`,
@@ -91,6 +95,18 @@ function Home() {
       `http://localhost:8080/contas/saldoTotal?ano=${ano}&mes=${mes}`,
       "Erro ao carregar o saldo total.",
       (data) => setSaldoTotal(data.saldo)
+    );
+
+    fetchData(
+      `http://localhost:8080/transacoes/somatorioDespesas?ano=${ano}&mes=${mes}`,
+      "Erro ao carregar o total de despesas.",
+      (data) => setTotalDespesas(data.valor)
+    );
+
+    fetchData(
+      `http://localhost:8080/transacoes/somatorioReceitas?ano=${ano}&mes=${mes}`,
+      "Erro ao carregar o total de receitas.",
+      (data) => setTotalReceitas(data.valor)
     );
   }, [ano, mes]);
 
@@ -129,7 +145,12 @@ function Home() {
               )}
             </p>
           </div>
-          <AddButton texto="Adicionar Transação" onClick={() => {}} />
+          <div className={style.cardButton}>
+            <AddButton texto="Adicionar Transação" onClick={toggleModal} />
+            {isModalOpen && (
+              <ModalTipoTrans mes={mes} ano={ano} onClose={toggleModal} />
+            )}
+          </div>
         </div>
       </header>
 
@@ -144,7 +165,7 @@ function Home() {
                 {isLoading ? (
                   <Skeleton height={30} count={3} />
                 ) : bancos.length === 0 ? (
-                  <p>Nenhum dado encontrado.</p>
+                  <p>Nenhuma conta Criada.</p>
                 ) : (
                   bancos.map((banco) => (
                     <div className={style.linebanks} key={banco.nomeBanco}>
@@ -175,26 +196,31 @@ function Home() {
                     className={style.iconH}
                   />
                   <p className={style.spanRed}>
-                    <span>Gastos do dia: </span> R$ 54,00
+                    <span>Total Despesas: </span>
+                    {isLoading ? (
+                      <Skeleton width={80} />
+                    ) : (
+                      formatarSaldo(totalDespesas)
+                    )}
                   </p>
                 </div>
                 <div className={style.linesTransacoes}>
                   <img
-                    src="/assets/Hred.svg"
-                    alt="Ícone Hred"
+                    src="/assets/Hgreen.svg"
+                    alt="Ícone Hgreen"
                     className={style.iconH}
                   />
-                  <p className={style.spanRed}>
-                    <span>Gastos do dia: </span> R$ 54,00
+                  <p className={style.spanGreen}>
+                    <span>Total Receitas: </span>
+                    {isLoading ? (
+                      <Skeleton width={80} />
+                    ) : (
+                      formatarSaldo(totalReceitas)
+                    )}
                   </p>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className={style.cards2}>
-            <h2>Metas</h2>
-            <CardMetas imagem="/assets/moto.svg" texto="Meta para moto" />
           </div>
 
           <div className={style.cards3}>
