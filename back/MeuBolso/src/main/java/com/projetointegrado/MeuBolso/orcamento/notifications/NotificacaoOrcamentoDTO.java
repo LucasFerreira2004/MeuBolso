@@ -10,11 +10,16 @@ public class NotificacaoOrcamentoDTO {
     }
 
     public NotificacaoOrcamentoDTO(NotificacaoOrcamento notificacao) {
-        this.threshold = notificacao.getThreshold();
-        this.notificado = true;
+        if (notificacao == null) {
+            this.threshold = 0;
+            this.notificado = false;
+        } else {
+            this.threshold = notificacao.getThreshold();
+            this.notificado = notificacao.isNotificado();
+        }
     }
 
-    public NotificacaoOrcamentoDTO(NotificacaoOrcamentoDTO notificacaoOrcamentoDTO) {
+    public NotificacaoOrcamentoDTO() {
     }
 
     // Getters e Setters

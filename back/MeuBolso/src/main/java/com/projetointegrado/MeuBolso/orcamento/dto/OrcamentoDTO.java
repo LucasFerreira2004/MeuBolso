@@ -19,13 +19,13 @@ public class OrcamentoDTO {
     private Integer mes;
     private Integer ano;
     private CategoriaDTO categoriaDTO;
-    private List<NotificacaoOrcamentoDTO> notificacoes = new ArrayList<>();
+    private NotificacaoOrcamentoDTO notificacao;
 
     public OrcamentoDTO() {
     }
 
     public OrcamentoDTO(Long id, String descricao, BigDecimal valorEstimado, BigDecimal valorGasto, BigDecimal valorRestante, BigDecimal progresso,
-                        Integer mes, Integer ano, CategoriaDTO categoriaDTO, List<NotificacaoOrcamento> notificacoes) {
+                        Integer mes, Integer ano, CategoriaDTO categoriaDTO, NotificacaoOrcamento notificacao) {
         this.id = id;
         this.descricao = descricao;
         this.valorEstimado = valorEstimado;
@@ -35,7 +35,7 @@ public class OrcamentoDTO {
         this.mes = mes;
         this.ano = ano;
         this.categoriaDTO = categoriaDTO;
-        this.setNotificacoes(notificacoes);
+        this.setNotificacao(notificacao);
     }
 
     public OrcamentoDTO(Orcamento orcamento) {
@@ -48,7 +48,7 @@ public class OrcamentoDTO {
         this.mes = orcamento.getMes();
         this.ano = orcamento.getAno();
         this.categoriaDTO = new CategoriaDTO(orcamento.getCategoria());
-        this.setNotificacoes(orcamento.getNotificacoes());
+        this.setNotificacao(orcamento.getNotificacao());
     }
 
     public Long getId() {
@@ -124,11 +124,15 @@ public class OrcamentoDTO {
         this.setDescricao();
     }
 
-    public List<NotificacaoOrcamentoDTO> getNotificacoes() {
-        return notificacoes;
+    public NotificacaoOrcamentoDTO getNotificacao() {
+        return notificacao;
     }
 
-    public void setNotificacoes(List<NotificacaoOrcamento> notificacoes) {
-        this.notificacoes = notificacoes.stream().map(NotificacaoOrcamentoDTO::new).toList();
+    public void setNotificacao(NotificacaoOrcamento notificacao) {
+        if (notificacao != null) {
+            this.notificacao = new NotificacaoOrcamentoDTO(notificacao);
+        } else {
+            this.notificacao = new NotificacaoOrcamentoDTO();
+        }
     }
 }

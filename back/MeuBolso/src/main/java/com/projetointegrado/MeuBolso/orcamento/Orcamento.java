@@ -44,13 +44,14 @@ public class Orcamento {
     @JoinColumn(nullable = false, name = "usuario_id")
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "orcamento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<NotificacaoOrcamento> notificacoes = new ArrayList<>();
+    @OneToOne(mappedBy = "orcamento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private NotificacaoOrcamento notificacao = null;;
 
     public Orcamento() {
     }
 
-    public Orcamento(Categoria categoria, Integer mes, Integer ano, BigDecimal valorEstimado, Usuario usuario) {
+    public Orcamento(Long id, Categoria categoria, Integer mes, Integer ano, BigDecimal valorEstimado, Usuario usuario) {
+        this.id = id;
         this.categoria = categoria;
         this.descricao = categoria.getNome();
         this.mes = mes;
@@ -152,12 +153,12 @@ public class Orcamento {
         }
     }
 
-    public List<NotificacaoOrcamento> getNotificacoes() {
-        return notificacoes;
+    public NotificacaoOrcamento getNotificacao() {
+        return notificacao;
     }
 
-    public void setNotificacoes(List<NotificacaoOrcamento> notificacoes) {
-        this.notificacoes = notificacoes;
+    public void setNotificacao(NotificacaoOrcamento notificacao) {
+        this.notificacao = notificacao;
     }
 
     public void verificarThresholds() {
@@ -182,20 +183,17 @@ public class Orcamento {
     }
 
     private boolean notificacaoJaEnviada(int threshold) {
-        return this.notificacoes.stream()
-                .anyMatch(n -> n.getThreshold() == threshold && n.isNotificado());
+        return notificacao != null && notificacao.getThreshold() == threshold && notificacao.isNotificado();
     }
 
     private void salvarNotificacao(Integer threshold) {
-        // Remove notificações com thresholds menores
-        this.notificacoes.removeIf(n -> n.getThreshold() < threshold);
-
+        // Se já existe uma notificacaoAtual, removemos ou sobrescrevemos
         NotificacaoOrcamento notificacao = new NotificacaoOrcamento();
         notificacao.setThreshold(threshold);
         notificacao.setNotificado(true);
         notificacao.setOrcamento(this);
 
-        this.notificacoes.add(notificacao);
+        this.notificacao = notificacao;
     }
 
     @Override

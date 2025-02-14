@@ -12,7 +12,7 @@ public class NotificacaoOrcamento {
     private Integer threshold;
     private Boolean notificado;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "orcamento_id")
     private Orcamento orcamento;
 
