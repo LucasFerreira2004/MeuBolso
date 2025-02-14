@@ -1,5 +1,7 @@
 package com.projetointegrado.MeuBolso.config;
 
+import com.projetointegrado.MeuBolso.ArmazenamentoImagens.CloudinaryStorageService;
+import com.projetointegrado.MeuBolso.ArmazenamentoImagens.IStorageService;
 import com.projetointegrado.MeuBolso.autorizacao.token.ITokenService;
 import com.projetointegrado.MeuBolso.autorizacao.token.TokenService;
 import com.projetointegrado.MeuBolso.banco.BancoService;
@@ -58,4 +60,7 @@ public class InjecaoDependeciaConfig {
 
     @Bean
     public ITransacaoRecorrenteService TransacaoFixaService(){return new TransacaoRecorrenteService();}
+
+    @Bean
+    public IStorageService StorageService() {return new CloudinaryStorageService();}
 }

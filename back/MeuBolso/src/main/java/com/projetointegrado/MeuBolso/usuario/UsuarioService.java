@@ -1,16 +1,18 @@
 package com.projetointegrado.MeuBolso.usuario;
 
+import com.projetointegrado.MeuBolso.ArmazenamentoImagens.IStorageService;
 import com.projetointegrado.MeuBolso.categoria.CriarCategoriasIniciaisService;
 import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioSaveDTO;
 import com.projetointegrado.MeuBolso.usuario.exception.EmailJaCadastradoException;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,8 +28,12 @@ public class UsuarioService implements IUsuarioService {
     @Autowired
     private UsuarioValidateService usuarioValidateService;
 
+    @Qualifier("cloudinaryStorageService")
+    @Autowired
+    private IStorageService imgStorageService;
+
     @Transactional
-    public UsuarioSaveDTO save(UsuarioSaveDTO usuarioSaveDTO) {
+    public UsuarioDTO save(UsuarioSaveDTO usuarioSaveDTO) {
         if (usuarioRepository.findByEmail(usuarioSaveDTO.getEmail()) != null)
             throw new EmailJaCadastradoException();
         String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioSaveDTO.getSenha());
@@ -36,14 +42,31 @@ public class UsuarioService implements IUsuarioService {
         usuario = usuarioRepository.save(usuario);
 
         criarCategoriasIniciaisService.criarCategorias(usuario.getId());
-        return new UsuarioSaveDTO(usuario);
+        return new UsuarioDTO(usuario);
+    }
+
+    @Transactional
+    public UsuarioDTO update(String userId, UsuarioSaveDTO usuarioSaveDTO, MultipartFile img) {
+        String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioSaveDTO.getSenha());
+        String imgUrl = null;
+        if (img != null) {
+            try {
+                imgUrl = imgStorageService.uploadFile(img);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        }
+        Usuario usuario = new Usuario(userId, usuarioSaveDTO.getNome(), usuarioSaveDTO.getEmail(), encryptedPassword, imgUrl);
+
+        usuario = usuarioRepository.save(usuario);
+        return new UsuarioDTO(usuario);
     }
 
 
-    private List<UsuarioSaveDTO> findAll() {
+    private List<UsuarioDTO> findAll() {
         List<Usuario> list = usuarioRepository.findAll();
-
-        return list.stream().map(UsuarioSaveDTO::new).toList();
+        return list.stream().map(UsuarioDTO::new).toList();
     }
 
     public UsuarioDTO findById(String id) {
