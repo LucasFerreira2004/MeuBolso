@@ -18,10 +18,9 @@ import java.util.Map;
 
 @Service
 public class CloudinaryStorageService implements IStorageService {
-    private final Dotenv dotenv = Dotenv.load();
     private final String CLOUDINARY_URL = System.getenv("CLOUDINARY_URL") != null
             ? System.getenv("CLOUDINARY_URL")
-            : dotenv.get("CLOUDINARY_URL");
+            : Dotenv.load().get("CLOUDINARY_URL");
     private final Cloudinary cloudinary = new Cloudinary(CLOUDINARY_URL);
 
     @Override
