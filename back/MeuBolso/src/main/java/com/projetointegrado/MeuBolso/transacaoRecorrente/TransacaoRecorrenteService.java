@@ -84,12 +84,8 @@ public class TransacaoRecorrenteService implements ITransacaoRecorrenteService {
         this.atualizarStatusAtiva(userId, id, false);
         TransacaoRecorrente transacao = transacaoRecorrenteValidateService.validateAndGet(id, userId, new EntidadeNaoEncontradaException("/{id}", "TransacaoRecorrente nao encontrada"), new AcessoNegadoException());
         TransacaoRecorrenteDTO dto = new TransacaoRecorrenteDTO(transacao);
-        try {
-            transacaoRecorrenteRepository.deleteAllAfterDate(id, data);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+
+        transacaoRecorrenteRepository.deleteAllAfterDate(id, data);
         return dto;
     }
 

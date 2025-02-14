@@ -34,7 +34,7 @@ public class TransacaoRepeticaoAspect {
 
         if (data != null && usuarioId != null) {
             System.out.println("AOP -> Gerando transações fixas para usuário ID " + usuarioId + " e data " + data);
-            transacaoRepeticaoExecutor.executarGeracaoTransacoes(data, usuarioId); // ✅ Agora sempre executa em nova transação
+            transacaoRepeticaoExecutor.executarGeracaoTransacoes(data, usuarioId);
         } else {
             System.out.println("AOP -> Parâmetros não encontrados, pulando geração de transações.");
         }
