@@ -17,7 +17,10 @@ import java.util.Map;
 
 public class CloudinaryStorageService implements IStorageService {
     private final Dotenv dotenv = Dotenv.load();
-    private Cloudinary cloudinary = new Cloudinary(dotenv.get("CLOUDINARY_URL"));
+    private final String CLOUDINARY_URL = System.getenv("CLOUDINARY_URL") != null
+            ? System.getenv("CLOUDINARY_URL")
+            : dotenv.get("CLOUDINARY_URL");
+    private final Cloudinary cloudinary = new Cloudinary(CLOUDINARY_URL);
 
     @Override
     public String uploadFile(MultipartFile file) {
