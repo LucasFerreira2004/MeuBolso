@@ -4,10 +4,20 @@ import style from "./orcamentos.module.css";
 import TotalOrcamentos from "../../components/UI/CardsOrcamentos/CardTotal/card-total";
 import AddButton from "../../components/UI/AddButton/add-button";
 import TotalCategorias from "../../components/UI/CardsOrcamentos/CardCategorias/card-categoria";
+import ModalAddOrcamento from "../../components/ModalAddOrcamento/modal-add-orcamento"; 
 
-function ContasBancarias() {
+function Orcamentos() {
   const [mes, setMes] = useState(new Date().getMonth() + 1);
   const [ano, setAno] = useState(new Date().getFullYear());
+  const [modalAberto, setModalAberto] = useState(false); 
+
+  const abrirModal = () => {
+    setModalAberto(true);
+  };
+
+  const fecharModal = () => {
+    setModalAberto(false); 
+  };
 
   return (
     <div className={style.orcamentos}>
@@ -25,19 +35,29 @@ function ContasBancarias() {
         </div>
         <AddButton
           texto="Adicionar orçamento"
-          onClick={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          onClick={abrirModal} 
         />
       </header>
+
       <main className={style.mainContainer}>
-      <div className={style.cards}>
-        <TotalOrcamentos/>
-        <TotalCategorias/>
+        <div className={style.cards}>
+          <TotalOrcamentos />
+          <TotalCategorias />
         </div>
       </main>
+
+      {modalAberto && (
+        <ModalAddOrcamento
+          onCloseAll={fecharModal}
+          valor=""
+          data=""
+          handleChangeValor={() => {}}
+          setCategoria={() => {}}
+          setData={() => {}}
+        />
+      )}
     </div>
   );
 }
 
-export default ContasBancarias;
+export default Orcamentos;
