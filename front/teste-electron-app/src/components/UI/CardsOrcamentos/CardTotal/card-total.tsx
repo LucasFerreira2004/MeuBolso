@@ -1,4 +1,4 @@
-import { ProgressBar } from "../ProgressBar/progress-bar";
+import { ProgressBar } from "../../ProgressBar/progress-bar";
 import style from "./card-total.module.css";
 
 function TotalOrcamentos() {

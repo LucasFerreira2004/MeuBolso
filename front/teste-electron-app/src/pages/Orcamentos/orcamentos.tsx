@@ -1,8 +1,9 @@
 import { useState } from "react";
 import DatePicker from "../../components/UI/Date/date";
 import style from "./orcamentos.module.css";
-import TotalOrcamentos from "../../components/UI/CardsOrcamentos/card-total";
+import TotalOrcamentos from "../../components/UI/CardsOrcamentos/CardTotal/card-total";
 import AddButton from "../../components/UI/AddButton/add-button";
+import TotalCategorias from "../../components/UI/CardsOrcamentos/CardCategorias/card-categoria";
 
 function ContasBancarias() {
   const [mes, setMes] = useState(new Date().getMonth() + 1);
@@ -32,6 +33,7 @@ function ContasBancarias() {
       <main className={style.mainContainer}>
       <div className={style.cards}>
         <TotalOrcamentos/>
+        <TotalCategorias/>
         </div>
       </main>
     </div>
