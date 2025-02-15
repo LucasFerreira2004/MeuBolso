@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @EnableScheduling
@@ -75,6 +76,16 @@ public class TransacaoRecorrenteService implements ITransacaoRecorrenteService {
                 new EntidadeNaoEncontradaException("/{id}", "TransacaoRecorrente nao encontrada"), new AcessoNegadoException());
         TransacaoRecorrenteDTO dto = new TransacaoRecorrenteDTO(transacaoRecorrente);
         transacaoRecorrenteRepository.delete(transacaoRecorrente);
+        return dto;
+    }
+
+    @Transactional
+    public TransacaoRecorrenteDTO deleteAllAfterDate(String userId, Long id, LocalDate data) {
+        this.atualizarStatusAtiva(userId, id, false);
+        TransacaoRecorrente transacao = transacaoRecorrenteValidateService.validateAndGet(id, userId, new EntidadeNaoEncontradaException("/{id}", "TransacaoRecorrente nao encontrada"), new AcessoNegadoException());
+        TransacaoRecorrenteDTO dto = new TransacaoRecorrenteDTO(transacao);
+
+        transacaoRecorrenteRepository.deleteAllAfterDate(id, data);
         return dto;
     }
 

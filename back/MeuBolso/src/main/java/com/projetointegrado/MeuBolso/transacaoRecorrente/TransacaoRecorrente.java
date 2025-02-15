@@ -58,6 +58,7 @@ public class TransacaoRecorrente {
     private Integer qtdParcelas;
 
     @Column(nullable = false, name = "tipo_repeticao")
+    @Enumerated(EnumType.STRING)
     private TipoRepeticao tipoRepeticao;
 
     @OneToMany(mappedBy = "transacaoRecorrente", cascade = CascadeType.REMOVE)

@@ -51,7 +51,7 @@ public class Transacao {
     private Usuario usuario;
 
     @ManyToOne(optional = true)
-    @JoinColumn(name = "transacao_fixa_id")
+    @JoinColumn(name = "transacao_recorrente_id")
     private TransacaoRecorrente transacaoRecorrente;
 
     @Enumerated(EnumType.STRING)
@@ -94,11 +94,11 @@ public class Transacao {
     }
 
     // Getters e Setters
-    public TransacaoRecorrente getTransacaoFixa() {
+    public TransacaoRecorrente getTransacaoRecorrente() {
         return transacaoRecorrente;
     }
 
-    public void setTransacaoFixa(TransacaoRecorrente transacaoRecorrente) {
+    public void setTransacaoRecorrente(TransacaoRecorrente transacaoRecorrente) {
         this.transacaoRecorrente = transacaoRecorrente;
     }
 

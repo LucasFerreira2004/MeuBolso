@@ -19,6 +19,7 @@ public class TransacaoDTO {
     private String comentario;
     private String descricao;
     private String origem;
+    private Long idTransacaoRecorrente;
 
     public TransacaoDTO(Transacao transacao) {
         this.id = transacao.getId();
@@ -30,6 +31,8 @@ public class TransacaoDTO {
         this.comentario = transacao.getComentario();
         this.descricao = transacao.getDescricao();
         this.origem = transacao.getOrigemTransacao().name();
+        if (transacao.getTransacaoRecorrente() != null)
+            this.idTransacaoRecorrente = transacao.getTransacaoRecorrente().getId();
     }
 
     public TransacaoDTO(TransacaoMeta transacao) {
@@ -115,6 +118,14 @@ public class TransacaoDTO {
 
     public void setOrigem(String origem) {
         this.origem = origem;
+    }
+
+    public Long getIdTransacaoRecorrente() {
+        return idTransacaoRecorrente;
+    }
+
+    public void setIdTransacaoRecorrente(Long idTransacaoRecorrente) {
+        this.idTransacaoRecorrente = idTransacaoRecorrente;
     }
 
     @Override
