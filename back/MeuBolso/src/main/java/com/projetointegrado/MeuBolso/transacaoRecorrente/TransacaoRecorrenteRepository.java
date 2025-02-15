@@ -30,7 +30,7 @@ public interface TransacaoRecorrenteRepository extends JpaRepository<TransacaoRe
     @Query(nativeQuery = true, value = """
         delete from TRANSACAO
         where transacao_recorrente_id = :id
-        and data > :data
+        and data >= :data
     """)
     public void deleteAllAfterDate(Long id, LocalDate data);
 }
