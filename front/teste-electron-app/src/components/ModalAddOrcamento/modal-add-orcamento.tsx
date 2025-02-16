@@ -1,25 +1,88 @@
+import React, { useState } from "react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from "./modal-add-orcamento.module.css";
-import DatePicker from "../UI/DatePicker/date-picker";
 import InputWithIcon from "../UI/InputsModal/input-modal";
+import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
 
-type ModalAddOrcamentoProps = {
-  valor: string;
-  data: string; 
-  onCloseAll: () => void;
-  handleChangeValor: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  setCategoria: (categoriaId: number | null) => void;
-  setData: (data: string) => void;
+// Função para remover a formatação de moeda (R$)
+const removerFormatacaoMoeda = (valorFormatado: string): number => {
+  const valorNumerico = valorFormatado
+    .replace("R$ ", "")
+    .replace(/\./g, "")
+    .replace(",", ".");
+  return parseFloat(valorNumerico);
 };
 
-function ModalAddOrcamento({
-  valor,
-  data,
-  onCloseAll,
-  handleChangeValor,
-  setCategoria,
-  setData,
-}: ModalAddOrcamentoProps) {
+// Função para formatar valor como moeda
+const formatarComoMoeda = (valor: string): string => {
+  let valorNumerico = valor.replace(/\D/g, "");
+  valorNumerico = (parseInt(valorNumerico) / 100).toFixed(2);
+  return `R$ ${valorNumerico.replace(".", ",")}`;
+};
+
+interface ModalAddOrcamentoProps {
+  onCloseAll: () => void;
+}
+
+const ModalAddOrcamento: React.FC<ModalAddOrcamentoProps> = ({ onCloseAll }) => {
+  const [valor, setValor] = useState<string>("");
+  const [data, setData] = useState<string>("");
+  const [categoria, setCategoria] = useState<number | null>(null);
+
+  // Atualiza o valor com formatação
+  const handleChangeValor = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const valorDigitado = e.target.value;
+    const valorFormatado = formatarComoMoeda(valorDigitado);
+    setValor(valorFormatado);
+  };
+
+  // Envia a requisição POST
+  const handleSubmit = async () => {
+    if (!valor || !data || !categoria) {
+      toast.error("Preencha todos os campos obrigatórios!");
+      return;
+    }
+
+    const valorNumerico = removerFormatacaoMoeda(valor);
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      toast.error("Por favor, faça login novamente.");
+      return;
+    }
+
+    const payload = {
+      valorEstimado: valorNumerico,
+      periodo: data,
+      idCategoria: categoria,
+    };
+
+    try {
+      const response = await axios.post("http://localhost:8080/orcamentos", payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Orçamento adicionado com sucesso!");
+        onCloseAll();
+      } else {
+        toast.error("Erro ao adicionar o orçamento. Tente novamente.");
+      }
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+      if (axios.isAxiosError(error)) {
+        console.log("Detalhes do erro:", error.response?.data);
+      }
+      toast.error("Erro ao adicionar o orçamento. Verifique os dados.");
+    }
+  };
+
   return (
     <div
       className={styles.modalOverlay}
@@ -27,11 +90,13 @@ function ModalAddOrcamento({
     >
       <div className={styles.modalContent}>
         <div className={styles.headerModal}>
-          <h3>Novo orçamento</h3>
+          <h3>Novo Orçamento</h3>
           <button className={styles.closeButton} onClick={onCloseAll}>
             <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
+
+        {/* Input de valor */}
         <InputWithIcon
           label="Valor: "
           type="text"
@@ -40,19 +105,39 @@ function ModalAddOrcamento({
           value={valor}
           onChange={handleChangeValor}
         />
+
+        {/* Selecionar categoria */}
         <SelectedDespesas setCategoria={setCategoria} />
+
+        {/* Data */}
         <DatePicker
           label="Escolha uma data:"
           value={data}
-          onChange={(date: string) => setData(date)} 
+          onChange={setData}
           iconsrc="/assets/iconsModalOrcamentos/date.svg"
         />
+
         <div className={styles.footerModal}>
-          <button className={styles.saveButton}>Salvar</button>
+          <button className={styles.saveButton} onClick={handleSubmit}>
+            Salvar
+          </button>
         </div>
+
+        {/* Notificações */}
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </div>
   );
-}
+};
 
 export default ModalAddOrcamento;
