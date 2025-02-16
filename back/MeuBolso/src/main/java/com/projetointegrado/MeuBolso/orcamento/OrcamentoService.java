@@ -12,6 +12,7 @@ import com.projetointegrado.MeuBolso.orcamento.exception.OrcamentoDuplicadoExcep
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
 import jakarta.transaction.Transactional;
+import org.hibernate.validator.internal.engine.messageinterpolation.util.InterpolationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,9 +79,9 @@ public class OrcamentoService implements IOrcamentoService{
     }
 
     @Transactional
-    public List<OrcamentoDTO> findOrcamentosByPeriodo(String usuarioId, LocalDate periodo) {
-        atualizacaoOrcamentoService.atualizarOrcamentos(usuarioId, periodo);
-        List<Orcamento> orcamentos = orcamentoRepository.findByUsuarioAndPeriodo(usuarioId, periodo.getYear(), periodo.getMonth().getValue());
+    public List<OrcamentoDTO> findOrcamentosByPeriodo(String usuarioId, Integer ano, Integer mes) {
+        atualizacaoOrcamentoService.atualizarOrcamentos(usuarioId, ano, mes);
+        List<Orcamento> orcamentos = orcamentoRepository.findByUsuarioAndPeriodo(usuarioId, ano, mes);
         return orcamentos.stream().map(OrcamentoDTO::new).toList();
     }
 

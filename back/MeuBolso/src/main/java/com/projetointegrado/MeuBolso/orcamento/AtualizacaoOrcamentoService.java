@@ -20,13 +20,14 @@ public class AtualizacaoOrcamentoService {
     TransacaoRepository transacaoRepository;
 
     @Transactional
-    public void atualizarOrcamentos(String usuarioId, LocalDate periodo) {
-        List<Orcamento> orcamentos = orcamentoRepository.findByUsuarioAndPeriodo(usuarioId, periodo.getYear(), periodo.getMonth().getValue());
+    public void atualizarOrcamentos(String usuarioId, Integer ano, Integer mes) {
+        LocalDate periodo = LocalDate.of(ano, mes, 1);
+        List<Orcamento> orcamentos = orcamentoRepository.findByUsuarioAndPeriodo(usuarioId, ano, mes);
+
+        LocalDate dataInicio = periodo.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate dataFim = periodo.with(TemporalAdjusters.lastDayOfMonth());
 
         orcamentos.forEach(orcamento -> {
-            LocalDate dataInicio = periodo.with(TemporalAdjusters.firstDayOfMonth());
-            LocalDate dataFim = periodo.with(TemporalAdjusters.lastDayOfMonth());
-
             BigDecimal gastoTotal = transacaoRepository.calcularGastoPorCategoriaEPeriodo(
                     orcamento.getCategoria().getId(), usuarioId, dataInicio, dataFim
             );

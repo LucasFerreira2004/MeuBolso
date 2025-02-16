@@ -134,7 +134,7 @@ public class Orcamento {
 
     public void updateValores(BigDecimal gastoTotal) {
         this.valorGasto = gastoTotal;
-        this.valorRestante = this.valorEstimado.subtract(gastoTotal);
+        this.valorRestante = this.valorEstimado.subtract(gastoTotal).max(BigDecimal.ZERO);
         this.updateProgresso();
     }
 
