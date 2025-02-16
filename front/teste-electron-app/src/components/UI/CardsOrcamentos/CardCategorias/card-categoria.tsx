@@ -32,18 +32,20 @@ interface Orcamento {
 interface TotalCategoriasProps {
   mes: number;
   ano: number;
-  onOrcamentoAdded?: () => void; // Callback para quando um orçamento é adicionado
+  onOrcamentoAdded?: () => void;
 }
 
 function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]); // Estado local para orçamentos
+  const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]);
   const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(
     null
   );
+  const [valor, setValor] = useState<string>("");
+  const [data, setData] = useState<string>("");
+  const [, setCategoriaId] = useState<number | null>(null);
 
-  // Função para buscar orçamentos
   const fetchOrcamentos = async () => {
     const token = localStorage.getItem("authToken");
 
@@ -68,18 +70,16 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
       }
 
       const data = await response.json();
-      setOrcamentos(data); // Atualiza o estado local com os orçamentos buscados
+      setOrcamentos(data);
     } catch (error) {
       console.error("Erro ao buscar orçamento:", error);
     }
   };
 
-  // Busca os orçamentos quando o componente é montado ou quando mes/ano mudam
   useEffect(() => {
     fetchOrcamentos();
   }, [mes, ano]);
 
-  // Se a prop onOrcamentoAdded mudar, busca os orçamentos novamente
   useEffect(() => {
     if (onOrcamentoAdded) {
       fetchOrcamentos();
@@ -88,6 +88,9 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
 
   const handleOpenModal = (orcamento: Orcamento) => {
     setSelectedOrcamento(orcamento);
+    setValor(`R$ ${orcamento.valorEstimado.toLocaleString()}`);
+    setData(`${orcamento.ano}-${String(orcamento.mes).padStart(2, "0")}-01`);
+    setCategoriaId(orcamento.categoriaDTO.id);
     setIsModalOpen(true);
   };
 
@@ -99,6 +102,9 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedOrcamento(null);
+    setValor("");
+    setData("");
+    setCategoriaId(null);
   };
 
   const handleCloseDeleteModal = () => {
@@ -107,9 +113,13 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
   };
 
   const handleDeleteSuccess = () => {
-    // Filtra a lista de orçamentos para remover o orçamento excluído
     setOrcamentos(orcamentos.filter((o) => o.id !== selectedOrcamento?.id));
     handleCloseDeleteModal();
+  };
+
+  const handleEditSuccess = () => {
+    fetchOrcamentos();
+    handleCloseModal();
   };
 
   if (orcamentos.length === 0) {
@@ -170,14 +180,14 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
 
       {isModalOpen && selectedOrcamento && (
         <ModalEditOrcamento
-          valor={selectedOrcamento.valorEstimado.toString()}
-          data={`${selectedOrcamento.ano}-${String(
-            selectedOrcamento.mes
-          ).padStart(2, "0")}-01`}
+          id={selectedOrcamento.id} // Passa o ID do orçamento selecionado
+          valor={valor} // Passa o valor do orçamento selecionado
+          data={data} // Passa a data do orçamento selecionado
           onCloseAll={handleCloseModal}
-          handleChangeValor={(e) => console.log(e.target.value)}
-          setCategoria={(categoriaId) => console.log(categoriaId)}
-          setData={(date) => console.log(date)}
+          handleChangeValor={(e) => setValor(e.target.value)} // Atualiza o valor
+          setCategoria={(categoriaId) => setCategoriaId(categoriaId)} // Atualiza o ID da categoria
+          setData={(date) => setData(date)} // Atualiza a data
+          onEditSuccess={handleEditSuccess} // Callback para sucesso na edição
         />
       )}
 
