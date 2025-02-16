@@ -32,10 +32,13 @@ public class OrcamentoController {
         return orcamentoService.findAll(usuarioId);
     }
 
-    @GetMapping()
-    public List<OrcamentoDTO> findOrcamentosByPeriodo(@RequestParam("periodo") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate periodo) {
+    @GetMapping
+    public List<OrcamentoDTO> findOrcamentosByPeriodo(
+            @RequestParam("ano") Integer ano,
+            @RequestParam("mes") Integer mes
+    ) {
         String usuarioId = usuarioService.getUsuarioLogadoId();
-        return orcamentoService.findOrcamentosByPeriodo(usuarioId, periodo);
+        return orcamentoService.findOrcamentosByPeriodo(usuarioId, ano, mes);
     }
 
     @GetMapping("/{orcamentoId}")
