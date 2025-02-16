@@ -30,8 +30,8 @@ interface Orcamento {
 
 function TotalCategorias() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]); // Alterado para armazenar uma lista de orçamentos
-  const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(null); // Estado para armazenar o orçamento selecionado para edição
+  const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]); 
+  const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(null); 
 
   useEffect(() => {
     const fetchOrcamento = async () => {
@@ -43,7 +43,7 @@ function TotalCategorias() {
       }
 
       try {
-        const response = await fetch("http://localhost:8080/orcamentos?periodo=2025-02-14&periodo=2025-02-14", {
+        const response = await fetch("http://localhost:8080/orcamentos?ano=2025&mes=2", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import DatePicker from "../../components/UI/Date/date";
 import style from "./orcamentos.module.css";
-import TotalOrcamentos from "../../components/UI/CardsOrcamentos/CardTotal/card-total";
 import AddButton from "../../components/UI/AddButton/add-button";
 import TotalCategorias from "../../components/UI/CardsOrcamentos/CardCategorias/card-categoria";
 import ModalAddOrcamento from "../../components/ModalAddOrcamento/modal-add-orcamento"; 
@@ -41,19 +40,13 @@ function Orcamentos() {
 
       <main className={style.mainContainer}>
         <div className={style.cards}>
-          <TotalOrcamentos />
           <TotalCategorias />
         </div>
       </main>
 
       {modalAberto && (
         <ModalAddOrcamento
-          onCloseAll={fecharModal}
-          valor=""
-          data=""
-          handleChangeValor={() => {}}
-          setCategoria={() => {}}
-          setData={() => {}}
+          onCloseAll={fecharModal} 
         />
       )}
     </div>
