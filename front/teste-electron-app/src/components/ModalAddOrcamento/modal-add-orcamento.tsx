@@ -7,7 +7,6 @@ import InputWithIcon from "../UI/InputsModal/input-modal";
 import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
 
-// Função para remover a formatação de moeda (R$)
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
     .replace("R$ ", "")
@@ -16,7 +15,6 @@ const removerFormatacaoMoeda = (valorFormatado: string): number => {
   return parseFloat(valorNumerico);
 };
 
-// Função para formatar valor como moeda
 const formatarComoMoeda = (valor: string): string => {
   let valorNumerico = valor.replace(/\D/g, "");
   valorNumerico = (parseInt(valorNumerico) / 100).toFixed(2);
@@ -32,14 +30,12 @@ const ModalAddOrcamento: React.FC<ModalAddOrcamentoProps> = ({ onCloseAll }) => 
   const [data, setData] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null);
 
-  // Atualiza o valor com formatação
   const handleChangeValor = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorDigitado = e.target.value;
     const valorFormatado = formatarComoMoeda(valorDigitado);
     setValor(valorFormatado);
   };
 
-  // Envia a requisição POST
   const handleSubmit = async () => {
     if (!valor || !data || !categoria) {
       toast.error("Preencha todos os campos obrigatórios!");

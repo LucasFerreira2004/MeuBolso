@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import styles from "./modal-add-orcamento.module.css";
 import InputWithIcon from "../UI/InputsModal/input-modal";
+import style from "./modal-despesas.module.css";
+import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
 import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
+import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
 
-// Função para remover a formatação de moeda (R$)
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
     .replace("R$ ", "")
@@ -16,32 +17,37 @@ const removerFormatacaoMoeda = (valorFormatado: string): number => {
   return parseFloat(valorNumerico);
 };
 
-// Função para formatar valor como moeda
 const formatarComoMoeda = (valor: string): string => {
   let valorNumerico = valor.replace(/\D/g, "");
   valorNumerico = (parseInt(valorNumerico) / 100).toFixed(2);
   return `R$ ${valorNumerico.replace(".", ",")}`;
 };
 
-interface ModalAddOrcamentoProps {
+interface ModalDespesasProps {
   onCloseAll: () => void;
+  mes: number;
+  ano: number;
 }
 
-const ModalAddOrcamento: React.FC<ModalAddOrcamentoProps> = ({ onCloseAll }) => {
+function ModalDespesas({ onCloseAll, mes, ano }: ModalDespesasProps) {
   const [valor, setValor] = useState<string>("");
-  const [data, setData] = useState<string>("");
+  const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null);
+  const [conta, setConta] = useState<number | null>(null);
+  const [data, setData] = useState<string>("");
+  const [comentario, setComentario] = useState<string | null>(null);
+  const [tipoTransacao, setTipoTransacao] = useState<"NORMAL" | "FIXA" | "PARCELADA">("NORMAL");
+  const [periodicidade, setPeriodicidade] = useState<"SEMANAL" | "MENSAL" | "DIARIO">("MENSAL");
+  const [qtdParcelas, setQtdParcelas] = useState<number | null>(null);
 
-  // Atualiza o valor com formatação
   const handleChangeValor = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorDigitado = e.target.value;
     const valorFormatado = formatarComoMoeda(valorDigitado);
     setValor(valorFormatado);
   };
 
-  // Envia a requisição POST
   const handleSubmit = async () => {
-    if (!valor || !data || !categoria) {
+    if (!valor || !descricao || !categoria || !data || !conta) {
       toast.error("Preencha todos os campos obrigatórios!");
       return;
     }
@@ -50,80 +56,161 @@ const ModalAddOrcamento: React.FC<ModalAddOrcamentoProps> = ({ onCloseAll }) => 
     const token = localStorage.getItem("authToken");
 
     if (!token) {
+      console.error("Token de autenticação não encontrado.");
       toast.error("Por favor, faça login novamente.");
       return;
     }
 
-    const payload = {
-      valorEstimado: valorNumerico,
-      periodo: data,
-      idCategoria: categoria,
+    // Dados comuns a todas as transações
+    const transactionData: any = {
+      valor: valorNumerico,
+      data,
+      tipoTransacao: tipoTransacao === "NORMAL" ? "DESPESA" : tipoTransacao === "FIXA" ? "DESPESA" : "DESPESA",
+      categoriaId: categoria,
+      contaId: conta,
+      comentario,
+      descricao,
     };
 
+    // Adicionar dados específicos para transações "FIXA"
+    if (tipoTransacao === "FIXA") {
+      transactionData.periodicidade = periodicidade;
+    }
+
+    // Adicionar dados específicos para transações "PARCELADA"
+    if (tipoTransacao === "PARCELADA") {
+      transactionData.qtdParcelas = qtdParcelas;
+      transactionData.periodicidade = periodicidade;
+    }
+
+    console.log("Dados da transação sendo enviados:", transactionData);
+
     try {
-      const response = await axios.post("http://localhost:8080/orcamentos", payload, {
+      let url = "http://localhost:8080/transacoes";
+
+      if (tipoTransacao === "FIXA") {
+        url = "http://localhost:8080/transacoesRecorrentes/fixas";
+      } else if (tipoTransacao === "PARCELADA") {
+        url = "http://localhost:8080/transacoesRecorrentes/parceladas";
+      }
+
+      console.log("URL da requisição:", url);
+
+      const response = await axios.post(url, transactionData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
 
+      console.log("Resposta do servidor:", response.data);
+
       if (response.status === 200 || response.status === 201) {
-        toast.success("Orçamento adicionado com sucesso!");
+        toast.success("Transação adicionada com sucesso!");
         onCloseAll();
       } else {
-        toast.error("Erro ao adicionar o orçamento. Tente novamente.");
+        toast.error("Erro ao adicionar transação. Verifique os dados ou tente novamente.");
       }
     } catch (error) {
-      console.error("Erro na requisição:", error);
+      console.error("Erro ao adicionar transação:", error);
       if (axios.isAxiosError(error)) {
         console.log("Detalhes do erro:", error.response?.data);
       }
-      toast.error("Erro ao adicionar o orçamento. Verifique os dados.");
+      toast.error("Erro ao adicionar transação. Verifique os dados ou tente novamente.");
     }
   };
 
   return (
     <div
-      className={styles.modalOverlay}
+      className={style.modalOverlay}
       onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
     >
-      <div className={styles.modalContent}>
-        <div className={styles.headerModal}>
-          <h3>Novo Orçamento</h3>
-          <button className={styles.closeButton} onClick={onCloseAll}>
+      <div className={style.modalContent}>
+        <div className={style.headerModal}>
+          <h3>Despesas</h3>
+          <button className={style.closeButton} onClick={onCloseAll}>
             <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
-
-        {/* Input de valor */}
         <InputWithIcon
           label="Valor: "
           type="text"
-          iconSrc="/assets/iconsModalOrcamentos/money.svg"
+          iconSrc="/assets/iconsModalDespesas/money.svg"
           placeholder="R$ 0,00"
           value={valor}
           onChange={handleChangeValor}
         />
-
-        {/* Selecionar categoria */}
+        <InputWithIcon
+          label="Descrição: "
+          iconSrc="/assets/iconsModalDespesas/descrip.svg"
+          placeholder="Ex: Pagamento da fatura"
+          value={descricao}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescricao(e.target.value)}
+        />
         <SelectedDespesas setCategoria={setCategoria} />
-
-        {/* Data */}
-        <DatePicker
-          label="Escolha uma data:"
-          value={data}
-          onChange={setData}
-          iconsrc="/assets/iconsModalOrcamentos/date.svg"
+        <SelectBoxContas setConta={setConta} mes={mes} ano={ano} />
+        <DatePicker label="Escolha uma data:" value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg" />
+        <InputWithIcon
+          label="Comentário: "
+          iconSrc="/assets/iconsModalDespesas/comentario.svg"
+          placeholder="Opcional"
+          value={comentario || ""}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComentario(e.target.value || null)}
         />
 
-        <div className={styles.footerModal}>
-          <button className={styles.saveButton} onClick={handleSubmit}>
-            Salvar
-          </button>
+        <div>
+          <label>
+            <input
+              type="radio"
+              value="NORMAL"
+              checked={tipoTransacao === "NORMAL"}
+              onChange={() => setTipoTransacao("NORMAL")}
+            />
+            Normal
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="FIXA"
+              checked={tipoTransacao === "FIXA"}
+              onChange={() => setTipoTransacao("FIXA")}
+            />
+            Fixa
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="PARCELADA"
+              checked={tipoTransacao === "PARCELADA"}
+              onChange={() => setTipoTransacao("PARCELADA")}
+            />
+            Parcelada
+          </label>
         </div>
 
-        {/* Notificações */}
+        {tipoTransacao !== "NORMAL" && (
+          <>
+            <SelectedPeriodo
+              selectedValue={periodicidade}
+              onChange={(e) => setPeriodicidade(e.target.value as "DIARIO" | "SEMANAL" | "MENSAL")}
+            />
+            {tipoTransacao === "PARCELADA" && (
+              <InputWithIcon
+                label="Quantidade de Parcelas:"
+                type="number"
+                placeholder="Ex: 12"
+                value={qtdParcelas || ""}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQtdParcelas(Number(e.target.value))}
+              />
+            )}
+          </>
+        )}
+
+        <button onClick={handleSubmit} className={style.submitButton}>
+          Adicionar Transação
+        </button>
+
+        {/* Adicione o ToastContainer aqui */}
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -138,6 +225,6 @@ const ModalAddOrcamento: React.FC<ModalAddOrcamentoProps> = ({ onCloseAll }) => 
       </div>
     </div>
   );
-};
+}
 
-export default ModalAddOrcamento;
+export default ModalDespesas;
