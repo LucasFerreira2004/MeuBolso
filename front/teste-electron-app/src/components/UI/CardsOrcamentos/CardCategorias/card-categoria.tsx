@@ -55,7 +55,7 @@ function TotalCategorias() {
         }
 
         const data = await response.json();
-        setOrcamentos(data); // Armazena todos os orçamentos retornados pela API
+        setOrcamentos(data); 
       } catch (error) {
         console.error("Erro ao buscar orçamento:", error);
       }

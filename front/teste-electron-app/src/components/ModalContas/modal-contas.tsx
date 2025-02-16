@@ -5,26 +5,16 @@ import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-contas.module.css";
 import SelectedBancos from "../UI/SelectedBanco/selected-banco";
 import SelectedTipoConta from "../UI/SelectedTipoConta/selected-tipo-conta";
-import DatePicker from "../UI/DatePicker/date-picker";
 
 interface ModalContasProps {
   onCloseAll: () => void;
   showToast: (message: string, type: "success" | "error") => void;
 }
 
-const getDataAtual = () => {
-  const data = new Date();
-  const ano = data.getFullYear();
-  const mes = String(data.getMonth() + 1).padStart(2, "0");
-  const dia = String(data.getDate()).padStart(2, "0");
-  return `${ano}-${mes}-${dia}`;
-};
-
 function ModalContas({ onCloseAll, showToast }: ModalContasProps) {
   const [saldo, setSaldo] = useState<string>("");
   const [bancoId, setBancoId] = useState<number | null>(null);
   const [tipoContaId, setTipoContaId] = useState<number | null>(null);
-  const [data, setData] = useState<string>(getDataAtual());
   const [descricao, setDescricao] = useState<string>("");
 
   const formatarMoeda = (valor: string): string => {
@@ -54,13 +44,11 @@ function ModalContas({ onCloseAll, showToast }: ModalContasProps) {
   };
 
   const handleSubmit = async () => {
-    if (!saldo || !bancoId || !tipoContaId || !data || !descricao) {
+    if (!saldo || !bancoId || !tipoContaId  || !descricao) {
       toast.error("Preencha todos os campos obrigatórios!");
       return;
     }
 
-    const dataFormatada = new Date(data);
-    const dataISO = dataFormatada.toISOString().split("T")[0];
     const saldoNumerico = removerFormatacaoMoeda(saldo);
     const token = localStorage.getItem("authToken");
 
@@ -77,7 +65,6 @@ function ModalContas({ onCloseAll, showToast }: ModalContasProps) {
           saldo: saldoNumerico,
           id_banco: bancoId,
           id_tipo_conta: tipoContaId,
-          data: dataISO,
           descricao,
         },
         {
@@ -123,13 +110,6 @@ function ModalContas({ onCloseAll, showToast }: ModalContasProps) {
         <SelectedBancos setBanco={setBancoId} />
 
         <SelectedTipoConta setTipoConta={setTipoContaId} />
-
-        <DatePicker
-         label="Data de Criação"
-          value={data}
-          onChange={setData}
-          iconsrc="/assets/iconsModalConta/date.svg"
-        />
 
         <InputWithIcon
           label="Descrição: "
