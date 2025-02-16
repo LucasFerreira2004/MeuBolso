@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ProgressBar } from "../../ProgressBar/progress-bar";
 import ModalEditOrcamento from "../../../ModalEditOrcamento/modal-edit-orcamento";
-import ModalDeleteOrca from "../../../ModalDeleteOrcamentos/modal-delete-orca"; // Import do modal de exclusão
+import ModalDeleteOrca from "../../../ModalDeleteOrcamentos/modal-delete-orca";
 import style from "./card-categoria.module.css";
 
 interface CategoriaDTO {
@@ -32,49 +32,59 @@ interface Orcamento {
 interface TotalCategoriasProps {
   mes: number;
   ano: number;
+  onOrcamentoAdded?: () => void; // Callback para quando um orçamento é adicionado
 }
 
-function TotalCategorias({ mes, ano }: TotalCategoriasProps) {
+function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Estado para controlar o modal de exclusão
-  const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]); // Estado local para orçamentos
   const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(
     null
   );
 
-  useEffect(() => {
-    const fetchOrcamento = async () => {
-      const token = localStorage.getItem("authToken");
+  // Função para buscar orçamentos
+  const fetchOrcamentos = async () => {
+    const token = localStorage.getItem("authToken");
 
-      if (!token) {
-        console.error("Token de autenticação não encontrado.");
-        return;
-      }
+    if (!token) {
+      console.error("Token de autenticação não encontrado.");
+      return;
+    }
 
-      try {
-        const response = await fetch(
-          `http://localhost:8080/orcamentos?ano=${ano}&mes=${mes}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Erro ao buscar orçamentos");
+    try {
+      const response = await fetch(
+        `http://localhost:8080/orcamentos?ano=${ano}&mes=${mes}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
+      );
 
-        const data = await response.json();
-        setOrcamentos(data);
-      } catch (error) {
-        console.error("Erro ao buscar orçamento:", error);
+      if (!response.ok) {
+        throw new Error("Erro ao buscar orçamentos");
       }
-    };
 
-    fetchOrcamento();
+      const data = await response.json();
+      setOrcamentos(data); // Atualiza o estado local com os orçamentos buscados
+    } catch (error) {
+      console.error("Erro ao buscar orçamento:", error);
+    }
+  };
+
+  // Busca os orçamentos quando o componente é montado ou quando mes/ano mudam
+  useEffect(() => {
+    fetchOrcamentos();
   }, [mes, ano]);
+
+  // Se a prop onOrcamentoAdded mudar, busca os orçamentos novamente
+  useEffect(() => {
+    if (onOrcamentoAdded) {
+      fetchOrcamentos();
+    }
+  }, [onOrcamentoAdded]);
 
   const handleOpenModal = (orcamento: Orcamento) => {
     setSelectedOrcamento(orcamento);
@@ -97,6 +107,7 @@ function TotalCategorias({ mes, ano }: TotalCategoriasProps) {
   };
 
   const handleDeleteSuccess = () => {
+    // Filtra a lista de orçamentos para remover o orçamento excluído
     setOrcamentos(orcamentos.filter((o) => o.id !== selectedOrcamento?.id));
     handleCloseDeleteModal();
   };
@@ -124,7 +135,7 @@ function TotalCategorias({ mes, ano }: TotalCategoriasProps) {
               </button>
               <button
                 className={style.buttons}
-                onClick={() => handleOpenDeleteModal(orcamento)} 
+                onClick={() => handleOpenDeleteModal(orcamento)}
               >
                 <img src="/assets/iconsContas/excluir.svg" alt="Excluir" />
               </button>
@@ -175,7 +186,7 @@ function TotalCategorias({ mes, ano }: TotalCategoriasProps) {
           url={`http://localhost:8080/orcamentos`}
           id={selectedOrcamento.id}
           onDeleteSuccess={handleDeleteSuccess}
-          onClose={handleCloseDeleteModal} 
+          onClose={handleCloseDeleteModal}
         />
       )}
     </div>

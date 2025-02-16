@@ -3,12 +3,13 @@ import DatePicker from "../../components/UI/Date/date";
 import style from "./orcamentos.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
 import TotalCategorias from "../../components/UI/CardsOrcamentos/CardCategorias/card-categoria";
-import ModalAddOrcamento from "../../components/ModalAddOrcamento/modal-add-orcamento"; 
+import ModalAddOrcamento from "../../components/ModalAddOrcamento/modal-add-orcamento";
 
 function Orcamentos() {
   const [mes, setMes] = useState(new Date().getMonth() + 1);
   const [ano, setAno] = useState(new Date().getFullYear());
   const [modalAberto, setModalAberto] = useState(false);
+  const [, setAtualizarLista] = useState(false);
 
   const abrirModal = () => {
     setModalAberto(true);
@@ -16,6 +17,10 @@ function Orcamentos() {
 
   const fecharModal = () => {
     setModalAberto(false);
+  };
+
+  const handleAddOrcamentoSuccess = () => {
+    setAtualizarLista((prev) => !prev); // Alterna o estado para forçar a atualização
   };
 
   return (
@@ -40,14 +45,18 @@ function Orcamentos() {
 
       <main className={style.mainContainer}>
         <div className={style.cards}>
-          {/* Passando mes e ano como props para TotalCategorias */}
-          <TotalCategorias mes={mes} ano={ano} />
+          <TotalCategorias
+            mes={mes}
+            ano={ano}
+            onOrcamentoAdded={handleAddOrcamentoSuccess} // Passando a função de callback
+          />
         </div>
       </main>
 
       {modalAberto && (
         <ModalAddOrcamento
           onCloseAll={fecharModal}
+          onAddOrcamentoSuccess={handleAddOrcamentoSuccess} // Passando a função de callback
         />
       )}
     </div>
