@@ -71,7 +71,7 @@ function TotalCategorias({ mes, ano }: TotalCategoriasProps) {
     };
 
     fetchOrcamento();
-  }, [mes, ano]); // Adicione mes e ano como dependências do useEffect
+  }, [mes, ano]); 
   const handleOpenModal = (orcamento: Orcamento) => {
     setSelectedOrcamento(orcamento);
     setIsModalOpen(true);
@@ -93,10 +93,10 @@ function TotalCategorias({ mes, ano }: TotalCategoriasProps) {
           <header className={style.header}>
             <h3 className={style.title}>{orcamento.categoriaDTO.nome}</h3>
             <div className={style.iconsEdit}>
-              <button onClick={() => handleOpenModal(orcamento)}>
-                <img src="/assets/iconsContas/editar.svg" alt="Editar" />
+              <button onClick={() => handleOpenModal(orcamento)} className={style.buttons}>
+                <img src="/assets/iconsContas/editar.svg" alt="Editar" className={style.imgEdit}/>
               </button>
-              <button>
+              <button className={style.buttons}>
                 <img src="/assets/iconsContas/excluir.svg" alt="Excluir" />
               </button>
             </div>
