@@ -13,8 +13,8 @@ insert into banco (nome, icone_url) values ('Bradesco', 'https://play-lh.googleu
 insert into banco (nome, icone_url) values ('Banco do Brasil', 'https://play-lh.googleusercontent.com/1-aNhsSPNqiVluwNGZar_7F5PbQ4u1zteuJ1jumnArhe8bfYHHaVwu4aVOF5-NAmLaA');
 insert into banco (nome, icone_url) values ('Nubank', 'https://t.ctcdn.com.br/DIEw0gGtQl_GNhWXJwgrRmuGpIk=/i624750.png');
 /*CONTA*/
-insert into conta(tipo_conta_id, banco_id, usuario_id, descricao) values ('1', '3', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c', 'conta01');
-insert into conta(tipo_conta_id, banco_id, usuario_id, descricao) values ('3', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c', 'conta02');
+insert into conta(tipo_conta_id, banco_id, usuario_id, descricao, saldo_inicial) values ('1', '3', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c', 'conta01', '10');
+insert into conta(tipo_conta_id, banco_id, usuario_id, descricao, saldo_inicial) values ('3', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c', 'conta02', '0');
 
 /*CATEGORIAS*/
 insert into categoria (nome, tipo_categoria, cor, usuario_id) values ('casa', 'despesa', '8755BC', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');             /*1*/

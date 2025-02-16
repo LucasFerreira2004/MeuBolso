@@ -24,13 +24,12 @@ public class TransacaoRepeticaoService {
     @Autowired
     private GerarTransacoesFactory gerarTransacoesFactory;
 
-    public List<Transacao> gerarTransacoes(LocalDate data, String userId) {
+    public void gerarTransacoes(LocalDate data, String userId) {
         // Obtém todas as transações normais no período
         System.out.println("TransacaoRecorrenteService -> gerarTransacoes");
-        List<Transacao> transacoesNormais = transacaoRepository.findAllBeforeDate(data, userId);
 
         List<TransacaoRecorrente> transacoesRecorrentes = transacaoRecorrenteRepository.findAllByUsuario(userId);
-        if (transacoesNormais.isEmpty() || transacoesRecorrentes.isEmpty()) return null;
+        if (transacoesRecorrentes.isEmpty()) return;
         try {
             for (TransacaoRecorrente transacaoRecorrente : transacoesRecorrentes) {
                 if (!transacaoRecorrente.getAtiva()) continue;
@@ -41,6 +40,5 @@ public class TransacaoRepeticaoService {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        return transacoesNormais;
     }
 }

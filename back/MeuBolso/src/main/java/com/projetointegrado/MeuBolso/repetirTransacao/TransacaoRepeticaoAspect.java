@@ -19,7 +19,7 @@ public class TransacaoRepeticaoAspect {
     @Before("execution(* com.projetointegrado.MeuBolso.conta.ContaService.find*(..)) || execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findAll*(..)) " +
             "|| execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findSum*(..)) || execution(* com.projetointegrado.MeuBolso.dashboard.CategoriaDashboardService.find*(..))" +
             "|| execution(* com.projetointegrado.MeuBolso.dashboard.ContaDashboardService.find*(..)) || execution(* com.projetointegrado.MeuBolso.dashboard.TransacoesDashboardsService.find*(..))")
-    public void gerarTransacoesFixasAntesDasBuscas(JoinPoint joinPoint) {
+    public void gerarTransacoesRecorrentes(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         LocalDate data = null;
         String usuarioId = null;
@@ -34,7 +34,7 @@ public class TransacaoRepeticaoAspect {
 
         if (data != null && usuarioId != null) {
             System.out.println("AOP -> Gerando transações fixas para usuário ID " + usuarioId + " e data " + data);
-            transacaoRepeticaoExecutor.executarGeracaoTransacoes(data, usuarioId); // ✅ Agora sempre executa em nova transação
+            transacaoRepeticaoExecutor.executarGeracaoTransacoes(data, usuarioId);
         } else {
             System.out.println("AOP -> Parâmetros não encontrados, pulando geração de transações.");
         }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController()
@@ -98,7 +99,14 @@ public class TransacaoRecorrenteController {
         return transacaoRecorrenteService.delete(userId, id);
     }
 
-    @Operation(summary = "Atualiza o status de ativo de uma transacao recorrente, fixa ou parcelada (permitindo assim o 'soft delete')")
+    @Operation(summary = "desativa uma transação fixa e recebe uma data. Apaga todas as transações relacionadas a essa transação fixa depois da data recebida")
+    @DeleteMapping("/futuras/{id}")
+    public TransacaoRecorrenteDTO deleteFuturas(@PathVariable Long id, @RequestParam LocalDate data){
+        String userId = usuarioService.getUsuarioLogadoId();
+        return transacaoRecorrenteService.deleteAllAfterDate(userId, id, data);
+    }
+
+    @Operation(summary = "Atualiza o status de ativo de uma transacao recorrente, fixa ou parcelada (permitindo assim o 'soft delete'). Permite ativar e reativar uma transação fixa")
     @PatchMapping("/arquivadas/{id}")
     public TransacaoRecorrenteDTO atualizarStatusAtiva(@PathVariable Long id, @RequestBody ArquivarCategoriaPatchDTO dto, BindingResult bindingResult) throws ValoresNaoPermitidosException {
         if (bindingResult.hasErrors()) {
