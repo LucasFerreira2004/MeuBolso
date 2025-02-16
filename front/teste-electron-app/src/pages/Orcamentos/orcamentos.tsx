@@ -8,14 +8,14 @@ import ModalAddOrcamento from "../../components/ModalAddOrcamento/modal-add-orca
 function Orcamentos() {
   const [mes, setMes] = useState(new Date().getMonth() + 1);
   const [ano, setAno] = useState(new Date().getFullYear());
-  const [modalAberto, setModalAberto] = useState(false); 
+  const [modalAberto, setModalAberto] = useState(false);
 
   const abrirModal = () => {
     setModalAberto(true);
   };
 
   const fecharModal = () => {
-    setModalAberto(false); 
+    setModalAberto(false);
   };
 
   return (
@@ -34,19 +34,20 @@ function Orcamentos() {
         </div>
         <AddButton
           texto="Adicionar orçamento"
-          onClick={abrirModal} 
+          onClick={abrirModal}
         />
       </header>
 
       <main className={style.mainContainer}>
         <div className={style.cards}>
-          <TotalCategorias />
+          {/* Passando mes e ano como props para TotalCategorias */}
+          <TotalCategorias mes={mes} ano={ano} />
         </div>
       </main>
 
       {modalAberto && (
         <ModalAddOrcamento
-          onCloseAll={fecharModal} 
+          onCloseAll={fecharModal}
         />
       )}
     </div>

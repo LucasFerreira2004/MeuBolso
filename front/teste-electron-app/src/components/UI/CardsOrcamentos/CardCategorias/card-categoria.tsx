@@ -28,11 +28,17 @@ interface Orcamento {
   notificacao: Notificacao;
 }
 
-function TotalCategorias() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]); 
-  const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(null); 
+interface TotalCategoriasProps {
+  mes: number;
+  ano: number;
+}
 
+function TotalCategorias({ mes, ano }: TotalCategoriasProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]);
+  const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(
+    null
+  );
   useEffect(() => {
     const fetchOrcamento = async () => {
       const token = localStorage.getItem("authToken");
@@ -43,27 +49,29 @@ function TotalCategorias() {
       }
 
       try {
-        const response = await fetch("http://localhost:8080/orcamentos?ano=2025&mes=2", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `http://localhost:8080/orcamentos?ano=${ano}&mes=${mes}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Erro ao buscar orçamentos");
         }
 
         const data = await response.json();
-        setOrcamentos(data); 
+        setOrcamentos(data);
       } catch (error) {
         console.error("Erro ao buscar orçamento:", error);
       }
     };
 
     fetchOrcamento();
-  }, []);
-
+  }, [mes, ano]); // Adicione mes e ano como dependências do useEffect
   const handleOpenModal = (orcamento: Orcamento) => {
     setSelectedOrcamento(orcamento);
     setIsModalOpen(true);
@@ -71,11 +79,11 @@ function TotalCategorias() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedOrcamento(null); 
+    setSelectedOrcamento(null);
   };
 
   if (orcamentos.length === 0) {
-    return <div>Carregando...</div>; 
+    return <div>Não há orçamentos definidos para este mês</div>;
   }
 
   return (
@@ -96,11 +104,15 @@ function TotalCategorias() {
           <main className={style.main}>
             <li className={style.item}>
               <p className={style.label}>Planejado:</p>
-              <p className={style.value}>R$ {orcamento.valorEstimado.toLocaleString()}</p>
+              <p className={style.value}>
+                R$ {orcamento.valorEstimado.toLocaleString()}
+              </p>
             </li>
             <li className={style.item}>
               <p className={style.label}>Gasto:</p>
-              <p className={style.value}>R$ {orcamento.valorGasto.toLocaleString()}</p>
+              <p className={style.value}>
+                R$ {orcamento.valorGasto.toLocaleString()}
+              </p>
             </li>
             <li className={style.item}>
               <p className={style.label}>Progresso:</p>
@@ -108,7 +120,9 @@ function TotalCategorias() {
             </li>
             <li className={style.item}>
               <p className={style.label}>Restante:</p>
-              <p className={style.value}>R$ {orcamento.valorRestante.toLocaleString()}</p>
+              <p className={style.value}>
+                R$ {orcamento.valorRestante.toLocaleString()}
+              </p>
             </li>
           </main>
         </div>
@@ -116,8 +130,10 @@ function TotalCategorias() {
 
       {isModalOpen && selectedOrcamento && (
         <ModalEditOrcamento
-          valor={selectedOrcamento.valorEstimado.toString()} 
-          data={`${selectedOrcamento.ano}-${String(selectedOrcamento.mes).padStart(2, '0')}-01`} 
+          valor={selectedOrcamento.valorEstimado.toString()}
+          data={`${selectedOrcamento.ano}-${String(
+            selectedOrcamento.mes
+          ).padStart(2, "0")}-01`}
           onCloseAll={handleCloseModal}
           handleChangeValor={(e) => console.log(e.target.value)}
           setCategoria={(categoriaId) => console.log(categoriaId)}
