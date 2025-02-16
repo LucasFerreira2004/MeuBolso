@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ProgressBar } from "../../ProgressBar/progress-bar";
 import ModalEditOrcamento from "../../../ModalEditOrcamento/modal-edit-orcamento";
+import ModalDeleteOrca from "../../../ModalDeleteOrcamentos/modal-delete-orca"; // Import do modal de exclusão
 import style from "./card-categoria.module.css";
 
 interface CategoriaDTO {
@@ -35,10 +36,12 @@ interface TotalCategoriasProps {
 
 function TotalCategorias({ mes, ano }: TotalCategoriasProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Estado para controlar o modal de exclusão
   const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]);
   const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(
     null
   );
+
   useEffect(() => {
     const fetchOrcamento = async () => {
       const token = localStorage.getItem("authToken");
@@ -71,15 +74,31 @@ function TotalCategorias({ mes, ano }: TotalCategoriasProps) {
     };
 
     fetchOrcamento();
-  }, [mes, ano]); 
+  }, [mes, ano]);
+
   const handleOpenModal = (orcamento: Orcamento) => {
     setSelectedOrcamento(orcamento);
     setIsModalOpen(true);
   };
 
+  const handleOpenDeleteModal = (orcamento: Orcamento) => {
+    setSelectedOrcamento(orcamento);
+    setIsDeleteModalOpen(true);
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedOrcamento(null);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setSelectedOrcamento(null);
+  };
+
+  const handleDeleteSuccess = () => {
+    setOrcamentos(orcamentos.filter((o) => o.id !== selectedOrcamento?.id));
+    handleCloseDeleteModal();
   };
 
   if (orcamentos.length === 0) {
@@ -93,10 +112,20 @@ function TotalCategorias({ mes, ano }: TotalCategoriasProps) {
           <header className={style.header}>
             <h3 className={style.title}>{orcamento.categoriaDTO.nome}</h3>
             <div className={style.iconsEdit}>
-              <button onClick={() => handleOpenModal(orcamento)} className={style.buttons}>
-                <img src="/assets/iconsContas/editar.svg" alt="Editar" className={style.imgEdit}/>
+              <button
+                onClick={() => handleOpenModal(orcamento)}
+                className={style.buttons}
+              >
+                <img
+                  src="/assets/iconsContas/editar.svg"
+                  alt="Editar"
+                  className={style.imgEdit}
+                />
               </button>
-              <button className={style.buttons}>
+              <button
+                className={style.buttons}
+                onClick={() => handleOpenDeleteModal(orcamento)} 
+              >
                 <img src="/assets/iconsContas/excluir.svg" alt="Excluir" />
               </button>
             </div>
@@ -138,6 +167,15 @@ function TotalCategorias({ mes, ano }: TotalCategoriasProps) {
           handleChangeValor={(e) => console.log(e.target.value)}
           setCategoria={(categoriaId) => console.log(categoriaId)}
           setData={(date) => console.log(date)}
+        />
+      )}
+
+      {isDeleteModalOpen && selectedOrcamento && (
+        <ModalDeleteOrca
+          url={`http://localhost:8080/orcamentos`}
+          id={selectedOrcamento.id}
+          onDeleteSuccess={handleDeleteSuccess}
+          onClose={handleCloseDeleteModal} 
         />
       )}
     </div>
