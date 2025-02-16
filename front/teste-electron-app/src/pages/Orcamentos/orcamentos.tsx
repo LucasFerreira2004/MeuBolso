@@ -1,22 +1,26 @@
 import { useState } from "react";
 import DatePicker from "../../components/UI/Date/date";
 import style from "./orcamentos.module.css";
-import TotalOrcamentos from "../../components/UI/CardsOrcamentos/CardTotal/card-total";
 import AddButton from "../../components/UI/AddButton/add-button";
 import TotalCategorias from "../../components/UI/CardsOrcamentos/CardCategorias/card-categoria";
-import ModalAddOrcamento from "../../components/ModalAddOrcamento/modal-add-orcamento"; 
+import ModalAddOrcamento from "../../components/ModalAddOrcamento/modal-add-orcamento";
 
 function Orcamentos() {
   const [mes, setMes] = useState(new Date().getMonth() + 1);
   const [ano, setAno] = useState(new Date().getFullYear());
-  const [modalAberto, setModalAberto] = useState(false); 
+  const [modalAberto, setModalAberto] = useState(false);
+  const [, setAtualizarLista] = useState(false);
 
   const abrirModal = () => {
     setModalAberto(true);
   };
 
   const fecharModal = () => {
-    setModalAberto(false); 
+    setModalAberto(false);
+  };
+
+  const handleAddOrcamentoSuccess = () => {
+    setAtualizarLista((prev) => !prev); // Alterna o estado para forçar a atualização
   };
 
   return (
@@ -35,25 +39,24 @@ function Orcamentos() {
         </div>
         <AddButton
           texto="Adicionar orçamento"
-          onClick={abrirModal} 
+          onClick={abrirModal}
         />
       </header>
 
       <main className={style.mainContainer}>
         <div className={style.cards}>
-          <TotalOrcamentos />
-          <TotalCategorias />
+          <TotalCategorias
+            mes={mes}
+            ano={ano}
+            onOrcamentoAdded={handleAddOrcamentoSuccess} // Passando a função de callback
+          />
         </div>
       </main>
 
       {modalAberto && (
         <ModalAddOrcamento
           onCloseAll={fecharModal}
-          valor=""
-          data=""
-          handleChangeValor={() => {}}
-          setCategoria={() => {}}
-          setData={() => {}}
+          onAddOrcamentoSuccess={handleAddOrcamentoSuccess} // Passando a função de callback
         />
       )}
     </div>

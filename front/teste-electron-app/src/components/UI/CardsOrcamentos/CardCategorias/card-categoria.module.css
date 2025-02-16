@@ -63,3 +63,18 @@
 .iconsEdit img {
   cursor: pointer;
 }
+.buttons{
+  border: none;
+  background-color: #fff;
+}
+.buttons img {
+  width: 30px;
+  height: 30px;
+}
+.buttons .imgEdit {
+  width: 35px;
+  height: 35px;
+}
+.title::first-letter{
+  text-transform: capitalize;
+}

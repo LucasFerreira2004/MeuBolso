@@ -23,9 +23,10 @@ const formatarComoMoeda = (valor: string): string => {
 
 interface ModalAddOrcamentoProps {
   onCloseAll: () => void;
+  onAddOrcamentoSuccess: () => void; 
 }
 
-const ModalAddOrcamento: React.FC<ModalAddOrcamentoProps> = ({ onCloseAll }) => {
+const ModalAddOrcamento: React.FC<ModalAddOrcamentoProps> = ({ onCloseAll, onAddOrcamentoSuccess }) => {
   const [valor, setValor] = useState<string>("");
   const [data, setData] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null);
@@ -67,6 +68,7 @@ const ModalAddOrcamento: React.FC<ModalAddOrcamentoProps> = ({ onCloseAll }) => 
       if (response.status === 200 || response.status === 201) {
         toast.success("Orçamento adicionado com sucesso!");
         onCloseAll();
+        onAddOrcamentoSuccess(); // Chama a função de callback para atualizar a lista
       } else {
         toast.error("Erro ao adicionar o orçamento. Tente novamente.");
       }
