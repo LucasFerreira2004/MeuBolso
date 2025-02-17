@@ -45,7 +45,7 @@ public class Orcamento {
     private Usuario usuario;
 
     @OneToOne(mappedBy = "orcamento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private NotificacaoOrcamento notificacao = null;;
+    private NotificacaoOrcamento notificacao;
 
     public Orcamento() {
     }
@@ -158,26 +158,33 @@ public class Orcamento {
     }
 
     public void setNotificacao(NotificacaoOrcamento notificacao) {
+        if (notificacao == null) {
+            if (this.notificacao != null) {
+                this.notificacao.setOrcamento(null);
+            }
+        } else {
+            notificacao.setOrcamento(this);
+        }
         this.notificacao = notificacao;
     }
 
     public void verificarThresholds() {
-        // Supondo que this.valorEstimado seja o total definido e valorGasto seja o que já foi usado
         if (this.valorEstimado == null || this.valorEstimado.compareTo(BigDecimal.ZERO) == 0) {
             return;
         }
+
         BigDecimal progresso = valorGasto
                 .divide(this.valorEstimado, 4, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(100));
 
-        // thresholds que queremos verificar
         List<Integer> thresholds = List.of(50, 90, 100);
 
         for (Integer threshold : thresholds) {
-            if (progresso.compareTo(new BigDecimal(threshold)) >= 0 && !notificacaoJaEnviada(threshold)) {
-                // Dispara notificação e Marca como notificado
-                // Ex: eventPublisher.publishEvent(new OrcamentoProgressEvent(this.id, progresso, threshold));
-                salvarNotificacao(threshold);
+            if (progresso.compareTo(new BigDecimal(threshold)) >= 0) {
+                if (this.notificacao == null || !this.notificacao.getThreshold().equals(threshold)) {
+                    salvarNotificacao(threshold);
+                    break; // Notifica apenas o primeiro threshold atingido
+                }
             }
         }
     }
@@ -187,13 +194,16 @@ public class Orcamento {
     }
 
     private void salvarNotificacao(Integer threshold) {
-        // Se já existe uma notificacaoAtual, removemos ou sobrescrevemos
-        NotificacaoOrcamento notificacao = new NotificacaoOrcamento();
-        notificacao.setThreshold(threshold);
-        notificacao.setNotificado(true);
-        notificacao.setOrcamento(this);
-
-        this.notificacao = notificacao;
+        if (this.notificacao == null) {
+            this.notificacao = new NotificacaoOrcamento();
+            this.notificacao.setThreshold(threshold);
+            this.notificacao.setNotificado(true);
+            this.notificacao.setOrcamento(this);
+        } else {
+            // Atualiza a notificação existente
+            this.notificacao.setThreshold(threshold);
+            this.notificacao.setNotificado(true);
+        }
     }
 
     @Override
