@@ -11,9 +11,7 @@ function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalDespesaOpen, setIsModalDespesaOpen] = useState<boolean>(false); // Estado para modal de despesa
   const [isModalReceitaOpen, setIsModalReceitaOpen] = useState<boolean>(false); // Estado para modal de receita
-  const [selectedTransactionId, setSelectedTransactionId] = useState<
-    number | null
-  >(null);
+  const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
   const [totalDespesas, setTotalDespesas] = useState<number | null>(null);
   const [totalReceitas, setTotalReceitas] = useState<number | null>(null);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
@@ -199,6 +197,11 @@ function Transacoes() {
     handleCloseEditModal();
   };
 
+  // Função para atualizar as transações
+  const handleUpdate = () => {
+    fetchTransacoes(ano, mes); // Atualiza a lista de transações
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -304,7 +307,12 @@ function Transacoes() {
       </div>
 
       {isModalOpen && (
-        <ModalTipoTrans mes={mes} ano={ano} onClose={toggleModal} />
+        <ModalTipoTrans
+          mes={mes}
+          ano={ano}
+          onClose={toggleModal}
+          onUpdate={handleUpdate} // Passando a função de atualização
+        />
       )}
 
       {isModalDespesaOpen && selectedTransactionId && (
