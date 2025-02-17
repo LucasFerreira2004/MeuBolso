@@ -183,23 +183,32 @@ function Transacoes() {
   };
 
   const handleUpdateTransaction = (updatedTransaction: any) => {
-    setTransacoesAgrupadas((prevTransacoes) => {
-      return prevTransacoes.map((grupo) => {
-        const updatedTransacoes = grupo.transacoes.map((transacao: any) =>
-          transacao.id === updatedTransaction.id
-            ? updatedTransaction
-            : transacao
-        );
-        return { ...grupo, transacoes: updatedTransacoes };
-      });
-    });
-
+    if (updatedTransaction.deleted) {
+      // Se a transação foi excluída, recarregue as transações
+      handleUpdate();
+    } else {
+      // Caso contrário, atualize os estados locais
+      setTransacoes((prevTransacoes) =>
+        prevTransacoes.map((transacao) =>
+          transacao.id === updatedTransaction.id ? updatedTransaction : transacao
+        )
+      );
+  
+      setTransacoesAgrupadas((prevTransacoes) =>
+        prevTransacoes.map((grupo) => ({
+          ...grupo,
+          transacoes: grupo.transacoes.map((transacao: any) =>
+            transacao.id === updatedTransaction.id ? updatedTransaction : transacao
+          ),
+        }))
+      );
+    }
+  
     handleCloseEditModal();
   };
 
-  // Função para atualizar as transações
   const handleUpdate = () => {
-    fetchTransacoes(ano, mes); // Atualiza a lista de transações
+    fetchTransacoes(ano, mes); 
   };
 
   useEffect(() => {
