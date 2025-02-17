@@ -34,9 +34,11 @@ public class AtualizacaoOrcamentoService {
 
             // Atualiza os valores de total gasto e restante
             orcamento.updateValores(gastoTotal);
+//            System.out.println("Update orcamento: " + orcamento.getNotificacao().getThreshold());
 
             // Verifica se algum threshold (50%, 90%, 100%) foi atingido
             orcamento.verificarThresholds();
+//            System.out.println("Update orcamento: " + orcamento.getNotificacao().getThreshold());
 
             orcamentoRepository.save(orcamento);
         });
