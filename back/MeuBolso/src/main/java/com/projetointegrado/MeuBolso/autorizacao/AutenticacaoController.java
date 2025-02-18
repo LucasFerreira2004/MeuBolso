@@ -8,6 +8,7 @@ import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosExcept
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioSaveDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,6 +34,7 @@ public class AutenticacaoController {
     @Qualifier("usuarioService")
     private IUsuarioService usuarioService;
 
+    @Operation(summary = "Autentica um usuario")
     @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody @Valid LoginDTO data) {
         var usernameSenha = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
@@ -42,6 +44,7 @@ public class AutenticacaoController {
         return new LoginResponseDTO(token);
     }
 
+    @Operation(summary = "Cadastra um novo usuario")
     @PostMapping("/cadastro")
     public ResponseEntity cadastrar(@RequestBody @Valid UsuarioSaveDTO usuarioSaveDTO,  BindingResult bindingResult) throws ValoresNaoPermitidosException {
         if (bindingResult.hasErrors()){
