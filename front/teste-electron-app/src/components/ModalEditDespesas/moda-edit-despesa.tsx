@@ -152,7 +152,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
 
       if (response.status === 200) {
         toast.success("Transação atualizada com sucesso!");
-        onTransactionUpdate(response.data);
+        onTransactionUpdate(response.data); // Notifica o componente pai sobre a atualização
         onClose();
       } else {
         toast.error("Erro ao atualizar a transação.");
@@ -179,6 +179,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
 
       if (response.status === 200) {
         toast.success("Transação excluída com sucesso!");
+        onTransactionUpdate({ id: transactionId, deleted: true }); // Notifica o componente pai sobre a exclusão
         onClose();
       } else {
         toast.error("Erro ao excluir a transação.");

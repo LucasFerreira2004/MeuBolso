@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styles from "./card-transacoes.module.css";
 
 interface Transacao {
@@ -32,7 +32,17 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
   dataTransacao,
   onEditClick,
 }) => {
-  const [ano, mes, dia] = dataTransacao.split("-");
+  // Formatar a data automaticamente quando `dataTransacao` mudar
+  const dataFormatada = useMemo(() => {
+    if (!dataTransacao) return "";
+    const [ano, mes, dia] = dataTransacao.split("-");
+    const data = new Date(`${ano}-${mes}-${dia}T00:00:00`);
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }).format(data);
+  }, [dataTransacao]); // `useMemo` garante que a formatação só acontece quando `dataTransacao` muda
 
   const formatarValor = (valor: number): string => {
     return valor.toLocaleString("pt-BR", {
@@ -41,20 +51,11 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
     });
   };
 
-  const formatarData = (): string => {
-    const data = new Date(`${ano}-${mes}-${dia}T00:00:00`);
-    return new Intl.DateTimeFormat("pt-BR", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    }).format(data);
-  };
-
   return (
     <div className={styles.card}>
       <header className={styles.time}>
         <div className={styles.bolinhaDate}></div>
-        <time>{formatarData()}</time>
+        <time>{dataFormatada}</time>
       </header>
       <ul className={styles.detalhes}>
         {transacoes.length > 0 ? (
@@ -62,9 +63,9 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
             const valor = formatarValor(transacao.valor);
             const corTransacao =
               transacao.tipo === "DESPESA"
-                ? "#C63A22" // vermelho
+                ? "#C63A22"
                 : transacao.tipo === "RECEITA"
-                ? "#2A9D8F" // verde
+                ? "#2A9D8F"
                 : `#${transacao.categoria.cor}`;
 
             return (

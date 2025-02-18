@@ -11,18 +11,18 @@ import SelectedReceita from "../UI/SelectedReceitas/selected-receita";
 
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
-    .replace(/[^\d,.-]/g, "")
+    .replace("R$ ", "")
+    .replace(/\./g, "")
     .replace(",", ".");
   return parseFloat(valorNumerico);
 };
 
 const formatarValor = (valor: string): string => {
-  const valorNumerico = parseFloat(valor.replace(/[^\d.-]/g, ""));
-  if (isNaN(valorNumerico)) return "R$ 0,00";
-  return valorNumerico.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
+  let valorNumerico = valor.replace(/\D/g, "");
+  valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
+  valorNumerico = valorNumerico.replace(".", ",");
+  valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  return `R$ ${valorNumerico}`;
 };
 
 interface ModalEditReceitaProps {
@@ -179,6 +179,7 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
 
       if (response.status === 200) {
         toast.success("Transação excluída com sucesso!");
+        onTransactionUpdate({ id: transactionId, deleted: true });
         onClose();
       } else {
         toast.error("Erro ao excluir a transação.");
