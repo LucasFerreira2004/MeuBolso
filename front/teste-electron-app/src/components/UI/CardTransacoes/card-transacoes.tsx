@@ -1,5 +1,8 @@
-import React, { useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import styles from "./card-transacoes.module.css";
+import ModalDeleteNormal from "../../ModalDeleteNormal/modal-delete-normal";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Transacao {
   id: number;
@@ -25,14 +28,26 @@ interface CardTransacoesProps {
   transacoes: Transacao[];
   dataTransacao: string;
   onEditClick: (id: number, tipo: string) => void;
+  onDeleteSuccess: (id: number) => void;
 }
 
 const CardTransacoes: React.FC<CardTransacoesProps> = ({
-  transacoes,
+  transacoes: initialTransacoes,
   dataTransacao,
   onEditClick,
+  onDeleteSuccess,
 }) => {
-  // Formatar a data automaticamente quando `dataTransacao` mudar
+  const [localTransacoes, setLocalTransacoes] = useState<Transacao[]>(initialTransacoes);
+  const [modalAberto, setModalAberto] = useState<{
+    tipo: "NORMAL" | "RECORRENTE" | null;
+    transacaoId: number | null;
+  }>({ tipo: null, transacaoId: null });
+
+  // Atualiza as transações locais sempre que as transações iniciais mudarem
+  useEffect(() => {
+    setLocalTransacoes(initialTransacoes);
+  }, [initialTransacoes]);
+
   const dataFormatada = useMemo(() => {
     if (!dataTransacao) return "";
     const [ano, mes, dia] = dataTransacao.split("-");
@@ -42,7 +57,7 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
       month: "long",
       year: "numeric",
     }).format(data);
-  }, [dataTransacao]); // `useMemo` garante que a formatação só acontece quando `dataTransacao` muda
+  }, [dataTransacao]);
 
   const formatarValor = (valor: number): string => {
     return valor.toLocaleString("pt-BR", {
@@ -51,22 +66,47 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
     });
   };
 
+  const handleDeleteClick = (event: React.MouseEvent, transacao: Transacao) => {
+    event.stopPropagation();
+
+    if (transacao.origem === "NORMAL") {
+      setModalAberto({ tipo: "NORMAL", transacaoId: transacao.id });
+    } else if (transacao.origem === "FIXA" || transacao.origem === "PARCELADA") {
+      setModalAberto({ tipo: "RECORRENTE", transacaoId: transacao.id });
+    }
+  };
+
+  const handleCloseModal = () => {
+    setModalAberto({ tipo: null, transacaoId: null });
+  };
+
+  const handleDeleteSuccess = (id: number) => {
+    // Remove a transação excluída da lista local
+    setLocalTransacoes((prevTransacoes) =>
+      prevTransacoes.filter((transacao) => transacao.id !== id)
+    );
+    // Notifica o componente pai sobre a exclusão
+    onDeleteSuccess(id);
+    toast.success("Transação excluída com sucesso!");
+  };
+
   return (
     <div className={styles.card}>
+      <ToastContainer />
       <header className={styles.time}>
         <div className={styles.bolinhaDate}></div>
         <time>{dataFormatada}</time>
       </header>
       <ul className={styles.detalhes}>
-        {transacoes.length > 0 ? (
-          transacoes.map((transacao) => {
+        {localTransacoes.length > 0 ? (
+          localTransacoes.map((transacao) => {
             const valor = formatarValor(transacao.valor);
             const corTransacao =
               transacao.tipo === "DESPESA"
                 ? "#C63A22"
                 : transacao.tipo === "RECEITA"
-                ? "#2A9D8F"
-                : `#${transacao.categoria.cor}`;
+                  ? "#2A9D8F"
+                  : `#${transacao.categoria.cor}`;
 
             return (
               <li
@@ -102,6 +142,12 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
                   <label className={styles.label}>Fixa:</label>{" "}
                   {transacao.origem === "FIXA" ? "Sim" : "Não"}
                 </div>
+                <button
+                  className={styles.button}
+                  onClick={(event) => handleDeleteClick(event, transacao)}
+                >
+                  <img src="/assets/iconsContas/excluir.svg" alt="Excluir" />
+                </button>
               </li>
             );
           })
@@ -109,6 +155,21 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
           <p>Nenhuma transação encontrada.</p>
         )}
       </ul>
+
+      {modalAberto.tipo === "NORMAL" && modalAberto.transacaoId !== null && (
+        <ModalDeleteNormal
+          transacaoId={modalAberto.transacaoId}
+          onClose={handleCloseModal}
+          onConfirmDelete={handleDeleteSuccess} 
+        />
+      )}
+      {modalAberto.tipo === "RECORRENTE" && modalAberto.transacaoId !== null && (
+        <ModalDeleteNormal
+          transacaoId={modalAberto.transacaoId}
+          onClose={handleCloseModal}
+          onConfirmDelete={handleDeleteSuccess} 
+        />
+      )}
     </div>
   );
 };

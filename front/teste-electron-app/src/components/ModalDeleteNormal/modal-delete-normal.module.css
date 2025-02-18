@@ -1,0 +1,72 @@
+.containerDelete {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+  }
+  
+  .divButton {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .divButton button {
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+  
+  .buttonSim {
+    color: black;
+    background-color: #d3d3d3; 
+  }
+  
+  .buttonSim:hover {
+    transform: scale(1.05);
+    background-color: #b0b0b0; 
+  }
+  
+  .buttonSim:active {
+    background-color: #8f8f8f;
+  }
+  
+  .buttonNao {
+    color: white;
+    background-color: #E63946; 
+  }
+  
+  .buttonNao:hover {
+    transform: scale(1.05);
+    background-color: #c1283d; 
+  }
+  
+  .buttonNao:active {
+    background-color: #9d1f31; 
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

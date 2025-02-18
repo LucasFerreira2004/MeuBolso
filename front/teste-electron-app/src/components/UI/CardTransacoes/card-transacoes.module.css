@@ -63,3 +63,12 @@
     align-items: center;
     gap: 5px;
 }
+.button{
+    border: none;
+    background-color: #fff;
+    cursor: pointer;
+}
+.button img{
+    width: 27px;
+    height: 27px;
+}
