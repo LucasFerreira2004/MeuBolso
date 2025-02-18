@@ -69,7 +69,7 @@ public class TransacaoService implements ITransacaoService {
         return sumDespesas;
     }
 
-    @Transactional()
+    @Transactional
     public SumTransacoesDTO findSumReceitasInRangeByMonth(String userId, LocalDate data) {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;

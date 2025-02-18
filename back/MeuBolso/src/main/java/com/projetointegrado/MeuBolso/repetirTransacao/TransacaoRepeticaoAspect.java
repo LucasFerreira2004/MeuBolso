@@ -11,14 +11,10 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReentrantLock;
-
 @Aspect
 @Component
 public class TransacaoRepeticaoAspect {
     private final TransacaoRepeticaoService transacaoRepeticaoService;
-    private final ConcurrentHashMap<String, ReentrantLock> locks = new ConcurrentHashMap<>();
 
     public TransacaoRepeticaoAspect(TransacaoRepeticaoService transacaoRepeticaoService) {
         this.transacaoRepeticaoService = transacaoRepeticaoService;
@@ -44,24 +40,10 @@ public class TransacaoRepeticaoAspect {
         }
 
         if (data != null && usuarioId != null) {
-            // Obtém ou cria um lock para o usuário
-            locks.putIfAbsent(usuarioId, new ReentrantLock());
-            ReentrantLock lock = locks.get(usuarioId);
-
-            // Tenta obter o lock para o usuário antes de prosseguir
-            if (lock.tryLock()) {
-                try {
-                    System.out.println("AOP -> Gerando transações fixas para usuário ID " + usuarioId + " e data " + data);
-                    transacaoRepeticaoService.gerarTransacoes(data, usuarioId);
-                } finally {
-                    lock.unlock();
-                }
-            } else {
-                System.out.println("AOP -> Uma geração de transação já está ocorrendo para o usuário ID " + usuarioId + ". Ignorando esta tentativa.");
-            }
+            System.out.println("Aspect -> Gerando transações fixas para usuário ID " + usuarioId + " e data " + data);
+            transacaoRepeticaoService.gerarTransacoes(data, usuarioId);
         } else {
-            System.out.println("AOP -> Parâmetros não encontrados, pulando geração de transações.");
+            System.out.println("Aspect -> Parâmetros não encontrados, pulando geração de transações.");
         }
     }
 }
-
