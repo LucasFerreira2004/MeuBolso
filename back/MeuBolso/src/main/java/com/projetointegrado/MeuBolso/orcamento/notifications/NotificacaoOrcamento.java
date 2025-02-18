@@ -9,12 +9,12 @@ public class NotificacaoOrcamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer threshold;
-    private Boolean notificado;
-
     @OneToOne
-    @JoinColumn(name = "orcamento_id")
+    @JoinColumn(name = "orcamento_id", unique = true)
     private Orcamento orcamento;
+
+    private Integer threshold;
+    private boolean notificado;
 
     public NotificacaoOrcamento() {
     }
