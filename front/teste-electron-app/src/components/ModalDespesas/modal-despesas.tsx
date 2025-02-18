@@ -9,6 +9,18 @@ import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
 import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
 
+interface TransactionData {
+  valor: number;
+  data: string;
+  tipoTransacao: "DESPESA";
+  categoriaId: number | null;
+  contaId: number | null;
+  comentario: string | null;
+  descricao: string;
+  periodicidade?: "DIARIO" | "SEMANAL" | "MENSAL";
+  qtdParcelas?: number | null; // Aceita `number` ou `null`
+}
+
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
     .replace("R$ ", "")
@@ -62,10 +74,10 @@ function ModalDespesas({ onCloseAll, mes, ano }: ModalDespesasProps) {
     }
 
     // Dados comuns a todas as transações
-    const transactionData: any = {
+    const transactionData: TransactionData = {
       valor: valorNumerico,
       data,
-      tipoTransacao: tipoTransacao === "NORMAL" ? "DESPESA" : tipoTransacao === "FIXA" ? "DESPESA" : "DESPESA",
+      tipoTransacao: "DESPESA", // Definido como "DESPESA" para todos os tipos
       categoriaId: categoria,
       contaId: conta,
       comentario,
