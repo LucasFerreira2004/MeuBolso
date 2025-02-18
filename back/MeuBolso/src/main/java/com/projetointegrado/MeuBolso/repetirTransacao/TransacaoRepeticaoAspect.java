@@ -27,7 +27,7 @@ public class TransacaoRepeticaoAspect {
             "execution(* com.projetointegrado.MeuBolso.dashboard.CategoriaDashboardService.find*(..)) || " +
             "execution(* com.projetointegrado.MeuBolso.dashboard.ContaDashboardService.find*(..)) || " +
             "execution(* com.projetointegrado.MeuBolso.dashboard.TransacoesDashboardsService.find*(..))")
-    public void gerarTransacoesRecorrentes(JoinPoint joinPoint) {
+    public synchronized void gerarTransacoesRecorrentes(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         LocalDate data = null;
         String usuarioId = null;

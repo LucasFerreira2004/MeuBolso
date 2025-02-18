@@ -37,10 +37,6 @@ public class TransacaoService implements ITransacaoService {
     @Autowired
     private TransacaoValidateService transacaoValidateService;
 
-    //temporário
-    @Autowired
-    private TransacaoRepeticaoService transacaoRepeticaoService;
-
     @Transactional
     public TransacaoDTO findById(String userId, Long id){
         Transacao transacao = transacaoRepository.findById(id).orElse(null);

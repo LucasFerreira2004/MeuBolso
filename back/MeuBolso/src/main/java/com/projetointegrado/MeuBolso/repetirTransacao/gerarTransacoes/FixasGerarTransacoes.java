@@ -5,6 +5,8 @@ import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStr
 import com.projetointegrado.MeuBolso.transacao.OrigemTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
+import com.projetointegrado.MeuBolso.transacao.TransacaoService;
+import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrenteRepository;
 import jakarta.persistence.EntityManager;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
@@ -23,8 +26,6 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
     @Autowired
     private TransacaoRecorrenteRepository transacaoRecorrenteRepository;
 
-    //@PersistenceContext
-    //private EntityManager entityManager;
 
     @Transactional
     @Override
@@ -39,7 +40,6 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
         }
 
         if (dataUltimaExecucao.isAfter(dataBusca)) return;
-
         while (!dataUltimaExecucao.isAfter(dataBusca)) {
             Transacao novaTransacao = new Transacao(transacaoRecorrente, dataUltimaExecucao, OrigemTransacao.FIXA);
             transacaoRepository.save(novaTransacao);
