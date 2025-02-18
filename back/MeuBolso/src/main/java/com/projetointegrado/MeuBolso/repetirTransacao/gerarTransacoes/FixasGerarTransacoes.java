@@ -31,6 +31,8 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
             dataUltimaExecucao = transacaoRecorrente.getDataCadastro();
         }
 
+        if (dataUltimaExecucao.isAfter(dataBusca)) return;
+
         while (!dataUltimaExecucao.isAfter(dataBusca)) {
             Transacao novaTransacao = new Transacao(transacaoRecorrente, dataUltimaExecucao, OrigemTransacao.FIXA);
             transacaoRepository.save(novaTransacao);

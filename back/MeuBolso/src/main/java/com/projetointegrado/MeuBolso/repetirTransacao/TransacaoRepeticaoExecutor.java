@@ -16,7 +16,7 @@ public class TransacaoRepeticaoExecutor {
         this.transacaoRepeticaoService = transacaoRepeticaoService;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRED)
     public void executarGeracaoTransacoes(LocalDate data, String usuarioId) {
         // Se já está em execução para esse usuário, não faz nada
         if (!usuariosEmExecucao.add(usuarioId)) {
