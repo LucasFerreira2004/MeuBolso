@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import styles from "./card-transacoes.module.css";
 import ModalDeleteNormal from "../../ModalDeleteNormal/modal-delete-normal";
+import ModalDeleteRecorrentes from "../../ModalDeleteRecorrentes/modal-delete-recorrentes"; // Importe o novo modal
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,6 +12,7 @@ interface Transacao {
   tipo: string;
   descricao: string;
   origem: string;
+  idTransacaoRecorrente: number; // Mudança aqui, usando idTransacaoRecorrente
   conta: {
     descricao: string;
     banco: {
@@ -29,6 +31,7 @@ interface CardTransacoesProps {
   dataTransacao: string;
   onEditClick: (id: number, tipo: string) => void;
   onDeleteSuccess: (id: number) => void;
+  token: string; // Adicionado o token como prop
 }
 
 const CardTransacoes: React.FC<CardTransacoesProps> = ({
@@ -41,9 +44,9 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
   const [modalAberto, setModalAberto] = useState<{
     tipo: "NORMAL" | "RECORRENTE" | null;
     transacaoId: number | null;
-  }>({ tipo: null, transacaoId: null });
+    dataTransacao: string | null; // Adicionado a data
+  }>({ tipo: null, transacaoId: null, dataTransacao: null });
 
-  // Atualiza as transações locais sempre que as transações iniciais mudarem
   useEffect(() => {
     setLocalTransacoes(initialTransacoes);
   }, [initialTransacoes]);
@@ -70,22 +73,24 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
     event.stopPropagation();
 
     if (transacao.origem === "NORMAL") {
-      setModalAberto({ tipo: "NORMAL", transacaoId: transacao.id });
+      setModalAberto({ tipo: "NORMAL", transacaoId: transacao.id, dataTransacao: transacao.data_transacao });
     } else if (transacao.origem === "FIXA" || transacao.origem === "PARCELADA") {
-      setModalAberto({ tipo: "RECORRENTE", transacaoId: transacao.id });
+      setModalAberto({
+        tipo: "RECORRENTE",
+        transacaoId: transacao.idTransacaoRecorrente,
+        dataTransacao: transacao.data_transacao, 
+      });
     }
   };
 
   const handleCloseModal = () => {
-    setModalAberto({ tipo: null, transacaoId: null });
+    setModalAberto({ tipo: null, transacaoId: null, dataTransacao: null });
   };
 
   const handleDeleteSuccess = (id: number) => {
-    // Remove a transação excluída da lista local
     setLocalTransacoes((prevTransacoes) =>
       prevTransacoes.filter((transacao) => transacao.id !== id)
     );
-    // Notifica o componente pai sobre a exclusão
     onDeleteSuccess(id);
     toast.success("Transação excluída com sucesso!");
   };
@@ -160,16 +165,18 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
         <ModalDeleteNormal
           transacaoId={modalAberto.transacaoId}
           onClose={handleCloseModal}
-          onConfirmDelete={handleDeleteSuccess} 
+          onConfirmDelete={handleDeleteSuccess}
         />
       )}
-      {modalAberto.tipo === "RECORRENTE" && modalAberto.transacaoId !== null && (
-        <ModalDeleteNormal
-          transacaoId={modalAberto.transacaoId}
+      {modalAberto.tipo === "RECORRENTE" && modalAberto.transacaoId !== null && modalAberto.dataTransacao && (
+        <ModalDeleteRecorrentes
+          idTransacaoRecorrente={modalAberto.transacaoId}
+          dataTransacao={modalAberto.dataTransacao} 
           onClose={handleCloseModal}
-          onConfirmDelete={handleDeleteSuccess} 
+          onDeleteSuccess={() => handleDeleteSuccess(modalAberto.transacaoId!)}
         />
       )}
+
     </div>
   );
 };
