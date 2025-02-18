@@ -5,12 +5,16 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Aspect
 @Component
 public class TransacaoRepeticaoAspect {
     private final TransacaoRepeticaoExecutor transacaoRepeticaoExecutor;
+    private final Map<String, Instant> ultimaExecucao = new ConcurrentHashMap<>();
 
     public TransacaoRepeticaoAspect(TransacaoRepeticaoExecutor transacaoRepeticaoExecutor) {
         this.transacaoRepeticaoExecutor = transacaoRepeticaoExecutor;
@@ -33,6 +37,15 @@ public class TransacaoRepeticaoAspect {
         }
 
         if (data != null && usuarioId != null) {
+            Instant agora = Instant.now();
+            Instant ultima = ultimaExecucao.get(usuarioId);
+
+            // Evita execuções muito frequentes (por exemplo, dentro de 1 segundos)
+            if (ultima != null && agora.minusSeconds(1).isBefore(ultima)) {
+                System.out.println("AOP -> Ignorando geração de transações para " + usuarioId + ", já foi feita recentemente.");
+                return;
+            }
+
             System.out.println("AOP -> Gerando transações fixas para usuário ID " + usuarioId + " e data " + data);
             transacaoRepeticaoExecutor.executarGeracaoTransacoes(data, usuarioId);
         } else {
