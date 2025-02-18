@@ -3,6 +3,7 @@ package com.projetointegrado.MeuBolso.usuario;
 import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioSaveDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,12 +21,14 @@ public class UsuarioController {
     @Qualifier("usuarioService")
     private IUsuarioService usuarioService;
 
+    @Operation(summary = "Retorna o usuário logado")
     @GetMapping
     public UsuarioDTO findUsuario(){
         String userId = usuarioService.getUsuarioLogadoId();
         return usuarioService.findById(userId);
     }
-
+    
+    @Operation(summary = "Cria um novo usuário")
     @PostMapping
     public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody @Valid UsuarioSaveDTO usuarioSaveDTO) {
         usuarioService.save(usuarioSaveDTO);
@@ -33,6 +36,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.findUsuario()); //isso deve sair
     }
 
+    @Operation(summary = "Atualiza o usuário logado")
     @PutMapping()
     public UsuarioDTO updateUsuario(@ModelAttribute @Valid UsuarioSaveDTO usuarioSaveDTO,
                                     @RequestPart(name = "img", required = false) MultipartFile img, BindingResult bindingResult) {
