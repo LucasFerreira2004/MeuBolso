@@ -15,16 +15,16 @@ const ModalDeleteRecorrentes: React.FC<ModalDeleteRecorrentesProps> = ({
   onClose,
   onDeleteSuccess,
 }) => {
-  const handleDeleteRecorrente = async () => {
+  const deleteTransaction = async (url: string) => {
     try {
+      onClose();
       const token = localStorage.getItem("authToken");
-
       if (!token) {
         console.error("Token não encontrado. O usuário não está autenticado.");
         return;
       }
 
-      const response = await fetch(`http://localhost:8080/transacoesRecorrentes/${idTransacaoRecorrente}`, {
+      const response = await fetch(url, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -33,43 +33,9 @@ const ModalDeleteRecorrentes: React.FC<ModalDeleteRecorrentesProps> = ({
 
       if (response.ok) {
         onDeleteSuccess();
-        onClose();
-        toast.success("Transação recorrente excluída com sucesso!");
+        toast.success("Transação excluída com sucesso!");
       } else {
-        console.error("Erro ao apagar transação recorrente");
-      }
-    } catch (error) {
-      console.error("Erro na requisição:", error);
-    }
-  };
-
-  const handleDeleteFuturas = async () => {
-    const dataFutura = dataTransacao;
-
-    try {
-      const token = localStorage.getItem("authToken");
-
-      if (!token) {
-        console.error("Token não encontrado. O usuário não está autenticado.");
-        return;
-      }
-
-      const response = await fetch(
-        `http://localhost:8080/transacoesRecorrentes/futuras/${idTransacaoRecorrente}?data=${dataFutura}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        onDeleteSuccess();
-        onClose();
-        toast.success("Transações futuras excluídas com sucesso!");
-      } else {
-        console.error("Erro ao apagar transação e as futuras");
+        console.error("Erro ao apagar transação");
       }
     } catch (error) {
       console.error("Erro na requisição:", error);
@@ -79,17 +45,35 @@ const ModalDeleteRecorrentes: React.FC<ModalDeleteRecorrentesProps> = ({
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <h2>Excluir Transação Recorrente</h2>
+        <div className={styles.headerModal}>
+          <h2>Excluir Transação Recorrente</h2>
+          <button className={styles.closeButton} onClick={onClose}>
+            <img src="assets/iconsModal/iconX.svg" alt="Fechar" />
+          </button>
+        </div>
         <p>Escolha uma opção:</p>
-        <button className={styles.button} onClick={handleDeleteRecorrente}>
-          Apagar transação recorrente
-        </button>
-        <button className={styles.button} onClick={handleDeleteFuturas}>
-          Apagar essa e as próximas
-        </button>
-        <button className={styles.button} onClick={onClose}>
-          Cancelar
-        </button>
+        <div className={styles.Buttons}>
+          <button
+            className={styles.deleteButton}
+            onClick={() =>
+              deleteTransaction(
+                `http://localhost:8080/transacoesRecorrentes/${idTransacaoRecorrente}`
+              )
+            }
+          >
+            Apagar transação recorrente
+          </button>
+          <button
+            className={styles.submitButton}
+            onClick={() =>
+              deleteTransaction(
+                `http://localhost:8080/transacoesRecorrentes/futuras/${idTransacaoRecorrente}?data=${dataTransacao}`
+              )
+            }
+          >
+            Apagar essa e as próximas
+          </button>
+        </div>
       </div>
     </div>
   );

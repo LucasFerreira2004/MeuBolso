@@ -308,8 +308,9 @@ function Transacoes() {
                 key={index}
                 transacoes={grupo.transacoes}
                 dataTransacao={grupo.data}
-                onEditClick={handleEditClick}
-              />
+                onEditClick={handleEditClick} onDeleteSuccess={function (): void {
+                  throw new Error("Function not implemented.");
+                } } token={""}              />
             ))
           )}
         </div>

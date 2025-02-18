@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import styles from "./card-transacoes.module.css";
 import ModalDeleteNormal from "../../ModalDeleteNormal/modal-delete-normal";
-import ModalDeleteRecorrentes from "../../ModalDeleteRecorrentes/modal-delete-recorrentes"; // Importe o novo modal
+import ModalDeleteRecorrentes from "../../ModalDeleteRecorrentes/modal-delete-recorrentes";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -12,7 +12,7 @@ interface Transacao {
   tipo: string;
   descricao: string;
   origem: string;
-  idTransacaoRecorrente: number; // Mudança aqui, usando idTransacaoRecorrente
+  idTransacaoRecorrente: number;
   conta: {
     descricao: string;
     banco: {
@@ -31,7 +31,6 @@ interface CardTransacoesProps {
   dataTransacao: string;
   onEditClick: (id: number, tipo: string) => void;
   onDeleteSuccess: (id: number) => void;
-  token: string; // Adicionado o token como prop
 }
 
 const CardTransacoes: React.FC<CardTransacoesProps> = ({
@@ -44,7 +43,7 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
   const [modalAberto, setModalAberto] = useState<{
     tipo: "NORMAL" | "RECORRENTE" | null;
     transacaoId: number | null;
-    dataTransacao: string | null; // Adicionado a data
+    dataTransacao: string | null;
   }>({ tipo: null, transacaoId: null, dataTransacao: null });
 
   useEffect(() => {
@@ -78,7 +77,7 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
       setModalAberto({
         tipo: "RECORRENTE",
         transacaoId: transacao.idTransacaoRecorrente,
-        dataTransacao: transacao.data_transacao, 
+        dataTransacao: transacao.data_transacao,
       });
     }
   };
@@ -87,9 +86,11 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
     setModalAberto({ tipo: null, transacaoId: null, dataTransacao: null });
   };
 
-  const handleDeleteSuccess = (id: number) => {
+  const handleDeleteSuccess = (id: number, isRecorrente: boolean) => {
     setLocalTransacoes((prevTransacoes) =>
-      prevTransacoes.filter((transacao) => transacao.id !== id)
+      isRecorrente
+        ? prevTransacoes.filter((transacao) => transacao.idTransacaoRecorrente !== id)
+        : prevTransacoes.filter((transacao) => transacao.id !== id)
     );
     onDeleteSuccess(id);
     toast.success("Transação excluída com sucesso!");
@@ -119,38 +120,20 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
                 onClick={() => onEditClick(transacao.id, transacao.tipo)}
                 className={styles.linha}
               >
-                <div
-                  className={styles.individualLine}
-                  style={{ color: corTransacao }}
-                >
-                  <div
-                    className={styles.bolinha}
-                    style={{ backgroundColor: corTransacao }}
-                  ></div>
+                <div className={styles.individualLine} style={{ color: corTransacao }}>
+                  <div className={styles.bolinha} style={{ backgroundColor: corTransacao }}></div>
                   {transacao.descricao} <br />
                 </div>
-                <div
-                  className={styles.individualLine}
-                  style={{ color: corTransacao }}
-                >
+                <div className={styles.individualLine} style={{ color: corTransacao }}>
                   {valor} <br />
                 </div>
                 <div className={styles.individualLine}>
-                  <label className={styles.label}>Categoria:</label>{" "}
-                  {transacao.categoria?.nome} <br />
+                  <label className={styles.label}>Categoria:</label> {transacao.categoria?.nome} <br />
                 </div>
                 <div className={styles.individualLine}>
-                  <label className={styles.label}>Conta:</label>{" "}
-                  {transacao.conta?.banco?.nome} <br />
+                  <label className={styles.label}>Conta:</label> {transacao.conta?.banco?.nome} <br />
                 </div>
-                <div className={styles.individualLine}>
-                  <label className={styles.label}>Fixa:</label>{" "}
-                  {transacao.origem === "FIXA" ? "Sim" : "Não"}
-                </div>
-                <button
-                  className={styles.button}
-                  onClick={(event) => handleDeleteClick(event, transacao)}
-                >
+                <button className={styles.button} onClick={(event) => handleDeleteClick(event, transacao)}>
                   <img src="/assets/iconsContas/excluir.svg" alt="Excluir" />
                 </button>
               </li>
@@ -165,18 +148,17 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
         <ModalDeleteNormal
           transacaoId={modalAberto.transacaoId}
           onClose={handleCloseModal}
-          onConfirmDelete={handleDeleteSuccess}
+          onConfirmDelete={() => handleDeleteSuccess(modalAberto.transacaoId!, false)}
         />
       )}
       {modalAberto.tipo === "RECORRENTE" && modalAberto.transacaoId !== null && modalAberto.dataTransacao && (
         <ModalDeleteRecorrentes
           idTransacaoRecorrente={modalAberto.transacaoId}
-          dataTransacao={modalAberto.dataTransacao} 
+          dataTransacao={modalAberto.dataTransacao}
           onClose={handleCloseModal}
-          onDeleteSuccess={() => handleDeleteSuccess(modalAberto.transacaoId!)}
+          onDeleteSuccess={() => handleDeleteSuccess(modalAberto.transacaoId!, true)}
         />
       )}
-
     </div>
   );
 };
