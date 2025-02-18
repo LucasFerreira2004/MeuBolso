@@ -41,7 +41,7 @@ public class TransacaoService implements ITransacaoService {
     @Autowired
     private TransacaoRepeticaoService transacaoRepeticaoService;
 
-    @Transactional()
+    @Transactional
     public TransacaoDTO findById(String userId, Long id){
         Transacao transacao = transacaoRepository.findById(id).orElse(null);
         if (transacao == null)
@@ -51,7 +51,7 @@ public class TransacaoService implements ITransacaoService {
         return new TransacaoDTO(transacao);
     }
 
-    @Transactional()
+    @Transactional
     public List<TransacaoDTO> findAllInRangeByMonth(String userId, LocalDate data) {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;
@@ -61,7 +61,7 @@ public class TransacaoService implements ITransacaoService {
         return transacaoDTOs;
     }
 
-    @Transactional()
+    @Transactional
     public SumTransacoesDTO findSumDespesasInRangeByMonth(String userId, LocalDate data) {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;

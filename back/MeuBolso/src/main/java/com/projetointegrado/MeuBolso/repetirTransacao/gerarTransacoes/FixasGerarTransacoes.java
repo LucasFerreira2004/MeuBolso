@@ -7,6 +7,8 @@ import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrenteRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,9 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
 
     @Autowired
     private TransacaoRecorrenteRepository transacaoRecorrenteRepository;
+
+    //@PersistenceContext
+    //private EntityManager entityManager;
 
     @Transactional
     @Override
@@ -42,8 +47,12 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
 
             dataUltimaExecucao = AvancoStrategy.avancarData(dataUltimaExecucao, transacaoRecorrente.getDataCadastro(), 1);
         }
-        System.out.println("gerarTransacoesFixas -> ultimaExecucao = " + transacaoRecorrente.getUltimaExecucao());
+        System.out.println("gerarTransacoesFixas -> ultimaExecucao (NO FIXAS GERAR) = " + transacaoRecorrente.getUltimaExecucao());
         transacaoRecorrenteRepository.save(transacaoRecorrente);
         transacaoRecorrenteRepository.flush(); // 🔥 Força a gravação imediata no banco
+        //entityManager.detach(transacaoRecorrente); // 🔥 Remove a entidade do cache de persistência
+        //transacaoRecorrente = entityManager.find(TransacaoRecorrente.class, transacaoRecorrente.getId());
+        transacaoRecorrenteRepository.findById(transacaoRecorrente.getId());
+
     }
 }

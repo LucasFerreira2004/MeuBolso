@@ -38,6 +38,8 @@ public class TransacaoRepeticaoService {
             List<TransacaoRecorrente> transacoesRecorrentes = transacaoRecorrenteRepository.findAllByUsuario(userId);
             if (transacoesRecorrentes.isEmpty()) return;
             for (TransacaoRecorrente transacaoRecorrente : transacoesRecorrentes) {
+                System.out.println("NO LOOP");
+                transacaoRecorrente = transacaoRecorrenteRepository.findById(transacaoRecorrente.getId()).orElse(null);
                // transacaoRecorrente.setUltimaExecucao(LocalDate.parse("2025-07-18"));
                 if (!transacaoRecorrente.getAtiva()) continue;
                 IGerarTransacoesStrategy gerarTransacoesStrategy = gerarTransacoesFactory.gerarTransacoesStrategy(transacaoRecorrente.getTipoRepeticao());
