@@ -1,180 +1,177 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-edit-contas.module.css";
-import DropDownBancos from "../UI/DropDownBancos/drop-down-bancos";
-import DropDownTipoConta from "../UI/DropDownTipoContas/drop-down-tipo-conta";
+import SelectedBancos from "../UI/SelectedBanco/selected-banco";
+import SelectedTipoConta from "../UI/SelectedTipoConta/selected-tipo-conta";
+import DatePicker from "../UI/DatePicker/date-picker";
 
 interface ModalEditContasProps {
-    closeModal: () => void;
-    conta: Conta; 
-    refreshContas: () => void;  // Nova propriedade para refrescar a lista de contas
+  onCloseAll: () => void; // Função para fechar o modal
+  contaId: number; // ID da conta que será editada
+  initialData: {
+    saldo: number;
+    id_banco: number;
+    id_tipo_conta: number;
+    data: string;
+    descricao: string;
+  }; // Dados iniciais da conta
 }
 
-interface Conta {
-  id: number;
-  saldo: number;
-  id_banco: number;
-  id_tipo_conta: number;
-}
-
-const sendData = async ({
-  id,
-  saldo,
-  id_banco,
-  id_tipo_conta,
-}: Conta) => {
-  try {
-    const response = await fetch(`http://localhost:8080/contas/${id}`, {
-      method: "PUT",  
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        saldo,
-        id_banco,
-        id_tipo_conta,
-      }),
-    });
-
-    if (response.ok) {
-      return { success: true, data: await response.json() };
-    } else {
-      const errorData = await response.json();
-      return { success: false, error: errorData };
-    }
-  } catch (error) {
-    console.error("Erro na requisição", error);
-    return { success: false, error: { message: "Erro na conexão com o servidor." } };
-  }
+const getDataAtual = () => {
+  const data = new Date();
+  const ano = data.getFullYear();
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
+  const dia = String(data.getDate()).padStart(2, "0");
+  return `${ano}-${mes}-${dia}`;
 };
 
-function ModalEditContas({ closeModal, conta, refreshContas }: ModalEditContasProps) {
-  const [openBancos, setOpenBancos] = useState(false); 
-  const [openTipoConta, setOpenTipoConta] = useState(false); 
-  const [isRotatedBancos, setIsRotatedBancos] = useState(false);
-  const [isRotatedTipoConta, setIsRotatedTipoConta] = useState(false);
-  const [saldo, setSaldo] = useState<number | string>(conta.saldo); 
-  const [selectedBanco, setSelectedBanco] = useState<number | null>(conta.id_banco); 
-  const [selectedTipoConta, setSelectedTipoConta] = useState<number | null>(conta.id_tipo_conta);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasProps) {
+  const [saldo, setSaldo] = useState<string>("");
+  const [bancoId, setBancoId] = useState<number | null>(null);
+  const [tipoContaId, setTipoContaId] = useState<number | null>(null);
+  const [data, setData] = useState<string>(getDataAtual());
+  const [descricao, setDescricao] = useState<string>("");
 
-  const toggleDropdownBancos = () => {
-    if (openTipoConta) {
-      setOpenTipoConta(false);
-      setIsRotatedTipoConta(false);
+  useEffect(() => {
+    if (initialData) {
+      setSaldo(`R$ ${initialData.saldo.toFixed(2).replace(".", ",")}`);
+      setBancoId(initialData.id_banco);
+      setTipoContaId(initialData.id_tipo_conta);
+      setData(initialData.data);
+      setDescricao(initialData.descricao);
     }
-    setOpenBancos(!openBancos);
-    setIsRotatedBancos(!isRotatedBancos);
+  }, [initialData]);
+
+  const formatarMoeda = (valor: string): string => {
+    let valorNumerico = valor.replace(/\D/g, "");
+    valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
+    valorNumerico = valorNumerico.replace(".", ",");
+    valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    return `R$ ${valorNumerico}`;
   };
 
-  const toggleDropdownTipoConta = () => {
-    if (openBancos) {
-      setOpenBancos(false);
-      setIsRotatedBancos(false);
-    }
-    setOpenTipoConta(!openTipoConta);
-    setIsRotatedTipoConta(!isRotatedTipoConta);
+  const removerFormatacaoMoeda = (valorFormatado: string): number => {
+    const valorNumerico = valorFormatado
+      .replace("R$ ", "")
+      .replace(/\./g, "")
+      .replace(",", ".");
+    return parseFloat(valorNumerico);
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleChangeSaldo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const valorDigitado = e.target.value;
+    const valorFormatado = formatarMoeda(valorDigitado);
+    setSaldo(valorFormatado);
+  };
 
-    if (!saldo || !selectedBanco || !selectedTipoConta) {
-      setErrorMessage("Por favor, preencha todos os campos obrigatórios.");
+  const handleChangeDescricao = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDescricao(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    if (!saldo || !bancoId || !tipoContaId || !data || !descricao) {
+      toast.error("Preencha todos os campos obrigatórios!");
       return;
     }
 
-    const result = await sendData({
-      id: conta.id, 
-      saldo: parseFloat(saldo.toString()),
-      id_banco: selectedBanco!,
-      id_tipo_conta: selectedTipoConta!,
-    });
+    const saldoNumerico = removerFormatacaoMoeda(saldo);
 
-    if (result.success) {
-      closeModal();
-      refreshContas();  // Atualiza a lista de contas após salvar as alterações
-    } else {
-      setErrorMessage(result.error?.message || "Erro ao atualizar a conta.");
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("Token de autenticação não encontrado.");
+      toast.error("Por favor, faça login novamente.");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/contas/${contaId}`,
+        {
+          saldo: saldoNumerico,
+          id_banco: bancoId,
+          id_tipo_conta: tipoContaId,
+          data,
+          descricao,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      toast.success("Conta atualizada com sucesso!");
+
+      onCloseAll();
+
+      console.log("Conta atualizada:", response.data);
+    } catch (error) {
+      console.error("Erro ao atualizar conta:", error);
+      toast.error("Erro ao atualizar conta. Verifique os dados ou tente novamente.");
     }
   };
 
   return (
-    <div className={style.overlay} onClick={closeModal}>
-      <div className={style.containerModalEditContas} onClick={(e) => e.stopPropagation()}>
-        <div className={style.headerModalEditContas}>
-          <p>Editar Conta Bancária</p>
-          <img
-            src="/assets/iconsModal/iconX.svg"
-            alt="Fechar"
-            className={style.iconClose}
-            onClick={closeModal}
-          />
+    <div
+      className={style.modalOverlay}
+      onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
+    >
+      <div className={style.modalContent}>
+        {/* ToastContainer para exibir os toasts */}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+
+        <div className={style.headerModal}>
+          <h3>Editar Conta</h3>
+          <button className={style.closeButton} onClick={onCloseAll}>
+            <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
+          </button>
         </div>
-        <form className={style.formModalEditContas} onSubmit={handleSubmit}>
-          <div className={style.formGroup}>
-            <label htmlFor="saldo">Saldo: </label>
-            <input
-              id="saldo"
-              type="number"
-              placeholder="R$ 0,00"
-              value={saldo}
-              onChange={(e) => setSaldo(e.target.value)}
-            />
-          </div>
 
-          <div className={style.divDropContas}>
-            <InputWithIcon
-              label="Banco: "
-              iconSrc="/assets/iconsModal/notes.svg"
-              placeholder={selectedBanco ? `Banco: ${selectedBanco}` : "Selecione o banco"} // Exibe o banco selecionado
-            />
-            <img
-              src="/assets/iconsModal/iconsarrowleft.svg"
-              alt="Abrir seleção de bancos"
-              className={`${style.iconLogoArrow} ${isRotatedBancos ? style.rotated : ''}`}
-              onClick={toggleDropdownBancos}
-            />
-            {openBancos && (
-              <DropDownBancos
-                toggleDropdownBancos={toggleDropdownBancos}
-                setBanco={setSelectedBanco}
-              />
-            )}
-          </div>
+        <InputWithIcon
+          label="Saldo: "
+          type="text"
+          iconSrc="/assets/iconsModalConta/money.svg"
+          placeholder="R$ 0,00"
+          value={saldo}
+          onChange={handleChangeSaldo}
+        />
 
-          <div className={style.divDropContas}>
-            <InputWithIcon
-              label="Tipo: "
-              iconSrc="/assets/iconsModal/icontag.svg"
-              placeholder={selectedTipoConta ? `Tipo: ${selectedTipoConta}` : "Selecione o tipo"} 
-            />
-            <img
-              src="/assets/iconsModal/iconsarrowleft.svg"
-              alt="Abrir seleção de tipo de conta"
-              className={`${style.iconLogoArrow} ${isRotatedTipoConta ? style.rotated : ''}`}
-              onClick={toggleDropdownTipoConta}
-            />
-            {openTipoConta && (
-              <DropDownTipoConta
-                toggleDropdownTipoConta={toggleDropdownTipoConta}
-                setTipoConta={setSelectedTipoConta}
-              />
-            )}
-          </div>
+        <SelectedBancos setBanco={setBancoId} />
 
-          {errorMessage && (
-            <div className={style.errorMessage}>
-              {errorMessage}
-            </div>
-          )}
+        <SelectedTipoConta setTipoConta={setTipoContaId} />
 
-          <div className={style.formActions}>
-            <button type="submit" className={style.saveButton}>
-              Salvar
-            </button>
-          </div>
-        </form>
+        <DatePicker
+        label="Escolha uma data: "
+          value={data}
+          onChange={setData}
+          iconsrc="/assets/iconsModalConta/date.svg"
+        />
+
+        <InputWithIcon
+          label="Descrição: "
+          iconSrc="/assets/iconsModalConta/descricao.svg"
+          placeholder="Ex: Conta Corrente"
+          value={descricao}
+          onChange={handleChangeDescricao}
+        />
+
+        <button onClick={handleSubmit} className={style.submitButton}>
+          Atualizar Conta
+        </button>
       </div>
     </div>
   );

@@ -10,7 +10,7 @@
     display: flex;
     width: 90px; /* Largura da barra */
     height: 10px; /* Altura da barra */
-    background-color: var(gray);
+    background-color: var(--gray);
     border-radius: 8px;
     overflow: hidden; /* Garante que o conteúdo não ultrapasse os limites */
     position: relative;

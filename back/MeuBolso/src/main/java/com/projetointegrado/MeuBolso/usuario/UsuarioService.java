@@ -1,50 +1,81 @@
 package com.projetointegrado.MeuBolso.usuario;
 
+import com.projetointegrado.MeuBolso.armazenamentoImagens.IStorageService;
+import com.projetointegrado.MeuBolso.categoria.CriarCategoriasIniciaisService;
+import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaException;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
-import com.projetointegrado.MeuBolso.usuario.exception.SenhaIncorretaException;
-import com.projetointegrado.MeuBolso.usuario.exception.UsuarioExistenteException;
-import com.projetointegrado.MeuBolso.usuario.exception.UsuarioNaoEncontradoException;
-import jakarta.persistence.EntityNotFoundException;
+import com.projetointegrado.MeuBolso.usuario.dto.UsuarioSaveDTO;
+import com.projetointegrado.MeuBolso.usuario.exception.EmailJaCadastradoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements IUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Usuario salvarUsuario(Usuario usuario) {
-        return usuarioRepository.save(usuario);
-    }
+    @Autowired
+    private CriarCategoriasIniciaisService criarCategoriasIniciaisService;
 
-    @Transactional(readOnly = true)
-    public List<UsuarioDTO> findAll() {
-        List<Usuario> list = usuarioRepository.findAll();
+    @Autowired
+    private UsuarioValidateService usuarioValidateService;
 
-        return list.stream().map(UsuarioDTO::new).toList();
-    }
+    @Qualifier("cloudinaryStorageService")
+    @Autowired
+    private IStorageService imgStorageService;
 
-    @Transactional(readOnly = true)
-    public UsuarioDTO findById(Long id) {
-        Usuario usuario = usuarioRepository.findById(id).
-                orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+    @Transactional
+    public UsuarioDTO save(UsuarioSaveDTO usuarioSaveDTO) {
+        if (usuarioRepository.findByEmail(usuarioSaveDTO.getEmail()) != null)
+            throw new EmailJaCadastradoException();
+        String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioSaveDTO.getSenha());
+        Usuario usuario = new Usuario(usuarioSaveDTO.getNome(), usuarioSaveDTO.getEmail(), encryptedPassword);
 
+        usuario = usuarioRepository.save(usuario);
+
+        criarCategoriasIniciaisService.criarCategorias(usuario.getId());
         return new UsuarioDTO(usuario);
     }
 
-    public UsuarioDTO login(String email, String senha) {
-        Usuario usuario = (Usuario) usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado"));
-
-        if (!usuario.getSenha().equals(senha)) {
-            throw new SenhaIncorretaException("Senha incorreta");
+    @Transactional
+    public UsuarioDTO update(String userId, UsuarioSaveDTO usuarioSaveDTO, MultipartFile img) {
+        String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioSaveDTO.getSenha());
+        String imgUrl = null;
+        if (img != null) {
+            try {
+                imgUrl = imgStorageService.uploadFile(img);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         }
+        Usuario usuario = new Usuario(userId, usuarioSaveDTO.getNome(), usuarioSaveDTO.getEmail(), encryptedPassword, imgUrl);
 
-        // Converter para DTO
-        return new UsuarioDTO(usuario.getNome(), usuario.getEmail(), usuario.getSenha());
+        usuario = usuarioRepository.save(usuario);
+        return new UsuarioDTO(usuario);
+    }
+
+
+    private List<UsuarioDTO> findAll() {
+        List<Usuario> list = usuarioRepository.findAll();
+        return list.stream().map(UsuarioDTO::new).toList();
+    }
+
+    public UsuarioDTO findById(String id) {
+        Usuario usuario = usuarioValidateService.validateAndGet(id, new EntidadeNaoEncontradaException("{token}", "usuário não encontrado"));
+        return new UsuarioDTO(usuario);
+    }
+
+    public String getUsuarioLogadoId(){
+        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return usuario.getId();
     }
 }

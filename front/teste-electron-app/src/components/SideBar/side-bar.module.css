@@ -1,26 +1,31 @@
-/* side-bar.module.css */
-
 .sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   position: fixed;
   top: 0;
   left: 0;
-  width: 250px; /* Largura da sidebar */
-  height: 100vh; /* Ocupa toda a altura da tela */
-  background-color: #FFFFFF; /* Cor de fundo da sidebar */
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* Sombra para dar destaque */
-  z-index: 100; /* Para garantir que fique acima de outros conteúdos */
+  width: 250px;
+  height: 100vh;
+  background-color: #FFFFFF;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+.auxLine{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .divlogo {
   display: flex;
-  justify-content: center; /* Alinha o logo ao centro */
-  padding-top: 10px ; /* Ajuste o padding para garantir o alinhamento com os itens da navegação */
-  padding-right: 15px;
+  justify-content: center;
+  padding: 20px 25px 0;
   cursor: pointer;
 }
 
 .iconLogo {
-  width: 140px;
+  width: 100px;
 }
 
 .navList {
@@ -28,46 +33,79 @@
   padding: 0;
   margin: 0;
 }
-nav{
+
+.sideBar {
   padding-top: 10px;
 }
 
-.navItem, .navIIcon {
+.navItem {
   display: flex;
   align-items: center;
-  padding: 10px 20px; /* Ajuste o padding para garantir que o hover afete a caixa inteira */
-  transition: background-color 0.2s ease; /* Transição suave no hover */
+  padding: 10px 20px;
+  font-size: medium;
+  font-weight: 400;
+  transition: background-color 0.2s ease;
 }
 
-.navItem:hover, .navIIcon:hover {
-  background-color: #f2f2f2; /* Cor de fundo ao passar o mouse */
+.navItem:hover {
+  background-color: var(--main-color-light);
+  color: #000000;
 }
-
-.navItem img, .navIIcon img {
-  width: 24px; /* Tamanho do ícone */
-  height: 24px;
-  margin-right: 15px; /* Espaçamento entre o ícone e o texto */
-}
-
-.navItem a, .navIIcon a {
-  color: #000000; /* Cor do texto */
+.navLink{
   text-decoration: none;
-  font-size: 18px; /* Tamanho do texto */
+  color: black;
+}
+
+.navItem img {
+  width: 24px;
+  height: 24px;
+  margin-right: 15px;
+}
+
+.navItem a {
+  color: #000000;
+  text-decoration: none;
+  font-size: 18px;
   font-weight: normal;
   transition: color 0.3s ease;
 }
-
-.navItem:hover{
-  background-color: var(--main-color-light); /* Cor de destaque ao passar o mouse no texto */
+.link {
+  text-decoration: none; 
+  color: inherit; 
 }
 
-/* Responsividade - Ajustes para telas menores */
+.sair {
+  display: flex;
+  list-style: none;
+  gap: 10px;
+  padding: 20px;
+  cursor: pointer;
+}
+
+.sair p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.sair:hover p {
+  color: var(--vibrant-red);
+}
+
+.sair img {
+  transition: transform 0.3s ease;
+}
+
+.sair:hover img {
+  transform: scale(1.1); 
+}
+
 @media (max-width: 768px) {
   .sidebar {
     width: 200px;
   }
 
-  .navItem a, .navIIcon a {
+  .navItem a {
     font-size: 16px;
   }
 }

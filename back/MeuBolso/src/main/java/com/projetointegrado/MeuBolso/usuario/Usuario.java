@@ -1,14 +1,20 @@
 package com.projetointegrado.MeuBolso.usuario;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
+@Table
 @Entity
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column(nullable = false)
     private String nome;
@@ -19,6 +25,8 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
+    private String img_url;
+
     public Usuario() {
     }
 
@@ -28,18 +36,26 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public Usuario(Long id, String nome, String email, String senha) {
+    public Usuario(String id, String nome, String email, String senha) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
     }
 
-    public Long getId() {
+    public Usuario(String id, String nome, String email, String senha, String img_url) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.img_url = img_url;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -67,6 +83,15 @@ public class Usuario {
         this.senha = senha;
     }
 
+    public String getImg_url() {
+        return img_url;
+    }
+
+    public void setImg_url(String foto_url) {
+        this.img_url = foto_url;
+    }
+
+    //métodos do userDetails
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -77,5 +102,40 @@ public class Usuario {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return this.senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

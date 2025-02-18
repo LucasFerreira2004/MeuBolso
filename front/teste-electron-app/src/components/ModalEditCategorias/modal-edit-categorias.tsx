@@ -10,11 +10,20 @@ interface ModalEditCategoriaProps {
 }
 
 const sendData = async (categoria: Categoria) => {
+  const token = localStorage.getItem("authToken");
+  if(!token){
+    return{
+      success: false,
+      error:{message: "Você precisa estar logado para realizar esta açao"},
+    };
+  }
+
   try {
     const response = await fetch(`http://localhost:8080/categorias/${categoria.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(categoria),
     });
@@ -47,15 +56,15 @@ const ModalEditCategoria: React.FC<ModalEditCategoriaProps> = ({ closeModal, cat
 
     if (result.success) {
       console.log("Categoria atualizada com sucesso!");
-      onCategoriaSaved();  // Chama a função de atualização da lista de categorias
-      closeModal();        // Fecha o modal
+      onCategoriaSaved();  
+      closeModal();        
     } else {
       console.error("Erro ao atualizar categoria:", result.error);
     }
   };
 
   return (
-    <div className={style.modalContainer}>
+    <div className={style.modalContainerCategoria}>
       <div className={style.modalHeader}>
         <h3>Editar Categoria</h3>
         <img

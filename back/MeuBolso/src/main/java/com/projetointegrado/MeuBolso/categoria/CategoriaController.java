@@ -1,9 +1,13 @@
 package com.projetointegrado.MeuBolso.categoria;
 
+import com.projetointegrado.MeuBolso.categoria.dto.ArquivarCategoriaPatchDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.categoria.dto.CategoriaSaveDTO;
-import io.swagger.v3.oas.annotations.Operation;
+import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
+import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,49 +17,55 @@ import java.util.List;
 public class CategoriaController {
 
     @Autowired
-    CategoriaService categoriaService;
+    @Qualifier("categoriaService")
+    private ICategoriaService categoriaService;
 
-    @Operation(summary = "Retorna todas as categorias registradas que estão ativas")
+    @Autowired
+    @Qualifier("usuarioService")
+    private IUsuarioService usuarioService;
+
     @GetMapping
-    public List<CategoriaDTO> findCategoria() {
-        List<CategoriaDTO> result = categoriaService.findCategoria();
+    public List<CategoriaDTO> findAllAtivas() {
+        List<CategoriaDTO> result = categoriaService.findAllAtivas(usuarioService.getUsuarioLogadoId());
         return result;
     }
 
-    @Operation(summary = "Retorna uma categoria expecifica a partir de um id indicado")
     @GetMapping("/{id}")
     public CategoriaDTO findCategoriaById(@PathVariable Long id) {
-        CategoriaDTO result = categoriaService.findCategoriaById(id);
+        CategoriaDTO result = categoriaService.findById(usuarioService.getUsuarioLogadoId(), id);
         return result;
     }
 
-    @Operation(summary = "Retorna todas as categorias registradas do tipo 'receita'")
     @GetMapping("/receitas")
     public List<CategoriaDTO> findReceitas() {
-        return categoriaService.findAllByReceita();
+        return categoriaService.findAllByReceita(usuarioService.getUsuarioLogadoId());
     }
-
-    @Operation(summary = "Retorna todas as categorias registradas do tipo 'despesas'")
     @GetMapping("/despesas")
     public List<CategoriaDTO> findDespesas() {
-        return categoriaService.findAllByDespesa();
+        return categoriaService.findAllByDespesa(usuarioService.getUsuarioLogadoId());
     }
 
-    @Operation(summary = "Registra uma nova categoria")
     @PostMapping
     public CategoriaDTO save(@RequestBody CategoriaSaveDTO categoriaSaveDTO) {
-        return categoriaService.save(categoriaSaveDTO);
+        return categoriaService.save(usuarioService.getUsuarioLogadoId(), categoriaSaveDTO);
     }
-
-    @Operation(summary = "Atualiza os dados de uma categoria ja registrada")
     @PutMapping("{id}")
     public CategoriaDTO update(@PathVariable Long id, @RequestBody CategoriaSaveDTO categoriaSaveDTO) {
-        return categoriaService.update(id, categoriaSaveDTO);
+        return categoriaService.update(usuarioService.getUsuarioLogadoId(), id, categoriaSaveDTO);
     }
 
-    @Operation(summary = "Modifica uma categoria para 'arquivada', ou seja, sera deletada para o usuario")
-    @PutMapping("/arquivadas/{id}")
-    public CategoriaDTO arquivar(@PathVariable Long id) {
-        return categoriaService.arquivar(id);
+    //RotasRerentes específicas das arquivadas
+    @GetMapping("/arquivadas")
+    public List<CategoriaDTO> findAllArquivadas() {
+        List<CategoriaDTO> result = categoriaService.findAllArquivadas(usuarioService.getUsuarioLogadoId());
+        return result;
+    }
+
+    @PatchMapping("/arquivadas/{id}")
+    public CategoriaDTO atualizarStatusAtiva(@PathVariable Long id, @RequestBody ArquivarCategoriaPatchDTO dto, BindingResult bindingResult) throws ValoresNaoPermitidosException {
+        if (bindingResult.hasErrors()) {
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
+        return categoriaService.atualizarStatusAtiva(usuarioService.getUsuarioLogadoId(), id, dto.ativa());
     }
 }

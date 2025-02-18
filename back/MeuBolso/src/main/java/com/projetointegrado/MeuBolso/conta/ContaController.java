@@ -1,58 +1,94 @@
 package com.projetointegrado.MeuBolso.conta;
 
 import com.projetointegrado.MeuBolso.conta.dto.*;
-import io.swagger.v3.oas.annotations.Operation;
+import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
+import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/contas")
 public class ContaController {
     @Autowired
-    private ContaService contaService;
+    @Qualifier("contaService")
+    private IContaService contaService;
 
-    @Operation(summary = "Retorna todas as contas registradas")
+    @Autowired
+    @Qualifier("usuarioService")
+    private IUsuarioService usuarioService;
+
+
     @GetMapping
-    public List<ContaDTO> findAll() {
-        return contaService.findAll();
+    public List<ContaDTO> findAll(@RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
+        String idUsuario = usuarioService.getUsuarioLogadoId();
+
+        return contaService.findAll(idUsuario, data);
     }
 
-    @Operation(summary = "Retorna uma conta expecifica a partir de um id indicado")
     @GetMapping("/{id}")
-    public ContaDTO findById(@PathVariable Long id){
-        return contaService.findById(id);
+    public ContaDTO findById(@PathVariable Long id, @RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
+        String idUsuario = usuarioService.getUsuarioLogadoId();
+
+        return contaService.findById(idUsuario, id, data);
     }
 
-    @Operation(summary = "Retorna todas as contas, mas no formato de ContaMinDTO")
     @GetMapping("/min")
-    public List<ContaMinDTO> findMin() {
-        return contaService.findAllMin();
+    public List<ContaMinDTO> findMin(@RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
+        String idUsuario = usuarioService.getUsuarioLogadoId();
+
+        return contaService.findAllMin(idUsuario, data);
     }
 
-    @Operation(summary = "Retorna o valor total somado de todo o saldo do usuario")
     @GetMapping("/saldoTotal")
-    public SaldoTotalDTO findSaldoTotal() {
-        return contaService.getSaldo();
+    public SaldoTotalDTO findSaldoTotal(@RequestParam int ano, @RequestParam int mes){
+        LocalDate data = LocalDate.of(ano, mes, 1);
+        data = data.with(TemporalAdjusters.lastDayOfMonth());
+        String idUsuario = usuarioService.getUsuarioLogadoId();
+        return contaService.findSaldo(idUsuario, data);
+
     }
 
-    @Operation(summary = "Registra uma nova conta")
     @PostMapping
-    public ContaDTO save(@RequestBody ContaPostDTO contaPostDTO){
-        return contaService.saveConta(contaPostDTO);
+    public ContaDTO save(@RequestBody @Valid ContaPostDTO contaPostDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
+        String userId = usuarioService.getUsuarioLogadoId();
+        return contaService.save(userId, contaPostDTO);
     }
 
-    @Operation(summary = "Atualiza dados de uma conta ja existente")
     @PutMapping("/{id}")
-    public ContaDTO update(@PathVariable Long id, @RequestBody ContaPutDTO contaPostDTO){
-        return contaService.updateConta(id, contaPostDTO);
+    public ContaDTO update(@PathVariable Long id, @RequestBody @Valid ContaPutDTO contaPostDTO, BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
+        String userId = usuarioService.getUsuarioLogadoId();
+        return contaService.update(id, contaPostDTO, userId);
     }
 
-    @Operation(summary = "Deleta uma conta existente")
     @DeleteMapping("/{id}")
     public ContaDTO delete(@PathVariable Long id){
-        return contaService.deleteConta(id);
+        //try {
+            String userId = usuarioService.getUsuarioLogadoId();
+            return contaService.delete(id, userId);
+       // }catch (Exception e){
+//            e.printStackTrace();
+//            throw new RuntimeException(e);
+//        }
     }
+
 }

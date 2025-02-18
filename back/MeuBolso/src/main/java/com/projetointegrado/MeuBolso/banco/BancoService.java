@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class BancoService {
+public class BancoService implements IBancoService {
     @Autowired
     BancoRepository bancoRepository;
 

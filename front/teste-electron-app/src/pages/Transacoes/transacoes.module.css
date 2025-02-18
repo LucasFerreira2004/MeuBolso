@@ -1,0 +1,105 @@
+.containerTransacoes {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; 
+    margin-left: 260px;
+    padding: 20px;
+}   
+.headerTransacoes{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--gray);
+    padding: 7px;
+    margin-bottom: 25px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+h3{
+    margin: 0px;
+}
+.rowTransacoes{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+}
+.rowTransacoes div{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.rowTransacoes p{
+    margin: 0px;
+}
+.transacoesList {
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    text-align: center;
+  }
+  
+.iconT{
+    height: 28px;
+}
+.spanM{
+    color: #BC7D18;
+}
+.spanR{
+    color: #C63A22;
+}.spanT{
+    color: #2A9D8F;
+}
+
+.bodyTransacoes{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    border-radius: 10px 10px 0px 0px;
+}
+.headerBodyT{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px 8px 0px 0px;
+    background-color: var(--gray);
+}
+
+.input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 0px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #333;
+    background-color: transparent;
+}
+
+.input::placeholder {
+    color: #888;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.icon:hover {
+    filter: brightness(0.8); /* efeito de escurecer ao passar o mouse */
+}
+
+/* Fundo escuro quando o modal está ativo */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+  }
+  

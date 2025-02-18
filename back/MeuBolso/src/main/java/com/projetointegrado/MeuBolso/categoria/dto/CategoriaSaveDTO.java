@@ -1,12 +1,18 @@
 package com.projetointegrado.MeuBolso.categoria.dto;
 
 import com.projetointegrado.MeuBolso.categoria.TipoCategoria;
-import com.projetointegrado.MeuBolso.categoria.exceptions.TipoCategoriaNaoEspecificado;
+import com.projetointegrado.MeuBolso.categoria.exception.TipoCategoriaNaoEspecificado;
 
 public class CategoriaSaveDTO {
     private String cor;
     private String nome;
     private String tipo; //tipo categoria
+
+    public CategoriaSaveDTO(String cor, String nome, String tipo) {
+        this.cor = cor;
+        this.nome = nome;
+        this.tipo = tipo;
+    }
 
     public String getCor() {
         return cor;
