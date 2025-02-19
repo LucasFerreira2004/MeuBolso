@@ -17,6 +17,7 @@ import com.projetointegrado.MeuBolso.transacaoMeta.exceptions.SaldoInsuficienteE
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.projetointegrado.MeuBolso.meta.notifications.ToastNotificationService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +45,9 @@ public class TransacaoMetaService implements ITransacaoMetaService {
 
     @Autowired
     private MetaRepository metaRepository;
+
+    @Autowired
+    private ToastNotificationService toastNotificationService;
 
     @Transactional
     public List<TransacaoMetaDTO> findAll(String userId) {
@@ -125,6 +129,8 @@ public class TransacaoMetaService implements ITransacaoMetaService {
 
         // Adiciona a transação à meta, que por cascata salvará também a TransacaoMeta.
         meta.adicionarTransacao(transacaoMeta);
+        meta.adicionarObserver(toastNotificationService);
+        meta.verificarThresholds();
 
         transacaoMetaRepository.save(transacaoMeta);
         metaRepository.save(meta);

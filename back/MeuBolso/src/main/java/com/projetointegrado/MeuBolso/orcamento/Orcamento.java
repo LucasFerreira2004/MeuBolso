@@ -1,7 +1,6 @@
 package com.projetointegrado.MeuBolso.orcamento;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
-import com.projetointegrado.MeuBolso.meta.notifications.NotificacaoMeta;
 import com.projetointegrado.MeuBolso.orcamento.notifications.NotificacaoOrcamento;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
@@ -9,7 +8,6 @@ import jakarta.validation.Valid;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
