@@ -46,7 +46,7 @@ public class TransacaoRepeticaoService {
             boolean transacaoExistente = false;
             if(transacaoRecorrente.getId() != null)
                 for (Transacao t : transacoes){
-                    if (t.getId().equals(transacaoRecorrente.getId())) {
+                    if (t.getTransacaoRecorrente().getId().equals(transacaoRecorrente.getId())) {
                         transacaoExistente = true;
                         break;
                     }
