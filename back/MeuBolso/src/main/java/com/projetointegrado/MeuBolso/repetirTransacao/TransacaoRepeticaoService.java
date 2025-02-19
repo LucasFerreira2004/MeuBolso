@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
-
 @Service
 public class TransacaoRepeticaoService {
     @Autowired
@@ -34,27 +33,40 @@ public class TransacaoRepeticaoService {
     private final ConcurrentHashMap<String, ReentrantLock> locks = new ConcurrentHashMap<>();
 
     @Transactional
-    public  void gerarTransacoes(LocalDate data, String userId) {
+    public void gerarTransacoes(LocalDate data, String userId) {
         System.out.println("TransacaoRecorrenteService -> gerarTransacoes");
-        List<TransacaoRecorrente> transacoesRecorrentes = transacaoRecorrenteRepository.findAllByUsuario(userId);
-        if (transacoesRecorrentes.isEmpty()) return;
 
-        for (TransacaoRecorrente transacaoRecorrente : transacoesRecorrentes) {
-            System.out.println("NO LOOP");
-            transacaoRecorrente = transacaoRecorrenteRepository.findById(transacaoRecorrente.getId()).orElse(null);
-            List<Transacao> transacoes = transacaoRepository.findAllInRange(data.with(TemporalAdjusters.firstDayOfMonth()), data.with(TemporalAdjusters.lastDayOfMonth()), userId);
-            boolean transacaoExistente = false;
-            if(transacaoRecorrente.getId() != null)
-                for (Transacao t : transacoes){
-                    if (t.getTransacaoRecorrente().getId().equals(transacaoRecorrente.getId())) {
-                        transacaoExistente = true;
-                        break;
-                    }
-                }
-            if(transacaoExistente) continue;
-            if (!transacaoRecorrente.getAtiva()) continue;
-            IGerarTransacoesStrategy gerarTransacoesStrategy = gerarTransacoesFactory.gerarTransacoesStrategy(transacaoRecorrente.getTipoRepeticao());
-            gerarTransacoesStrategy.gerarTransacoes(transacaoRecorrente, data);
+        // Obtém ou cria um lock para o userId
+        ReentrantLock lock = locks.computeIfAbsent(userId, k -> new ReentrantLock());
+
+        lock.lock(); // 🔒 Bloqueia a execução para o userId
+        try {
+            List<TransacaoRecorrente> transacoesRecorrentes = transacaoRecorrenteRepository.findAllByUsuario(userId);
+            if (transacoesRecorrentes.isEmpty()) return;
+
+            for (TransacaoRecorrente transacaoRecorrente : transacoesRecorrentes) {
+                System.out.println("NO LOOP");
+                transacaoRecorrente = transacaoRecorrenteRepository.findById(transacaoRecorrente.getId()).orElse(null);
+                if (transacaoRecorrente == null) continue;
+
+                List<Transacao> transacoes = transacaoRepository.findAllInRange(
+                        data.with(TemporalAdjusters.firstDayOfMonth()),
+                        data.with(TemporalAdjusters.lastDayOfMonth()),
+                        userId
+                );
+
+                TransacaoRecorrente finalTransacaoRecorrente = transacaoRecorrente;
+                boolean transacaoExistente = transacoes.stream()
+                        .anyMatch(t -> t.getTransacaoRecorrente() != null &&
+                                t.getTransacaoRecorrente().getId().equals(finalTransacaoRecorrente.getId()));
+
+                if (transacaoExistente || !transacaoRecorrente.getAtiva()) continue;
+
+                IGerarTransacoesStrategy gerarTransacoesStrategy = gerarTransacoesFactory.gerarTransacoesStrategy(transacaoRecorrente.getTipoRepeticao());
+                gerarTransacoesStrategy.gerarTransacoes(transacaoRecorrente, data);
+            }
+        } finally {
+            lock.unlock(); // 🔓 Libera o lock no final
         }
     }
 }
