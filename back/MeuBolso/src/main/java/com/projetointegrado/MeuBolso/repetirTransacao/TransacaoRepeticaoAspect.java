@@ -20,7 +20,6 @@ public class TransacaoRepeticaoAspect {
         this.transacaoRepeticaoService = transacaoRepeticaoService;
     }
 
-    @Transactional
     @Before("execution(* com.projetointegrado.MeuBolso.conta.ContaService.find*(..)) || " +
             "execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findAll*(..)) || " +
             "execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findSum*(..)) || " +

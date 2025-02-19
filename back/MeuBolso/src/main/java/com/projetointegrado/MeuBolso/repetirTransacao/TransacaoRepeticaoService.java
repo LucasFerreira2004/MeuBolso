@@ -44,9 +44,13 @@ public class TransacaoRepeticaoService {
             transacaoRecorrente = transacaoRecorrenteRepository.findById(transacaoRecorrente.getId()).orElse(null);
             List<Transacao> transacoes = transacaoRepository.findAllInRange(data.with(TemporalAdjusters.firstDayOfMonth()), data.with(TemporalAdjusters.lastDayOfMonth()), userId);
             boolean transacaoExistente = false;
-            for (Transacao t : transacoes){
-                if (t.getId().equals(transacaoRecorrente.getId())) transacaoExistente = true;
-            }
+            if(transacaoRecorrente.getId() != null)
+                for (Transacao t : transacoes){
+                    if (t.getId().equals(transacaoRecorrente.getId())) {
+                        transacaoExistente = true;
+                        break;
+                    }
+                }
             if(transacaoExistente) continue;
             if (!transacaoRecorrente.getAtiva()) continue;
             IGerarTransacoesStrategy gerarTransacoesStrategy = gerarTransacoesFactory.gerarTransacoesStrategy(transacaoRecorrente.getTipoRepeticao());
