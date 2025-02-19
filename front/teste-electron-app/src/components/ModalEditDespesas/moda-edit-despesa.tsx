@@ -163,33 +163,6 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
     }
   };
 
-  const handleDelete = async () => {
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      toast.error("Por favor, faça login novamente.");
-      return;
-    }
-
-    try {
-      const response = await axios.delete(
-        `http://localhost:8080/transacoes/${transactionId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (response.status === 200) {
-        toast.success("Transação excluída com sucesso!");
-        onTransactionUpdate({ id: transactionId, deleted: true }); // Notifica o componente pai sobre a exclusão
-        onClose();
-      } else {
-        toast.error("Erro ao excluir a transação.");
-      }
-    } catch (error) {
-      toast.error("Erro ao excluir a transação. Tente novamente.");
-      console.error("Erro ao excluir transação:", error);
-    }
-  };
-
   return (
     <div className={style.modalOverlay} onClick={(e) => e.stopPropagation()}>
       <div className={style.modalContent}>
@@ -294,9 +267,6 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
         )}
 
         <div className={style.Buttons}>
-          <button onClick={handleDelete} className={style.deleteButton}>
-            Excluir Transação
-          </button>
           <button onClick={handleSubmit} className={style.submitButton}>
             Atualizar Transação
           </button>
