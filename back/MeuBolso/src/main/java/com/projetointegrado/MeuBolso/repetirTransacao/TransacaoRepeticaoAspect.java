@@ -4,21 +4,28 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDate;
-
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 @Aspect
 @Component
 public class TransacaoRepeticaoAspect {
-    private final TransacaoRepeticaoExecutor transacaoRepeticaoExecutor;
+    private final TransacaoRepeticaoService transacaoRepeticaoService;
 
-    public TransacaoRepeticaoAspect(TransacaoRepeticaoExecutor transacaoRepeticaoExecutor) {
-        this.transacaoRepeticaoExecutor = transacaoRepeticaoExecutor;
+    public TransacaoRepeticaoAspect(TransacaoRepeticaoService transacaoRepeticaoService) {
+        this.transacaoRepeticaoService = transacaoRepeticaoService;
     }
 
-    @Before("execution(* com.projetointegrado.MeuBolso.conta.ContaService.find*(..)) || execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findAll*(..)) " +
-            "|| execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findSum*(..)) || execution(* com.projetointegrado.MeuBolso.dashboard.CategoriaDashboardService.find*(..))" +
-            "|| execution(* com.projetointegrado.MeuBolso.dashboard.ContaDashboardService.find*(..)) || execution(* com.projetointegrado.MeuBolso.dashboard.TransacoesDashboardsService.find*(..))")
+    @Before("execution(* com.projetointegrado.MeuBolso.conta.ContaService.find*(..)) || " +
+            "execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findAll*(..)) || " +
+            "execution(* com.projetointegrado.MeuBolso.transacao.TransacaoService.findSum*(..)) || " +
+            "execution(* com.projetointegrado.MeuBolso.dashboard.CategoriaDashboardService.find*(..)) || " +
+            "execution(* com.projetointegrado.MeuBolso.dashboard.ContaDashboardService.find*(..)) || " +
+            "execution(* com.projetointegrado.MeuBolso.dashboard.TransacoesDashboardsService.find*(..))")
     public void gerarTransacoesRecorrentes(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         LocalDate data = null;
@@ -33,10 +40,10 @@ public class TransacaoRepeticaoAspect {
         }
 
         if (data != null && usuarioId != null) {
-            System.out.println("AOP -> Gerando transações fixas para usuário ID " + usuarioId + " e data " + data);
-            transacaoRepeticaoExecutor.executarGeracaoTransacoes(data, usuarioId);
+            System.out.println("Aspect -> Gerando transações fixas para usuário ID " + usuarioId + " e data " + data);
+            transacaoRepeticaoService.gerarTransacoes(data, usuarioId);
         } else {
-            System.out.println("AOP -> Parâmetros não encontrados, pulando geração de transações.");
+            System.out.println("Aspect -> Parâmetros não encontrados, pulando geração de transações.");
         }
     }
 }
