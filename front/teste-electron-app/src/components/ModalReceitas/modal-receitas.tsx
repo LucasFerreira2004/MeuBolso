@@ -16,6 +16,19 @@ const removerFormatacaoMoeda = (valorFormatado: string): number => {
     .replace(",", ".");
   return parseFloat(valorNumerico);
 };
+interface TransactionData {
+  valor: number;
+  data: string;
+  tipoTransacao: "RECEITA";
+  categoriaId: number | null;
+  contaId: number | null;
+  comentario?: string | null;
+  descricao: string;
+  periodicidade?: "DIARIO" | "SEMANAL" | "MENSAL";
+  qtdParcelas?: number | null;
+}
+
+
 
 const formatarComoMoeda = (valor: string): string => {
   let valorNumerico = valor.replace(/\D/g, "");
@@ -62,7 +75,7 @@ function ModalReceitas({ onCloseAll, mes, ano }: ModalReceitasProps) {
     }
 
     // Dados comuns a todas as transações
-    const transactionData: any = {
+    const transactionData: TransactionData = {
       valor: valorNumerico,
       data,
       tipoTransacao: tipoTransacao === "NORMAL" ? "RECEITA" : tipoTransacao === "FIXA" ? "RECEITA" : "RECEITA",
