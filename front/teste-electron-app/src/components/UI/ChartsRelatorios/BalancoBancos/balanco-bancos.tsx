@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Bar } from "react-chartjs-2";
 import DatePicker, { meses } from "../../Date/date";
 import styles from "./balanco-bancos.module.css";
@@ -20,7 +20,8 @@ const BalancoBancos: React.FC = () => {
   const [balanco, setBalanco] = useState<{ ano: number; mes: number; saldo: number }[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchBalanco = async () => {
+  // Memoize fetchBalanco using useCallback
+  const fetchBalanco = useCallback(async () => {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
@@ -54,12 +55,13 @@ const BalancoBancos: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [dataInicial, dataFinal]); // Depend on dataInicial and dataFinal
 
+  // Use useEffect to call fetchBalanco when dataInicial or dataFinal changes
   useEffect(() => {
     console.log("Datas atualizadas:", { dataInicial, dataFinal });
     fetchBalanco();
-  }, [dataInicial, dataFinal]);
+  }, [dataInicial, dataFinal, fetchBalanco]); // Include fetchBalanco in the dependency array
 
   const data = {
     labels: balanco.map((item) => `${meses[item.mes - 1]} / ${item.ano}`),
