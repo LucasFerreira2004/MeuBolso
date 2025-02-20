@@ -15,6 +15,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"transacao_recorrente_id", "data"}) })
 public class Transacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -53,29 +53,29 @@ public class ContaService implements IContaService {
     @Autowired
     private ITransacaoService transacaoService;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public ContaDTO findById(String idUsuario, Long id, LocalDate data) {
         Conta conta = contaValidateService.validateAndGet(id, idUsuario, new EntidadeNaoEncontradaException("/{id}", "conta nao encontrada"), new AcessoNegadoException());
         ContaDTO dto = new ContaDTO(conta);
         dto.setSaldo(conta.getSaldo(data));
         return dto;
     }
-    @Transactional(readOnly = true)
+    @Transactional
     public List<ContaDTO> findAll(String idUsuario, LocalDate data) {
         List<Conta> listConta = contaRepository.findAllByUsuario(idUsuario);
         List<ContaDTO> listDto = new ArrayList<>();
-        for (Conta conta : listConta) {
+        for (Conta conta : listConta) { //implementar iterator?
             ContaDTO dto = new ContaDTO(conta);
             dto.setSaldo(conta.getSaldo(data));
             listDto.add(dto);
         }
         return listDto;
     }
-    @Transactional(readOnly = true)
+    @Transactional
     public List<ContaMinDTO> findAllMin(String idUsuario, LocalDate data) {
         List<Conta> contas = contaRepository.findAllByUsuario(idUsuario);
         List<ContaMinDTO> listDto = new ArrayList<>();
-        for (Conta conta : contas){
+        for (Conta conta : contas){ //implementar iterator?
             ContaMinDTO dto = new ContaMinDTO(conta);
             dto.setSaldo(conta.getSaldo(data));
             listDto.add(dto);
@@ -83,7 +83,7 @@ public class ContaService implements IContaService {
         return listDto;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public SaldoTotalDTO findSaldo(String idUsuario, LocalDate data) {
         BigDecimal saldo = new BigDecimal(0);
         List<Conta> contas = contaRepository.findAllByUsuario(idUsuario);
