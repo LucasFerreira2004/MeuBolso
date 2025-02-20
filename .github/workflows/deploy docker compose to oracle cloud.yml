@@ -1,0 +1,55 @@
+name: Deploy Docker Compose to Oracle Cloud
+
+on:
+  push:
+    branches:
+      - main  # Executa a pipeline quando houver push na branch "main"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🚀 Checkout do repositório
+        uses: actions/checkout@v3
+
+      - name: 🔑 Configurar chave SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: 🐳 Instalar Docker e Docker Compose (se necessário)
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+            set -e  # Para caso algum comando falhe
+            if ! command -v docker &> /dev/null; then
+              echo "🚀 Instalando Docker..."
+              sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+              sudo dnf install -y docker-ce docker-ce-cli containerd.io
+              sudo systemctl start docker
+              sudo systemctl enable docker
+              sudo usermod -aG docker $USER
+              newgrp docker
+            else
+              echo "✅ Docker já está instalado."
+            fi
+            
+            if ! command -v docker-compose &> /dev/null; then
+              echo "🚀 Instalando Docker Compose..."
+              sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+            else
+              echo "✅ Docker Compose já está instalado."
+            fi
+          EOF    
+
+      - name: 📤 Deploy via SSH
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+            cd /caminho/do/projeto  # Ajuste conforme necessário
+            git pull origin main
+            docker-compose down
+            docker-compose up -d --build
+          EOF
