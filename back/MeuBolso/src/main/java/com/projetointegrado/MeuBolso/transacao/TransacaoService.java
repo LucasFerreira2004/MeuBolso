@@ -37,11 +37,7 @@ public class TransacaoService implements ITransacaoService {
     @Autowired
     private TransacaoValidateService transacaoValidateService;
 
-    //temporário
-    @Autowired
-    private TransacaoRepeticaoService transacaoRepeticaoService;
-
-    @Transactional(readOnly = true)
+    @Transactional
     public TransacaoDTO findById(String userId, Long id){
         Transacao transacao = transacaoRepository.findById(id).orElse(null);
         if (transacao == null)
@@ -51,17 +47,17 @@ public class TransacaoService implements ITransacaoService {
         return new TransacaoDTO(transacao);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<TransacaoDTO> findAllInRangeByMonth(String userId, LocalDate data) {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;
         List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
-        transacoes.forEach(t -> System.out.println(t.getData()));
+        transacoes.forEach(t -> System.out.println(t.getData())); //implementar iterator?
         List<TransacaoDTO> transacaoDTOs = transacoes.stream().map(transacao -> new TransacaoDTO(transacao)).toList();
         return transacaoDTOs;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public SumTransacoesDTO findSumDespesasInRangeByMonth(String userId, LocalDate data) {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;
@@ -69,7 +65,7 @@ public class TransacaoService implements ITransacaoService {
         return sumDespesas;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public SumTransacoesDTO findSumReceitasInRangeByMonth(String userId, LocalDate data) {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;

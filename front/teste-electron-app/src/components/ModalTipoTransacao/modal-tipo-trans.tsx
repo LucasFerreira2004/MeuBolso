@@ -7,9 +7,10 @@ interface ModalTransacaoProps {
   onClose: () => void;
   mes: number; 
   ano: number; 
+  onUpdate: () => void; // Certifique-se de que esta linha está presente
 }
 
-function ModalTipoTransacao({ onClose, mes, ano }: ModalTransacaoProps) {
+function ModalTipoTransacao({ onClose, mes, ano, onUpdate }: ModalTransacaoProps) {
   const [isDespesasModalOpen, setIsDespesasModalOpen] = useState(false);
   const [isReceitasModalOpen, setIsReceitasModalOpen] = useState(false);
   const [, setSelectedMes] = useState(mes); 
@@ -19,6 +20,7 @@ function ModalTipoTransacao({ onClose, mes, ano }: ModalTransacaoProps) {
     setIsDespesasModalOpen(false);
     setIsReceitasModalOpen(false);
     onClose(); 
+    onUpdate(); // Chama a função de atualização ao fechar o modal
   };
 
   useEffect(() => {

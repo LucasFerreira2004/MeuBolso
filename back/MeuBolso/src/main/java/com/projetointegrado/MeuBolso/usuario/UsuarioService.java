@@ -47,22 +47,34 @@ public class UsuarioService implements IUsuarioService {
 
     @Transactional
     public UsuarioDTO update(String userId, UsuarioSaveDTO usuarioSaveDTO, MultipartFile img) {
-        String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioSaveDTO.getSenha());
+        Usuario usuarioExistente = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
+
+        // Se a senha vier nula ou vazia, mantenha a senha antiga
+        String senhaAtualizada;
+        if (usuarioSaveDTO.getSenha() == null || usuarioSaveDTO.getSenha().isBlank()) {
+            senhaAtualizada = usuarioExistente.getSenha(); // mantém senha antiga
+        } else {
+            senhaAtualizada = new BCryptPasswordEncoder().encode(usuarioSaveDTO.getSenha());
+        }
+
+        // Se houver imagem, faz o upload
         String imgUrl = null;
         if (img != null) {
-            try {
-                imgUrl = imgStorageService.uploadFile(img);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
-            }
+            imgUrl = imgStorageService.uploadFile(img);
         }
-        Usuario usuario = new Usuario(userId, usuarioSaveDTO.getNome(), usuarioSaveDTO.getEmail(), encryptedPassword, imgUrl);
 
-        usuario = usuarioRepository.save(usuario);
-        return new UsuarioDTO(usuario);
+        // Atualiza dados
+        usuarioExistente.setNome(usuarioSaveDTO.getNome());
+        usuarioExistente.setEmail(usuarioSaveDTO.getEmail());
+        usuarioExistente.setSenha(senhaAtualizada);
+        if (imgUrl != null) {
+            usuarioExistente.setImg_url(imgUrl);
+        }
+
+        usuarioRepository.save(usuarioExistente);
+        return new UsuarioDTO(usuarioExistente);
     }
-
 
     private List<UsuarioDTO> findAll() {
         List<Usuario> list = usuarioRepository.findAll();

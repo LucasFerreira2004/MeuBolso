@@ -7,6 +7,7 @@ import com.projetointegrado.MeuBolso.autorizacao.token.TokenService;
 import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
+import com.projetointegrado.MeuBolso.usuario.dto.OnCreate;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioSaveDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +48,7 @@ public class AutenticacaoController {
 
     @Operation(summary = "Cadastra um novo usuario")
     @PostMapping("/cadastro")
-    public ResponseEntity cadastrar(@RequestBody @Valid UsuarioSaveDTO usuarioSaveDTO,  BindingResult bindingResult) throws ValoresNaoPermitidosException {
+    public ResponseEntity cadastrar(@RequestBody @Validated(OnCreate.class) UsuarioSaveDTO usuarioSaveDTO, BindingResult bindingResult) throws ValoresNaoPermitidosException {
         if (bindingResult.hasErrors()){
             throw new ValoresNaoPermitidosException(bindingResult);
         }

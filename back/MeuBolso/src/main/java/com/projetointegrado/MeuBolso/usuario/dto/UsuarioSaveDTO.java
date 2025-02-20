@@ -1,23 +1,23 @@
 package com.projetointegrado.MeuBolso.usuario.dto;
 
 import com.projetointegrado.MeuBolso.usuario.Usuario;
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import org.springframework.web.multipart.MultipartFile;
 
 public class UsuarioSaveDTO {
-    @NotBlank(message = "O nome é obrigatório.")
-    @Size(min = 3, max = 50, message = "O nome deve ter entre 3 e 50 caracteres.")
+
+    @NotBlank(message = "O nome é obrigatório.", groups = {OnCreate.class, OnUpdate.class})
+    @Size(min = 3, max = 50, message = "O nome deve ter entre 3 e 50 caracteres.", groups = {OnCreate.class, OnUpdate.class})
     private String nome;
 
-    @NotBlank(message = "O email é obrigatório.")
-    @Email(message = "Email inválido.")
+    @NotBlank(message = "O email é obrigatório.", groups = {OnCreate.class, OnUpdate.class})
+    @Email(message = "Email inválido.", groups = {OnCreate.class, OnUpdate.class})
     private String email;
 
-    @NotBlank(message = "A senha é obrigatória.")
-    @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.")
+    // Aqui a senha é obrigatória APENAS no create
+    @NotBlank(message = "A senha é obrigatória.", groups = OnCreate.class)
+    @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.", groups = OnCreate.class)
     private String senha;
 
     public UsuarioSaveDTO() {

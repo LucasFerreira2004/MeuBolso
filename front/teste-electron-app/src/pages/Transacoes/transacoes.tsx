@@ -11,9 +11,7 @@ function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isModalDespesaOpen, setIsModalDespesaOpen] = useState<boolean>(false); // Estado para modal de despesa
   const [isModalReceitaOpen, setIsModalReceitaOpen] = useState<boolean>(false); // Estado para modal de receita
-  const [selectedTransactionId, setSelectedTransactionId] = useState<
-    number | null
-  >(null);
+  const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
   const [totalDespesas, setTotalDespesas] = useState<number | null>(null);
   const [totalReceitas, setTotalReceitas] = useState<number | null>(null);
   const [saldoTotal, setSaldoTotal] = useState<number | null>(null);
@@ -185,18 +183,32 @@ function Transacoes() {
   };
 
   const handleUpdateTransaction = (updatedTransaction: any) => {
-    setTransacoesAgrupadas((prevTransacoes) => {
-      return prevTransacoes.map((grupo) => {
-        const updatedTransacoes = grupo.transacoes.map((transacao: any) =>
-          transacao.id === updatedTransaction.id
-            ? updatedTransaction
-            : transacao
-        );
-        return { ...grupo, transacoes: updatedTransacoes };
-      });
-    });
-
+    if (updatedTransaction.deleted) {
+      // Se a transação foi excluída, recarregue as transações
+      handleUpdate();
+    } else {
+      // Caso contrário, atualize os estados locais
+      setTransacoes((prevTransacoes) =>
+        prevTransacoes.map((transacao) =>
+          transacao.id === updatedTransaction.id ? updatedTransaction : transacao
+        )
+      );
+  
+      setTransacoesAgrupadas((prevTransacoes) =>
+        prevTransacoes.map((grupo) => ({
+          ...grupo,
+          transacoes: grupo.transacoes.map((transacao: any) =>
+            transacao.id === updatedTransaction.id ? updatedTransaction : transacao
+          ),
+        }))
+      );
+    }
+  
     handleCloseEditModal();
+  };
+
+  const handleUpdate = () => {
+    fetchTransacoes(ano, mes); 
   };
 
   useEffect(() => {
@@ -296,15 +308,21 @@ function Transacoes() {
                 key={index}
                 transacoes={grupo.transacoes}
                 dataTransacao={grupo.data}
-                onEditClick={handleEditClick}
-              />
+                onEditClick={handleEditClick} onDeleteSuccess={function (): void {
+                  throw new Error("Function not implemented.");
+                } } token={""}              />
             ))
           )}
         </div>
       </div>
 
       {isModalOpen && (
-        <ModalTipoTrans mes={mes} ano={ano} onClose={toggleModal} />
+        <ModalTipoTrans
+          mes={mes}
+          ano={ano}
+          onClose={toggleModal}
+          onUpdate={handleUpdate} // Passando a função de atualização
+        />
       )}
 
       {isModalDespesaOpen && selectedTransactionId && (

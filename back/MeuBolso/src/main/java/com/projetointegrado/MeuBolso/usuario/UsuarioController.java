@@ -1,15 +1,17 @@
 package com.projetointegrado.MeuBolso.usuario;
 
 import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
+import com.projetointegrado.MeuBolso.usuario.dto.OnCreate;
+import com.projetointegrado.MeuBolso.usuario.dto.OnUpdate;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
 import com.projetointegrado.MeuBolso.usuario.dto.UsuarioSaveDTO;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,22 +29,28 @@ public class UsuarioController {
         String userId = usuarioService.getUsuarioLogadoId();
         return usuarioService.findById(userId);
     }
-    
+
     @Operation(summary = "Cria um novo usuário")
     @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody @Valid UsuarioSaveDTO usuarioSaveDTO) {
+    public ResponseEntity<String> criarUsuario(@RequestBody @Validated(OnCreate.class) UsuarioSaveDTO usuarioSaveDTO, BindingResult bindingResult) throws ValoresNaoPermitidosException {
+        if (bindingResult.hasErrors()) {
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
         usuarioService.save(usuarioSaveDTO);
-        ResponseEntity.ok("Usuário cadastrado com sucesso");
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.findUsuario()); //isso deve sair
+        return ResponseEntity.status(HttpStatus.CREATED).body("Usuário cadastrado com sucesso");
     }
 
     @Operation(summary = "Atualiza o usuário logado")
-    @PutMapping()
-    public UsuarioDTO updateUsuario(@ModelAttribute @Valid UsuarioSaveDTO usuarioSaveDTO,
-                                    @RequestPart(name = "img", required = false) MultipartFile img, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
+    @PutMapping
+    public UsuarioDTO updateUsuario(
+            @ModelAttribute @Validated(OnUpdate.class) UsuarioSaveDTO usuarioSaveDTO,
+            @RequestPart(name = "img", required = false) MultipartFile img,
+            BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
             throw new ValoresNaoPermitidosException(bindingResult);
         }
+
         String userId = usuarioService.getUsuarioLogadoId();
         return usuarioService.update(userId, usuarioSaveDTO, img);
     }
