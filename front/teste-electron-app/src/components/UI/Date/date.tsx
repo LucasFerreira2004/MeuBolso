@@ -1,6 +1,20 @@
 import React, { useState } from "react";
 import styles from "./date.module.css";
-import { meses } from "../../contants"; // Importe a constante do novo arquivo
+
+export const meses = [
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
+];
 
 interface DatePickerProps {
   mes: number;
