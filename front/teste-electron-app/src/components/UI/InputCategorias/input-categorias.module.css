@@ -33,18 +33,19 @@
   }
   
   /* Estilo para o texto (nome da categoria) */
-  a {
+  .a {
     font-weight: bold;
     color: inherit;
     text-decoration: none;
     transition: color 0.3s ease;
   }
   
-  a:hover {
+  .a:hover {
     color: #0056b3; /* Cor do link ao passar o mouse */
   }
   
-  a span {
+  .a span {
+    text-decoration: none;
     font-size: 14px;
     color: inherit;
     font-style: italic; /* Para tornar o texto da cor mais sutil */

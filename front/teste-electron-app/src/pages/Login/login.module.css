@@ -55,17 +55,17 @@
   margin-bottom: 15px;
 }
 
-.plogin {
-  color: #007bff;
-  text-decoration: none;
-  font-size: 14px;
-  margin-bottom: 20px;
-  text-align: end;
-  cursor: pointer;
+.texto{
+  font-size:small;
 }
 
-.plogin:hover {
-  text-decoration: underline;
+.link{
+  font-size: small;
+}
+
+
+.link:hover {
+  color: rgb(66, 66, 253);
 }
 
 .buttonC {
@@ -84,4 +84,9 @@
 
 .buttonC:hover {
   background-color: var(--main-color-light);
+}
+.resgistrar{
+  display: flex;
+  justify-content: flex-end;
+  gap: 3px;
 }

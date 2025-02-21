@@ -4,6 +4,7 @@ import ModalEditCategoria from "../../components/ModalEditCategorias/modal-edit-
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./categorias.module.css";
 import InputCategorias from "../../components/UI/InputCategorias/input-categorias";
+import axios from "axios";
 
 export interface Categoria {
   id: number;
@@ -24,12 +25,25 @@ function Categorias() {
   }, []);
 
   const fetchCategorias = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      return {
+        success: false,
+        error: { message: "Você precisa estar logado para realizar esta ação" },
+      };
+    }
+  
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8080/categorias");
-      const data: Categoria[] = await response.json();
-      setCategorias(data);
-    } catch (error) {
+      const response = await axios.get("http://localhost:8080/categorias", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adiciona o token no cabeçalho
+        },
+      });
+  
+      // A resposta já vem com o status e os dados, basta acessar diretamente
+      setCategorias(response.data); // Aqui estamos usando o `data` retornado pelo Axios
+    } catch (error: any) {
       console.error("Erro ao buscar categorias:", error);
     } finally {
       setLoading(false);
@@ -61,7 +75,8 @@ function Categorias() {
     <div className={style.containerCategorias}>
       <header className={style.headerCategorias}>
         <h1>Categorias</h1>
-        <div>
+        <div className={style.buttons}>
+          <AddButton texto="Categorias arquivadas" onClick={handleAddClick} />
           <AddButton texto="Adicionar Categoria" onClick={handleAddClick} />
         </div>
       </header>
@@ -104,7 +119,7 @@ function Categorias() {
                 />
               ))}
           </div>
-              <hr className={style.hrCentral}/>
+          <hr className={style.hrCentral}/>
           {/* Renderizando categorias de receitas */}
           <div className={style.cardReceita}>
             <h3>Receitas</h3>

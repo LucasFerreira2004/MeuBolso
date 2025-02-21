@@ -70,3 +70,13 @@
     justify-content: center;
     align-items: center;
   }
+  .delete{
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: smaller;
+  }
+  .delete img{
+    width: 20px;
+    margin-bottom: 12px;
+  }

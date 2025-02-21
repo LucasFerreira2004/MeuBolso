@@ -1,35 +1,61 @@
 package com.projetointegrado.MeuBolso.categoria;
 
 import com.projetointegrado.MeuBolso.transacao.Transacao;
+import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.List;
 
 @Entity
-//@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"nome", "tipo_categoria"}) })
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"usuario_id", "nome"}) })
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false)
+
+    @Column(nullable = false)
     private String nome;
+
     @Enumerated(EnumType.STRING)
     private TipoCategoria tipoCategoria;
+
     @Column(nullable = false)
     private String cor;
+
     @Column(name = "ativa", nullable = false, columnDefinition = "boolean default true")
     private Boolean ativa;
+
+    @Column(name = "interna_sistema", nullable = false, columnDefinition = "boolean default false")
+    private Boolean internaSistema;
+
+    @ManyToOne
+    @Valid
+    @JoinColumn(nullable = false, name = "usuario_id")
+    private Usuario usuario;
 
     public Categoria() {
     }
 
-    public Categoria(Long id, String nome, TipoCategoria tipoCategoria, String cor, Boolean ativa) {
+    public Categoria(Long id, String nome, TipoCategoria tipoCategoria, String cor, Boolean ativa, Usuario usuario) {
         this.id = id;
         this.nome = nome;
         this.tipoCategoria = tipoCategoria;
         this.cor = cor;
         this.ativa = ativa;
+        this.usuario = usuario;
+        this.internaSistema = false;
+    }
+
+    public Categoria(Long id, String nome, TipoCategoria tipoCategoria, String cor, Boolean ativa, Usuario usuario, Boolean internaSistema) {
+        this.id = id;
+        this.nome = nome;
+        this.tipoCategoria = tipoCategoria;
+        this.cor = cor;
+        this.ativa = ativa;
+        this.usuario = usuario;
+        this.internaSistema = internaSistema;
     }
 
     public Long getId() {
@@ -77,5 +103,21 @@ public class Categoria {
 
     public void setAtiva(Boolean ativa) {
         this.ativa = ativa;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Boolean getInternaSistema() {
+        return internaSistema;
+    }
+
+    public void setInternaSistema(Boolean internaSistema) {
+        this.internaSistema = internaSistema;
     }
 }

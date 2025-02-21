@@ -13,8 +13,8 @@ insert into banco (nome, icone_url) values ('Bradesco', 'https://play-lh.googleu
 insert into banco (nome, icone_url) values ('Banco do Brasil', 'https://play-lh.googleusercontent.com/1-aNhsSPNqiVluwNGZar_7F5PbQ4u1zteuJ1jumnArhe8bfYHHaVwu4aVOF5-NAmLaA');
 insert into banco (nome, icone_url) values ('Nubank', 'https://t.ctcdn.com.br/DIEw0gGtQl_GNhWXJwgrRmuGpIk=/i624750.png');
 /*CONTA*/
-insert into conta(saldo, tipo_conta_id, banco_id, usuario_id) values ('1412', '1', '3', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
-insert into conta(saldo, tipo_conta_id, banco_id, usuario_id) values ('2000.50', '3', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
+insert into conta(tipo_conta_id, banco_id, usuario_id, descricao, saldo_inicial) values ('1', '3', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c', 'conta01', '10');
+insert into conta(tipo_conta_id, banco_id, usuario_id, descricao, saldo_inicial) values ('3', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c', 'conta02', '0');
 
 /*CATEGORIAS*/
 insert into categoria (nome, tipo_categoria, cor, usuario_id) values ('casa', 'despesa', '8755BC', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');             /*1*/
@@ -33,8 +33,8 @@ insert into categoria (nome, tipo_categoria, cor, usuario_id) values ('renda ext
 insert into categoria (nome, tipo_categoria, cor, usuario_id) values ('outros', 'receita', 'BC7D18', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');           /*13*/
 
 /*TRANSACAO*/
-insert into transacao (valor, data_transacao, descricao, tipo, categoria, conta_origem) values ('1000', '2024-12-01', 'venda bicicleta', 'receita', '12', '1');
-insert into transacao (valor, data_transacao, descricao, tipo, categoria, conta_origem) values ('16.28', '2024-12-01', 'açaí', 'despesa', '5', '1');
-insert into transacao (valor, data_transacao, descricao, tipo, categoria, conta_origem) values ('1412', '2024-12-05', 'salario', 'receita', '9', '2');
-insert into transacao (valor, data_transacao, descricao, tipo, categoria, conta_origem) values ('123.55', '2024-12-10', 'conta luz', 'despesa', '1', '1');
-insert into transacao (valor, data_transacao, descricao, tipo, categoria, conta_origem) values ('76.20', '2024-12-11', 'conta água', 'despesa', '1', '1');
+insert into transacao (valor, data, descricao, tipo, categoria_id, conta_origem, usuario_id) values ('1000', '2024-12-01', 'venda bicicleta', 'receita', '12', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
+insert into transacao (valor, data, descricao, tipo, categoria_id, conta_origem, usuario_id) values ('16.28', '2024-12-01', 'açaí', 'despesa', '5', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
+insert into transacao (valor, data, descricao, tipo, categoria_id, conta_origem, usuario_id) values ('1412', '2024-12-05', 'salario', 'receita', '9', '2', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
+insert into transacao (valor, data, descricao, tipo, categoria_id, conta_origem, usuario_id) values ('123.55', '2024-12-10', 'conta luz', 'despesa', '1', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');
+insert into transacao (valor, data, descricao, tipo, categoria_id, conta_origem, usuario_id) values ('76.20', '2024-12-11', 'conta água', 'despesa', '1', '1', '2ebbc2f1-bf81-470c-a5f2-063723d99d2c');

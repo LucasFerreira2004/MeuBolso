@@ -14,11 +14,19 @@ interface CategoriaProps {
 }
 
 const sendData = async ({ cor, nome, tipo }: CategoriaProps) => {
+  const token = localStorage.getItem("authToken"); //isso aqui serve pra pegar o token, e usar dnv
+  if (!token) { //faz uma verificacaao do token
+    return {
+      success: false,
+      error: { message: "Você precisa estar logado para realizar esta ação" },
+    };
+  }
   try {
     const response = await fetch(`http://localhost:8080/categorias`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, //valida o token no cabeçalho
       },
       body: JSON.stringify({ cor, nome, tipo }),
     });
@@ -34,6 +42,7 @@ const sendData = async ({ cor, nome, tipo }: CategoriaProps) => {
     return { success: false, error: { message: "Erro na conexão com o servidor." } };
   }
 };
+
 
 function ModalAddCategoria({ closeModal, onCategoriaSaved }: ModalAddCategoriaProps) {
   const [openColors, setOpenColors] = useState(false);
@@ -71,7 +80,7 @@ function ModalAddCategoria({ closeModal, onCategoriaSaved }: ModalAddCategoriaPr
   };
 
   return (
-    <div className={style.modalContainer}>
+    <div className={style.modalContainerCategoria}>
       <div className={style.modalHeader}>
         <h3>Nova Categoria</h3>
         <img

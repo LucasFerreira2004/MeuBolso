@@ -1,12 +1,16 @@
-import { createBrowserRouter } from 'react-router-dom';
-import Login from '../pages/Login/login';
-import Cadastro from '../pages/Cadastro/cadastro';
-import Home from '../pages/Home/home';
-import ContasBancarias from '../pages/ContasBancarias/contas-bancarias';
-import Categorias from '../pages/Categorias/categorias';
-import PageTeste from '../pages/PageTeste/page-teste';
-import App from '../App';
-
+import { createBrowserRouter } from "react-router-dom";
+import Login from "../pages/Login/login";
+import Cadastro from "../pages/Cadastro/cadastro";
+import Home from "../pages/Home/home";
+import ContasBancarias from "../pages/ContasBancarias/contas-bancarias";
+import Categorias from "../pages/Categorias/categorias";
+import PageTeste from "../pages/PageTeste/page-teste";
+import App from "../App";
+import Transacoes from "../pages/Transacoes/transacoes";
+import Metas from "../pages/Metas/metas";
+import PrivateRoute from "../components/private-routes";
+import Orcamentos from "../pages/Orcamentos/orcamentos";
+import Relatorios from "../pages/Relatorios/relatorios";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -22,35 +26,75 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/home",
-        element: <Home />
+        element: (
+          <PrivateRoute>
+            <Home />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/perfil",
-        element: <PageTeste />
+        element: (
+          <PrivateRoute>
+            <PageTeste />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/contas",
-        element: <ContasBancarias />
+        element: (
+          <PrivateRoute>
+            <ContasBancarias />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/categorias",
-        element: <Categorias />
+        element: (
+          <PrivateRoute>
+            <Categorias />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/transacoes",
-        element: <PageTeste />
+        element: (
+          <PrivateRoute>
+            <Transacoes />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/metas",
-        element: <PageTeste />
+        element: (
+          <PrivateRoute>
+            <Metas />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/orcamentos",
+        element: (
+          <PrivateRoute>
+            <Orcamentos />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/relatorios",
-        element: <PageTeste />
+        element: (
+          <PrivateRoute>
+            <Relatorios />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/profile",
-        element: <PageTeste />
+        element: (
+          <PrivateRoute>
+            <PageTeste />
+          </PrivateRoute>
+        ),
       },
     ],
   },

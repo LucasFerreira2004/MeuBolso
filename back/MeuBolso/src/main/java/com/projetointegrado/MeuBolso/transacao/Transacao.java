@@ -2,54 +2,107 @@ package com.projetointegrado.MeuBolso.transacao;
 
 import com.projetointegrado.MeuBolso.categoria.Categoria;
 import com.projetointegrado.MeuBolso.conta.Conta;
+import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
+import com.projetointegrado.MeuBolso.usuario.Usuario;
 import jakarta.persistence.*;
+
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.math.RoundingMode;
+import java.time.LocalDate;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {"transacao_recorrente_id", "data"}) })
 public class Transacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
+    @DecimalMin(value = "0.01", message = "O valor da transação deve ser no mínimo 0.01")
     private BigDecimal valor;
-    @Column(columnDefinition = "DATE")
-    private Date data_transacao;
+
+    @Column(nullable = false, columnDefinition = "DATE")
+    private LocalDate data;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
+
     @ManyToOne(optional = false)
-    @JoinColumn(name = "categoria", nullable = false)
+    @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
-    @ManyToOne
+
+    @ManyToOne(optional = false)
     @JoinColumn(name = "conta_origem")
     private Conta conta;
+
     @Column(columnDefinition = "TEXT")
     private String comentario;
+
     @NotBlank
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT") //especificar tamanho maximo da descricao
     private String descricao;
 
-    public Transacao(Long id, BigDecimal valor, Date data_transacao, TipoTransacao tipo, Categoria categoria, String comentario, String descricao) {
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "transacao_recorrente_id")
+    private TransacaoRecorrente transacaoRecorrente;
+
+    @Enumerated(EnumType.STRING)
+    private OrigemTransacao origemTransacao;
+
+    public Transacao(Long id, BigDecimal valor, LocalDate data, TipoTransacao tipo, Categoria categoria, Conta conta, String comentario, String descricao, Usuario usuario, OrigemTransacao origemTransacao) {
         this.id = id;
         this.valor = valor;
-        this.data_transacao = data_transacao;
+        this.data = data;
         this.tipo = tipo;
         this.categoria = categoria;
+        this.conta = conta;
         this.comentario = comentario;
         this.descricao = descricao;
+        this.usuario = usuario;
+        this.origemTransacao = origemTransacao;
     }
-    public Transacao(Long id, BigDecimal valor, Date data_transacao, Boolean e_fixo, String descricao) {
-        this.id = id;
-        this.valor = valor;
-        this.tipo = tipo;
-        this.data_transacao = data_transacao;
-        this.descricao = descricao;
+
+    public Transacao (TransacaoRecorrente transacaoRecorrente, LocalDate data, OrigemTransacao origemTransacao) {
+        this.id = null;
+        if(transacaoRecorrente.getQtdParcelas() != null) {
+            BigDecimal qtdParcelas = new BigDecimal(transacaoRecorrente.getQtdParcelas());
+            this.valor = transacaoRecorrente.getValor()
+                    .divide(qtdParcelas, 2, RoundingMode.DOWN);
+        }else{
+            this.valor = transacaoRecorrente.getValor();
+        }
+        this.data = data;
+        this.tipo = transacaoRecorrente.getTipo();
+        this.categoria = transacaoRecorrente.getCategoria();
+        this.conta = transacaoRecorrente.getConta();
+        this.comentario = null;
+        this.descricao = transacaoRecorrente.getDescricao();
+        this.usuario = transacaoRecorrente.getUsuario();
+        this.transacaoRecorrente = transacaoRecorrente;
+        this.origemTransacao = origemTransacao;
     }
-    public Transacao() {}
+
+    public Transacao() {
+    }
 
     // Getters e Setters
+    public TransacaoRecorrente getTransacaoRecorrente() {
+        return transacaoRecorrente;
+    }
+
+    public void setTransacaoRecorrente(TransacaoRecorrente transacaoRecorrente) {
+        this.transacaoRecorrente = transacaoRecorrente;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -82,12 +135,12 @@ public class Transacao {
         this.descricao = descricao;
     }
 
-    public Date getData_transacao() {
-        return data_transacao;
+    public LocalDate getData() {
+        return data;
     }
 
-    public void setData_transacao(Date data_transacao) {
-        this.data_transacao = data_transacao;
+    public void setData(LocalDate data_transacao) {
+        this.data = data_transacao;
     }
 
     public Conta getConta() {
@@ -112,5 +165,21 @@ public class Transacao {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public OrigemTransacao getOrigemTransacao() {
+        return origemTransacao;
+    }
+
+    public void setOrigemTransacao(OrigemTransacao origemTransacao) {
+        this.origemTransacao = origemTransacao;
     }
 }
