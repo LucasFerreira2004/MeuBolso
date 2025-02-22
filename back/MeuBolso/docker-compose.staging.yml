@@ -8,10 +8,12 @@ services:
     container_name: mb-postgresql-server
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - 5433:5432
     volumes:
+      - ./src/main/resources/create.sql:/docker-entrypoint-initdb.d/create.sql
       - pgdata:/var/lib/postgresql/data
     networks:
       - dev-network
