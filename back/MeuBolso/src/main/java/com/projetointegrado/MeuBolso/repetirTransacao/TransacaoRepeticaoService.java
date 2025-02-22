@@ -34,10 +34,9 @@ public class TransacaoRepeticaoService {
 
     @Transactional
     public void gerarTransacoes(LocalDate data, String userId) {
-        // Obtém ou cria um lock para a theread do userId
         ReentrantLock lock = locks.computeIfAbsent(userId, k -> new ReentrantLock());
 
-        lock.lock(); // Bloqueia a execução para o userId
+        lock.lock();
         try {
             List<TransacaoRecorrente> transacoesRecorrentes = transacaoRecorrenteRepository.findAllByUsuario(userId);
             if (transacoesRecorrentes.isEmpty()) return;
@@ -59,11 +58,13 @@ public class TransacaoRepeticaoService {
 
                 if (transacaoExistente || !transacaoRecorrente.getAtiva()) continue;
 
-                IGerarTransacoesStrategy gerarTransacoesStrategy = gerarTransacoesFactory.gerarTransacoesStrategy(transacaoRecorrente.getTipoRepeticao()); //chama a factory para conseguir a estratégia correta com base no tipoRepetição (DARIO, SEMANAL, ...)
+                //chama a factory de strategies de gerarTransacoes com base no tipo de repetição (FIXA, PARCELADA)
+                IGerarTransacoesStrategy gerarTransacoesStrategy = gerarTransacoesFactory.gerarTransacoesStrategy(transacaoRecorrente.getTipoRepeticao());
+                //executa a strategy
                 gerarTransacoesStrategy.gerarTransacoes(transacaoRecorrente, data); //executa o método da strategy
             }
         } finally {
-            lock.unlock(); // Libera o lock
+            lock.unlock();
         }
     }
 }

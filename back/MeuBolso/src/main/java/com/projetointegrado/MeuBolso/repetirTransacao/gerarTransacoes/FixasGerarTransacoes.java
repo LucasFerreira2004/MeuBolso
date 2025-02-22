@@ -5,18 +5,12 @@ import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStr
 import com.projetointegrado.MeuBolso.transacao.OrigemTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
-import com.projetointegrado.MeuBolso.transacao.TransacaoService;
-import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrenteRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
@@ -30,9 +24,11 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
     @Transactional
     @Override
     public void gerarTransacoes(TransacaoRecorrente transacaoRecorrente, LocalDate dataBusca) {
+        //chama a factory de stragies de avanço e obtem a estratégia correta de acordo com a periodiciade da transação recorrente
         IAvancoDataStrategy AvancoStrategy = AvancoDataFactory.getStrategy(transacaoRecorrente.getPeriodicidade());
         LocalDate dataUltimaExecucao;
         if(transacaoRecorrente.getUltimaExecucao() != null){
+            //executando a strategy
             dataUltimaExecucao = AvancoStrategy.avancarData(transacaoRecorrente.getUltimaExecucao(), transacaoRecorrente.getDataCadastro(), 1);
         }else{
             dataUltimaExecucao = transacaoRecorrente.getDataCadastro();
@@ -43,7 +39,7 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
             Transacao novaTransacao = new Transacao(transacaoRecorrente, dataUltimaExecucao, OrigemTransacao.FIXA);
             transacaoRepository.save(novaTransacao);
             transacaoRecorrente.setUltimaExecucao(dataUltimaExecucao);
-
+            //executando a strategy
             dataUltimaExecucao = AvancoStrategy.avancarData(dataUltimaExecucao, transacaoRecorrente.getDataCadastro(), 1);
         }
         transacaoRecorrenteRepository.save(transacaoRecorrente);

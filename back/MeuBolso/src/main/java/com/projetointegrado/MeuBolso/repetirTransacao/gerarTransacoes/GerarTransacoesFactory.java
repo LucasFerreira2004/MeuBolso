@@ -15,14 +15,13 @@ public class GerarTransacoesFactory {
     public GerarTransacoesFactory() {}
 
     public IGerarTransacoesStrategy gerarTransacoesStrategy(TipoRepeticao tipoRepeticao) {
-
         switch (tipoRepeticao) {
             case FIXO:
                 return fixasGerarTransacoes;
             case PARCELAMENTO:
                 return parceladasGerarTransacoes;
             default:
-                throw new IllegalArgumentException("Periodicidade desconhecida");
+                throw new IllegalArgumentException("TipoRepeticao desconhecida");
         }
     }
 }
