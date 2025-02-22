@@ -21,7 +21,6 @@ public class ParceladasGerarTransacoes implements IGerarTransacoesStrategy{
     private TransacaoRecorrenteRepository transacaoRecorrenteRepository;
 
     public void gerarTransacoes(TransacaoRecorrente transacaoRecorrente, LocalDate dataBusca) {
-        System.out.println("TransacaoRecorrenteService -> gerarTransacoesFixas");
         IAvancoDataStrategy AvancoStrategy = AvancoDataFactory.getStrategy(transacaoRecorrente.getPeriodicidade());
         LocalDate dataUltimaExecucao;
         if(transacaoRecorrente.getUltimaExecucao() != null){
@@ -37,7 +36,7 @@ public class ParceladasGerarTransacoes implements IGerarTransacoesStrategy{
 
             dataUltimaExecucao = AvancoStrategy.avancarData(dataUltimaExecucao, transacaoRecorrente.getDataCadastro(), 1);
         }
-        System.out.println("TransacaoRecorrenteService -> gerarTransacoesParceladas -> ultimaExecucao = " + transacaoRecorrente.getUltimaExecucao());
         transacaoRecorrenteRepository.save(transacaoRecorrente);
+        transacaoRecorrenteRepository.flush();
     }
 }

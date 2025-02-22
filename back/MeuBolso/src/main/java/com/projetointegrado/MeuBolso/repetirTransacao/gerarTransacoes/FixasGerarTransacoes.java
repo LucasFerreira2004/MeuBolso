@@ -30,7 +30,6 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
     @Transactional
     @Override
     public void gerarTransacoes(TransacaoRecorrente transacaoRecorrente, LocalDate dataBusca) {
-        System.out.println("fixasGerarTransacoes");
         IAvancoDataStrategy AvancoStrategy = AvancoDataFactory.getStrategy(transacaoRecorrente.getPeriodicidade());
         LocalDate dataUltimaExecucao;
         if(transacaoRecorrente.getUltimaExecucao() != null){
@@ -47,12 +46,7 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
 
             dataUltimaExecucao = AvancoStrategy.avancarData(dataUltimaExecucao, transacaoRecorrente.getDataCadastro(), 1);
         }
-        System.out.println("gerarTransacoesFixas -> ultimaExecucao (NO FIXAS GERAR) = " + transacaoRecorrente.getUltimaExecucao());
         transacaoRecorrenteRepository.save(transacaoRecorrente);
-        transacaoRecorrenteRepository.flush(); // 🔥 Força a gravação imediata no banco
-        //entityManager.detach(transacaoRecorrente); // 🔥 Remove a entidade do cache de persistência
-        //transacaoRecorrente = entityManager.find(TransacaoRecorrente.class, transacaoRecorrente.getId());
-        transacaoRecorrenteRepository.findById(transacaoRecorrente.getId());
-
+        transacaoRecorrenteRepository.flush();
     }
 }
