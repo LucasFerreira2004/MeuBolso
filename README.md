@@ -3,4 +3,4 @@
 Pronto, agora você encontrará os arquivos do nosso back end em java :)
 
 #### Link para acesso ao documento que descreve os padrões usados e onde foram aplicados:
-- adicionar o link aqui
+- Link para [drive da documentação](https://drive.google.com/drive/folders/1tV1T9iRjCLUp4Pw2ZkdfOmEH0nm8IFH9?usp=sharing)
