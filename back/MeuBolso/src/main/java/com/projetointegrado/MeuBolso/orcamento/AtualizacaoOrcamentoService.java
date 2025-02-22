@@ -1,6 +1,9 @@
 package com.projetointegrado.MeuBolso.orcamento;
 
+import com.projetointegrado.MeuBolso.orcamento.iterator.OrcamentoAgregado;
+import com.projetointegrado.MeuBolso.orcamento.iterator.OrcamentoAgregado;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
+import com.projetointegrado.MeuBolso.orcamento.iterator.Iterator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,25 +25,23 @@ public class AtualizacaoOrcamentoService {
     @Transactional
     public void atualizarOrcamentos(String usuarioId, Integer ano, Integer mes) {
         LocalDate periodo = LocalDate.of(ano, mes, 1);
-        List<Orcamento> orcamentos = orcamentoRepository.findByUsuarioAndPeriodo(usuarioId, ano, mes);
-
         LocalDate dataInicio = periodo.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = periodo.with(TemporalAdjusters.lastDayOfMonth());
 
-        orcamentos.forEach(orcamento -> {
+        List<Orcamento> orcamentosList = orcamentoRepository.findByUsuarioAndPeriodo(usuarioId, ano, mes);
+        OrcamentoAgregado orcamentoAggregate = new OrcamentoAgregado(orcamentosList);
+
+        Iterator<Orcamento> it = orcamentoAggregate.iterator();
+        while (it.hasNext()) {
+            Orcamento orcamento = it.next();
+
             BigDecimal gastoTotal = transacaoRepository.calcularGastoPorCategoriaEPeriodo(
-                    orcamento.getCategoria().getId(), usuarioId, dataInicio, dataFim
-            );
+                    orcamento.getCategoria().getId(), usuarioId, dataInicio, dataFim);
 
-            // Atualiza os valores de total gasto e restante
             orcamento.updateValores(gastoTotal);
-//            System.out.println("Update orcamento: " + orcamento.getNotificacao().getThreshold());
-
-            // Verifica se algum threshold (50%, 90%, 100%) foi atingido
             orcamento.verificarThresholds();
-//            System.out.println("Update orcamento: " + orcamento.getNotificacao().getThreshold());
-
             orcamentoRepository.save(orcamento);
-        });
+        }
     }
+
 }
