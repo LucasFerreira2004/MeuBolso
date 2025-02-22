@@ -7,19 +7,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class GerarTransacoesFactory {
     @Autowired
-    FixasGerarTransacoes fixasGerarTransacoes;
+    FixasGerarTransacoesStrategy fixasGerarTransacoesStrategy;
 
     @Autowired
-    ParceladasGerarTransacoes parceladasGerarTransacoes;
+    ParceladasGerarTransacoesStrategy parceladasGerarTransacoesStrategy;
 
     public GerarTransacoesFactory() {}
 
     public IGerarTransacoesStrategy gerarTransacoesStrategy(TipoRepeticao tipoRepeticao) {
         switch (tipoRepeticao) {
             case FIXO:
-                return fixasGerarTransacoes;
+                return fixasGerarTransacoesStrategy;
             case PARCELAMENTO:
-                return parceladasGerarTransacoes;
+                return parceladasGerarTransacoesStrategy;
             default:
                 throw new IllegalArgumentException("TipoRepeticao desconhecida");
         }

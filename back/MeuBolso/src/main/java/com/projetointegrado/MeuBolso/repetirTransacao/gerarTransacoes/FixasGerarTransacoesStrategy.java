@@ -9,19 +9,22 @@ import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 
 @Service
-public class ParceladasGerarTransacoes implements IGerarTransacoesStrategy{
+public class FixasGerarTransacoesStrategy implements IGerarTransacoesStrategy{
     @Autowired
     private TransacaoRepository transacaoRepository;
 
     @Autowired
     private TransacaoRecorrenteRepository transacaoRecorrenteRepository;
 
+
+    @Transactional
+    @Override
     public void gerarTransacoes(TransacaoRecorrente transacaoRecorrente, LocalDate dataBusca) {
-        //chama a factory de estragies de avanço e obtem a estratégia correta de acordo com a periodiciade da transação recorrente
+        //chama a factory de stragies de avanço e obtem a estratégia correta de acordo com a periodiciade da transação recorrente
         IAvancoDataStrategy AvancoStrategy = AvancoDataFactory.getStrategy(transacaoRecorrente.getPeriodicidade());
         LocalDate dataUltimaExecucao;
         if(transacaoRecorrente.getUltimaExecucao() != null){
@@ -31,8 +34,9 @@ public class ParceladasGerarTransacoes implements IGerarTransacoesStrategy{
             dataUltimaExecucao = transacaoRecorrente.getDataCadastro();
         }
 
-        while (!dataUltimaExecucao.isAfter(dataBusca) && !dataUltimaExecucao.isAfter(transacaoRecorrente.getDataFinal())) {
-            Transacao novaTransacao = new Transacao(transacaoRecorrente, dataUltimaExecucao, OrigemTransacao.PARCELADA);
+        if (dataUltimaExecucao.isAfter(dataBusca)) return;
+        while (!dataUltimaExecucao.isAfter(dataBusca)) {
+            Transacao novaTransacao = new Transacao(transacaoRecorrente, dataUltimaExecucao, OrigemTransacao.FIXA);
             transacaoRepository.save(novaTransacao);
             transacaoRecorrente.setUltimaExecucao(dataUltimaExecucao);
             //executando a strategy
