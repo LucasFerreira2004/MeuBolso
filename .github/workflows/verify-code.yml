@@ -3,10 +3,12 @@ name: Verify Code
 on:
   push:
     branches:
-      - main
       - developer
       - staging
   pull_request:
+    branches:
+      - developer
+      - staging
 
 jobs:
   verify:
