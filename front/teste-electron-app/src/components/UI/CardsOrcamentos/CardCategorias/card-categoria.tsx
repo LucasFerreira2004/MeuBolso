@@ -55,7 +55,7 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
 
     try {
       const response = await fetch(
-        `${baseUrl}orcamentos?ano=${ano}&mes=${mes}`,
+        `${baseUrl}/orcamentos?ano=${ano}&mes=${mes}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -187,18 +187,18 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
         </div>
       ))}
 
-      {isModalOpen && selectedOrcamento && (
-        <ModalEditOrcamento
-          id={selectedOrcamento.id}
-          valor={valor}
-          data={data}
-          onCloseAll={handleCloseModal}
-          handleChangeValor={(e) => setValor(e.target.value)}
-          setCategoria={(categoriaId) => setCategoriaId(categoriaId)}
-          setData={(date) => setData(date)}
-          onEditSuccess={handleEditSuccess}
-        />
-      )}
+{isModalOpen && selectedOrcamento && (
+  <ModalEditOrcamento
+    id={selectedOrcamento.id}
+    valor={valor}
+    data={data}
+    onCloseAll={handleCloseModal}
+    handleChangeValor={(e) => setValor(e.target.value)}
+    setCategoria={(categoriaId) => setCategoriaId(categoriaId)} // Passa a função para atualizar o idCategoria
+    setData={(date) => setData(date)}
+    onEditSuccess={handleEditSuccess}
+  />
+)}
 
       {isDeleteModalOpen && selectedOrcamento && (
         <ModalDeleteOrca

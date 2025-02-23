@@ -14,7 +14,7 @@ type ModalEditOrcamentoProps = {
   data: string;
   onCloseAll: () => void;
   handleChangeValor: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  setCategoria: (categoriaId: number | null) => void;
+  setCategoria: (categoriaId: number | null) => void; // Adicione esta linha
   setData: (data: string) => void;
   onEditSuccess: () => void;
 };
@@ -25,11 +25,11 @@ function ModalEditOrcamento({
   data,
   onCloseAll,
   handleChangeValor,
-  setCategoria,
   setData,
   onEditSuccess,
 }: ModalEditOrcamentoProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [idCategoria, setIdCategoria] = useState<number | null>(null); // Estado para armazenar o idCategoria selecionado
 
   const handleSave = async () => {
     setIsLoading(true);
@@ -42,23 +42,35 @@ function ModalEditOrcamento({
       return;
     }
 
+    // Verifica se uma categoria foi selecionada
+    if (idCategoria === null) {
+      toast.error("Por favor, selecione uma categoria.");
+      setIsLoading(false);
+      return;
+    }
+
+    // Debugging: Log the ID being edited
+    console.log("Editing orcamento with ID:", id);
+
     const payload = {
       valorEstimado: parseFloat(valor.replace("R$ ", "").replace(",", ".")),
       periodo: data,
-      idCategoria: 24,
+      idCategoria: idCategoria, // Usa o idCategoria do estado
     };
 
+    // Debugging: Log the payload being sent to the API
+    console.log("Payload sendo enviado:", payload);
+
     try {
-      const response = await axios.put(
-        `${baseUrl}/orcamentos/${id}`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.put(`${baseUrl}/orcamentos/${id}`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      // Debugging: Log the response from the API
+      console.log("Resposta da API:", response.data);
 
       if (response.status === 200) {
         toast.success("Orçamento atualizado com sucesso!");
@@ -71,8 +83,16 @@ function ModalEditOrcamento({
       console.error("Erro na requisição:", error);
       if (axios.isAxiosError(error)) {
         console.log("Detalhes do erro:", error.response?.data);
+
+        // Handle 403 Forbidden error specifically
+        if (error.response?.status === 403) {
+          toast.error("Acesso negado: Este orçamento não pertence ao usuário logado.");
+        } else {
+          toast.error(`Erro: ${error.response?.data.message || "Verifique os dados."}`);
+        }
+      } else {
+        toast.error("Erro ao atualizar o orçamento. Verifique os dados.");
       }
-      toast.error("Erro ao atualizar o orçamento. Verifique os dados.");
     } finally {
       setIsLoading(false);
     }
@@ -86,12 +106,15 @@ function ModalEditOrcamento({
       <div className={styles.modalContent}>
         <div className={styles.headerModal}>
           <h3>Editar orçamento</h3>
-          <button className={styles.closeButton} onClick={onCloseAll}>
+          <button
+            className={styles.closeButton}
+            onClick={onCloseAll}
+            aria-label="Fechar"
+          >
             <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
 
-        {/* Input de valor */}
         <InputWithIcon
           label="Valor: "
           type="text"
@@ -101,10 +124,9 @@ function ModalEditOrcamento({
           onChange={handleChangeValor}
         />
 
-        {/* Selecionar categoria */}
-        <SelectedDespesas setCategoria={setCategoria} />
+        {/* Passa a função setIdCategoria para o componente SelectedDespesas */}
+        <SelectedDespesas setCategoria={setIdCategoria} />
 
-        {/* Data */}
         <DatePicker
           label="Escolha uma data:"
           value={data}
@@ -122,7 +144,6 @@ function ModalEditOrcamento({
           </button>
         </div>
 
-        {/* Notificações */}
         <ToastContainer
           position="top-right"
           autoClose={5000}
