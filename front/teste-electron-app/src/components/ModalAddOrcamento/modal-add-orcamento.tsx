@@ -6,6 +6,7 @@ import styles from "./modal-add-orcamento.module.css";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
+import { baseUrl } from "../../api/api";
 
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
@@ -58,7 +59,7 @@ const ModalAddOrcamento: React.FC<ModalAddOrcamentoProps> = ({ onCloseAll, onAdd
     };
 
     try {
-      const response = await axios.post("http://localhost:8080/orcamentos", payload, {
+      const response = await axios.post(`${baseUrl}/orcamentos`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
