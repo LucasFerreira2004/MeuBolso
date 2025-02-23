@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, TooltipItem } from 'chart.js';
-import styles from './categorias-despesas.module.css';
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from 'chart.js';
+import styles from './categorias-despesas.module.css'; 
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
@@ -35,7 +35,7 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
         const url = `http://localhost:8080/dashboards/despesasCategoria?ano=${ano}&mes=${mes}`;
         const response = await fetch(url, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, 
             'Content-Type': 'application/json',
           },
         });
@@ -59,11 +59,11 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
   }, [ano, mes]);
 
   const chartData = {
-    labels: dados.map((d) => d.nome),
+    labels: dados.map((d) => d.nome), 
     datasets: [
       {
         label: 'Percentual',
-        data: dados.map((d) => d.percentual),
+        data: dados.map((d) => d.percentual), 
         backgroundColor: dados.map((d) => `#${d.cor}`),
         hoverBackgroundColor: dados.map((d) => `#${d.cor}`),
       },
@@ -79,7 +79,7 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
       },
       tooltip: {
         callbacks: {
-          label: (context: TooltipItem<'pie'>) => {
+          label: (context: any) => {
             const index = context.dataIndex; // Obtém o índice do dado
             const categoria = dados[index]; // Recupera a categoria correspondente
             const valorTotal = categoria.valorTotal;

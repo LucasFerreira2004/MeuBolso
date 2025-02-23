@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { ProgressBar } from "../../ProgressBar/progress-bar";
 import ModalEditOrcamento from "../../../ModalEditOrcamento/modal-edit-orcamento";
 import ModalDeleteOrca from "../../../ModalDeleteOrcamentos/modal-delete-orca";
@@ -39,12 +39,14 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]);
-  const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(null);
+  const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(
+    null
+  );
   const [valor, setValor] = useState<string>("");
   const [data, setData] = useState<string>("");
   const [, setCategoriaId] = useState<number | null>(null);
 
-  const fetchOrcamentos = useCallback(async () => {
+  const fetchOrcamentos = async () => {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
@@ -72,27 +74,17 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
     } catch (error) {
       console.error("Erro ao buscar orçamento:", error);
     }
-  }, [ano, mes]);
+  };
 
   useEffect(() => {
     fetchOrcamentos();
-  }, [fetchOrcamentos]);
+  }, [mes, ano]);
 
   useEffect(() => {
     if (onOrcamentoAdded) {
       fetchOrcamentos();
     }
-  }, [onOrcamentoAdded, fetchOrcamentos]);
-
-  useEffect(() => {
-    fetchOrcamentos();
-  }, [mes, ano, fetchOrcamentos]);
-
-  useEffect(() => {
-    if (onOrcamentoAdded) {
-      fetchOrcamentos();
-    }
-  }, [onOrcamentoAdded, fetchOrcamentos]);
+  }, [onOrcamentoAdded]);
 
   const handleOpenModal = (orcamento: Orcamento) => {
     setSelectedOrcamento(orcamento);
@@ -188,14 +180,14 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
 
       {isModalOpen && selectedOrcamento && (
         <ModalEditOrcamento
-          id={selectedOrcamento.id}
-          valor={valor}
-          data={data}
+          id={selectedOrcamento.id} // Passa o ID do orçamento selecionado
+          valor={valor} // Passa o valor do orçamento selecionado
+          data={data} // Passa a data do orçamento selecionado
           onCloseAll={handleCloseModal}
-          handleChangeValor={(e) => setValor(e.target.value)}
-          setCategoria={(categoriaId) => setCategoriaId(categoriaId)}
-          setData={(date) => setData(date)}
-          onEditSuccess={handleEditSuccess}
+          handleChangeValor={(e) => setValor(e.target.value)} // Atualiza o valor
+          setCategoria={(categoriaId) => setCategoriaId(categoriaId)} // Atualiza o ID da categoria
+          setData={(date) => setData(date)} // Atualiza a data
+          onEditSuccess={handleEditSuccess} // Callback para sucesso na edição
         />
       )}
 

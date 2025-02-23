@@ -8,7 +8,6 @@ import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
 import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
 import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
-import { Transaction } from "electron";
 
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
@@ -26,25 +25,12 @@ const formatarValor = (valor: string): string => {
   return `R$ ${valorNumerico}`;
 };
 
-
-interface TransactionData {
-  valor: number;
-  data: string;
-  tipoTransacao: "DESPESA";
-  categoriaId: number | null;
-  contaId: number | null;
-  comentario: string | null;
-  descricao: string;
-  periodicidade?: "DIARIO" | "SEMANAL" | "MENSAL";
-  qtdParcelas?: number | null; // Aceita `number` ou `null`
-}
-
 interface ModalEditDespesasProps {
   onClose: () => void;
   mes: number;
   ano: number;
   transactionId: number;
-  onTransactionUpdate: (updatedTransaction: Transaction) => void;
+  onTransactionUpdate: (updatedTransaction: any) => void;
 }
 
 const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
@@ -119,7 +105,6 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
     setValor(valorFormatado);
   };
 
-
   const handleSubmit = async () => {
     if (!valor || !descricao || !categoria || !data || !conta) {
       toast.error("Preencha todos os campos obrigatórios!");
@@ -134,7 +119,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
       return;
     }
 
-    const transactionData: TransactionData = {
+    const transactionData: any = {
       valor: valorNumerico,
       data,
       tipoTransacao: "DESPESA",
@@ -142,7 +127,6 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
       contaId: conta,
       comentario,
       descricao,
-      qtdParcelas: qtdParcelas ?? undefined, // Converte `null` para `undefined`
     };
 
     if (tipoTransacao === "FIXA") {
@@ -150,7 +134,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
     }
 
     if (tipoTransacao === "PARCELADA") {
-      transactionData.qtdParcelas = qtdParcelas ?? undefined; // Converte `null` para `undefined`
+      transactionData.qtdParcelas = qtdParcelas;
       transactionData.periodicidade = periodicidade;
     }
 
@@ -168,7 +152,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
 
       if (response.status === 200) {
         toast.success("Transação atualizada com sucesso!");
-        onTransactionUpdate(response.data);
+        onTransactionUpdate(response.data); // Notifica o componente pai sobre a atualização
         onClose();
       } else {
         toast.error("Erro ao atualizar a transação.");
@@ -203,8 +187,8 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
           iconSrc="/assets/iconsModalDespesas/descrip.svg"
           placeholder="Ex: Pagamento da fatura"
           value={descricao}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setQtdParcelas(Number(e.target.value))
+          onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
+            setDescricao(e.target.value)
           }
         />
 
@@ -222,8 +206,9 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
           iconSrc="/assets/iconsModalDespesas/comentario.svg"
           placeholder="Opcional"
           value={comentario || ""}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComentario(e.target.value || null)}
-
+          onChange={(e: { target: { value: any } }) =>
+            setComentario(e.target.value || null)
+          }
         />
 
         <div>
@@ -272,7 +257,8 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
                 iconSrc="/assets/iconsModalDespesas/parcelas.svg"
                 type="number"
                 placeholder="Ex: 12"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                value={qtdParcelas || ""}
+                onChange={(e: { target: { value: any } }) =>
                   setQtdParcelas(Number(e.target.value))
                 }
               />

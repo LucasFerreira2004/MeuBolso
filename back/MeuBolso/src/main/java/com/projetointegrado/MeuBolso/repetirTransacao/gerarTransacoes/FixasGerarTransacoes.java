@@ -5,12 +5,18 @@ import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.IAvancoDataStr
 import com.projetointegrado.MeuBolso.transacao.OrigemTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
 import com.projetointegrado.MeuBolso.transacao.TransacaoRepository;
+import com.projetointegrado.MeuBolso.transacao.TransacaoService;
+import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrente;
 import com.projetointegrado.MeuBolso.transacaoRecorrente.TransacaoRecorrenteRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
@@ -20,9 +26,11 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
     @Autowired
     private TransacaoRecorrenteRepository transacaoRecorrenteRepository;
 
+
+    @Transactional
     @Override
     public void gerarTransacoes(TransacaoRecorrente transacaoRecorrente, LocalDate dataBusca) {
-        System.out.println("TransacaoRecorrenteService -> gerarTransacoesFixas");
+        System.out.println("fixasGerarTransacoes");
         IAvancoDataStrategy AvancoStrategy = AvancoDataFactory.getStrategy(transacaoRecorrente.getPeriodicidade());
         LocalDate dataUltimaExecucao;
         if(transacaoRecorrente.getUltimaExecucao() != null){
@@ -31,6 +39,7 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
             dataUltimaExecucao = transacaoRecorrente.getDataCadastro();
         }
 
+        if (dataUltimaExecucao.isAfter(dataBusca)) return;
         while (!dataUltimaExecucao.isAfter(dataBusca)) {
             Transacao novaTransacao = new Transacao(transacaoRecorrente, dataUltimaExecucao, OrigemTransacao.FIXA);
             transacaoRepository.save(novaTransacao);
@@ -38,7 +47,9 @@ public class FixasGerarTransacoes implements IGerarTransacoesStrategy{
 
             dataUltimaExecucao = AvancoStrategy.avancarData(dataUltimaExecucao, transacaoRecorrente.getDataCadastro(), 1);
         }
-        System.out.println("TransacaoRecorrenteService -> gerarTransacoesFixas -> ultimaExecucao = " + transacaoRecorrente.getUltimaExecucao());
         transacaoRecorrenteRepository.save(transacaoRecorrente);
+        transacaoRecorrenteRepository.flush(); // 🔥 Força a gravação imediata no banco
+        transacaoRecorrenteRepository.findById(transacaoRecorrente.getId());
+
     }
 }
