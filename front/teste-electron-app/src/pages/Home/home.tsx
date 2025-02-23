@@ -9,6 +9,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import TotalBalanco from "../../components/UI/ChartsRelatorios/TotalBalanco/total-balanco";
 import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans"; // Importar modal de tipo de transação
+import { baseUrl } from "../../api/api";
 
 interface Banco {
   iconeUrl: string;
@@ -86,25 +87,25 @@ function Home() {
 
   useEffect(() => {
     fetchData(
-      `http://localhost:8080/contas/min?ano=${ano}&mes=${mes}`,
+      `${baseUrl}/contas/min?ano=${ano}&mes=${mes}`,
       "Erro ao carregar os dados dos bancos.",
       setBancos
     );
 
     fetchData(
-      `http://localhost:8080/contas/saldoTotal?ano=${ano}&mes=${mes}`,
+      `${baseUrl}/contas/saldoTotal?ano=${ano}&mes=${mes}`,
       "Erro ao carregar o saldo total.",
       (data) => setSaldoTotal(data.saldo)
     );
 
     fetchData(
-      `http://localhost:8080/transacoes/somatorioDespesas?ano=${ano}&mes=${mes}`,
+      `${baseUrl}/transacoes/somatorioDespesas?ano=${ano}&mes=${mes}`,
       "Erro ao carregar o total de despesas.",
       (data) => setTotalDespesas(data.valor)
     );
 
     fetchData(
-      `http://localhost:8080/transacoes/somatorioReceitas?ano=${ano}&mes=${mes}`,
+      `${baseUrl}/transacoes/somatorioReceitas?ano=${ano}&mes=${mes}`,
       "Erro ao carregar o total de receitas.",
       (data) => setTotalReceitas(data.valor)
     );
