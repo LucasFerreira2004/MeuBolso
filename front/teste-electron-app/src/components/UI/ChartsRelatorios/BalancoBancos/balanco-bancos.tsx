@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Bar } from "react-chartjs-2";
-import DatePicker, { meses } from "../../Date/date";
+import DatePicker from "../../Date/date";
+import { meses } from "../../Date/consts"
 import styles from "./balanco-bancos.module.css";
 import {
   Chart as ChartJS,
