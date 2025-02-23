@@ -7,6 +7,12 @@ import ModalEditReceita from "../../components/ModalEditReceita/modal-edit-recei
 import DatePicker from "../../components/UI/Date/date";
 import CardTransacoes from "../../components/UI/CardTransacoes/card-transacoes";
 import { baseUrl } from "../../api/api";
+import { Transacao } from "../../types/types";
+
+interface TransacoesPorData {
+  data: string;
+  transacoes: Transacao[];
+}
 
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -20,8 +26,8 @@ function Transacoes() {
   const [mes, setMes] = useState<number>(new Date().getMonth() + 1);
   const [ano, setAno] = useState<number>(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [, setTransacoes] = useState<any[]>([]);
-  const [transacoesAgrupadas, setTransacoesAgrupadas] = useState<any[]>([]);
+  const [, setTransacoes] = useState<Transacao[]>([]);
+  const [transacoesAgrupadas, setTransacoesAgrupadas] = useState<TransacoesPorData[]>([]);
 
   const fetchSaldoTotal = async (ano: number, mes: number) => {
     const token = localStorage.getItem("authToken");
@@ -136,8 +142,8 @@ function Transacoes() {
     }
   };
 
-  const agruparTransacoesPorData = (transacoes: any[]) => {
-    const transacoesPorData = transacoes.reduce((acc: any, transacao) => {
+  const agruparTransacoesPorData = (transacoes: Transacao[]) => {
+    const transacoesPorData = transacoes.reduce((acc: Record<string, Transacao[]>, transacao) => {
       const data = transacao.data_transacao;
 
       if (!acc[data]) {
@@ -182,7 +188,7 @@ function Transacoes() {
     setSelectedTransactionId(null);
   };
 
-  const handleUpdateTransaction = (updatedTransaction: any) => {
+  const handleUpdateTransaction = (updatedTransaction: Transacao) => {
     if (updatedTransaction.deleted) {
       handleUpdate();
     } else {
@@ -195,7 +201,7 @@ function Transacoes() {
       setTransacoesAgrupadas((prevTransacoes) =>
         prevTransacoes.map((grupo) => ({
           ...grupo,
-          transacoes: grupo.transacoes.map((transacao: any) =>
+          transacoes: grupo.transacoes.map((transacao) =>
             transacao.id === updatedTransaction.id ? updatedTransaction : transacao
           ),
         }))
@@ -329,7 +335,6 @@ function Transacoes() {
           ano={ano}
           transactionId={selectedTransactionId}
           onClose={handleCloseEditModal}
-          onTransactionUpdate={handleUpdateTransaction}
         />
       )}
 

@@ -1,12 +1,21 @@
 export interface Transacao {
-    id: number;
-    data_transacao: string;
-    tipo: string;
-    valor: number;
+  id: number;
+  valor: number;
+  data_transacao: string;
+  tipo: string;
+  descricao: string;
+  origem: string;
+  idTransacaoRecorrente: number;
+  conta: {
     descricao: string;
-    origem?: string; // Adicione propriedades opcionais, se necessário
-    idTransacaoRecorrente?: number;
-    conta?: string;
-    categoria?: string;
-    deleted?: boolean;
-  }
+    banco: {
+      nome: string;
+    };
+  };
+  categoria: {
+    nome: string;
+    cor: string;
+  };
+  data_transacao_formatada?: string;
+  deleted?: boolean;
+}

@@ -27,7 +27,6 @@ const formatarValor = (valor: string): string => {
   return `R$ ${valorNumerico}`;
 };
 
-
 interface TransactionData {
   valor: number;
   data: string;
@@ -45,7 +44,7 @@ interface ModalEditDespesasProps {
   mes: number;
   ano: number;
   transactionId: number;
-  onTransactionUpdate: (updatedTransaction: Transaction) => void;
+  onTransactionUpdate?: (updatedTransaction: Transaction) => void; // Prop opcional
 }
 
 const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
@@ -53,7 +52,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
   mes,
   ano,
   transactionId,
-  onTransactionUpdate,
+  onTransactionUpdate = () => {}, // Valor padrão como função vazia
 }) => {
   const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
@@ -81,7 +80,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
 
       try {
         const response = await axios.get(
-         `${baseUrl}/transacoes/${transactionId}`,
+          `${baseUrl}/transacoes/${transactionId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -119,7 +118,6 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
     const valorFormatado = formatarValor(valorDigitado);
     setValor(valorFormatado);
   };
-
 
   const handleSubmit = async () => {
     if (!valor || !descricao || !categoria || !data || !conta) {
@@ -169,7 +167,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
 
       if (response.status === 200) {
         toast.success("Transação atualizada com sucesso!");
-        onTransactionUpdate(response.data);
+        onTransactionUpdate(response.data); // Chama a função se ela foi passada
         onClose();
       } else {
         toast.error("Erro ao atualizar a transação.");
@@ -205,7 +203,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
           placeholder="Ex: Pagamento da fatura"
           value={descricao}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setQtdParcelas(Number(e.target.value))
+            setDescricao(e.target.value)
           }
         />
 
@@ -223,8 +221,9 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
           iconSrc="/assets/iconsModalDespesas/comentario.svg"
           placeholder="Opcional"
           value={comentario || ""}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComentario(e.target.value || null)}
-
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setComentario(e.target.value || null)
+          }
         />
 
         <div>
