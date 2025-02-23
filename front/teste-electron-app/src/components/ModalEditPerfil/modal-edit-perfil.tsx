@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./modal-edit-perfil.module.css";
+import { baseUrl } from "../../api/api";
 
 interface ModalEditPerfilProps {
   onClose: () => void;
@@ -47,7 +48,7 @@ const ModalEditPerfil: React.FC<ModalEditPerfilProps> = ({ onClose, usuario, set
 
     try {
       const response = await axios.put(
-        "http://localhost:8080/usuarios",
+        `${baseUrl}/usuarios`,
         formData,
         {
           headers: {
