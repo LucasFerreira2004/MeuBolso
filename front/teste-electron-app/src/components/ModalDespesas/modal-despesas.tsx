@@ -8,6 +8,7 @@ import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
 import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
 import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
+import { baseUrl } from "../../api/api";
 
 interface TransactionData {
   valor: number;
@@ -98,12 +99,12 @@ function ModalDespesas({ onCloseAll, mes, ano }: ModalDespesasProps) {
     console.log("Dados da transação sendo enviados:", transactionData);
 
     try {
-      let url = "http://localhost:8080/transacoes";
+      let url = `${baseUrl}/transacoes`;
 
       if (tipoTransacao === "FIXA") {
-        url = "http://localhost:8080/transacoesRecorrentes/fixas";
+        url = `${baseUrl}/transacoesRecorrentes/fixas`;
       } else if (tipoTransacao === "PARCELADA") {
-        url = "http://localhost:8080/transacoesRecorrentes/parceladas";
+        url = `${baseUrl}/transacoesRecorrentes/parceladas`;
       }
 
       console.log("URL da requisição:", url);
