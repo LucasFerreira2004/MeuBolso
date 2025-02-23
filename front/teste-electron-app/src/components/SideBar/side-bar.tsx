@@ -1,22 +1,40 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import style from "./side-bar.module.css";
 
 function SideBar() {
   return (
     <div className={style.sidebar}>
       <div className={style.auxLine}>
-        <Link to="/home">
-          <div className={style.divlogo}>
-            <img
-              src="/assets/logo-meuBolso.svg"
-              alt="Ícone meuBolso"
-              className={style.iconLogo}
-            />
-          </div>
-        </Link>
+        <div className={style.divlogo}>
+          <img
+            src="/assets/logo-meuBolso.svg"
+            alt="Ícone meuBolso"
+            className={style.iconLogo}
+          />
+        </div>
         <nav>
+          <NavLink
+            to="/home"
+            className={({ isActive }) =>
+              isActive ? `${style.navLink} ${style.active}` : style.navLink
+            }
+          >
+            <li className={style.navItem}>
+              <img
+                src="/assets/home.svg"
+                alt="Ícone de home"
+                className={style.icon}
+              />
+              Home
+            </li>
+          </NavLink>
           <ul className={style.navList}>
-            <Link to="/perfil" className={style.navLink}>
+            <NavLink
+              to="/perfil"
+              className={({ isActive }) =>
+                isActive ? `${style.navLink} ${style.active}` : style.navLink
+              }
+            >
               <li className={style.navItem}>
                 <img
                   src="/assets/profile.svg"
@@ -25,8 +43,13 @@ function SideBar() {
                 />
                 Perfil
               </li>
-            </Link>
-            <Link to="/contas" className={style.navLink}>
+            </NavLink>
+            <NavLink
+              to="/contas"
+              className={({ isActive }) =>
+                isActive ? `${style.navLink} ${style.active}` : style.navLink
+              }
+            >
               <li className={style.navItem}>
                 <img
                   src="/assets/bank.svg"
@@ -35,8 +58,13 @@ function SideBar() {
                 />
                 Contas Bancárias
               </li>
-            </Link>
-            <Link to="/transacoes" className={style.navLink}>
+            </NavLink>
+            <NavLink
+              to="/transacoes"
+              className={({ isActive }) =>
+                isActive ? `${style.navLink} ${style.active}` : style.navLink
+              }
+            >
               <li className={style.navItem}>
                 <img
                   src="/assets/translation.svg"
@@ -45,18 +73,13 @@ function SideBar() {
                 />
                 Transações
               </li>
-            </Link>
-            {/* <Link to="/metas" className={style.navLink}>
-              <li className={style.navItem}>
-                <img
-                  src="/assets/pig-bank.svg"
-                  alt="Ícone de Metas"
-                  className={style.icon}
-                />
-                Metas
-              </li>
-            </Link> */}
-            <Link to="/orcamentos" className={style.navLink}>
+            </NavLink>
+            <NavLink
+              to="/orcamentos"
+              className={({ isActive }) =>
+                isActive ? `${style.navLink} ${style.active}` : style.navLink
+              }
+            >
               <li className={style.navItem}>
                 <img
                   src="/assets/orcamentos.svg"
@@ -65,8 +88,13 @@ function SideBar() {
                 />
                 Orçamentos
               </li>
-            </Link>
-            <Link to="/relatorios" className={style.navLink}>
+            </NavLink>
+            <NavLink
+              to="/relatorios"
+              className={({ isActive }) =>
+                isActive ? `${style.navLink} ${style.active}` : style.navLink
+              }
+            >
               <li className={style.navItem}>
                 <img
                   src="/assets/graphics.svg"
@@ -75,8 +103,13 @@ function SideBar() {
                 />
                 Relatórios
               </li>
-            </Link>
-            <Link to="/categorias" className={style.navLink}>
+            </NavLink>
+            <NavLink
+              to="/categorias"
+              className={({ isActive }) =>
+                isActive ? `${style.navLink} ${style.active}` : style.navLink
+              }
+            >
               <li className={style.navItem}>
                 <img
                   src="/assets/categories.svg"
@@ -85,17 +118,22 @@ function SideBar() {
                 />
                 Categorias
               </li>
-            </Link>
+            </NavLink>
           </ul>
         </nav>
       </div>
       <div>
-        <Link to="/" className={style.link}>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive ? `${style.link} ${style.active}` : style.link
+          }
+        >
           <li className={style.sair}>
             <img src="/assets/iconsContas/sair.svg" alt="" />
             <p>Sair</p>
           </li>
-        </Link>
+        </NavLink>
       </div>
     </div>
   );
