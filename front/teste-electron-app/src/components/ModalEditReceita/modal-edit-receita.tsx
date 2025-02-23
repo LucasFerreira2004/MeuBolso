@@ -80,7 +80,7 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
 
       try {
         const response = await axios.get(
-          `http://localhost:8080/transacoes/${transactionId}`,
+          `${baseUrl}/transacoes/${transactionId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

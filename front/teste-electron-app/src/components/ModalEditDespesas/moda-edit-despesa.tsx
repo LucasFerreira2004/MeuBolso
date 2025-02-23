@@ -9,6 +9,7 @@ import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
 import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
 import { Transaction } from "electron";
+import { baseUrl } from "../../api/api";
 
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
