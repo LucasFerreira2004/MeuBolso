@@ -72,7 +72,7 @@ function SelectedDespesas({ setCategoria }: SelectedDespesasProps) {
 
   const handleChange = (selectedOption: OptionType | null) => {
     const categoriaSelecionada = selectedOption ? selectedOption.value : null;
-    setCategoria(categoriaSelecionada); // Passando a categoria para o componente pai
+    setCategoria(categoriaSelecionada); 
   };
 
   return (

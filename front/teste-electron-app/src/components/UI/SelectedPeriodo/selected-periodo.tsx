@@ -2,12 +2,12 @@ import Select from "react-select";
 import style from "./selected-periodo.module.css";
 
 interface SelectedPeriodoProps {
-  selectedValue: "DIARIO" | "SEMANAL" | "MENSAL"; // Corrigido o tipo para corresponder à expectativa
+  selectedValue: "DIARIO" | "SEMANAL" | "MENSAL"; 
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 interface OptionType {
-  value: "DIARIO" | "SEMANAL" | "MENSAL"; // Valores possíveis
+  value: "DIARIO" | "SEMANAL" | "MENSAL"; 
   label: string;
 }
 

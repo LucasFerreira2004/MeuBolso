@@ -15,8 +15,8 @@ interface SelectedReceitaProps {
 }
 
 interface OptionType {
-  value: number; // O valor é o ID da categoria, que é um número
-  label: JSX.Element; // O rótulo é um elemento JSX
+  value: number;
+  label: JSX.Element; 
 }
 
 function SelectedReceita({ setCategoria }: SelectedReceitaProps) {
@@ -72,7 +72,7 @@ function SelectedReceita({ setCategoria }: SelectedReceitaProps) {
 
   const handleChange = (selectedOption: OptionType | null) => {
     const categoriaSelecionada = selectedOption ? selectedOption.value : null;
-    setCategoria(categoriaSelecionada); // Passando a categoria para o componente pai
+    setCategoria(categoriaSelecionada); 
   };
 
   return (

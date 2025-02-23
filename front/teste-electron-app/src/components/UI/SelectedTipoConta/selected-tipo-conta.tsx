@@ -12,6 +12,11 @@ interface SelectedTipoContaProps {
   setTipoConta: (tipoContaId: number | null) => void;
 }
 
+interface OptionType {
+  value: number; 
+  label: string; 
+}
+
 function SelectedTipoConta({ setTipoConta }: SelectedTipoContaProps) {
   const [tiposConta, setTiposConta] = useState<TipoConta[]>([]);
 
@@ -23,7 +28,7 @@ function SelectedTipoConta({ setTipoConta }: SelectedTipoContaProps) {
       return;
     }
 
-    const url = `${baseUrl}/tipoConta`; // Ajuste o URL conforme necessário
+    const url = `${baseUrl}/tipoConta`; 
 
     fetch(url, {
       method: "GET",
@@ -40,7 +45,6 @@ function SelectedTipoConta({ setTipoConta }: SelectedTipoContaProps) {
       })
       .then((data: TipoConta[]) => {
         console.log("Dados recebidos:", data);
-        // Verifica se os dados são um array válido
         if (Array.isArray(data)) {
           setTiposConta(data);
         } else {
@@ -52,14 +56,13 @@ function SelectedTipoConta({ setTipoConta }: SelectedTipoContaProps) {
       });
   }, []);
 
-  // Formatação das opções para o componente Select
   const options = tiposConta.map((tipo) => ({
     value: tipo.id,
-    label: tipo.tipoConta.replace("_", " "), // Ajuste o nome se necessário (ex: CONTA_CORRENTE => Conta Corrente)
+    label: tipo.tipoConta.replace("_", " "), 
   }));
 
-  const handleChange = (selectedOption: any) => {
-    setTipoConta(selectedOption ? selectedOption.value : null);  // Passando o ID do tipo de conta
+  const handleChange = (selectedOption: OptionType | null) => {
+    setTipoConta(selectedOption ? selectedOption.value : null); 
   };
 
   return (
