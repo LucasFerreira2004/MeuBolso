@@ -1,3 +1,4 @@
+import { baseUrl } from "../../api/api";
 import style from "./modal-delete-orca.module.css";
 
 interface ModalDeleteOrcaProps {
@@ -7,7 +8,7 @@ interface ModalDeleteOrcaProps {
   onClose: () => void;
 }
 
-function ModalDeleteOrca({ id, url, onDeleteSuccess, onClose }: ModalDeleteOrcaProps) {
+function ModalDeleteOrca({ id, onDeleteSuccess, onClose }: ModalDeleteOrcaProps) {
   const handleDelete = async () => {
     const token = localStorage.getItem("authToken");
 
@@ -17,7 +18,7 @@ function ModalDeleteOrca({ id, url, onDeleteSuccess, onClose }: ModalDeleteOrcaP
     }
 
     try {
-      const response = await fetch(`${url}/${id}`, {
+      const response = await fetch(`${baseUrl}/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
