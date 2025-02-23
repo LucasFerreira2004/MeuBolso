@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import style from "./home.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
 import DatePicker from "../../components/UI/Date/date";
-import  { meses } from "../../components/UI/Date/consts"
+import { meses } from "../../components/UI/Date/consts";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import TotalBalanco from "../../components/UI/ChartsRelatorios/TotalBalanco/total-balanco";
@@ -92,8 +92,7 @@ function Home() {
     setIsModalOpen((prev) => !prev);
   };
 
-  // Função para atualizar os dados
-  const handleUpdate = () => {
+  const handleUpdate = useCallback(() => {
     fetchData<Banco[]>(
       `${baseUrl}/contas/min?ano=${ano}&mes=${mes}`,
       "Erro ao carregar os dados dos bancos.",
@@ -119,11 +118,11 @@ function Home() {
     );
 
     console.log("Dados atualizados após fechar o modal.");
-  };
+  }, [ano, mes]);
 
   useEffect(() => {
-    handleUpdate(); // Carrega os dados ao montar o componente
-  }, [ano, mes]);
+    handleUpdate();
+  }, [handleUpdate, ano, mes]);
 
   return (
     <div className={style.home}>
@@ -167,7 +166,7 @@ function Home() {
                 mes={mes}
                 ano={ano}
                 onClose={toggleModal}
-                onUpdate={handleUpdate} // Passando a função de atualização
+                onUpdate={handleUpdate} 
               />
             )}
           </div>
