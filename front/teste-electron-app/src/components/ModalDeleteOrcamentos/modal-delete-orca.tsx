@@ -18,7 +18,7 @@ function ModalDeleteOrca({ id, onDeleteSuccess, onClose }: ModalDeleteOrcaProps)
     }
 
     try {
-      const response = await fetch(`${baseUrl}/${id}`, {
+      const response = await fetch(`${baseUrl}/orcamentos/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
