@@ -14,7 +14,7 @@ type ModalEditOrcamentoProps = {
   data: string;
   onCloseAll: () => void;
   handleChangeValor: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  setCategoria: (categoriaId: number | null) => void; // Adicione esta linha
+  setCategoria: (categoriaId: number | null) => void;
   setData: (data: string) => void;
   onEditSuccess: () => void;
 };
@@ -29,7 +29,25 @@ function ModalEditOrcamento({
   onEditSuccess,
 }: ModalEditOrcamentoProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [idCategoria, setIdCategoria] = useState<number | null>(null); // Estado para armazenar o idCategoria selecionado
+  const [idCategoria, setIdCategoria] = useState<number | null>(null);
+
+  // Função para formatar o valor como moeda
+  const formatarMoeda = (valor: string): string => {
+    let valorNumerico = valor.replace(/\D/g, "");
+    valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
+    valorNumerico = valorNumerico.replace(".", ",");
+    valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    return `R$ ${valorNumerico}`;
+  };
+
+  // Função para remover a formatação da moeda e converter para número
+  const removerFormatacaoMoeda = (valorFormatado: string): number => {
+    const valorNumerico = valorFormatado
+      .replace("R$ ", "")
+      .replace(/\./g, "")
+      .replace(",", ".");
+    return parseFloat(valorNumerico);
+  };
 
   const handleSave = async () => {
     setIsLoading(true);
@@ -42,23 +60,29 @@ function ModalEditOrcamento({
       return;
     }
 
-    // Verifica se uma categoria foi selecionada
     if (idCategoria === null) {
       toast.error("Por favor, selecione uma categoria.");
       setIsLoading(false);
       return;
     }
 
-    // Debugging: Log the ID being edited
     console.log("Editing orcamento with ID:", id);
 
+    // Remove a formatação e converte o valor para número
+    const valorNumerico = removerFormatacaoMoeda(valor);
+
+    if (isNaN(valorNumerico)) {
+      toast.error("Valor inválido. Insira um número válido.");
+      setIsLoading(false);
+      return;
+    }
+
     const payload = {
-      valorEstimado: parseFloat(valor.replace("R$ ", "").replace(",", ".")),
+      valorEstimado: valorNumerico,
       periodo: data,
-      idCategoria: idCategoria, // Usa o idCategoria do estado
+      idCategoria: idCategoria,
     };
 
-    // Debugging: Log the payload being sent to the API
     console.log("Payload sendo enviado:", payload);
 
     try {
@@ -69,7 +93,6 @@ function ModalEditOrcamento({
         },
       });
 
-      // Debugging: Log the response from the API
       console.log("Resposta da API:", response.data);
 
       if (response.status === 200) {
@@ -84,7 +107,6 @@ function ModalEditOrcamento({
       if (axios.isAxiosError(error)) {
         console.log("Detalhes do erro:", error.response?.data);
 
-        // Handle 403 Forbidden error specifically
         if (error.response?.status === 403) {
           toast.error("Acesso negado: Este orçamento não pertence ao usuário logado.");
         } else {
@@ -96,6 +118,13 @@ function ModalEditOrcamento({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Função para lidar com a mudança no campo de valor
+  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatarMoeda(e.target.value);
+    e.target.value = formattedValue;
+    handleChangeValor(e);
   };
 
   return (
@@ -121,10 +150,9 @@ function ModalEditOrcamento({
           iconSrc="/assets/iconsModalOrcamentos/money.svg"
           placeholder="R$ 0,00"
           value={valor}
-          onChange={handleChangeValor}
+          onChange={handleValueChange} // Usa a nova função handleValueChange
         />
 
-        {/* Passa a função setIdCategoria para o componente SelectedDespesas */}
         <SelectedDespesas setCategoria={setIdCategoria} />
 
         <DatePicker
