@@ -1,0 +1,90 @@
+.containerPerfil {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    justify-items: center;
+    height: 100vh; 
+    margin-left: 260px;
+    padding: 20px;
+}
+.body{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.headerPerfil{
+    display: flex;
+    gap: 30px;
+}
+.infoItem{
+    display: flex;
+    gap: 20px;
+}
+.infoItem span{
+    width: 250px;
+    background-color: var(--gray);
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+.infoItem strong{
+    display: flex;
+    align-items: center;
+}
+
+.headerPerfil h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.fotoPerfil {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: #ccc; /* Cor de fundo temporária para a foto */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.infoPerfil {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.infoPerfil label {
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-top: 10px;
+}
+
+.infoPerfil p {
+    margin: 5px 0;
+    color: #333;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--gray);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: var(--main-color-light);
+}

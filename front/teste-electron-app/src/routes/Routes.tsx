@@ -14,7 +14,7 @@ import Transacoes from "../pages/Transacoes/transacoes";
 import Metas from "../pages/Metas/metas";
 import Orcamentos from "../pages/Orcamentos/orcamentos";
 import Relatorios from "../pages/Relatorios/relatorios";
-import PageTeste from "../pages/PageTeste/page-teste";
+import Perfil from "../pages/Perfil/perfil";
 
 // Rotas Públicas
 const publicRoutes = [
@@ -59,8 +59,8 @@ const privateRoutes = [
     element: <Relatorios />,
   },
   {
-    path: "/profile",
-    element: <PageTeste />, // Renomeado de PageTeste para Profile
+    path: "/perfil",
+    element: <Perfil />, // Renomeado de PageTeste para Profile
   },
 ];
 
