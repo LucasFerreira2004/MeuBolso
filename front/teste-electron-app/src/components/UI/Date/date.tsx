@@ -1,20 +1,7 @@
+// date.tsx
 import React, { useState } from "react";
 import styles from "./date.module.css";
-
-export const meses = [
-  "Janeiro",
-  "Fevereiro",
-  "Março",
-  "Abril",
-  "Maio",
-  "Junho",
-  "Julho",
-  "Agosto",
-  "Setembro",
-  "Outubro",
-  "Novembro",
-  "Dezembro",
-];
+import { meses } from "./consts"; // Importe a constante do novo arquivo
 
 interface DatePickerProps {
   mes: number;
