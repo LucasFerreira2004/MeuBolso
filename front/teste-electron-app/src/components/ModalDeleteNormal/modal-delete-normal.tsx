@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import style from "./modal-delete-normal.module.css";
+import { baseUrl } from '../../api/api';
 
 interface ModalDeleteNormalProps {
     onClose: () => void;
@@ -19,7 +20,7 @@ const deleteTransacao = async (id: number) => {
       };
     }
 
-    const response = await fetch(`http://localhost:8080/transacoes/${id}`, {
+    const response = await fetch(`${baseUrl}/transacoes/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
