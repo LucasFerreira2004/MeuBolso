@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./transacoes.module.css";
 import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans";
@@ -113,7 +113,7 @@ function Transacoes() {
     }
   };
 
-  const fetchTransacoes = async (ano: number, mes: number) => {
+  const fetchTransacoes = useCallback(async (ano: number, mes: number) => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       setError("Você precisa estar logado para acessar esta funcionalidade.");
@@ -140,7 +140,7 @@ function Transacoes() {
       setError("Erro ao carregar as transações.");
       console.error(error);
     }
-  };
+  }, []);
 
   const agruparTransacoesPorData = (transacoes: Transacao[]) => {
     const transacoesPorData = transacoes.reduce((acc: Record<string, Transacao[]>, transacao) => {
@@ -213,7 +213,7 @@ function Transacoes() {
     };
 
     fetchData();
-  }, [mes, ano]);
+  }, [mes, ano, fetchTransacoes]);
 
   return (
     <div className={style.containerTransacoes}>
