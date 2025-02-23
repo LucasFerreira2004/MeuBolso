@@ -6,6 +6,7 @@ import ModalEditDespesa from "../../components/ModalEditDespesas/moda-edit-despe
 import ModalEditReceita from "../../components/ModalEditReceita/modal-edit-receita"; // Importar modal de receita
 import DatePicker from "../../components/UI/Date/date";
 import CardTransacoes from "../../components/UI/CardTransacoes/card-transacoes";
+import { baseUrl } from "../../api/api";
 
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -32,7 +33,7 @@ function Transacoes() {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/contas/saldoTotal?ano=${ano}&mes=${mes}`,
+        `${baseUrl}/contas/saldoTotal?ano=${ano}&mes=${mes}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -60,7 +61,7 @@ function Transacoes() {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/transacoes/somatorioDespesas?ano=${ano}&mes=${mes}`,
+        `${baseUrl}/transacoes/somatorioDespesas?ano=${ano}&mes=${mes}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -88,7 +89,7 @@ function Transacoes() {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/transacoes/somatorioReceitas?ano=${ano}&mes=${mes}`,
+       `${baseUrl}/transacoes/somatorioReceitas?ano=${ano}&mes=${mes}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -116,7 +117,7 @@ function Transacoes() {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/transacoes?ano=${ano}&mes=${mes}`,
+        `${baseUrl}/transacoes?ano=${ano}&mes=${mes}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -193,7 +194,7 @@ function Transacoes() {
           transacao.id === updatedTransaction.id ? updatedTransaction : transacao
         )
       );
-  
+
       setTransacoesAgrupadas((prevTransacoes) =>
         prevTransacoes.map((grupo) => ({
           ...grupo,
@@ -203,12 +204,12 @@ function Transacoes() {
         }))
       );
     }
-  
+
     handleCloseEditModal();
   };
 
   const handleUpdate = () => {
-    fetchTransacoes(ano, mes); 
+    fetchTransacoes(ano, mes);
   };
 
   useEffect(() => {
@@ -310,7 +311,7 @@ function Transacoes() {
                 dataTransacao={grupo.data}
                 onEditClick={handleEditClick} onDeleteSuccess={function (): void {
                   throw new Error("Function not implemented.");
-                } } token={""}              />
+                }} token={""} />
             ))
           )}
         </div>
