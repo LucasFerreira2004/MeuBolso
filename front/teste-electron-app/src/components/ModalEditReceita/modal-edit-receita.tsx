@@ -17,6 +17,15 @@ const removerFormatacaoMoeda = (valorFormatado: string): number => {
     .replace(",", ".");
   return parseFloat(valorNumerico);
 };
+
+const formatarValor = (valor: string): string => {
+  let valorNumerico = valor.replace(/\D/g, "");
+  valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
+  valorNumerico = valorNumerico.replace(".", ",");
+  valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  return `R$ ${valorNumerico}`;
+};
+
 interface TransactionData {
   id: number;
   valor: number;
@@ -30,30 +39,20 @@ interface TransactionData {
   qtdParcelas?: number | null;
 }
 
-
-const formatarValor = (valor: string): string => {
-  let valorNumerico = valor.replace(/\D/g, "");
-  valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
-  valorNumerico = valorNumerico.replace(".", ",");
-  valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-  return `R$ ${valorNumerico}`;
-};
-
 interface ModalEditReceitaProps {
   onClose: () => void;
   mes: number;
   ano: number;
   transactionId: number;
-  onTransactionUpdate: (updatedTransaction: TransactionData | { id: number; deleted: boolean }) => void;
+  onTransactionUpdate?: (updatedTransaction: TransactionData | { id: number; deleted: boolean }) => void; // Prop opcional
 }
-
 
 const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
   onClose,
   mes,
   ano,
   transactionId,
-  onTransactionUpdate,
+  onTransactionUpdate = () => {},
 }) => {
   const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
@@ -144,18 +143,8 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
       descricao,
       periodicidade: tipoTransacao !== "NORMAL" ? periodicidade : undefined,
       qtdParcelas: tipoTransacao === "PARCELADA" ? qtdParcelas ?? undefined : undefined,
-      id: 0
+      id: transactionId,
     };
-
-
-    if (tipoTransacao === "FIXA") {
-      transactionData.periodicidade = periodicidade;
-    }
-
-    if (tipoTransacao === "PARCELADA") {
-      transactionData.qtdParcelas = qtdParcelas;
-      transactionData.periodicidade = periodicidade;
-    }
 
     try {
       const response = await axios.put(
@@ -171,7 +160,7 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
 
       if (response.status === 200) {
         toast.success("Transação atualizada com sucesso!");
-        onTransactionUpdate(response.data);
+        onTransactionUpdate(response.data); 
         onClose();
       } else {
         toast.error("Erro ao atualizar a transação.");
@@ -179,33 +168,6 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
     } catch (error) {
       toast.error("Erro ao atualizar a transação. Tente novamente.");
       console.error("Erro ao enviar atualização:", error);
-    }
-  };
-
-  const handleDelete = async () => {
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      toast.error("Por favor, faça login novamente.");
-      return;
-    }
-
-    try {
-      const response = await axios.delete(
-        `http://localhost:8080/transacoes/${transactionId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (response.status === 200) {
-        toast.success("Transação excluída com sucesso!");
-        onTransactionUpdate({ id: transactionId, deleted: true });
-        onClose();
-      } else {
-        toast.error("Erro ao excluir a transação.");
-      }
-    } catch (error) {
-      toast.error("Erro ao excluir a transação. Tente novamente.");
-      console.error("Erro ao excluir transação:", error);
     }
   };
 
@@ -233,7 +195,7 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
           iconSrc="/assets/iconsModalReceitas/descrip.svg"
           placeholder="Ex: Pagamento da fatura"
           value={descricao}
-          onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setDescricao(e.target.value)
           }
         />
@@ -313,9 +275,6 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
         )}
 
         <div className={style.Buttons}>
-          <button onClick={handleDelete} className={style.deleteButton}>
-            Excluir Transação
-          </button>
           <button onClick={handleSubmit} className={style.submitButton}>
             Atualizar Transação
           </button>

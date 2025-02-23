@@ -188,29 +188,6 @@ function Transacoes() {
     setSelectedTransactionId(null);
   };
 
-  const handleUpdateTransaction = (updatedTransaction: Transacao) => {
-    if (updatedTransaction.deleted) {
-      handleUpdate();
-    } else {
-      setTransacoes((prevTransacoes) =>
-        prevTransacoes.map((transacao) =>
-          transacao.id === updatedTransaction.id ? updatedTransaction : transacao
-        )
-      );
-
-      setTransacoesAgrupadas((prevTransacoes) =>
-        prevTransacoes.map((grupo) => ({
-          ...grupo,
-          transacoes: grupo.transacoes.map((transacao) =>
-            transacao.id === updatedTransaction.id ? updatedTransaction : transacao
-          ),
-        }))
-      );
-    }
-
-    handleCloseEditModal();
-  };
-
   const handleUpdate = () => {
     fetchTransacoes(ano, mes);
   };
@@ -344,7 +321,6 @@ function Transacoes() {
           ano={ano}
           transactionId={selectedTransactionId}
           onClose={handleCloseEditModal}
-          onTransactionUpdate={handleUpdateTransaction}
         />
       )}
     </div>
