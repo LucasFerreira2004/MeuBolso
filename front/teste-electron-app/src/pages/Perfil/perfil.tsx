@@ -5,8 +5,14 @@ import BalancoBancos from "../../components/UI/ChartsRelatorios/BalancoBancos/ba
 import ModalEditPerfil from "../../components/ModalEditPerfil/modal-edit-perfil";
 import { baseUrl } from "../../api/api";
 
+interface Usuario {
+  nome: string;
+  email: string;
+  imgUrl: string | null;
+}
+
 function Perfil() {
-  const [usuario, setUsuario] = useState({
+  const [usuario, setUsuario] = useState<Usuario>({
     nome: "",
     email: "",
     imgUrl: null,
@@ -32,11 +38,11 @@ function Perfil() {
       });
 
       setUsuario(response.data);
-    } catch (error: any) {
+    } catch (error) {
       console.error("Erro ao buscar dados do usuário:", error);
-      if (error.response) {
-        console.error("Resposta do servidor:", error.response.data);
-        console.error("Status do erro:", error.response.status);
+      if (axios.isAxiosError(error)) {
+        console.error("Resposta do servidor:", error.response?.data);
+        console.error("Status do erro:", error.response?.status);
       }
       setError("Erro ao carregar dados do usuário");
     } finally {
@@ -91,7 +97,6 @@ function Perfil() {
 
       <BalancoBancos />
 
-      {/* Renderiza o modal quando isModalOpen for true */}
       {isModalOpen && (
         <ModalEditPerfil
           onClose={() => setIsModalOpen(false)}
