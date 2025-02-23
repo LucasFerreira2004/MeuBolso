@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import style from "./input-bancos.module.css";
+import { baseUrl } from "../../../api/api";
 
 interface InputBancosProps {
   id: number;
@@ -24,7 +25,7 @@ const InputBancos: React.FC<InputBancosProps> = ({ id, nome, iconeUrl, onClick }
 
     try {
       const response = await axios.get(
-        `http://localhost:8080/bancos/${id}`,
+        `${baseUrl}/bancos/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
