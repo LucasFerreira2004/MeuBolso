@@ -5,6 +5,7 @@ import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./categorias.module.css";
 import InputCategorias from "../../components/UI/InputCategorias/input-categorias";
 import axios from "axios";
+import { baseUrl } from "../../api/api";
 
 export interface Categoria {
   id: number;
@@ -35,7 +36,7 @@ function Categorias() {
   
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8080/categorias", {
+      const response = await axios.get(`${baseUrl}/categorias`, {
         headers: {
           Authorization: `Bearer ${token}`, // Adiciona o token no cabeçalho
         },
