@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./transacoes.module.css";
 import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans";
-import ModalEditDespesa from "../../components/ModalEditDespesas/moda-edit-despesa"; // Importar modal de despesa
-import ModalEditReceita from "../../components/ModalEditReceita/modal-edit-receita"; // Importar modal de receita
+import ModalEditDespesa from "../../components/ModalEditDespesas/moda-edit-despesa";
+import ModalEditReceita from "../../components/ModalEditReceita/modal-edit-receita";
 import DatePicker from "../../components/UI/Date/date";
 import CardTransacoes from "../../components/UI/CardTransacoes/card-transacoes";
 import { baseUrl } from "../../api/api";
 
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isModalDespesaOpen, setIsModalDespesaOpen] = useState<boolean>(false); // Estado para modal de despesa
-  const [isModalReceitaOpen, setIsModalReceitaOpen] = useState<boolean>(false); // Estado para modal de receita
+  const [isModalDespesaOpen, setIsModalDespesaOpen] = useState<boolean>(false);
+  const [isModalReceitaOpen, setIsModalReceitaOpen] = useState<boolean>(false);
   const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
   const [totalDespesas, setTotalDespesas] = useState<number | null>(null);
   const [totalReceitas, setTotalReceitas] = useState<number | null>(null);
@@ -89,7 +89,7 @@ function Transacoes() {
 
     try {
       const response = await fetch(
-       `${baseUrl}/transacoes/somatorioReceitas?ano=${ano}&mes=${mes}`,
+        `${baseUrl}/transacoes/somatorioReceitas?ano=${ano}&mes=${mes}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -136,7 +136,6 @@ function Transacoes() {
     }
   };
 
-  // Função para agrupar transações por data
   const agruparTransacoesPorData = (transacoes: any[]) => {
     const transacoesPorData = transacoes.reduce((acc: any, transacao) => {
       const data = transacao.data_transacao;
@@ -171,9 +170,9 @@ function Transacoes() {
     setSelectedTransactionId(id);
 
     if (tipo === "DESPESA") {
-      setIsModalDespesaOpen(true); // Abrir modal de despesa
+      setIsModalDespesaOpen(true);
     } else if (tipo === "RECEITA") {
-      setIsModalReceitaOpen(true); // Abrir modal de receita
+      setIsModalReceitaOpen(true);
     }
   };
 
@@ -185,10 +184,8 @@ function Transacoes() {
 
   const handleUpdateTransaction = (updatedTransaction: any) => {
     if (updatedTransaction.deleted) {
-      // Se a transação foi excluída, recarregue as transações
       handleUpdate();
     } else {
-      // Caso contrário, atualize os estados locais
       setTransacoes((prevTransacoes) =>
         prevTransacoes.map((transacao) =>
           transacao.id === updatedTransaction.id ? updatedTransaction : transacao
@@ -309,9 +306,9 @@ function Transacoes() {
                 key={index}
                 transacoes={grupo.transacoes}
                 dataTransacao={grupo.data}
-                onEditClick={handleEditClick} onDeleteSuccess={function (): void {
-                  throw new Error("Function not implemented.");
-                }} token={""} />
+                onEditClick={handleEditClick}
+                onDeleteSuccess={handleUpdate}
+              />
             ))
           )}
         </div>
@@ -322,7 +319,7 @@ function Transacoes() {
           mes={mes}
           ano={ano}
           onClose={toggleModal}
-          onUpdate={handleUpdate} // Passando a função de atualização
+          onUpdate={handleUpdate}
         />
       )}
 
