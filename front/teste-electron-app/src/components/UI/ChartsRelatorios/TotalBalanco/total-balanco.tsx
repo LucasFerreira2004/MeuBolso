@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { baseUrl } from "../../../../api/api";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -30,7 +31,7 @@ const TotalBalanco: React.FC = () => {
       return;
     }
 
-    const url = `http://localhost:8080/dashboards/transacoes/balanco?anoInicial=${dataInicial.ano}&mesInicial=${dataInicial.mes}&anoFinal=${dataFinal.ano}&mesFinal=${dataFinal.mes}`;
+    const url = `${baseUrl}/dashboards/transacoes/balanco?anoInicial=${dataInicial.ano}&mesInicial=${dataInicial.mes}&anoFinal=${dataFinal.ano}&mesFinal=${dataFinal.mes}`;
     console.log("Iniciando requisição para URL:", url);
 
     try {

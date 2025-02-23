@@ -32,7 +32,7 @@ const CategoriasReceitas: React.FC<CategoriasReceitasProps> = ({ mes, ano }) => 
 
     const fetchData = async () => {
       try {
-        const url = `http://localhost:8080/dashboards/receitasCategoria?ano=${ano}&mes=${mes}`;
+        const url = `${baseUrl}/dashboards/receitasCategoria?ano=${ano}&mes=${mes}`;
         const response = await fetch(url, {
           headers: {
             Authorization: `Bearer ${token}`,

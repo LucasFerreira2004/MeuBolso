@@ -29,7 +29,7 @@ const BalancoBancos: React.FC = () => {
       return;
     }
 
-    const url = `http://localhost:8080/dashboards/saldo/balanco?anoInicial=${dataInicial.ano}&mesInicial=${dataInicial.mes}&anoFinal=${dataFinal.ano}&mesFinal=${dataFinal.mes}`;
+    const url = `${baseUrl}/dashboards/saldo/balanco?anoInicial=${dataInicial.ano}&mesInicial=${dataInicial.mes}&anoFinal=${dataFinal.ano}&mesFinal=${dataFinal.mes}`;
     console.log("Iniciando requisição para URL:", url);
 
     try {
