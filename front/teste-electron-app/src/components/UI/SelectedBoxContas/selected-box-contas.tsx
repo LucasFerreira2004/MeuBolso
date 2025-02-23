@@ -10,10 +10,24 @@ interface Conta {
   nomeBanco: string;
 }
 
+interface ApiConta {
+  id: number;
+  saldo: number;
+  banco: {
+    iconeUrl: string;
+    nome: string;
+  };
+}
+
 interface SelectBoxContasProps {
   setConta: React.Dispatch<React.SetStateAction<number | null>>;
   mes: number;
   ano: number;
+}
+
+interface OptionType {
+  value: number;
+  label: JSX.Element;
 }
 
 function SelectBoxContas({ setConta, mes, ano }: SelectBoxContasProps) {
@@ -42,15 +56,15 @@ function SelectBoxContas({ setConta, mes, ano }: SelectBoxContasProps) {
         }
         return response.json();
       })
-      .then((data: any[]) => {
+      .then((data: ApiConta[]) => {
         const contasMapeadas = data.map((conta) => ({
           id: conta.id,
           saldo: conta.saldo,
-          iconeUrl: conta.banco.iconeUrl, 
-          nomeBanco: conta.banco.nome, 
+          iconeUrl: conta.banco.iconeUrl,
+          nomeBanco: conta.banco.nome,
         }));
         setContas(contasMapeadas);
-        setConta(contasMapeadas.length > 0 ? contasMapeadas[0].id : null); 
+        setConta(contasMapeadas.length > 0 ? contasMapeadas[0].id : null);
       })
       .catch((error) => console.error("Erro ao buscar contas:", error));
   }, [mes, ano, setConta]);
@@ -77,8 +91,10 @@ function SelectBoxContas({ setConta, mes, ano }: SelectBoxContasProps) {
     ),
   }));
 
-  const handleChange = (selectedOption: any) => {
-    setConta(selectedOption.value); 
+  const handleChange = (selectedOption: OptionType | null) => {
+    if (selectedOption) {
+      setConta(selectedOption.value);
+    }
   };
 
   return (
