@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import styles from "./modal-edit-perfil.module.css";
 import { baseUrl } from "../../api/api";
 
+interface Usuario {
+  nome: string;
+  email: string;
+  imgUrl: string | null;
+}
+
 interface ModalEditPerfilProps {
   onClose: () => void;
-  usuario: {
-    nome: string;
-    email: string;
-    imgUrl: string | null;
-  };
-  setUsuario: React.Dispatch<React.SetStateAction<any>>;
+  usuario: Usuario;
+  setUsuario: React.Dispatch<React.SetStateAction<Usuario>>;
 }
 
 const ModalEditPerfil: React.FC<ModalEditPerfilProps> = ({ onClose, usuario, setUsuario }) => {
@@ -61,9 +63,14 @@ const ModalEditPerfil: React.FC<ModalEditPerfilProps> = ({ onClose, usuario, set
       // Atualiza os dados do usuário no componente Perfil
       setUsuario(response.data);
       onClose(); // Fecha o modal
-    } catch (error: any) {
-      console.error("Erro ao editar dados do usuário:", error);
-      setError("Erro ao atualizar dados do usuário");
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error("Erro ao editar dados do usuário:", error.response?.data);
+        setError(error.response?.data?.message || "Erro ao atualizar dados do usuário");
+      } else {
+        console.error("Erro desconhecido:", error);
+        setError("Erro ao atualizar dados do usuário");
+      }
     } finally {
       setLoading(false);
     }
