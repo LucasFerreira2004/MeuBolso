@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import style from "./selected-box-contas.module.css";
+import { baseUrl } from "../../../api/api";
 
 interface Conta {
   id: number;
@@ -26,7 +27,7 @@ function SelectBoxContas({ setConta, mes, ano }: SelectBoxContasProps) {
       return;
     }
 
-    const url = `http://localhost:8080/contas?ano=${ano}&mes=${mes}`;
+    const url = `${baseUrl}/contas?ano=${ano}&mes=${mes}`;
 
     fetch(url, {
       method: "GET",

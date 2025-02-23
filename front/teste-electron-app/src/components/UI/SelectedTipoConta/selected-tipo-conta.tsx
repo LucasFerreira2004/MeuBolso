@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import style from "./selected-tipo-conta.module.css";
+import { baseUrl } from "../../../api/api";
 
 interface TipoConta {
   id: number;
@@ -22,7 +23,7 @@ function SelectedTipoConta({ setTipoConta }: SelectedTipoContaProps) {
       return;
     }
 
-    const url = "http://localhost:8080/tipoConta"; // Ajuste o URL conforme necessário
+    const url = `${baseUrl}/tipoConta`; // Ajuste o URL conforme necessário
 
     fetch(url, {
       method: "GET",

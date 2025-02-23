@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import style from "./selected-banco.module.css";
+import { baseUrl } from "../../../api/api";
 
 interface Banco {
   id: number;
@@ -30,7 +31,7 @@ function SelectedBancos({ setBanco }: SelectedBancosProps) {
       return;
     }
 
-    const url = "http://localhost:8080/bancos";
+    const url = `${baseUrl}/bancos`;
 
     fetch(url, {
       method: "GET",

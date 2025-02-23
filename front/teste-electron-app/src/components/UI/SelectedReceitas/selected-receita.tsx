@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import style from "./selected-receita.module.css"; 
+import { baseUrl } from "../../../api/api";
 
 interface Categoria {
   id: number;
@@ -24,7 +25,7 @@ function SelectedReceita({ setCategoria }: SelectedReceitaProps) {
       return;
     }
 
-    const url = "http://localhost:8080/categorias/receitas"; 
+    const url = `${baseUrl}/categorias/receitas`; 
 
     fetch(url, {
       method: "GET",
