@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./modal-delete-recorrentes.module.css";
 import { toast } from "react-toastify";
+import { baseUrl } from "../../api/api";
 
 interface ModalDeleteRecorrentesProps {
   idTransacaoRecorrente: number;
@@ -57,7 +58,7 @@ const ModalDeleteRecorrentes: React.FC<ModalDeleteRecorrentesProps> = ({
             className={styles.deleteButton}
             onClick={() =>
               deleteTransaction(
-                `http://localhost:8080/transacoesRecorrentes/${idTransacaoRecorrente}`
+                `${baseUrl}/transacoesRecorrentes/${idTransacaoRecorrente}`
               )
             }
           >
@@ -67,7 +68,7 @@ const ModalDeleteRecorrentes: React.FC<ModalDeleteRecorrentesProps> = ({
             className={styles.submitButton}
             onClick={() =>
               deleteTransaction(
-                `http://localhost:8080/transacoesRecorrentes/futuras/${idTransacaoRecorrente}?data=${dataTransacao}`
+                `${baseUrl}/transacoesRecorrentes/futuras/${idTransacaoRecorrente}?data=${dataTransacao}`
               )
             }
           >
