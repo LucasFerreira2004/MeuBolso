@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import style from "./perfil.module.css";
 import BalancoBancos from "../../components/UI/ChartsRelatorios/BalancoBancos/balanco-bancos";
+import ModalEditPerfil from "../../components/ModalEditPerfil/modal-edit-perfil";
 
 function Perfil() {
   const [usuario, setUsuario] = useState({
@@ -11,6 +12,7 @@ function Perfil() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchUsuario = async () => {
     const token = localStorage.getItem("authToken");
@@ -31,12 +33,10 @@ function Perfil() {
       setUsuario(response.data);
     } catch (error: any) {
       console.error("Erro ao buscar dados do usuário:", error);
-
       if (error.response) {
         console.error("Resposta do servidor:", error.response.data);
         console.error("Status do erro:", error.response.status);
       }
-
       setError("Erro ao carregar dados do usuário");
     } finally {
       setLoading(false);
@@ -81,13 +81,23 @@ function Perfil() {
           </div>
         </div>
         <div className={style.classButton}>
-          <button className={style.button}>
+          <button className={style.button} onClick={() => setIsModalOpen(true)}>
             <img src="/assets/iconsPerfil/editperfil.svg" alt="" />
             Editar informações
           </button>
         </div>
       </div>
-      <BalancoBancos/>
+
+      <BalancoBancos />
+
+      {/* Renderiza o modal quando isModalOpen for true */}
+      {isModalOpen && (
+        <ModalEditPerfil
+          onClose={() => setIsModalOpen(false)}
+          usuario={usuario}
+          setUsuario={setUsuario}
+        />
+      )}
     </div>
   );
 }
