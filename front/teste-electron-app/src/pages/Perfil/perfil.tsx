@@ -3,6 +3,7 @@ import axios from "axios";
 import style from "./perfil.module.css";
 import BalancoBancos from "../../components/UI/ChartsRelatorios/BalancoBancos/balanco-bancos";
 import ModalEditPerfil from "../../components/ModalEditPerfil/modal-edit-perfil";
+import { baseUrl } from "../../api/api";
 
 function Perfil() {
   const [usuario, setUsuario] = useState({
@@ -24,7 +25,7 @@ function Perfil() {
 
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8080/usuarios", {
+      const response = await axios.get(`${baseUrl}/usuarios`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

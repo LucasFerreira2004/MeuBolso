@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import style from "./cadastro.module.css";
+import { baseUrl } from "../../api/api";
 
 function Cadastro() {
   const [nome, setNome] = useState("");
@@ -38,7 +39,7 @@ function Cadastro() {
     }
   
     try {
-      const response = await fetch("http://localhost:8080/auth/cadastro", {
+      const response = await fetch(`${baseUrl}/auth/cadastro`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

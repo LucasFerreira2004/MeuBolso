@@ -8,6 +8,7 @@ import ModalEditContas from "../../components/ModalEditContas/modal-edit-contas"
 import ModalContas from "../../components/ModalContas/modal-contas";
 import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-conta";
 import DatePicker from "../../components/UI/Date/date";
+import { baseUrl } from "../../api/api";
 
 interface Conta {
   data: string;
@@ -45,7 +46,7 @@ function ContasBancarias() {
       return;
     }
 
-    const url = `http://localhost:8080/contas?ano=${ano}&mes=${mes}`;
+    const url = `${baseUrl}/contas?ano=${ano}&mes=${mes}`;
 
     fetch(url, {
       method: "GET",
