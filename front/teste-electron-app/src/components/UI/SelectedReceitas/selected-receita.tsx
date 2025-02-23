@@ -14,6 +14,11 @@ interface SelectedReceitaProps {
   setCategoria: (categoriaId: number | null) => void; 
 }
 
+interface OptionType {
+  value: number; // O valor é o ID da categoria, que é um número
+  label: JSX.Element; // O rótulo é um elemento JSX
+}
+
 function SelectedReceita({ setCategoria }: SelectedReceitaProps) {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
@@ -65,7 +70,7 @@ function SelectedReceita({ setCategoria }: SelectedReceitaProps) {
     ),
   }));
 
-  const handleChange = (selectedOption: any) => {
+  const handleChange = (selectedOption: OptionType | null) => {
     const categoriaSelecionada = selectedOption ? selectedOption.value : null;
     setCategoria(categoriaSelecionada); // Passando a categoria para o componente pai
   };
