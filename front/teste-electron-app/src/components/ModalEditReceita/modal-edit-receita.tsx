@@ -8,6 +8,7 @@ import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
 import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
 import SelectedReceita from "../UI/SelectedReceitas/selected-receita";
+import { baseUrl } from "../../api/api";
 
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
