@@ -69,12 +69,12 @@
     text-align: left;
   }
   
-  label {
+  .formGroup label {
     font-weight: bold;
     margin-bottom: 5px;
   }
   
-  input {
+  .formGroup input {
     width: 350px;
     padding: 10px;
     border: 1px solid #ccc;
