@@ -2,18 +2,23 @@ import Select from "react-select";
 import style from "./selected-periodo.module.css";
 
 interface SelectedPeriodoProps {
-  selectedValue: "SEMANAL" | "MENSAL" | "DIARIO"; // Corrigido o tipo para corresponder à expectativa
+  selectedValue: "DIARIO" | "SEMANAL" | "MENSAL"; // Corrigido o tipo para corresponder à expectativa
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
+interface OptionType {
+  value: "DIARIO" | "SEMANAL" | "MENSAL"; // Valores possíveis
+  label: string;
+}
+
 function SelectedPeriodo({ selectedValue, onChange }: SelectedPeriodoProps) {
-  const options = [
+  const options: OptionType[] = [
     { value: "DIARIO", label: "Diária" },
     { value: "SEMANAL", label: "Semanal" },
     { value: "MENSAL", label: "Mensal" }
   ];
 
-  const handleChange = (selectedOption: any) => {
+  const handleChange = (selectedOption: OptionType | null) => {
     const periodoSelecionado = selectedOption ? selectedOption.value : null;
     onChange({ target: { value: periodoSelecionado } } as React.ChangeEvent<HTMLSelectElement>);
   };
