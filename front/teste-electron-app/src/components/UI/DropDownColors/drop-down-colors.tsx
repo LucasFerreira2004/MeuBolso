@@ -2,24 +2,21 @@ import { useState } from "react";
 import style from "./drop-down-colors.module.css";
 
 interface DropDownColorsProps {
-  setColor: (color: string) => void; // Função que vai ser passada pelo ModalAddCategoria
+  setColor: (color: string) => void;
 }
 
 const DropDownColors = ({ setColor }: DropDownColorsProps) => {
-  const [isOpen, setIsOpen] = useState(true); // Estado que controla a visibilidade do dropdown
+  const [isOpen, setIsOpen] = useState(true);
 
-  // Função para alternar a visibilidade do dropdown
   const toggleDropdown = () => {
     setIsOpen(false);
   };
 
-  // Função para selecionar a cor e atualizar o estado no ModalAddCategoria
   const handleColorSelect = (color: string) => {
-    setColor(color); // Atualiza o estado de cor no componente pai (ModalAddCategoria)
-    toggleDropdown(); // Fecha o dropdown após a cor ser selecionada
+    setColor(color);
+    toggleDropdown();
   };
 
-  // Se o dropdown estiver fechado, retorna null (não renderiza nada)
   if (!isOpen) return null;
 
   return (

@@ -1,0 +1,32 @@
+name: Verify Code
+
+on:
+  push:
+    branches:
+      - main
+      - developer
+      - staging
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Configurar variáveis de ambiente
+        run: |
+          echo "CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}" >> $GITHUB_ENV
+          echo "CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}" >> $GITHUB_ENV && cat $GITHUB_ENV
+
+        
+      - name: Run Maven Verify
+        run: mvn -f back/MeuBolso/pom.xml --batch-mode --update-snapshots verify -e

@@ -1,33 +1,18 @@
 package com.projetointegrado.MeuBolso.conta.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
-public class ContaPutDTO {
-    private BigDecimal saldo;
-    private Long id_banco;
-    private Long id_tipo_conta;
+public class ContaPutDTO extends ContaSaveDTO{
+    @NotNull(message = "Data não pode ser vazia")
+    private LocalDate data;
 
-    public BigDecimal getSaldo() {
-        return saldo;
+    public LocalDate getData() {
+        return data;
     }
-
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
-    }
-
-    public Long getId_banco() {
-        return id_banco;
-    }
-
-    public void setId_banco(Long id_banco) {
-        this.id_banco = id_banco;
-    }
-
-    public Long getId_tipo_conta() {
-        return id_tipo_conta;
-    }
-
-    public void setId_tipo_conta(Long id_tipo_conta) {
-        this.id_tipo_conta = id_tipo_conta;
+    public void setData(LocalDate data) {
+        this.data = data;
     }
 }
