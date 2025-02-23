@@ -7,6 +7,7 @@ import style from "./modal-edit-contas.module.css";
 import SelectedBancos from "../UI/SelectedBanco/selected-banco";
 import SelectedTipoConta from "../UI/SelectedTipoConta/selected-tipo-conta";
 import DatePicker from "../UI/DatePicker/date-picker";
+import { baseUrl } from "../../api/api";
 
 interface ModalEditContasProps {
   onCloseAll: () => void; // Função para fechar o modal
@@ -88,7 +89,7 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/contas/${contaId}`,
+        `${baseUrl}/contas/${contaId}`,
         {
           saldo: saldoNumerico,
           id_banco: bancoId,
