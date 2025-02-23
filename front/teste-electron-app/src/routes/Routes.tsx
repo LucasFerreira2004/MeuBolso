@@ -1,101 +1,81 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom"; // Alterado para createHashRouter
+import App from "../App";
+import PrivateRoute from "../components/private-routes";
+
+// Páginas Públicas
 import Login from "../pages/Login/login";
 import Cadastro from "../pages/Cadastro/cadastro";
+
+// Páginas Privadas
 import Home from "../pages/Home/home";
 import ContasBancarias from "../pages/ContasBancarias/contas-bancarias";
 import Categorias from "../pages/Categorias/categorias";
-import PageTeste from "../pages/PageTeste/page-teste";
-import App from "../App";
 import Transacoes from "../pages/Transacoes/transacoes";
 import Metas from "../pages/Metas/metas";
-import PrivateRoute from "../components/private-routes";
 import Orcamentos from "../pages/Orcamentos/orcamentos";
 import Relatorios from "../pages/Relatorios/relatorios";
-export const router = createBrowserRouter([
+import PageTeste from "../pages/PageTeste/page-teste";
+
+// Rotas Públicas
+const publicRoutes = [
   {
     path: "/",
-    element: <Login />
+    element: <Login />,
   },
   {
     path: "/cadastro",
-    element: <Cadastro />
+    element: <Cadastro />,
   },
+];
+
+// Rotas Privadas
+const privateRoutes = [
+  {
+    path: "/home",
+    element: <Home />,
+  },
+  {
+    path: "/contas",
+    element: <ContasBancarias />,
+  },
+  {
+    path: "/categorias",
+    element: <Categorias />,
+  },
+  {
+    path: "/transacoes",
+    element: <Transacoes />,
+  },
+  {
+    path: "/metas",
+    element: <Metas />,
+  },
+  {
+    path: "/orcamentos",
+    element: <Orcamentos />,
+  },
+  {
+    path: "/relatorios",
+    element: <Relatorios />,
+  },
+  {
+    path: "/profile",
+    element: <PageTeste />, // Renomeado de PageTeste para Profile
+  },
+];
+
+// Aplicar PrivateRoute às rotas privadas
+const protectedRoutes = privateRoutes.map((route) => ({
+  ...route,
+  element: <PrivateRoute>{route.element}</PrivateRoute>,
+}));
+
+// Combinar todas as rotas
+export const router = createHashRouter([
+  ...publicRoutes,
   {
     path: "/",
     element: <App />,
-    children: [
-      {
-        path: "/home",
-        element: (
-          <PrivateRoute>
-            <Home />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/perfil",
-        element: (
-          <PrivateRoute>
-            <PageTeste />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/contas",
-        element: (
-          <PrivateRoute>
-            <ContasBancarias />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/categorias",
-        element: (
-          <PrivateRoute>
-            <Categorias />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/transacoes",
-        element: (
-          <PrivateRoute>
-            <Transacoes />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/metas",
-        element: (
-          <PrivateRoute>
-            <Metas />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/orcamentos",
-        element: (
-          <PrivateRoute>
-            <Orcamentos />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/relatorios",
-        element: (
-          <PrivateRoute>
-            <Relatorios />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/profile",
-        element: (
-          <PrivateRoute>
-            <PageTeste />
-          </PrivateRoute>
-        ),
-      },
-    ],
+    children: protectedRoutes,
   },
 ]);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Bar } from "react-chartjs-2";
 import DatePicker, { meses } from "../../Date/date";
 import style from "./total-balanco.module.css";
@@ -22,7 +22,7 @@ const TotalBalanco: React.FC = () => {
   >([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchBalanco = async () => {
+  const fetchBalanco = useCallback(async () => {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
@@ -56,12 +56,12 @@ const TotalBalanco: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [dataInicial, dataFinal]);
 
   useEffect(() => {
     console.log("Datas atualizadas:", { dataInicial, dataFinal });
     fetchBalanco();
-  }, [dataInicial, dataFinal]);
+  }, [fetchBalanco, dataInicial, dataFinal]);
 
   const data = {
     labels: balanco.map((item) => `${meses[item.mes - 1]} / ${item.ano}`),
@@ -69,20 +69,19 @@ const TotalBalanco: React.FC = () => {
       {
         label: "Despesas",
         data: balanco.map((item) => item.despesas),
-        backgroundColor: "#C63A22", 
-        barPercentage: 0.8, 
-        categoryPercentage: 0.5, 
+        backgroundColor: "#C63A22",
+        barPercentage: 0.8,
+        categoryPercentage: 0.5,
       },
       {
         label: "Receitas",
         data: balanco.map((item) => item.receitas),
-        backgroundColor: "#2A9D8F", 
+        backgroundColor: "#2A9D8F",
         barPercentage: 0.8,
-        categoryPercentage: 0.5, 
+        categoryPercentage: 0.5,
       },
     ],
   };
-  
 
   const options = {
     responsive: true,
