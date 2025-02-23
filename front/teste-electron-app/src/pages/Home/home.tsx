@@ -4,17 +4,26 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import style from "./home.module.css";
 import AddButton from "../../components/UI/AddButton/add-button";
-import DatePicker, { meses } from "../../components/UI/Date/date";
+import DatePicker from "../../components/UI/Date/date";
+import  { meses } from "../../components/UI/Date/consts"
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import TotalBalanco from "../../components/UI/ChartsRelatorios/TotalBalanco/total-balanco";
-import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans"; // Importar modal de tipo de transação
+import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans";
 import { baseUrl } from "../../api/api";
 
 interface Banco {
   iconeUrl: string;
   nomeBanco: string;
   saldo: number;
+}
+
+interface SaldoTotal {
+  saldo: number;
+}
+
+interface Somatorio {
+  valor: number;
 }
 
 function Home() {
@@ -36,16 +45,14 @@ function Home() {
     }
   }, [state]);
 
-  const fetchData = async (
+  const fetchData = async <T,>(
     url: string,
     errorMessage: string,
-    setData: (data: any) => void
+    setData: (data: T) => void
   ) => {
     const token = localStorage.getItem("authToken");
     if (!token) {
-      toast.error(
-        "Você precisa estar logado para acessar esta funcionalidade."
-      );
+      toast.error("Você precisa estar logado para acessar esta funcionalidade.");
       return;
     }
 
@@ -61,7 +68,7 @@ function Home() {
         throw new Error(errorMessage);
       }
 
-      const data = await response.json();
+      const data: T = await response.json();
       setData(data);
     } catch (error) {
       toast.error(errorMessage);
@@ -85,30 +92,37 @@ function Home() {
     setIsModalOpen((prev) => !prev);
   };
 
-  useEffect(() => {
-    fetchData(
+  // Função para atualizar os dados
+  const handleUpdate = () => {
+    fetchData<Banco[]>(
       `${baseUrl}/contas/min?ano=${ano}&mes=${mes}`,
       "Erro ao carregar os dados dos bancos.",
       setBancos
     );
 
-    fetchData(
+    fetchData<SaldoTotal>(
       `${baseUrl}/contas/saldoTotal?ano=${ano}&mes=${mes}`,
       "Erro ao carregar o saldo total.",
       (data) => setSaldoTotal(data.saldo)
     );
 
-    fetchData(
+    fetchData<Somatorio>(
       `${baseUrl}/transacoes/somatorioDespesas?ano=${ano}&mes=${mes}`,
       "Erro ao carregar o total de despesas.",
       (data) => setTotalDespesas(data.valor)
     );
 
-    fetchData(
+    fetchData<Somatorio>(
       `${baseUrl}/transacoes/somatorioReceitas?ano=${ano}&mes=${mes}`,
       "Erro ao carregar o total de receitas.",
       (data) => setTotalReceitas(data.valor)
     );
+
+    console.log("Dados atualizados após fechar o modal.");
+  };
+
+  useEffect(() => {
+    handleUpdate(); // Carrega os dados ao montar o componente
   }, [ano, mes]);
 
   return (
@@ -149,7 +163,12 @@ function Home() {
           <div className={style.cardButton}>
             <AddButton texto="Adicionar Transação" onClick={toggleModal} />
             {isModalOpen && (
-              <ModalTipoTrans mes={mes} ano={ano} onClose={toggleModal} />
+              <ModalTipoTrans
+                mes={mes}
+                ano={ano}
+                onClose={toggleModal}
+                onUpdate={handleUpdate} // Passando a função de atualização
+              />
             )}
           </div>
         </div>
@@ -175,9 +194,7 @@ function Home() {
                         alt={`Ícone ${banco.nomeBanco}`}
                         className={style.iconNubank}
                       />
-                      <p>{`${banco.nomeBanco}: ${formatarSaldo(
-                        banco.saldo
-                      )}`}</p>
+                      <p>{`${banco.nomeBanco}: ${formatarSaldo(banco.saldo)}`}</p>
                     </div>
                   ))
                 )}
