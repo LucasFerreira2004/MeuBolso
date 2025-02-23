@@ -1,6 +1,7 @@
 import { useState } from "react";
 import style from "./modal-add-categoria.module.css";
 import DropDownColors from "../UI/DropDownColors/drop-down-colors";
+import { baseUrl } from "../../api/api";
 
 interface ModalAddCategoriaProps {
   closeModal: () => void;
@@ -22,7 +23,7 @@ const sendData = async ({ cor, nome, tipo }: CategoriaProps) => {
     };
   }
   try {
-    const response = await fetch(`http://localhost:8080/categorias`, {
+    const response = await fetch(`${baseUrl}/categorias`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
