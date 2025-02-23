@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import style from "./selected-despesa.module.css";import { baseUrl } from "../../../api/api";
-''
+import style from "./selected-despesa.module.css";
+import { baseUrl } from "../../../api/api";
 
 interface Categoria {
   id: number;
@@ -12,6 +12,11 @@ interface Categoria {
 
 interface SelectedDespesasProps {
   setCategoria: (categoriaId: number | null) => void;
+}
+
+interface OptionType {
+  value: number;
+  label: JSX.Element;
 }
 
 function SelectedDespesas({ setCategoria }: SelectedDespesasProps) {
@@ -25,7 +30,7 @@ function SelectedDespesas({ setCategoria }: SelectedDespesasProps) {
       return;
     }
 
-    const url = `${baseUrl}/categorias/despesas`; 
+    const url = `${baseUrl}/categorias/despesas`;
 
     fetch(url, {
       method: "GET",
@@ -65,7 +70,7 @@ function SelectedDespesas({ setCategoria }: SelectedDespesasProps) {
     ),
   }));
 
-  const handleChange = (selectedOption: any) => {
+  const handleChange = (selectedOption: OptionType | null) => {
     const categoriaSelecionada = selectedOption ? selectedOption.value : null;
     setCategoria(categoriaSelecionada); // Passando a categoria para o componente pai
   };
