@@ -3,6 +3,7 @@ import { ProgressBar } from "../../ProgressBar/progress-bar";
 import ModalEditOrcamento from "../../../ModalEditOrcamento/modal-edit-orcamento";
 import ModalDeleteOrca from "../../../ModalDeleteOrcamentos/modal-delete-orca";
 import style from "./card-categoria.module.css";
+import { baseUrl } from "../../../../api/api";
 
 interface CategoriaDTO {
   id: number;
@@ -54,7 +55,7 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/orcamentos?ano=${ano}&mes=${mes}`,
+        `${baseUrl}orcamentos?ano=${ano}&mes=${mes}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
