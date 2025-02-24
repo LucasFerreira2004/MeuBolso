@@ -16,6 +16,8 @@ export interface Categoria {
   arquivado: boolean;
 }
 
+const baseUrl = "http://localhost:8080"; // Definindo a base URL corretamente
+
 function Categorias() {
   const [open, setOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -30,19 +32,15 @@ function Categorias() {
 
   const fetchCategorias = async () => {
     const token = localStorage.getItem("authToken");
-    if (!token) {
-      return;
-    }
+    if (!token) return;
 
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8080/categorias", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await axios.get(`${baseUrl}/categorias`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
       setCategorias(response.data);
-    } catch (error: any) {
+    } catch (error) {
       console.error("Erro ao buscar categorias:", error);
     } finally {
       setLoading(false);
@@ -73,18 +71,14 @@ function Categorias() {
   const arquivarCategoria = async (id: number, arquivado: boolean) => {
     console.log("arquivarCategoria chamado", id, arquivado);
     const token = localStorage.getItem("authToken");
-    if (!token) {
-      return;
-    }
+    if (!token) return;
 
     try {
       await axios.patch(
-        `http://localhost:8080/categorias/arquivadas/${id}`,
+        `${baseUrl}/categorias/arquivadas/${id}`,
         { arquivado },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       fetchCategorias();
@@ -93,9 +87,8 @@ function Categorias() {
     }
   };
 
-  const handleCategoriaArchived = (categoriaId: number, arquivado: boolean) => {
-    arquivarCategoria(categoriaId, arquivado);
-    fetchCategorias();
+  const handleCategoriaArchived = async (categoriaId: number, arquivado: boolean) => {
+    await arquivarCategoria(categoriaId, arquivado);
   };
 
   return (
@@ -128,7 +121,9 @@ function Categorias() {
       )}
 
       {modalArquivadasAberto && (
-        <ModalArquivadas onClose={() => setModalArquivadasAberto(false)} />
+        <ModalArquivadas 
+          onClose={() => setModalArquivadasAberto(false)} 
+        />
       )}
 
       <main className={style.containerMain}>
@@ -173,9 +168,11 @@ function Categorias() {
 }
 
 function toTitleCase(str: string): string {
-  return str.toLowerCase().split(' ').map(function(word) {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  }).join(' ');
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 export default Categorias;
