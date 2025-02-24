@@ -16,6 +16,19 @@ const removerFormatacaoMoeda = (valorFormatado: string): number => {
     .replace(",", ".");
   return parseFloat(valorNumerico);
 };
+interface TransactionData {
+  id: number;
+  valor: number;
+  data: string;
+  tipoTransacao: "NORMAL" | "FIXA" | "PARCELADA" | "RECEITA";
+  categoriaId: number | null;
+  contaId: number | null;
+  comentario?: string | null;
+  descricao: string;
+  periodicidade?: "DIARIO" | "SEMANAL" | "MENSAL";
+  qtdParcelas?: number | null;
+}
+
 
 const formatarValor = (valor: string): string => {
   let valorNumerico = valor.replace(/\D/g, "");
@@ -30,8 +43,9 @@ interface ModalEditReceitaProps {
   mes: number;
   ano: number;
   transactionId: number;
-  onTransactionUpdate: (updatedTransaction: any) => void;
+  onTransactionUpdate: (updatedTransaction: TransactionData | { id: number; deleted: boolean }) => void;
 }
+
 
 const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
   onClose,
@@ -119,7 +133,7 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
       return;
     }
 
-    const transactionData: any = {
+    const transactionData: TransactionData = {
       valor: valorNumerico,
       data,
       tipoTransacao: "RECEITA",
@@ -127,7 +141,11 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
       contaId: conta,
       comentario,
       descricao,
+      periodicidade: tipoTransacao !== "NORMAL" ? periodicidade : undefined,
+      qtdParcelas: tipoTransacao === "PARCELADA" ? qtdParcelas ?? undefined : undefined,
+      id: 0
     };
+
 
     if (tipoTransacao === "FIXA") {
       transactionData.periodicidade = periodicidade;
@@ -233,7 +251,7 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
           iconSrc="/assets/iconsModalReceitas/comentario.svg"
           placeholder="Opcional"
           value={comentario || ""}
-          onChange={(e: { target: { value: any } }) =>
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setComentario(e.target.value || null)
           }
         />
@@ -285,8 +303,8 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
                 type="number"
                 placeholder="Ex: 12"
                 value={qtdParcelas || ""}
-                onChange={(e: { target: { value: any } }) =>
-                  setQtdParcelas(Number(e.target.value))
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setQtdParcelas(e.target.value ? Number(e.target.value) : null)
                 }
               />
             )}

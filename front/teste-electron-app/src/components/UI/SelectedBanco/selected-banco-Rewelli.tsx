@@ -9,12 +9,7 @@ interface Banco {
 }
 
 interface SelectedBancosProps {
-  setBanco: (bancoId: number | null) => void;
-}
-
-interface OptionType {
-  value: number;
-  label: JSX.Element;
+  setBanco: (bancoId: number | null) => void; 
 }
 
 function SelectedBancos({ setBanco }: SelectedBancosProps) {
@@ -56,7 +51,7 @@ function SelectedBancos({ setBanco }: SelectedBancosProps) {
       });
   }, []);
 
-  const options: OptionType[] = bancos.map((banco) => ({
+  const options = bancos.map((banco) => ({
     value: banco.id,
     label: (
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -70,7 +65,7 @@ function SelectedBancos({ setBanco }: SelectedBancosProps) {
     ),
   }));
 
-  const handleChange = (selectedOption: OptionType | null) => {
+  const handleChange = (selectedOption: any) => {
     const bancoSelecionado = selectedOption ? selectedOption.value : null;
     setBanco(bancoSelecionado); // Passando o ID do banco
   };

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, TooltipItem } from 'chart.js';
-import styles from './categorias-despesas.module.css';
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from 'chart.js';
+import styles from './categorias-receitas.module.css';
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
-interface DespesaCategoria {
+interface ReceitasCategoria {
   id: number;
   cor: string;
   nome: string;
@@ -13,13 +13,13 @@ interface DespesaCategoria {
   percentual: number;
 }
 
-interface CategoriasDespesasProps {
+interface CategoriasReceitasProps {
   mes: number;
   ano: number;
 }
 
-const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => {
-  const [dados, setDados] = useState<DespesaCategoria[]>([]);
+const CategoriasReceitas: React.FC<CategoriasReceitasProps> = ({ mes, ano }) => {
+  const [dados, setDados] = useState<ReceitasCategoria[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
 
     const fetchData = async () => {
       try {
-        const url = `http://localhost:8080/dashboards/despesasCategoria?ano=${ano}&mes=${mes}`;
+        const url = `http://localhost:8080/dashboards/receitasCategoria?ano=${ano}&mes=${mes}`;
         const response = await fetch(url, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -75,13 +75,13 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
     plugins: {
       title: {
         display: true,
-        text: `Despesas por Categoria - ${mes}/${ano}`,
+        text: `Receitas por Categoria - ${mes}/${ano}`,
       },
       tooltip: {
         callbacks: {
-          label: (context: TooltipItem<'pie'>) => {
-            const index = context.dataIndex; // Obtém o índice do dado
-            const categoria = dados[index]; // Recupera a categoria correspondente
+          label: (context: any) => {
+            const index = context.dataIndex; // Obtém o índice do item no tooltip
+            const categoria = dados[index]; // Recupera os dados da categoria
             const valorTotal = categoria.valorTotal;
             const percentual = categoria.percentual;
 
@@ -103,8 +103,8 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
       ) : dados.length === 0 ? (
         <p className={styles.emptyText}>Nenhuma informação disponível para o período selecionado.</p>
       ) : (
-        <div className={styles.bodyCharts}>
-          <h2 className={styles.chartTitle}>Despesas por Categoria</h2>
+        <div>
+          <h2 className={styles.chartTitle}>Receitas por Categoria</h2>
           <Pie data={chartData} options={options} />
         </div>
       )}
@@ -112,4 +112,4 @@ const CategoriasDespesas: React.FC<CategoriasDespesasProps> = ({ mes, ano }) => 
   );
 };
 
-export default CategoriasDespesas;
+export default CategoriasReceitas;

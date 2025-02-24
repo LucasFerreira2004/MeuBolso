@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from 'chart.js';
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, TooltipItem } from 'chart.js';
 import styles from './categorias-receitas.module.css';
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
@@ -79,7 +79,7 @@ const CategoriasReceitas: React.FC<CategoriasReceitasProps> = ({ mes, ano }) => 
       },
       tooltip: {
         callbacks: {
-          label: (context: any) => {
+          label: (context: TooltipItem<'pie'>) => {
             const index = context.dataIndex; // Obtém o índice do item no tooltip
             const categoria = dados[index]; // Recupera os dados da categoria
             const valorTotal = categoria.valorTotal;
