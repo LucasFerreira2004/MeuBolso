@@ -44,4 +44,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ErroUploadImagemException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUploadImagemException(ErroUploadImagemException ex) {
+        ErrorResponseDTO dto = new ErrorResponseDTO("", ex.getMessage());
+        return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+    }
+
 }
