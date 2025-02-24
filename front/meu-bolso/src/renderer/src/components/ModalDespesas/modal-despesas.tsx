@@ -142,30 +142,30 @@ function ModalDespesas({ onCloseAll, mes, ano }: ModalDespesasProps) {
         <div className={style.headerModal}>
           <h3>Despesas</h3>
           <button className={style.closeButton} onClick={onCloseAll}>
-            <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
+            <img src="assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
         <InputWithIcon
           label="Valor: "
           type="text"
-          iconSrc="/assets/iconsModalDespesas/money.svg"
+          iconSrc="assets/iconsModalDespesas/money.svg"
           placeholder="R$ 0,00"
           value={valor}
           onChange={handleChangeValor}
         />
         <InputWithIcon
           label="Descrição: "
-          iconSrc="/assets/iconsModalDespesas/descrip.svg"
+          iconSrc="assets/iconsModalDespesas/descrip.svg"
           placeholder="Ex: Pagamento da fatura"
           value={descricao}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescricao(e.target.value)}
         />
         <SelectedDespesas setCategoria={setCategoria} />
         <SelectBoxContas setConta={setConta} mes={mes} ano={ano} />
-        <DatePicker label="Escolha uma data:" value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg" />
+        <DatePicker label="Escolha uma data:" value={data} onChange={setData} iconsrc="assets/iconsModalDespesas/date.svg" />
         <InputWithIcon
           label="Comentário: "
-          iconSrc="/assets/iconsModalDespesas/comentario.svg"
+          iconSrc="assets/iconsModalDespesas/comentario.svg"
           placeholder="Opcional"
           value={comentario || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComentario(e.target.value || null)}

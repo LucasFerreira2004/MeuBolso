@@ -184,7 +184,7 @@ function ContasBancarias() {
               titulo={conta.banco.nome}
               tipo={conta.tipo_conta.tipoConta.replace("_", " ")}
               saldo={conta.saldo}
-              banco={conta.banco.iconeUrl || "/assets/iconsContas/default.svg"}
+              banco={conta.banco.iconeUrl || "assets/iconsContas/default.svg"}
               altBanco={`Ícone do banco ${conta.banco.nome}`}
               data={conta.data}
               descricao={conta.descricao}

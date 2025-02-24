@@ -85,7 +85,7 @@ function ModalAddCategoria({ closeModal, onCategoriaSaved }: ModalAddCategoriaPr
       <div className={style.modalHeader}>
         <h3>Nova Categoria</h3>
         <img
-          src="/assets/iconsModal/iconX.svg"
+          src="assets/iconsModal/iconX.svg"
           alt="Fechar modal"
           className={style.closeIcon}
           onClick={closeModal}

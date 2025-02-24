@@ -62,7 +62,7 @@ function ModalDeleteConta({ onClose, onConfirmDelete, contaId }: ModalDeleteCont
       <div className={style.containerDelete}>
         <h3>Deseja excluir esta conta?</h3>
         <span className={style.delete}>
-          <img src="/assets/iconsModalConta/delete.svg"/>
+          <img src="assets/iconsModalConta/delete.svg"/>
           Ao deletar esta conta, todas as transaões relacionadas a ela sumirão
           </span>
         <div className={style.divButton}>

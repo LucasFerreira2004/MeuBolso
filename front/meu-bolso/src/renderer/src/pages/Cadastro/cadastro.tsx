@@ -77,7 +77,7 @@ function Cadastro() {
       <div className={style.mainContainer}>
         <div className={style.containerLogo}>
           <img
-            src="/assets/logo-meuBolso.svg"
+            src="assets/logo-meuBolso.svg"
             alt="Ícone meuBolso"
             className={style.iconLogo}
           />

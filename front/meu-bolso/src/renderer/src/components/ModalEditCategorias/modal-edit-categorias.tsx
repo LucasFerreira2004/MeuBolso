@@ -69,7 +69,7 @@ const ModalEditCategoria: React.FC<ModalEditCategoriaProps> = ({ closeModal, cat
       <div className={style.modalHeader}>
         <h3>Editar Categoria</h3>
         <img
-          src="/assets/iconsModal/iconX.svg"
+          src="assets/iconsModal/iconX.svg"
           alt="Fechar modal"
           className={style.closeIcon}
           onClick={closeModal}

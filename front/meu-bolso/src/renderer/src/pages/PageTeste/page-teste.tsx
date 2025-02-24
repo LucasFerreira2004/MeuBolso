@@ -5,7 +5,7 @@ function PageTeste() {
         <div className={style.containerTeste}>
             <div className={style.containerRuleMain}>
                 <img 
-                    src= "/assets/pageteste/iconteste.svg"
+                    src= "assets/pageteste/iconteste.svg"
                     alt="Ícone de teste" 
                     className={style.iconTeste} 
                 />

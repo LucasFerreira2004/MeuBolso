@@ -91,7 +91,7 @@ const ModalAddOrcamento: React.FC<ModalAddOrcamentoProps> = ({ onCloseAll, onAdd
         <div className={styles.headerModal}>
           <h3>Novo Orçamento</h3>
           <button className={styles.closeButton} onClick={onCloseAll}>
-            <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
+            <img src="assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
 
@@ -99,7 +99,7 @@ const ModalAddOrcamento: React.FC<ModalAddOrcamentoProps> = ({ onCloseAll, onAdd
         <InputWithIcon
           label="Valor: "
           type="text"
-          iconSrc="/assets/iconsModalOrcamentos/money.svg"
+          iconSrc="assets/iconsModalOrcamentos/money.svg"
           placeholder="R$ 0,00"
           value={valor}
           onChange={handleChangeValor}
@@ -113,7 +113,7 @@ const ModalAddOrcamento: React.FC<ModalAddOrcamentoProps> = ({ onCloseAll, onAdd
           label="Escolha uma data:"
           value={data}
           onChange={setData}
-          iconsrc="/assets/iconsModalOrcamentos/date.svg"
+          iconsrc="assets/iconsModalOrcamentos/date.svg"
         />
 
         <div className={styles.footerModal}>

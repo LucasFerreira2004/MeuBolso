@@ -14,7 +14,7 @@ function Metas() {
                 </div>
             </div>
             <div className={style.body}>
-                    <CardMetas texto={"Moto"} imagem={"/assets/moto.svg"}/>
+                    <CardMetas texto={"Moto"} imagem={"assets/moto.svg"}/>
             </div>
         </div>
 

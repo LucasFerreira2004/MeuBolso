@@ -10,7 +10,7 @@ const AddButton: React.FC<AddButtonProps> = ({ texto, onClick }) => {
   return (
     <button className={style.addButton} onClick={onClick}>
       <img
-        src="/assets/plus.svg"
+        src="assets/plus.svg"
         alt="Ícone de adicionar"
         className={style.iconPlus}
       />

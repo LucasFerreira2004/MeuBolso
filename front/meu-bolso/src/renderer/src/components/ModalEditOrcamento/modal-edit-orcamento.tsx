@@ -140,14 +140,14 @@ function ModalEditOrcamento({
             onClick={onCloseAll}
             aria-label="Fechar"
           >
-            <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
+            <img src="assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
 
         <InputWithIcon
           label="Valor: "
           type="text"
-          iconSrc="/assets/iconsModalOrcamentos/money.svg"
+          iconSrc="assets/iconsModalOrcamentos/money.svg"
           placeholder="R$ 0,00"
           value={valor}
           onChange={handleValueChange} // Usa a nova função handleValueChange
@@ -159,7 +159,7 @@ function ModalEditOrcamento({
           label="Escolha uma data:"
           value={data}
           onChange={(date: string) => setData(date)}
-          iconsrc="/assets/iconsModalOrcamentos/date.svg"
+          iconsrc="assets/iconsModalOrcamentos/date.svg"
         />
 
         <div className={styles.footerModal}>

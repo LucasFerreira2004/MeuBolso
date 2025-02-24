@@ -95,14 +95,14 @@ function ModalContas({ onCloseAll, showToast }: ModalContasProps) {
         <div className={style.headerModal}>
           <h3>Cadastrar Conta</h3>
           <button className={style.closeButton} onClick={onCloseAll}>
-            <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
+            <img src="assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
 
         <InputWithIcon
           label="Saldo: "
           type="text"
-          iconSrc="/assets/iconsModalConta/money.svg"
+          iconSrc="assets/iconsModalConta/money.svg"
           placeholder="R$ 0,00"
           value={saldo}
           onChange={handleChangeSaldo}
@@ -114,7 +114,7 @@ function ModalContas({ onCloseAll, showToast }: ModalContasProps) {
 
         <InputWithIcon
           label="Descrição: "
-          iconSrc="/assets/iconsModalConta/descricao.svg"
+          iconSrc="assets/iconsModalConta/descricao.svg"
           placeholder="Ex: Conta Corrente"
           value={descricao}
           onChange={handleChangeDescricao}

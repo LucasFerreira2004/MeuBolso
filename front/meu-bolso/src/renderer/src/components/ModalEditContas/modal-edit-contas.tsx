@@ -138,14 +138,14 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
         <div className={style.headerModal}>
           <h3>Editar Conta</h3>
           <button className={style.closeButton} onClick={onCloseAll}>
-            <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
+            <img src="assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
 
         <InputWithIcon
           label="Saldo: "
           type="text"
-          iconSrc="/assets/iconsModalConta/money.svg"
+          iconSrc="assets/iconsModalConta/money.svg"
           placeholder="R$ 0,00"
           value={saldo}
           onChange={handleChangeSaldo}
@@ -159,12 +159,12 @@ function ModalEditContas({ onCloseAll, contaId, initialData }: ModalEditContasPr
         label="Escolha uma data: "
           value={data}
           onChange={setData}
-          iconsrc="/assets/iconsModalConta/date.svg"
+          iconsrc="assets/iconsModalConta/date.svg"
         />
 
         <InputWithIcon
           label="Descrição: "
-          iconSrc="/assets/iconsModalConta/descricao.svg"
+          iconSrc="assets/iconsModalConta/descricao.svg"
           placeholder="Ex: Conta Corrente"
           value={descricao}
           onChange={handleChangeDescricao}

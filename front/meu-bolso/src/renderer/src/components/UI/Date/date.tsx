@@ -49,7 +49,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ mes, ano, onChange }) => {
         onClick={() => alterarMes("anterior")}
         aria-label="Mês anterior"
       >
-        <img src="/assets/iconsTransacoes/arrowL.svg" alt="Seta anterior" />
+        <img src="assets/iconsTransacoes/arrowL.svg" alt="Seta anterior" />
       </button>
 
       <div className={styles.selectorContainer}>
@@ -85,7 +85,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ mes, ano, onChange }) => {
         onClick={() => alterarMes("proximo")}
         aria-label="Próximo mês"
       >
-        <img src="/assets/iconsTransacoes/arrowR.svg" alt="Seta próximo" />
+        <img src="assets/iconsTransacoes/arrowR.svg" alt="Seta próximo" />
       </button>
     </div>
   );

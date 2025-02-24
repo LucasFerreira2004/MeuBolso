@@ -146,7 +146,7 @@ function Home() {
         <div className={style.subHeader}>
           <div className={style.headerSaldo}>
             <img
-              src="/assets/money-home.svg"
+              src="assets/money-home.svg"
               alt="Ícone de Estimativa de Saldo"
               className={style.iconHeader}
             />
@@ -208,7 +208,7 @@ function Home() {
               <div className={style.CLineTransacoes}>
                 <div className={style.linesTransacoes}>
                   <img
-                    src="/assets/Hred.svg"
+                    src="assets/Hred.svg"
                     alt="Ícone Hred"
                     className={style.iconH}
                   />
@@ -223,7 +223,7 @@ function Home() {
                 </div>
                 <div className={style.linesTransacoes}>
                   <img
-                    src="/assets/Hgreen.svg"
+                    src="assets/Hgreen.svg"
                     alt="Ícone Hgreen"
                     className={style.iconH}
                   />

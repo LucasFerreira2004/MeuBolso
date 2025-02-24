@@ -184,14 +184,14 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
         <div className={style.headerModal}>
           <h3>Editar Transação</h3>
           <button className={style.closeButton} onClick={onClose}>
-            <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
+            <img src="assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
 
         <InputWithIcon
           label="Valor: "
           type="text"
-          iconSrc="/assets/iconsModalDespesas/money.svg"
+          iconSrc="assets/iconsModalDespesas/money.svg"
           placeholder="R$ 0,00"
           value={valor}
           onChange={handleChangeValor}
@@ -199,7 +199,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
 
         <InputWithIcon
           label="Descrição: "
-          iconSrc="/assets/iconsModalDespesas/descrip.svg"
+          iconSrc="assets/iconsModalDespesas/descrip.svg"
           placeholder="Ex: Pagamento da fatura"
           value={descricao}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -213,12 +213,12 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
           label="Escolha uma data:"
           value={data}
           onChange={setData}
-          iconsrc="/assets/iconsModalDespesas/date.svg"
+          iconsrc="assets/iconsModalDespesas/date.svg"
         />
 
         <InputWithIcon
           label="Comentário: "
-          iconSrc="/assets/iconsModalDespesas/comentario.svg"
+          iconSrc="assets/iconsModalDespesas/comentario.svg"
           placeholder="Opcional"
           value={comentario || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -269,7 +269,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
             {tipoTransacao === "PARCELADA" && (
               <InputWithIcon
                 label="Quantidade de Parcelas:"
-                iconSrc="/assets/iconsModalDespesas/parcelas.svg"
+                iconSrc="assets/iconsModalDespesas/parcelas.svg"
                 type="number"
                 placeholder="Ex: 12"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

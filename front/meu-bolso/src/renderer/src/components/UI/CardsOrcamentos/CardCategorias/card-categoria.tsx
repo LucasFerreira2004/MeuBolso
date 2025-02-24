@@ -147,7 +147,7 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
                 className={style.buttons}
               >
                 <img
-                  src="/assets/iconsContas/editar.svg"
+                  src="assets/iconsContas/editar.svg"
                   alt="Editar"
                   className={style.imgEdit}
                 />
@@ -156,7 +156,7 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
                 className={style.buttons}
                 onClick={() => handleOpenDeleteModal(orcamento)}
               >
-                <img src="/assets/iconsContas/excluir.svg" alt="Excluir" />
+                <img src="assets/iconsContas/excluir.svg" alt="Excluir" />
               </button>
             </div>
           </header>

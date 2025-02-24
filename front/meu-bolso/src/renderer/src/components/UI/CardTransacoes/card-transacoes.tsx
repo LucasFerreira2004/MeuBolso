@@ -114,7 +114,7 @@ const CardTransacoes: React.FC<CardTransacoesProps> = ({
                   <label className={styles.label}>Conta:</label> {transacao.conta?.banco?.nome} <br />
                 </div>
                 <button className={styles.button} onClick={(event) => handleDeleteClick(event, transacao)}>
-                  <img src="/assets/iconsContas/excluir.svg" alt="Excluir" />
+                  <img src="assets/iconsContas/excluir.svg" alt="Excluir" />
                 </button>
               </li>
             );

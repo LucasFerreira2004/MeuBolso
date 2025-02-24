@@ -177,14 +177,14 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
         <div className={style.headerModal}>
           <h3>Editar Transação</h3>
           <button className={style.closeButton} onClick={onClose}>
-            <img src="/assets/iconsModal/iconX.svg" alt="Fechar" />
+            <img src="assets/iconsModal/iconX.svg" alt="Fechar" />
           </button>
         </div>
 
         <InputWithIcon
           label="Valor: "
           type="text"
-          iconSrc="/assets/iconsModalReceitas/money.svg"
+          iconSrc="assets/iconsModalReceitas/money.svg"
           placeholder="R$ 0,00"
           value={valor}
           onChange={handleChangeValor}
@@ -192,7 +192,7 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
 
         <InputWithIcon
           label="Descrição: "
-          iconSrc="/assets/iconsModalReceitas/descrip.svg"
+          iconSrc="assets/iconsModalReceitas/descrip.svg"
           placeholder="Ex: Pagamento da fatura"
           value={descricao}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -206,12 +206,12 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
           label="Escolha uma data:"
           value={data}
           onChange={setData}
-          iconsrc="/assets/iconsModalReceitas/date.svg"
+          iconsrc="assets/iconsModalReceitas/date.svg"
         />
 
         <InputWithIcon
           label="Comentário: "
-          iconSrc="/assets/iconsModalReceitas/comentario.svg"
+          iconSrc="assets/iconsModalReceitas/comentario.svg"
           placeholder="Opcional"
           value={comentario || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -262,7 +262,7 @@ const ModalEditReceita: React.FC<ModalEditReceitaProps> = ({
             {tipoTransacao === "PARCELADA" && (
               <InputWithIcon
                 label="Quantidade de Parcelas:"
-                iconSrc="/assets/iconsModalReceitas/parcelas.svg"
+                iconSrc="assets/iconsModalReceitas/parcelas.svg"
                 type="number"
                 placeholder="Ex: 12"
                 value={qtdParcelas || ""}

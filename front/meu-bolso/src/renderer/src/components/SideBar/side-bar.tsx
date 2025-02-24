@@ -7,7 +7,7 @@ function SideBar() {
       <div className={style.auxLine}>
         <div className={style.divlogo}>
           <img
-            src="/assets/logo-meuBolso.svg"
+            src="assets/logo-meuBolso.svg"
             alt="Ícone meuBolso"
             className={style.iconLogo}
           />
@@ -21,7 +21,7 @@ function SideBar() {
           >
             <li className={style.navItem}>
               <img
-                src="/assets/home.svg"
+                src="assets/home.svg"
                 alt="Ícone de home"
                 className={style.icon}
               />
@@ -37,7 +37,7 @@ function SideBar() {
             >
               <li className={style.navItem}>
                 <img
-                  src="/assets/profile.svg"
+                  src="assets/profile.svg"
                   alt="Ícone de Perfil"
                   className={style.icon}
                 />
@@ -52,7 +52,7 @@ function SideBar() {
             >
               <li className={style.navItem}>
                 <img
-                  src="/assets/bank.svg"
+                  src="assets/bank.svg"
                   alt="Ícone de Contas Bancárias"
                   className={style.icon}
                 />
@@ -67,7 +67,7 @@ function SideBar() {
             >
               <li className={style.navItem}>
                 <img
-                  src="/assets/translation.svg"
+                  src="assets/translation.svg"
                   alt="Ícone de Transações"
                   className={style.icon}
                 />
@@ -82,7 +82,7 @@ function SideBar() {
             >
               <li className={style.navItem}>
                 <img
-                  src="/assets/orcamentos.svg"
+                  src="assets/orcamentos.svg"
                   alt="Ícone de Relatórios"
                   className={style.icon}
                 />
@@ -97,7 +97,7 @@ function SideBar() {
             >
               <li className={style.navItem}>
                 <img
-                  src="/assets/graphics.svg"
+                  src="assets/graphics.svg"
                   alt="Ícone de Relatórios"
                   className={style.icon}
                 />
@@ -112,7 +112,7 @@ function SideBar() {
             >
               <li className={style.navItem}>
                 <img
-                  src="/assets/categories.svg"
+                  src="assets/categories.svg"
                   alt="Ícone de Categorias"
                   className={style.icon}
                 />
@@ -130,7 +130,7 @@ function SideBar() {
           }
         >
           <li className={style.sair}>
-            <img src="/assets/iconsContas/sair.svg" alt="" />
+            <img src="assets/iconsContas/sair.svg" alt="" />
             <p>Sair</p>
           </li>
         </NavLink>

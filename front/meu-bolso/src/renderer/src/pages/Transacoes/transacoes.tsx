@@ -223,7 +223,7 @@ function Transacoes() {
         <div className={style.rowTransacoes}>
           <div>
             <img
-              src="/assets/iconsTransacoes/money.svg"
+              src="assets/iconsTransacoes/money.svg"
               alt="iconMoney"
               className={style.iconT}
             />
@@ -234,7 +234,7 @@ function Transacoes() {
           </div>
           <div>
             <img
-              src="/assets/iconsTransacoes/arrowred.svg"
+              src="assets/iconsTransacoes/arrowred.svg"
               alt="iconMoney"
               className={style.iconT}
             />
@@ -245,7 +245,7 @@ function Transacoes() {
           </div>
           <div>
             <img
-              src="/assets/iconsTransacoes/arrowgreen.svg"
+              src="assets/iconsTransacoes/arrowgreen.svg"
               alt="iconMoney"
               className={style.iconT}
             />

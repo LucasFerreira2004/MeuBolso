@@ -52,13 +52,13 @@ const CardContas: React.FC<CardContasProps> = ({
       <div className={style.editar}>
         <button onClick={onEdit}>
           <img
-            src="/assets/iconsContas/editar.svg"
+            src="assets/iconsContas/editar.svg"
             alt="icon editar"
           />
         </button>
         <button onClick={onDelete}>
           <img
-            src="/assets/iconsContas/excluir.svg"
+            src="assets/iconsContas/excluir.svg"
             alt="icon excluir"
             className={style.img2}
           />

@@ -39,7 +39,7 @@ function ModalTipoTransacao({ onClose, mes, ano, onUpdate }: ModalTransacaoProps
             <h3>Selecione o tipo da transacao</h3>
             <button className={styles.closeButton} onClick={onClose}>
               <img
-                src="/assets/iconsModal/iconX.svg"
+                src="assets/iconsModal/iconX.svg"
                 alt="Fechar"
                 className={styles.icon}
               />
@@ -51,7 +51,7 @@ function ModalTipoTransacao({ onClose, mes, ano, onUpdate }: ModalTransacaoProps
               onClick={() => setIsDespesasModalOpen(true)}
             >
               <img
-                src="/assets/iconsModal/setavermelha.svg"
+                src="assets/iconsModal/setavermelha.svg"
                 alt="Despesas"
                 className={styles.icon}
               />
@@ -62,7 +62,7 @@ function ModalTipoTransacao({ onClose, mes, ano, onUpdate }: ModalTransacaoProps
               onClick={() => setIsReceitasModalOpen(true)}
             >
               <img
-                src="/assets/iconsModal/setaverde.svg"
+                src="assets/iconsModal/setaverde.svg"
                 alt="Receitas"
                 className={styles.icon}
               />

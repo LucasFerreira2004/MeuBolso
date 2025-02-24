@@ -89,7 +89,7 @@ function Perfil() {
         </div>
         <div className={style.classButton}>
           <button className={style.button} onClick={() => setIsModalOpen(true)}>
-            <img src="/assets/iconsPerfil/editperfil.svg" alt="" />
+            <img src="assets/iconsPerfil/editperfil.svg" alt="" />
             Editar informações
           </button>
         </div>
