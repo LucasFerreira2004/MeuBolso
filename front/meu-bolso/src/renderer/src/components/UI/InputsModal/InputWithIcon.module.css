@@ -1,0 +1,48 @@
+.inputsTransferencia {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+label {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+  background-color: #fff;
+}
+
+input {
+  border: none;
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+  background-color: transparent;
+  outline: none;
+}
+
+input:focus {
+  border-color: #007bff;
+}
+
+.iconLogo {
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+}
+
+.inputContainer:hover {
+  border-color: #007bff;
+}
+
+.inputContainer:focus-within {
+  border-color: #007bff;
+}

@@ -1,0 +1,53 @@
+.containerDropDownCategories {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  border: 1px solid black;
+  position: absolute;
+  margin-left: 450px;
+  background-color: #fff;
+  height: auto;
+  width: 170px;
+  padding: 8px;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header img {
+  cursor: pointer;
+}
+
+.containerDropDownCategories h3 {
+  margin: 0px;
+}
+
+.linhacor {
+  display: flex;
+  flex-wrap: wrap; /* Permite que as imagens se ajustem em várias linhas */
+  justify-content: space-between;
+  gap: 5px;
+  margin-top: 10px; /* Adiciona um pequeno espaçamento acima */
+}
+
+.linhacor img {
+  width: 33px;
+  height: 33px;
+  object-fit: cover;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.linhacor img:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+.linhacor img:active {
+  transform: scale(0.95);
+}
