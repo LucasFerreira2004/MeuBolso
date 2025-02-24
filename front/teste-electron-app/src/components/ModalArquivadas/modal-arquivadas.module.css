@@ -1,0 +1,49 @@
+/* modal-arquivadas.module.css */
+.modalArquivadasOverlay {
+  position: absolute; /* Mudado para absolute */
+  top: 60px; /* Ajuste a posição vertical */
+  left: 200px; /* Ajuste a posição horizontal */
+  background: white; /* Removido o background semi-transparente */
+  border: 1px solid #ccc; /* Adicionado borda */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Adicionado sombra */
+  z-index: 1000; /* Garante que o modal fique acima de outros elementos */
+}
+
+.modalArquivadasContent {
+  padding: 20px;
+  width: 300px;
+}
+
+.modalArquivadasContent h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.modalArquivadasContent ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 15px;
+}
+
+.modalArquivadasContent li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.modalArquivadasContent li:hover {
+  background-color: #f9f9f9;
+}
+
+.modalArquivadasContent button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modalArquivadasContent button:hover {
+  background-color: #e0e0e0;
+}

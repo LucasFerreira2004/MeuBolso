@@ -5,20 +5,24 @@ import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./categorias.module.css";
 import InputCategorias from "../../components/UI/InputCategorias/input-categorias";
 import axios from "axios";
+import ArquivadasButton from "../../components/UI/ArquivadasButton/arquivadas-button";
+import ModalArquivadas from "../../components/ModalArquivadas/modal-arquivadas";
 
 export interface Categoria {
   id: number;
   nome: string;
   tipo: string;
   cor: string;
+  arquivado: boolean;
 }
 
 function Categorias() {
   const [open, setOpen] = useState(false);
-  const [editMode, setEditMode] = useState(false); // Para saber se estamos editando ou adicionando
-  const [categorias, setCategorias] = useState<Categoria[]>([]); 
-  const [loading, setLoading] = useState<boolean>(true); 
-  const [categoriaToEdit, setCategoriaToEdit] = useState<Categoria | null>(null); // Categoria que será editada
+  const [editMode, setEditMode] = useState(false);
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [categoriaToEdit, setCategoriaToEdit] = useState<Categoria | null>(null);
+  const [modalArquivadasAberto, setModalArquivadasAberto] = useState(false);
 
   useEffect(() => {
     fetchCategorias();
@@ -27,22 +31,17 @@ function Categorias() {
   const fetchCategorias = async () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
-      return {
-        success: false,
-        error: { message: "Você precisa estar logado para realizar esta ação" },
-      };
+      return;
     }
-  
+
     setLoading(true);
     try {
       const response = await axios.get("http://localhost:8080/categorias", {
         headers: {
-          Authorization: `Bearer ${token}`, // Adiciona o token no cabeçalho
+          Authorization: `Bearer ${token}`,
         },
       });
-  
-      // A resposta já vem com o status e os dados, basta acessar diretamente
-      setCategorias(response.data); // Aqui estamos usando o `data` retornado pelo Axios
+      setCategorias(response.data);
     } catch (error: any) {
       console.error("Erro ao buscar categorias:", error);
     } finally {
@@ -55,20 +54,48 @@ function Categorias() {
   }
 
   const handleEditClick = (categoria: Categoria) => {
-    setCategoriaToEdit(categoria); 
-    setEditMode(true); 
+    setCategoriaToEdit(categoria);
+    setEditMode(true);
     setOpen(true);
   };
 
   const handleAddClick = () => {
-    setEditMode(false); 
-    setCategoriaToEdit(null); 
+    setEditMode(false);
+    setCategoriaToEdit(null);
     setOpen(true);
   };
 
   const handleCategoriaSaved = () => {
-    fetchCategorias(); 
-    setOpen(false);     
+    fetchCategorias();
+    setOpen(false);
+  };
+
+  const arquivarCategoria = async (id: number, arquivado: boolean) => {
+    console.log("arquivarCategoria chamado", id, arquivado);
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      return;
+    }
+
+    try {
+      await axios.patch(
+        `http://localhost:8080/categorias/arquivadas/${id}`,
+        { arquivado },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      fetchCategorias();
+    } catch (error) {
+      console.error("Erro ao arquivar categoria:", error);
+    }
+  };
+
+  const handleCategoriaArchived = (categoriaId: number, arquivado: boolean) => {
+    arquivarCategoria(categoriaId, arquivado);
+    fetchCategorias();
   };
 
   return (
@@ -76,38 +103,41 @@ function Categorias() {
       <header className={style.headerCategorias}>
         <h1>Categorias</h1>
         <div className={style.buttons}>
-          <AddButton texto="Categorias arquivadas" onClick={handleAddClick} />
+          <ArquivadasButton texto="" onClick={() => setModalArquivadasAberto(true)} />
           <AddButton texto="Adicionar Categoria" onClick={handleAddClick} />
         </div>
       </header>
 
-      {/* Exibindo o modal dependendo do estado */}
       {open && (
         <>
           <div className={style.overlay} onClick={() => setOpen(false)} />
           {editMode && categoriaToEdit ? (
             <ModalEditCategoria
-              closeModal={() => setOpen(false)} 
-              categoria={categoriaToEdit} // Passa a categoria para o modal de edição
-              onCategoriaSaved={handleCategoriaSaved} // Passa a função de atualização
+              closeModal={() => setOpen(false)}
+              categoria={categoriaToEdit}
+              onCategoriaSaved={handleCategoriaSaved}
+              onCategoriaArchived={handleCategoriaArchived}
             />
           ) : (
-            <ModalAddCategoria 
-              closeModal={() => setOpen(false)} 
-              onCategoriaSaved={handleCategoriaSaved} // Passa a função de atualização
+            <ModalAddCategoria
+              closeModal={() => setOpen(false)}
+              onCategoriaSaved={handleCategoriaSaved}
             />
           )}
         </>
       )}
 
+      {modalArquivadasAberto && (
+        <ModalArquivadas onClose={() => setModalArquivadasAberto(false)} />
+      )}
+
       <main className={style.containerMain}>
         <div className={style.cardCategorias}>
-          {/* Renderizando categorias de despesas */}
           <div className={style.cardDespesa}>
             <h3>Despesas</h3>
             <hr />
             {categorias
-              .filter((categoria) => categoria.tipo === "DESPESA")
+              .filter((categoria) => categoria.tipo === "DESPESA" && !categoria.arquivado)
               .map((categoria) => (
                 <InputCategorias
                   key={categoria.id}
@@ -115,17 +145,16 @@ function Categorias() {
                   nome={toTitleCase(categoria.nome)}
                   tipo={categoria.tipo}
                   cor={categoria.cor}
-                  onClick={() => handleEditClick(categoria)} // Abre o modal de edição ao clicar
+                  onClick={() => handleEditClick(categoria)}
                 />
               ))}
           </div>
-          <hr className={style.hrCentral}/>
-          {/* Renderizando categorias de receitas */}
+          <hr className={style.hrCentral} />
           <div className={style.cardReceita}>
             <h3>Receitas</h3>
             <hr />
             {categorias
-              .filter((categoria) => categoria.tipo === "RECEITA")
+              .filter((categoria) => categoria.tipo === "RECEITA" && !categoria.arquivado)
               .map((categoria) => (
                 <InputCategorias
                   key={categoria.id}
@@ -133,7 +162,7 @@ function Categorias() {
                   nome={toTitleCase(categoria.nome)}
                   tipo={categoria.tipo}
                   cor={categoria.cor}
-                  onClick={() => handleEditClick(categoria)} // Abre o modal de edição ao clicar
+                  onClick={() => handleEditClick(categoria)}
                 />
               ))}
           </div>
@@ -144,7 +173,9 @@ function Categorias() {
 }
 
 function toTitleCase(str: string): string {
-  return str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+  return str.toLowerCase().split(' ').map(function(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
 }
 
 export default Categorias;

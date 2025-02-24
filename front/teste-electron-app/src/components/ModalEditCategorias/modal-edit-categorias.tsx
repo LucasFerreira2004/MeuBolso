@@ -2,64 +2,55 @@ import { useState } from "react";
 import { Categoria } from "../../pages/Categorias/categorias";
 import style from "./modal-edit-categorias.module.css";
 import DropDownColors from "../../components/UI/DropDownColors/drop-down-colors";
+import axios from "axios";
 
 interface ModalEditCategoriaProps {
   closeModal: () => void;
   categoria: Categoria;
-  onCategoriaSaved: () => void;  // Função para atualizar a lista de categorias
+  onCategoriaSaved: () => void;
+  onCategoriaArchived: (categoriaId: number, arquivado: boolean) => void;
 }
 
-const sendData = async (categoria: Categoria) => {
-  const token = localStorage.getItem("authToken");
-  if(!token){
-    return{
-      success: false,
-      error:{message: "Você precisa estar logado para realizar esta açao"},
-    };
-  }
-
-  try {
-    const response = await fetch(`http://localhost:8080/categorias/${categoria.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(categoria),
-    });
-
-    if (response.ok) {
-      const responseData = await response.json();
-      return { success: true, data: responseData };
-    } else {
-      const errorData = await response.json();
-      return { success: false, error: errorData };
-    }
-  } catch (error) {
-    console.error("Erro na requisição", error);
-    return { success: false, error: { message: "Erro na conexão com o servidor." } };
-  }
-};
-
-const ModalEditCategoria: React.FC<ModalEditCategoriaProps> = ({ closeModal, categoria, onCategoriaSaved }) => {
+const ModalEditCategoria: React.FC<ModalEditCategoriaProps> = ({
+  closeModal,
+  categoria,
+  onCategoriaSaved,
+  onCategoriaArchived,
+}) => {
   const [nome, setNome] = useState(categoria.nome);
   const [tipo, setTipo] = useState(categoria.tipo);
   const [cor, setCor] = useState(categoria.cor);
   const [isColorDropdownOpen, setIsColorDropdownOpen] = useState(false);
 
+  const handleArchive = () => {
+    onCategoriaArchived(categoria.id, !categoria.arquivado);
+    closeModal();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const categoriaAtualizada = { id: categoria.id, nome, tipo, cor };
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      return;
+    }
 
-    const result = await sendData(categoriaAtualizada);
-
-    if (result.success) {
+    try {
+      await axios.put(
+        `http://localhost:8080/categorias/${categoria.id}`,
+        { nome, tipo, cor },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log("Categoria atualizada com sucesso!");
-      onCategoriaSaved();  
-      closeModal();        
-    } else {
-      console.error("Erro ao atualizar categoria:", result.error);
+      onCategoriaSaved();
+      closeModal();
+    } catch (error) {
+      console.error("Erro ao atualizar categoria:", error);
     }
   };
 
@@ -122,6 +113,9 @@ const ModalEditCategoria: React.FC<ModalEditCategoriaProps> = ({ closeModal, cat
         <div className={style.formActions}>
           <button type="submit" className={style.saveButton}>
             Salvar
+          </button>
+          <button type="button" className={style.archiveButton} onClick={handleArchive}>
+            {categoria.arquivado ? "Desarquivar" : "Arquivar"}
           </button>
         </div>
       </form>

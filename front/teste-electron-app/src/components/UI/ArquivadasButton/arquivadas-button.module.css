@@ -1,0 +1,21 @@
+.arquivadasButton {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espaço entre o ícone e o texto */
+    padding: 8px 15px;
+    font-size: 16px;
+    border: none;
+    height: 38px;
+    background: none;
+    cursor: pointer;
+    position:relative;
+    margin-right: 525px;
+  }
+  
+  .iconArquivadas {
+    width: 150px; /* Tamanho adequado ao botão */
+    height: 150px;
+    margin-right: 120px; /* Espaço entre o ícone e o texto */
+    flex-shrink: 0; /* Impede que o ícone seja redimensionado */
+  }
+  
