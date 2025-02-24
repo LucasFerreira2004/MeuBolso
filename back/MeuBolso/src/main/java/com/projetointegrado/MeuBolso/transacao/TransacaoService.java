@@ -75,13 +75,8 @@ public class TransacaoService implements ITransacaoService {
 
     @Transactional
     public TransacaoDTO save(String userId, TransacaoSaveDTO dto) {
-        try {
-            Transacao transacao = saveAndValidate(userId, null, dto);
-            return new TransacaoDTO(transacao);
-        }catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        Transacao transacao = saveAndValidate(userId, null, dto);
+        return new TransacaoDTO(transacao);
     }
 
     @Transactional

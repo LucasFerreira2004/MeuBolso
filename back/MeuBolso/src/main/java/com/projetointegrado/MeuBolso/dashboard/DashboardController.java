@@ -62,32 +62,22 @@ public class DashboardController {
     @Operation(summary = "Dashboard do total de transacoes separado por despesa e receita")
     @GetMapping("transacoes/balanco")
     public List<TransacaoBalancoDTO> getBalancoTransacoes(@RequestParam int anoInicial, @RequestParam int mesInicial, @RequestParam int anoFinal, @RequestParam int mesFinal) {
-        try {
-            LocalDate dataInicial = LocalDate.of(anoInicial, mesInicial, 1);
-            LocalDate dataFinal = LocalDate.of(anoFinal, mesFinal, 1);
-            dataFinal = dataFinal.with(TemporalAdjusters.lastDayOfMonth());
+        LocalDate dataInicial = LocalDate.of(anoInicial, mesInicial, 1);
+        LocalDate dataFinal = LocalDate.of(anoFinal, mesFinal, 1);
+        dataFinal = dataFinal.with(TemporalAdjusters.lastDayOfMonth());
 
-            String userId = usuarioService.getUsuarioLogadoId();
-            return transacoesDashboardsService.findTransacoesBalanco(userId, dataInicial, dataFinal);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        String userId = usuarioService.getUsuarioLogadoId();
+        return transacoesDashboardsService.findTransacoesBalanco(userId, dataInicial, dataFinal);
     }
 
     @Operation(summary = "Dashboard de saldo do usuario por mes")
     @GetMapping("saldo/balanco")
     public List<SaldoBalancoDTO> getBalancoSaldos(@RequestParam int anoInicial, @RequestParam int mesInicial, @RequestParam int anoFinal, @RequestParam int mesFinal) {
-        try {
-            LocalDate dataInicial = LocalDate.of(anoInicial, mesInicial, 1);
-            LocalDate dataFinal = LocalDate.of(anoFinal, mesFinal, 1);
-            dataFinal = dataFinal.with(TemporalAdjusters.lastDayOfMonth());
-            String userId = usuarioService.getUsuarioLogadoId();
+        LocalDate dataInicial = LocalDate.of(anoInicial, mesInicial, 1);
+        LocalDate dataFinal = LocalDate.of(anoFinal, mesFinal, 1);
+        dataFinal = dataFinal.with(TemporalAdjusters.lastDayOfMonth());
+        String userId = usuarioService.getUsuarioLogadoId();
 
-            return contaDashboardService.findSaldosBalanco(userId, dataInicial, dataFinal);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        return contaDashboardService.findSaldosBalanco(userId, dataInicial, dataFinal);
     }
 }
