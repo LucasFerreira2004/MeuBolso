@@ -5,7 +5,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import style from "./login.module.css";
 import { baseUrl } from "@renderer/api/api";
-import { LogoIcon } from "@renderer/assets/iconesLogin";
 
 // Definindo tipo para a resposta da API
 interface LoginResponse {
@@ -65,7 +64,7 @@ function Login() {
     <div className={style.pageBackground}>
       <div className={style.mainContainer}>
         <div className={style.containerLogo}>
-          <LogoIcon />
+          <img src="assets/logo-meuBolso.svg" alt="Logo" className={style.iconLogo}/>
         </div>
 
         <div className={style.containerInput}>
