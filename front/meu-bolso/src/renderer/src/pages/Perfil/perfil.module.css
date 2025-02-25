@@ -41,7 +41,7 @@
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    background-color: #ccc; /* Cor de fundo temporária para a foto */
+    background-color: #000; /* Cor de fundo temporária para a foto */
     display: flex;
     align-items: center;
     justify-content: center;

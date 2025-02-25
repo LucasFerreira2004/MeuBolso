@@ -70,11 +70,7 @@ function Perfil() {
       <div className={style.body}>
         <div className={style.headerPerfil}>
           <div className={style.fotoPerfil}>
-            {usuario.imgUrl ? (
-              <img src={usuario.imgUrl} alt="Foto do perfil" />
-            ) : (
-              "Foto aqui"
-            )}
+            <img src="assets/sung.svg" alt="" className={style.fotoPerfil}/>
           </div>
           <div className={style.infoPerfil}>
             <div className={style.infoItem}>
