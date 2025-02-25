@@ -1,11 +1,12 @@
 .container {
   display: flex;
   gap: 20px;
-  flex-direction: column;
+  flex-direction: column; 
   justify-items: center;
-  width: 100vh;
-  width: 1000px;
+  width: 80vh;
+  width: 850px;
   padding: 20px;
+  margin-left: 200px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 @media (max-width: 1535px) and (min-width: 834px) {
