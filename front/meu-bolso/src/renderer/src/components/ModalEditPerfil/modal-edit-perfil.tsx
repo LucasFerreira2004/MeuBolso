@@ -89,11 +89,7 @@ const ModalEditPerfil: React.FC<ModalEditPerfilProps> = ({ onClose, usuario, set
         </button>
         <h2>Editar Perfil</h2>
         <div className={styles.fotoPerfil}>
-          {fotoPerfil ? (
-            <img src={URL.createObjectURL(fotoPerfil)} alt="Foto de Perfil" />
-          ) : (
-            "Foto de perfil aqui"
-          )}
+          <img src="assets/sung.svg" alt="" className={styles.fotoPerfil}/>
         </div>
         <div className={styles.escolherFoto}>
           <input type="file" onChange={handleFotoChange} />

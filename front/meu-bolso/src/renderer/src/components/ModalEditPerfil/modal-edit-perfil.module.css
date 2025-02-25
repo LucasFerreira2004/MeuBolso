@@ -51,7 +51,7 @@
   .fotoPerfil {
     width: 200px;
     height: 200px;
-    background: #ddd;
+    background: #000;
     border-radius: 50%;
     display: flex;
     align-items: center;
