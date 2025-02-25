@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Categoria } from "../../pages/Categorias/categorias";
 import style from "./modal-edit-categorias.module.css";
 import DropDownColors from "../../components/UI/DropDownColors/drop-down-colors";
+import { baseUrl } from "../../api/api";
 
 interface ModalEditCategoriaProps {
   closeModal: () => void;
@@ -19,7 +20,7 @@ const sendData = async (categoria: Categoria) => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8080/categorias/${categoria.id}`, {
+    const response = await fetch(`${baseUrl}/categorias/${categoria.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

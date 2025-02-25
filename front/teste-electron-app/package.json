@@ -3,6 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "Aplicação Electron para gerenciamento financeiro pessoal.",
+  "author": {
+    "name": "Seu Nome",
+    "email": "seu.email@example.com",
+    "url": "https://seusite.com"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build && electron-builder",
@@ -17,14 +23,15 @@
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",
     "date-fns": "^4.1.0",
-    "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.0",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
+    "react-avatar-edit": "^1.2.0",
     "react-chartjs-2": "^5.3.0",
     "react-datepicker": "^7.6.0",
     "react-day-picker": "^9.5.1",
     "react-dom": "^18.3.1",
+    "react-dropzone": "^14.3.5",
     "react-intl-currency-input": "^0.2.6",
     "react-loading-skeleton": "^3.5.0",
     "react-router-dom": "^7.0.2",
@@ -58,14 +65,7 @@
     },
     "files": [
       "dist/**",
-      "dist-electron/**",
-      "api/**"
-    ],
-    "extraResources": [
-      {
-        "from": "api/dslist.jar",
-        "to": "api/dslist.jar"
-      }
+      "dist-electron/**"
     ],
     "win": {
       "target": [

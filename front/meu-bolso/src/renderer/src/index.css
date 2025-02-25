@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif; 
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll; /* Mantém a rolagem funcional */
+  scrollbar-width: none; /* Firefox: esconde a barra */
+}
+:root {
+  --main-color: #E17A05;
+  --main-color-light: #FFA238;
+  --gray: #F8F8F8;
+  --vibrant-red: #E63946;
+  --vibrant-green: #2A9D8F;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"]:focus + label {
+  display: none;
+}

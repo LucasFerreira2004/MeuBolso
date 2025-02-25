@@ -5,6 +5,7 @@ import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-contas.module.css";
 import SelectedBancos from "../UI/SelectedBanco/selected-banco";
 import SelectedTipoConta from "../UI/SelectedTipoConta/selected-tipo-conta";
+import { baseUrl } from "../../api/api";
 
 interface ModalContasProps {
   onCloseAll: () => void;
@@ -60,7 +61,7 @@ function ModalContas({ onCloseAll, showToast }: ModalContasProps) {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/contas",
+        `${baseUrl}/contas`,
         {
           saldo: saldoNumerico,
           id_banco: bancoId,

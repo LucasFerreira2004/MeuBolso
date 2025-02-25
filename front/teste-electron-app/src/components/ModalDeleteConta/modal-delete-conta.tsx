@@ -1,3 +1,4 @@
+import { baseUrl } from "../../api/api";
 import style from "./modal-delete-conta.module.css";
 
 interface ModalDeleteContaProps {
@@ -17,7 +18,7 @@ const deleteConta = async (id: number) => {
       };
     }
 
-    const response = await fetch(`http://localhost:8080/contas/${id}`, {
+    const response = await fetch(`${baseUrl}/contas/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,

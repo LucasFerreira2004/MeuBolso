@@ -1,16 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import AddButton from "../../components/UI/AddButton/add-button";
 import style from "./transacoes.module.css";
 import ModalTipoTrans from "../../components/ModalTipoTransacao/modal-tipo-trans";
-import ModalEditDespesa from "../../components/ModalEditDespesas/moda-edit-despesa"; // Importar modal de despesa
-import ModalEditReceita from "../../components/ModalEditReceita/modal-edit-receita"; // Importar modal de receita
+import ModalEditDespesa from "../../components/ModalEditDespesas/moda-edit-despesa";
+import ModalEditReceita from "../../components/ModalEditReceita/modal-edit-receita";
 import DatePicker from "../../components/UI/Date/date";
 import CardTransacoes from "../../components/UI/CardTransacoes/card-transacoes";
+import { baseUrl } from "../../api/api";
+import { Transacao } from "../../types/types";
+
+interface TransacoesPorData {
+  data: string;
+  transacoes: Transacao[];
+}
 
 function Transacoes() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isModalDespesaOpen, setIsModalDespesaOpen] = useState<boolean>(false); // Estado para modal de despesa
-  const [isModalReceitaOpen, setIsModalReceitaOpen] = useState<boolean>(false); // Estado para modal de receita
+  const [isModalDespesaOpen, setIsModalDespesaOpen] = useState<boolean>(false);
+  const [isModalReceitaOpen, setIsModalReceitaOpen] = useState<boolean>(false);
   const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
   const [totalDespesas, setTotalDespesas] = useState<number | null>(null);
   const [totalReceitas, setTotalReceitas] = useState<number | null>(null);
@@ -19,8 +26,8 @@ function Transacoes() {
   const [mes, setMes] = useState<number>(new Date().getMonth() + 1);
   const [ano, setAno] = useState<number>(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [, setTransacoes] = useState<any[]>([]);
-  const [transacoesAgrupadas, setTransacoesAgrupadas] = useState<any[]>([]);
+  const [, setTransacoes] = useState<Transacao[]>([]);
+  const [transacoesAgrupadas, setTransacoesAgrupadas] = useState<TransacoesPorData[]>([]);
 
   const fetchSaldoTotal = async (ano: number, mes: number) => {
     const token = localStorage.getItem("authToken");
@@ -32,7 +39,7 @@ function Transacoes() {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/contas/saldoTotal?ano=${ano}&mes=${mes}`,
+        `${baseUrl}/contas/saldoTotal?ano=${ano}&mes=${mes}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -60,7 +67,7 @@ function Transacoes() {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/transacoes/somatorioDespesas?ano=${ano}&mes=${mes}`,
+        `${baseUrl}/transacoes/somatorioDespesas?ano=${ano}&mes=${mes}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -88,7 +95,7 @@ function Transacoes() {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/transacoes/somatorioReceitas?ano=${ano}&mes=${mes}`,
+        `${baseUrl}/transacoes/somatorioReceitas?ano=${ano}&mes=${mes}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -106,7 +113,7 @@ function Transacoes() {
     }
   };
 
-  const fetchTransacoes = async (ano: number, mes: number) => {
+  const fetchTransacoes = useCallback(async (ano: number, mes: number) => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       setError("Você precisa estar logado para acessar esta funcionalidade.");
@@ -116,7 +123,7 @@ function Transacoes() {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/transacoes?ano=${ano}&mes=${mes}`,
+        `${baseUrl}/transacoes?ano=${ano}&mes=${mes}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -133,11 +140,10 @@ function Transacoes() {
       setError("Erro ao carregar as transações.");
       console.error(error);
     }
-  };
+  }, []);
 
-  // Função para agrupar transações por data
-  const agruparTransacoesPorData = (transacoes: any[]) => {
-    const transacoesPorData = transacoes.reduce((acc: any, transacao) => {
+  const agruparTransacoesPorData = (transacoes: Transacao[]) => {
+    const transacoesPorData = transacoes.reduce((acc: Record<string, Transacao[]>, transacao) => {
       const data = transacao.data_transacao;
 
       if (!acc[data]) {
@@ -170,9 +176,9 @@ function Transacoes() {
     setSelectedTransactionId(id);
 
     if (tipo === "DESPESA") {
-      setIsModalDespesaOpen(true); // Abrir modal de despesa
+      setIsModalDespesaOpen(true);
     } else if (tipo === "RECEITA") {
-      setIsModalReceitaOpen(true); // Abrir modal de receita
+      setIsModalReceitaOpen(true);
     }
   };
 
@@ -182,33 +188,8 @@ function Transacoes() {
     setSelectedTransactionId(null);
   };
 
-  const handleUpdateTransaction = (updatedTransaction: any) => {
-    if (updatedTransaction.deleted) {
-      // Se a transação foi excluída, recarregue as transações
-      handleUpdate();
-    } else {
-      // Caso contrário, atualize os estados locais
-      setTransacoes((prevTransacoes) =>
-        prevTransacoes.map((transacao) =>
-          transacao.id === updatedTransaction.id ? updatedTransaction : transacao
-        )
-      );
-  
-      setTransacoesAgrupadas((prevTransacoes) =>
-        prevTransacoes.map((grupo) => ({
-          ...grupo,
-          transacoes: grupo.transacoes.map((transacao: any) =>
-            transacao.id === updatedTransaction.id ? updatedTransaction : transacao
-          ),
-        }))
-      );
-    }
-  
-    handleCloseEditModal();
-  };
-
   const handleUpdate = () => {
-    fetchTransacoes(ano, mes); 
+    fetchTransacoes(ano, mes);
   };
 
   useEffect(() => {
@@ -232,7 +213,7 @@ function Transacoes() {
     };
 
     fetchData();
-  }, [mes, ano]);
+  }, [mes, ano, fetchTransacoes]);
 
   return (
     <div className={style.containerTransacoes}>
@@ -308,9 +289,9 @@ function Transacoes() {
                 key={index}
                 transacoes={grupo.transacoes}
                 dataTransacao={grupo.data}
-                onEditClick={handleEditClick} onDeleteSuccess={function (): void {
-                  throw new Error("Function not implemented.");
-                } } token={""}              />
+                onEditClick={handleEditClick}
+                onDeleteSuccess={handleUpdate}
+              />
             ))
           )}
         </div>
@@ -321,7 +302,7 @@ function Transacoes() {
           mes={mes}
           ano={ano}
           onClose={toggleModal}
-          onUpdate={handleUpdate} // Passando a função de atualização
+          onUpdate={handleUpdate}
         />
       )}
 
@@ -331,7 +312,6 @@ function Transacoes() {
           ano={ano}
           transactionId={selectedTransactionId}
           onClose={handleCloseEditModal}
-          onTransactionUpdate={handleUpdateTransaction}
         />
       )}
 
@@ -341,7 +321,6 @@ function Transacoes() {
           ano={ano}
           transactionId={selectedTransactionId}
           onClose={handleCloseEditModal}
-          onTransactionUpdate={handleUpdateTransaction}
         />
       )}
     </div>

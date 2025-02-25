@@ -8,6 +8,7 @@ import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
 import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedReceita from "../UI/SelectedReceitas/selected-receita";
 import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
+import { baseUrl } from "../../api/api";
 
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
@@ -16,6 +17,19 @@ const removerFormatacaoMoeda = (valorFormatado: string): number => {
     .replace(",", ".");
   return parseFloat(valorNumerico);
 };
+interface TransactionData {
+  valor: number;
+  data: string;
+  tipoTransacao: "RECEITA";
+  categoriaId: number | null;
+  contaId: number | null;
+  comentario?: string | null;
+  descricao: string;
+  periodicidade?: "DIARIO" | "SEMANAL" | "MENSAL";
+  qtdParcelas?: number | null;
+}
+
+
 
 const formatarComoMoeda = (valor: string): string => {
   let valorNumerico = valor.replace(/\D/g, "");
@@ -62,7 +76,7 @@ function ModalReceitas({ onCloseAll, mes, ano }: ModalReceitasProps) {
     }
 
     // Dados comuns a todas as transações
-    const transactionData: any = {
+    const transactionData: TransactionData = {
       valor: valorNumerico,
       data,
       tipoTransacao: tipoTransacao === "NORMAL" ? "RECEITA" : tipoTransacao === "FIXA" ? "RECEITA" : "RECEITA",
@@ -86,13 +100,13 @@ function ModalReceitas({ onCloseAll, mes, ano }: ModalReceitasProps) {
     console.log("Dados da transação sendo enviados:", transactionData);
 
     try {
-      let url = "http://localhost:8080/transacoes";
+      let url = `${baseUrl}/transacoes`;
 
       // URLs diferentes para transações FIXA e PARCELADA
       if (tipoTransacao === "FIXA") {
-        url = "http://localhost:8080/transacoesRecorrentes/fixas";
+        url = `${baseUrl}/transacoesRecorrentes/fixas`;
       } else if (tipoTransacao === "PARCELADA") {
-        url = "http://localhost:8080/transacoesRecorrentes/parceladas";
+        url = `${baseUrl}/transacoesRecorrentes/parceladas`;
       }
 
       console.log("URL da requisição:", url);

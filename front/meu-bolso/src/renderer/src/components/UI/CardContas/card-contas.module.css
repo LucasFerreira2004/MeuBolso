@@ -1,0 +1,73 @@
+.cardContas {
+    display: flex;
+    justify-content: space-between;
+    flex: 1; /* Faz os cards crescerem igualmente */
+    margin-top: 20px;
+    margin-right: 30px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+.parteInfo {
+    display: flex;
+    font-size: large;
+    font-weight: 500;
+}
+
+.infoText{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 15px;
+    padding-left: 10px;
+}
+
+.parteInfo div p{
+    margin: 0px;
+}
+
+.parteInfo div h3{
+    margin: 0px;
+}
+
+.infoText span{
+    color: var(--vibrant-green);
+}
+
+.imagemContainer {
+    display: flex;
+    width: 170px; /* Definido um tamanho fixo para o ícone do banco */
+    height: 170px; /* Definido um tamanho fixo para o ícone do banco */
+    overflow: hidden; /* Garante que a imagem não saia do contêiner */
+    border-radius: 8px 0 0 8px;
+}
+
+.imagemContainer img {
+    object-fit: cover; /* Faz a imagem cobrir toda a altura e largura da div */
+    width: 100%; /* A imagem ocupa toda a largura do contêiner */
+    height: 100%; /* A imagem ocupa toda a altura do contêiner */
+}
+
+.editar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin: 10px;
+}
+
+.editar button { 
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.editar img {
+    width: 35px;
+}
+
+.editar .img2 {
+    width: 25px;
+}

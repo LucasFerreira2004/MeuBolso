@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Electron</title>
+    <!-- Configuração da CSP -->
+    <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://exemplo.com https://play-lh.googleusercontent.com https://t.ctcdn.com.br; connect-src 'self'  http://159.112.187.30:8080;"
+  />
+  </head>
+
+  <body>
+    <div id="root">
+      <!-- Exemplo de ícone da pasta public -->
+      <img src="/icone.png" alt="Ícone local" />
+
+      <!-- Exemplo de imagem de URL externa -->
+      <img src="https://exemplo.com/imagem.jpg" alt="Imagem de exemplo" />
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

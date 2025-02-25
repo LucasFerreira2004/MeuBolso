@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ProgressBar } from "../../ProgressBar/progress-bar";
 import ModalEditOrcamento from "../../../ModalEditOrcamento/modal-edit-orcamento";
 import ModalDeleteOrca from "../../../ModalDeleteOrcamentos/modal-delete-orca";
 import style from "./card-categoria.module.css";
+import { baseUrl } from "../../../../api/api";
 
 interface CategoriaDTO {
   id: number;
@@ -39,14 +40,12 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]);
-  const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(
-    null
-  );
+  const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(null);
   const [valor, setValor] = useState<string>("");
   const [data, setData] = useState<string>("");
   const [, setCategoriaId] = useState<number | null>(null);
 
-  const fetchOrcamentos = async () => {
+  const fetchOrcamentos = useCallback(async () => {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
@@ -56,7 +55,7 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/orcamentos?ano=${ano}&mes=${mes}`,
+        `${baseUrl}/orcamentos?ano=${ano}&mes=${mes}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -74,17 +73,27 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
     } catch (error) {
       console.error("Erro ao buscar orçamento:", error);
     }
-  };
+  }, [ano, mes]);
 
   useEffect(() => {
     fetchOrcamentos();
-  }, [mes, ano]);
+  }, [fetchOrcamentos]);
 
   useEffect(() => {
     if (onOrcamentoAdded) {
       fetchOrcamentos();
     }
-  }, [onOrcamentoAdded]);
+  }, [onOrcamentoAdded, fetchOrcamentos]);
+
+  useEffect(() => {
+    fetchOrcamentos();
+  }, [mes, ano, fetchOrcamentos]);
+
+  useEffect(() => {
+    if (onOrcamentoAdded) {
+      fetchOrcamentos();
+    }
+  }, [onOrcamentoAdded, fetchOrcamentos]);
 
   const handleOpenModal = (orcamento: Orcamento) => {
     setSelectedOrcamento(orcamento);
@@ -178,18 +187,18 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
         </div>
       ))}
 
-      {isModalOpen && selectedOrcamento && (
-        <ModalEditOrcamento
-          id={selectedOrcamento.id} // Passa o ID do orçamento selecionado
-          valor={valor} // Passa o valor do orçamento selecionado
-          data={data} // Passa a data do orçamento selecionado
-          onCloseAll={handleCloseModal}
-          handleChangeValor={(e) => setValor(e.target.value)} // Atualiza o valor
-          setCategoria={(categoriaId) => setCategoriaId(categoriaId)} // Atualiza o ID da categoria
-          setData={(date) => setData(date)} // Atualiza a data
-          onEditSuccess={handleEditSuccess} // Callback para sucesso na edição
-        />
-      )}
+{isModalOpen && selectedOrcamento && (
+  <ModalEditOrcamento
+    id={selectedOrcamento.id}
+    valor={valor}
+    data={data}
+    onCloseAll={handleCloseModal}
+    handleChangeValor={(e) => setValor(e.target.value)}
+    setCategoria={(categoriaId) => setCategoriaId(categoriaId)} // Passa a função para atualizar o idCategoria
+    setData={(date) => setData(date)}
+    onEditSuccess={handleEditSuccess}
+  />
+)}
 
       {isDeleteModalOpen && selectedOrcamento && (
         <ModalDeleteOrca

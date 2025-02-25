@@ -23,7 +23,7 @@ function Login() {
       // Limpa o estado para evitar que o toast seja exibido novamente
       navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [location.state]);
+  }, [location.state, location.pathname, navigate]); // Adicionadas as dependências faltantes
 
   const handleLogin = async () => {
     if (email === "" || password === "") {

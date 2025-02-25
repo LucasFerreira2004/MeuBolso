@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CardContas from "../../components/UI/CardContas/card-contas";
@@ -8,6 +8,7 @@ import ModalEditContas from "../../components/ModalEditContas/modal-edit-contas"
 import ModalContas from "../../components/ModalContas/modal-contas";
 import ModalDeleteConta from "../../components/ModalDeleteConta/modal-delete-conta";
 import DatePicker from "../../components/UI/Date/date";
+import { baseUrl } from "../../api/api";
 
 interface Conta {
   data: string;
@@ -38,14 +39,14 @@ function ContasBancarias() {
   const [mes, setMes] = useState(new Date().getMonth() + 1);
   const [ano, setAno] = useState(new Date().getFullYear());
 
-  const fetchContas = () => {
+  const fetchContas = useCallback(() => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("Token de autenticação não encontrado.");
       return;
     }
 
-    const url = `http://localhost:8080/contas?ano=${ano}&mes=${mes}`;
+    const url = `${baseUrl}/contas?ano=${ano}&mes=${mes}`;
 
     fetch(url, {
       method: "GET",
@@ -68,11 +69,11 @@ function ContasBancarias() {
       .catch((error) => {
         console.error("Erro ao buscar as contas:", error);
       });
-  };
+  }, [ano, mes]);
 
   useEffect(() => {
     fetchContas();
-  }, [mes, ano]);
+  }, [fetchContas]);
 
   const handleDeleteRequest = (contaId: number) => {
     setSelectedDeleteId(contaId);
@@ -112,7 +113,6 @@ function ContasBancarias() {
 
   return (
     <div className={style.contas}>
-      {/* ToastContainer deve estar no nível mais alto da tela */}
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -152,7 +152,7 @@ function ContasBancarias() {
             setOpenCreateModal(false);
             fetchContas();
           }}
-          showToast={showToast} // Passa a função showToast como prop
+          showToast={showToast}
         />
       )}
 

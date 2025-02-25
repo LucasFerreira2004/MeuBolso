@@ -8,6 +8,8 @@ import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
 import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
 import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
+import { Transaction } from "electron";
+import { baseUrl } from "../../api/api";
 
 const removerFormatacaoMoeda = (valorFormatado: string): number => {
   const valorNumerico = valorFormatado
@@ -25,12 +27,24 @@ const formatarValor = (valor: string): string => {
   return `R$ ${valorNumerico}`;
 };
 
+interface TransactionData {
+  valor: number;
+  data: string;
+  tipoTransacao: "DESPESA";
+  categoriaId: number | null;
+  contaId: number | null;
+  comentario: string | null;
+  descricao: string;
+  periodicidade?: "DIARIO" | "SEMANAL" | "MENSAL";
+  qtdParcelas?: number | null; // Aceita `number` ou `null`
+}
+
 interface ModalEditDespesasProps {
   onClose: () => void;
   mes: number;
   ano: number;
   transactionId: number;
-  onTransactionUpdate: (updatedTransaction: any) => void;
+  onTransactionUpdate?: (updatedTransaction: Transaction) => void; // Prop opcional
 }
 
 const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
@@ -38,7 +52,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
   mes,
   ano,
   transactionId,
-  onTransactionUpdate,
+  onTransactionUpdate = () => {}, // Valor padrão como função vazia
 }) => {
   const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
@@ -66,7 +80,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
 
       try {
         const response = await axios.get(
-          `http://localhost:8080/transacoes/${transactionId}`,
+          `${baseUrl}/transacoes/${transactionId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -119,7 +133,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
       return;
     }
 
-    const transactionData: any = {
+    const transactionData: TransactionData = {
       valor: valorNumerico,
       data,
       tipoTransacao: "DESPESA",
@@ -127,6 +141,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
       contaId: conta,
       comentario,
       descricao,
+      qtdParcelas: qtdParcelas ?? undefined, // Converte `null` para `undefined`
     };
 
     if (tipoTransacao === "FIXA") {
@@ -134,7 +149,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
     }
 
     if (tipoTransacao === "PARCELADA") {
-      transactionData.qtdParcelas = qtdParcelas;
+      transactionData.qtdParcelas = qtdParcelas ?? undefined; // Converte `null` para `undefined`
       transactionData.periodicidade = periodicidade;
     }
 
@@ -152,7 +167,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
 
       if (response.status === 200) {
         toast.success("Transação atualizada com sucesso!");
-        onTransactionUpdate(response.data); // Notifica o componente pai sobre a atualização
+        onTransactionUpdate(response.data); // Chama a função se ela foi passada
         onClose();
       } else {
         toast.error("Erro ao atualizar a transação.");
@@ -187,7 +202,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
           iconSrc="/assets/iconsModalDespesas/descrip.svg"
           placeholder="Ex: Pagamento da fatura"
           value={descricao}
-          onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setDescricao(e.target.value)
           }
         />
@@ -206,7 +221,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
           iconSrc="/assets/iconsModalDespesas/comentario.svg"
           placeholder="Opcional"
           value={comentario || ""}
-          onChange={(e: { target: { value: any } }) =>
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setComentario(e.target.value || null)
           }
         />
@@ -257,8 +272,7 @@ const ModalEditDespesas: React.FC<ModalEditDespesasProps> = ({
                 iconSrc="/assets/iconsModalDespesas/parcelas.svg"
                 type="number"
                 placeholder="Ex: 12"
-                value={qtdParcelas || ""}
-                onChange={(e: { target: { value: any } }) =>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setQtdParcelas(Number(e.target.value))
                 }
               />
