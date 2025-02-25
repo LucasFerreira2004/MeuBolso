@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import { ProgressBar } from "../../ProgressBar/progress-bar";
 import ModalEditOrcamento from "../../../ModalEditOrcamento/modal-edit-orcamento";
 import ModalDeleteOrca from "../../../ModalDeleteOrcamentos/modal-delete-orca";
 import style from "./card-categoria.module.css";
@@ -175,7 +174,7 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
             </li>
             <li className={style.item}>
               <p className={style.label}>Progresso:</p>
-              <ProgressBar value={orcamento.progresso * 100} />
+              <p>{orcamento.progresso}</p>
             </li>
             <li className={style.item}>
               <p className={style.label}>Restante:</p>
@@ -187,22 +186,22 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
         </div>
       ))}
 
-{isModalOpen && selectedOrcamento && (
-  <ModalEditOrcamento
-    id={selectedOrcamento.id}
-    valor={valor}
-    data={data}
-    onCloseAll={handleCloseModal}
-    handleChangeValor={(e) => setValor(e.target.value)}
-    setCategoria={(categoriaId) => setCategoriaId(categoriaId)} // Passa a função para atualizar o idCategoria
-    setData={(date) => setData(date)}
-    onEditSuccess={handleEditSuccess}
-  />
-)}
+      {isModalOpen && selectedOrcamento && (
+        <ModalEditOrcamento
+          id={selectedOrcamento.id}
+          valor={valor}
+          data={data}
+          onCloseAll={handleCloseModal}
+          handleChangeValor={(e) => setValor(e.target.value)}
+          setCategoria={(categoriaId) => setCategoriaId(categoriaId)} // Passa a função para atualizar o idCategoria
+          setData={(date) => setData(date)}
+          onEditSuccess={handleEditSuccess}
+        />
+      )}
 
       {isDeleteModalOpen && selectedOrcamento && (
         <ModalDeleteOrca
-          url={`http://localhost:8080/orcamentos`}
+          url={`${baseUrl}/orcamentos`}
           id={selectedOrcamento.id}
           onDeleteSuccess={handleDeleteSuccess}
           onClose={handleCloseDeleteModal}
