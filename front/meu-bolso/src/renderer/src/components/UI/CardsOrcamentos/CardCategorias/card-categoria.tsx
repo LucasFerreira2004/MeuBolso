@@ -174,7 +174,7 @@ function TotalCategorias({ mes, ano, onOrcamentoAdded }: TotalCategoriasProps) {
             </li>
             <li className={style.item}>
               <p className={style.label}>Progresso:</p>
-              <p>{orcamento.progresso}</p>
+              <p>{orcamento.progresso} %</p>
             </li>
             <li className={style.item}>
               <p className={style.label}>Restante:</p>
