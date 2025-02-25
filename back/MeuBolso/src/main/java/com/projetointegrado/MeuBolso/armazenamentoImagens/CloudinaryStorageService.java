@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.armazenamentoImagens;
 
 import com.projetointegrado.MeuBolso.armazenamentoImagens.Exceptions.ImagemGrandeException;
+import com.projetointegrado.MeuBolso.globalExceptions.ErroUploadImagemException;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,7 +34,7 @@ public class CloudinaryStorageService implements IStorageService {
             BufferedImage image = ImageIO.read(inputStream);
             String contentType = file.getContentType();
             if (contentType == null || (!contentType.equals("image/png") && !contentType.equals("image/jpeg"))) {
-                throw new IllegalArgumentException("Apenas arquivos PNG e JPG são permitidos!");
+                throw new ErroUploadImagemException();
             }
 
             // Converte para JPG e reduz tamanho
@@ -55,8 +56,7 @@ public class CloudinaryStorageService implements IStorageService {
             return (String) uploadResult.get("secure_url");
 
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao fazer upload da imagem!", e);
+            throw new ErroUploadImagemException();
         }
     }
 
