@@ -25,6 +25,7 @@ const CardContas: React.FC<CardContasProps> = ({
   saldo,
   banco,
   altBanco,
+  descricao,
   onDelete,
   onEdit,
 }) => {
@@ -47,6 +48,7 @@ const CardContas: React.FC<CardContasProps> = ({
           <h3>{titulo}</h3>
           <p>Conta: {formatarTipoConta(tipo)}</p> {/* Formatar tipo aqui */}
           <p>Saldo: <span>{formatarSaldo(saldo)}</span></p>
+          <p>Descrição: {descricao}</p>
         </div>
       </div>
       <div className={style.editar}>
