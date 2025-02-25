@@ -72,7 +72,6 @@ function Categorias() {
       <header className={style.headerCategorias}>
         <h1>Categorias</h1>
         <div className={style.buttons}>
-          <AddButton texto="Categorias arquivadas" onClick={handleAddClick} />
           <AddButton texto="Adicionar Categoria" onClick={handleAddClick} />
         </div>
       </header>
@@ -137,7 +136,7 @@ function Categorias() {
 }
 
 function toTitleCase(str: string): string {
-  return str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+  return str.toLowerCase().replace(/(?:^|\s)\w/g, (match) => match.toUpperCase());
 }
 
 export default Categorias;
