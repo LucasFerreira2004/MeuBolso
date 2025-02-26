@@ -1,0 +1,130 @@
+/* Fundo escurecido ao redor do modal */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  /* Modal estilizado */
+  .modal {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: slideIn 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza os itens no modal */
+    text-align: center;
+  }
+  
+  /* Botão de fechar */
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: none;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s;
+  }
+  
+  .closeButton:hover {
+    color: #000;
+  }
+  
+  /* Estilização da Foto de Perfil */
+  .fotoPerfil {
+    width: 200px;
+    height: 200px;
+    background: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin: 10px auto; /* Centraliza a div no modal */
+  }
+  
+  /* Grupo de inputs */
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    width: 100%;
+    text-align: left;
+  }
+  
+  .formGroup label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .formGroup input {
+    width: 350px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Botão de salvar */
+  .saveButton {
+    background: #ff8c00;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+  
+  .saveButton:hover {
+    background: #e67e00;
+  }
+  
+  /* Animações */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Responsividade */
+  @media (max-width: 480px) {
+    .modal {
+      width: 95%;
+    }
+  }
+  
