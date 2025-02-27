@@ -58,24 +58,16 @@ public class TransacaoRecorrente {
     private Integer qtdParcelas;
 
     @Column(nullable = false, name = "tipo_repeticao")
+    @Enumerated(EnumType.STRING)
     private TipoRepeticao tipoRepeticao;
 
     @OneToMany(mappedBy = "transacaoRecorrente", cascade = CascadeType.REMOVE)
     private List<Transacao> transacoes;
 
-    public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario) {
-        this.id = id;
-        this.valor = valor;
-        this.tipo = tipo;
-        this.dataCadastro = dataCadastro;
-        this.descricao = descricao;
-        this.conta = conta;
-        this.categoria = categoria;
-        this.periodicidade = periodicidade;
-        this.usuario = usuario;
-        this.ultimaExecucao = null;
-    }
+    @Column(name = "ativa", nullable = false, columnDefinition = "boolean default true")
+    private Boolean ativa;
 
+    //no futuro poderia ter dois construturores, um que recebe um transaçãoFixaSave DTO e outro que recebe um transacaoParceladaSaveDTO
     public TransacaoRecorrente(Long id, BigDecimal valor, TipoTransacao tipo, LocalDate dataCadastro, String descricao, Conta conta, Categoria categoria, Periodicidade periodicidade, Usuario usuario, Integer qtdParcelas, TipoRepeticao tipoRepeticao) {
         this.id = id;
         this.valor = valor;
@@ -89,10 +81,13 @@ public class TransacaoRecorrente {
         this.ultimaExecucao = null;
         this.qtdParcelas = qtdParcelas;
         this.tipoRepeticao = tipoRepeticao;
+        this.ativa = true;
+
         if (qtdParcelas == null) return;
         IAvancoDataStrategy avancoStrategy = AvancoDataFactory.getStrategy(this.periodicidade);
         this.dataFinal = avancoStrategy.avancarData(this.dataCadastro, this.dataCadastro, this.qtdParcelas - 1);
     }
+
     public TransacaoRecorrente() {}
 
     public List<Transacao> getTransacoes() {
@@ -205,5 +200,13 @@ public class TransacaoRecorrente {
 
     public void setTipoRepeticao(TipoRepeticao tipoRepeticao) {
         this.tipoRepeticao = tipoRepeticao;
+    }
+
+    public Boolean getAtiva() {
+        return ativa;
+    }
+
+    public void setAtiva(Boolean ativa) {
+        this.ativa = ativa;
     }
 }

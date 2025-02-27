@@ -5,6 +5,11 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      '/dashboards': 'http://localhost:8080', // Substitua com a URL correta do seu backend
+    },
+  },
   plugins: [
     react(),
     electron({
@@ -14,7 +19,7 @@ export default defineConfig({
       },
       preload: {
         // Shortcut of `build.rollupOptions.input`.
-        // Preload scripts may contain Web assets, so use the `build.rollupOptions.input` instead `build.lib.entry`.
+// Preload scripts may contain Web assets, so use the `build.rollupOptions.input` instead `build.lib.entry`.
         input: path.join(__dirname, 'electron/preload.ts'),
       },
       // Ployfill the Electron and Node.js API for Renderer process.

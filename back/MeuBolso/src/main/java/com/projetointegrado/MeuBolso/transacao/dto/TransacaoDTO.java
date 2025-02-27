@@ -4,6 +4,7 @@ import com.projetointegrado.MeuBolso.categoria.dto.CategoriaDTO;
 import com.projetointegrado.MeuBolso.conta.dto.ContaDTO;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.transacao.Transacao;
+import com.projetointegrado.MeuBolso.transacaoMeta.TransacaoMeta;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,9 +18,10 @@ public class TransacaoDTO {
     private ContaDTO contaDTO;
     private String comentario;
     private String descricao;
+    private String origem;
+    private Long idTransacaoRecorrente;
 
     public TransacaoDTO(Transacao transacao) {
-        //isso so funcionará se os atributos forem os mesmos e estiverem na mesma ordem que a entidade
         this.id = transacao.getId();
         this.valor = transacao.getValor();
         this.data_transacao = transacao.getData();
@@ -28,6 +30,21 @@ public class TransacaoDTO {
         this.contaDTO = new ContaDTO(transacao.getConta());
         this.comentario = transacao.getComentario();
         this.descricao = transacao.getDescricao();
+        this.origem = transacao.getOrigemTransacao().name();
+        if (transacao.getTransacaoRecorrente() != null)
+            this.idTransacaoRecorrente = transacao.getTransacaoRecorrente().getId();
+    }
+
+    public TransacaoDTO(TransacaoMeta transacao) {
+        //isso so funcionará se os atributos forem os mesmos e estiverem na mesma ordem que a entidade
+        this.id = transacao.getId();
+        this.valor = transacao.getTransacao().getValor();
+        this.data_transacao = transacao.getTransacao().getData();
+        this.tipo = transacao.getTransacao().getTipo();
+        this.categoriaDTO = new CategoriaDTO(transacao.getTransacao().getCategoria());
+        this.contaDTO = new ContaDTO(transacao.getTransacao().getConta());
+        this.comentario = transacao.getTransacao().getComentario();
+        this.descricao = transacao.getTransacao().getDescricao();
     }
 
     //getters e setters
@@ -93,6 +110,22 @@ public class TransacaoDTO {
 
     public void setConta(ContaDTO conta) {
         this.contaDTO = conta;
+    }
+
+    public String getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(String origem) {
+        this.origem = origem;
+    }
+
+    public Long getIdTransacaoRecorrente() {
+        return idTransacaoRecorrente;
+    }
+
+    public void setIdTransacaoRecorrente(Long idTransacaoRecorrente) {
+        this.idTransacaoRecorrente = idTransacaoRecorrente;
     }
 
     @Override

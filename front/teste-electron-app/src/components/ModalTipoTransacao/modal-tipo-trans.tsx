@@ -1,25 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./modal-tipo-trans.module.css";
 import ModalDespesas from "../ModalDespesas/modal-despesas";
 import ModalReceitas from "../ModalReceitas/modal-receitas";
 
 interface ModalTransacaoProps {
   onClose: () => void;
+  mes: number; 
+  ano: number; 
+  onUpdate: () => void; // Certifique-se de que esta linha está presente
 }
 
-function ModalTipoTransacao({ onClose }: ModalTransacaoProps) {
+function ModalTipoTransacao({ onClose, mes, ano, onUpdate }: ModalTransacaoProps) {
   const [isDespesasModalOpen, setIsDespesasModalOpen] = useState(false);
   const [isReceitasModalOpen, setIsReceitasModalOpen] = useState(false);
+  const [, setSelectedMes] = useState(mes); 
+  const [, setSelectedAno] = useState(ano); 
 
-  // Função para fechar tudo (modal de despesas/receitas + modal de transação)
   const closeAllModals = () => {
     setIsDespesasModalOpen(false);
     setIsReceitasModalOpen(false);
-    onClose(); // Fecha também o modal principal
-
-    // Recarrega a página
-    window.location.reload();
+    onClose(); 
+    onUpdate(); // Chama a função de atualização ao fechar o modal
   };
+
+  useEffect(() => {
+    setSelectedMes(mes);
+    setSelectedAno(ano);
+  }, [mes, ano]);
 
   return (
     <>
@@ -29,6 +36,7 @@ function ModalTipoTransacao({ onClose }: ModalTransacaoProps) {
           onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
         >
           <div className={styles.header}>
+            <h3>Selecione o tipo da transacao</h3>
             <button className={styles.closeButton} onClick={onClose}>
               <img
                 src="/assets/iconsModal/iconX.svg"
@@ -64,8 +72,12 @@ function ModalTipoTransacao({ onClose }: ModalTransacaoProps) {
         </div>
       </div>
 
-      {isDespesasModalOpen && <ModalDespesas onCloseAll={closeAllModals} />}
-      {isReceitasModalOpen && <ModalReceitas onCloseAll={closeAllModals} />}
+      {isDespesasModalOpen && (
+        <ModalDespesas mes={mes} ano={ano} onCloseAll={closeAllModals} />
+      )}
+      {isReceitasModalOpen && (
+        <ModalReceitas mes={mes} ano={ano} onCloseAll={closeAllModals} />
+      )}
     </>
   );
 }

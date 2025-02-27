@@ -8,8 +8,9 @@ import PageTeste from "../pages/PageTeste/page-teste";
 import App from "../App";
 import Transacoes from "../pages/Transacoes/transacoes";
 import Metas from "../pages/Metas/metas";
-import PrivateRoute from "../components/private-routes"; // Importa o PrivateRoute
-
+import PrivateRoute from "../components/private-routes";
+import Orcamentos from "../pages/Orcamentos/orcamentos";
+import Relatorios from "../pages/Relatorios/relatorios";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -72,10 +73,18 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "/orcamentos",
+        element: (
+          <PrivateRoute>
+            <Orcamentos />
+          </PrivateRoute>
+        ),
+      },
+      {
         path: "/relatorios",
         element: (
           <PrivateRoute>
-            <PageTeste />
+            <Relatorios />
           </PrivateRoute>
         ),
       },

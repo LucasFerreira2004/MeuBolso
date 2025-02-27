@@ -12,6 +12,7 @@ import com.projetointegrado.MeuBolso.orcamento.exception.OrcamentoDuplicadoExcep
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
 import jakarta.transaction.Transactional;
+import org.hibernate.validator.internal.engine.messageinterpolation.util.InterpolationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,15 +79,15 @@ public class OrcamentoService implements IOrcamentoService{
     }
 
     @Transactional
-    public List<OrcamentoDTO> findOrcamentosByPeriodo(String usuarioId, LocalDate periodo) {
-        atualizacaoOrcamentoService.atualizarOrcamentos(usuarioId, periodo);
-        List<Orcamento> orcamentos = orcamentoRepository.findByUsuarioAndPeriodo(usuarioId, periodo.getYear(), periodo.getMonth().getValue());
+    public List<OrcamentoDTO> findOrcamentosByPeriodo(String usuarioId, Integer ano, Integer mes) {
+        atualizacaoOrcamentoService.atualizarOrcamentos(usuarioId, ano, mes);
+        List<Orcamento> orcamentos = orcamentoRepository.findByUsuarioAndPeriodo(usuarioId, ano, mes);
         return orcamentos.stream().map(OrcamentoDTO::new).toList();
     }
 
     @Transactional
     public Orcamento saveAndValidate(String usuarioId, Long id, OrcamentoPostDTO orcamentoDTO, Integer mes, Integer ano) {
-        // Valida o usuário e a categoria (supondo que esses métodos já fazem a validação)
+        // Valida o usuario e a categoria (supondo que esses métodos já fazem a validação)
         Usuario usuario = usuarioValidateService.validateAndGet(usuarioId,
                 new EntidadeNaoEncontradaException("{token}", "usuário não encontrado a partir do token"));
         Categoria categoria = categoriaValidateService.validateAndGet(orcamentoDTO.getIdCategoria(), usuarioId,
@@ -98,13 +99,14 @@ public class OrcamentoService implements IOrcamentoService{
         orcamentoValidateService.validateSamePeriod(categoria, usuarioId, mes, ano, id, new OrcamentoDuplicadoException());
 
         // Cria a nova orcamento
-        Orcamento orcamento = new Orcamento(categoria, mes, ano, orcamentoDTO.getValorEstimado(), usuario);
+        Orcamento orcamento = new Orcamento(null, categoria, mes, ano, orcamentoDTO.getValorEstimado(), usuario);
+
         return orcamentoRepository.save(orcamento);
     }
 
     @Transactional
     public Orcamento updateAndValidate(String usuarioId, Long id, OrcamentoPostDTO orcamentoDTO, Integer mes, Integer ano) {
-        // Primeiro, valida que o orçamento existe e pertence ao usuário
+        // Primeiro, valida que o orçamento existe e pertence ao usuario
         Orcamento orcamentoExistente = orcamentoValidateService.validateAndGet(id, usuarioId,
                 new EntidadeNaoEncontradaException("{id}", "Orçamento não encontrado para atualização"),
                 new AcessoNegadoException("Acesso negado para atualizar este orçamento."));

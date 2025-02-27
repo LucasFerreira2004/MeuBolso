@@ -1,89 +1,122 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import InputWithIcon from "../UI/InputsModal/input-modal";
 import style from "./modal-despesas.module.css";
 import SelectBoxContas from "../UI/SelectedBoxContas/selected-box-contas";
-import DatePicker from "../UI/DatePicker/date-picker"; 
+import DatePicker from "../UI/DatePicker/date-picker";
 import SelectedDespesas from "../UI/SelectedDespesa/selected-despesa";
+import SelectedPeriodo from "../UI/SelectedPeriodo/selected-periodo";
 
-interface ModalADespesasProps {
-  onCloseAll: () => void; // Agora fecha tudo ao cadastrar
+const removerFormatacaoMoeda = (valorFormatado: string): number => {
+  const valorNumerico = valorFormatado
+    .replace("R$ ", "")
+    .replace(/\./g, "")
+    .replace(",", ".");
+  return parseFloat(valorNumerico);
+};
+
+const formatarComoMoeda = (valor: string): string => {
+  let valorNumerico = valor.replace(/\D/g, "");
+  valorNumerico = (parseInt(valorNumerico) / 100).toFixed(2);
+  return `R$ ${valorNumerico.replace(".", ",")}`;
+};
+
+interface ModalDespesasProps {
+  onCloseAll: () => void;
+  mes: number;
+  ano: number;
 }
 
-function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
+function ModalDespesas({ onCloseAll, mes, ano }: ModalDespesasProps) {
   const [valor, setValor] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
   const [categoria, setCategoria] = useState<number | null>(null);
   const [conta, setConta] = useState<number | null>(null);
-  const [data, setData] = useState<string>(""); 
+  const [data, setData] = useState<string>("");
   const [comentario, setComentario] = useState<string | null>(null);
-
-  // Tipo de transação fixo como 'DESPESA'
-  const tipoTransacao = "DESPESA";
-
-  const formatarMoeda = (valor: string): string => {
-    let valorNumerico = valor.replace(/\D/g, ""); 
-    valorNumerico = (Number(valorNumerico) / 100).toFixed(2);
-    valorNumerico = valorNumerico.replace(".", ",");
-    valorNumerico = valorNumerico.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-    return `R$ ${valorNumerico}`;
-  };
-
-  const removerFormatacaoMoeda = (valorFormatado: string): number => {
-    const valorNumerico = valorFormatado
-      .replace("R$ ", "")
-      .replace(/\./g, "")
-      .replace(",", ".");
-    return parseFloat(valorNumerico);
-  };
+  const [tipoTransacao, setTipoTransacao] = useState<"NORMAL" | "FIXA" | "PARCELADA">("NORMAL");
+  const [periodicidade, setPeriodicidade] = useState<"SEMANAL" | "MENSAL" | "DIARIO">("MENSAL");
+  const [qtdParcelas, setQtdParcelas] = useState<number | null>(null);
 
   const handleChangeValor = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorDigitado = e.target.value;
-    const valorFormatado = formatarMoeda(valorDigitado);
+    const valorFormatado = formatarComoMoeda(valorDigitado);
     setValor(valorFormatado);
   };
 
   const handleSubmit = async () => {
     if (!valor || !descricao || !categoria || !data || !conta) {
-      alert("Preencha todos os campos obrigatórios!");
+      toast.error("Preencha todos os campos obrigatórios!");
       return;
     }
 
     const valorNumerico = removerFormatacaoMoeda(valor);
-
-    // Obtendo o token de autenticação
     const token = localStorage.getItem("authToken");
+
     if (!token) {
       console.error("Token de autenticação não encontrado.");
-      alert("Por favor, faça login novamente.");
+      toast.error("Por favor, faça login novamente.");
       return;
     }
 
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/transacoes",
-        {
-          valor: valorNumerico,
-          data,
-          tipoTransacao,
-          categoriaId: categoria,
-          contaId: conta,
-          comentario,
-          descricao,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+    // Dados comuns a todas as transações
+    const transactionData: any = {
+      valor: valorNumerico,
+      data,
+      tipoTransacao: tipoTransacao === "NORMAL" ? "DESPESA" : tipoTransacao === "FIXA" ? "DESPESA" : "DESPESA",
+      categoriaId: categoria,
+      contaId: conta,
+      comentario,
+      descricao,
+    };
 
-      console.log("Transação adicionada:", response.data);
-      onCloseAll(); // Fecha os dois modais ao cadastrar
+    // Adicionar dados específicos para transações "FIXA"
+    if (tipoTransacao === "FIXA") {
+      transactionData.periodicidade = periodicidade;
+    }
+
+    // Adicionar dados específicos para transações "PARCELADA"
+    if (tipoTransacao === "PARCELADA") {
+      transactionData.qtdParcelas = qtdParcelas;
+      transactionData.periodicidade = periodicidade;
+    }
+
+    console.log("Dados da transação sendo enviados:", transactionData);
+
+    try {
+      let url = "http://localhost:8080/transacoes";
+
+      if (tipoTransacao === "FIXA") {
+        url = "http://localhost:8080/transacoesRecorrentes/fixas";
+      } else if (tipoTransacao === "PARCELADA") {
+        url = "http://localhost:8080/transacoesRecorrentes/parceladas";
+      }
+
+      console.log("URL da requisição:", url);
+
+      const response = await axios.post(url, transactionData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("Resposta do servidor:", response.data);
+
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Transação adicionada com sucesso!");
+        onCloseAll();
+      } else {
+        toast.error("Erro ao adicionar transação. Verifique os dados ou tente novamente.");
+      }
     } catch (error) {
       console.error("Erro ao adicionar transação:", error);
-      alert("Erro ao adicionar transação. Verifique os dados ou tente novamente.");
+      if (axios.isAxiosError(error)) {
+        console.log("Detalhes do erro:", error.response?.data);
+      }
+      toast.error("Erro ao adicionar transação. Verifique os dados ou tente novamente.");
     }
   };
 
@@ -115,8 +148,8 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescricao(e.target.value)}
         />
         <SelectedDespesas setCategoria={setCategoria} />
-        <SelectBoxContas setConta={setConta} />
-        <DatePicker value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg"/>
+        <SelectBoxContas setConta={setConta} mes={mes} ano={ano} />
+        <DatePicker label="Escolha uma data:" value={data} onChange={setData} iconsrc="/assets/iconsModalDespesas/date.svg" />
         <InputWithIcon
           label="Comentário: "
           iconSrc="/assets/iconsModalDespesas/comentario.svg"
@@ -124,9 +157,71 @@ function ModalDespesas({ onCloseAll }: ModalADespesasProps) {
           value={comentario || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComentario(e.target.value || null)}
         />
+
+        <div>
+          <label>
+            <input
+              type="radio"
+              value="NORMAL"
+              checked={tipoTransacao === "NORMAL"}
+              onChange={() => setTipoTransacao("NORMAL")}
+            />
+            Normal
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="FIXA"
+              checked={tipoTransacao === "FIXA"}
+              onChange={() => setTipoTransacao("FIXA")}
+            />
+            Fixa
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="PARCELADA"
+              checked={tipoTransacao === "PARCELADA"}
+              onChange={() => setTipoTransacao("PARCELADA")}
+            />
+            Parcelada
+          </label>
+        </div>
+
+        {tipoTransacao !== "NORMAL" && (
+          <>
+            <SelectedPeriodo
+              selectedValue={periodicidade}
+              onChange={(e) => setPeriodicidade(e.target.value as "DIARIO" | "SEMANAL" | "MENSAL")}
+            />
+            {tipoTransacao === "PARCELADA" && (
+              <InputWithIcon
+                label="Quantidade de Parcelas:"
+                type="number"
+                placeholder="Ex: 12"
+                value={qtdParcelas || ""}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQtdParcelas(Number(e.target.value))}
+              />
+            )}
+          </>
+        )}
+
         <button onClick={handleSubmit} className={style.submitButton}>
           Adicionar Transação
         </button>
+
+        {/* Adicione o ToastContainer aqui */}
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </div>
   );

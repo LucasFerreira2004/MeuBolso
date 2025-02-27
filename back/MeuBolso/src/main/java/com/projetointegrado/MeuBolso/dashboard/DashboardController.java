@@ -6,6 +6,7 @@ import com.projetointegrado.MeuBolso.dashboard.dto.CategoriaExpandedDTO;
 import com.projetointegrado.MeuBolso.dashboard.dto.CategoriaMinDTO;
 import com.projetointegrado.MeuBolso.transacao.TipoTransacao;
 import com.projetointegrado.MeuBolso.usuario.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class DashboardController {
     @Autowired
     private ContaDashboardService contaDashboardService;
 
+    @Operation(summary = "Dashboard de valores total por categoria de despesas no mes")
     @GetMapping("/despesasCategoria")
     public List<CategoriaMinDTO> getDespesasCategorias(@RequestParam int ano, @RequestParam int mes){
         LocalDate data = LocalDate.of(ano, mes, 1);
@@ -37,6 +39,7 @@ public class DashboardController {
         return categoriaDashboardService.findAllValorTotalCategoria(userId, data, TipoTransacao.DESPESA);
     }
 
+    @Operation(summary = "Dashboard de valores total por categoria de receitas no mes")
     @GetMapping("/receitasCategoria")
     public List<CategoriaMinDTO> getReceitasCategorias(@RequestParam int ano, @RequestParam int mes){
         LocalDate data = LocalDate.of(ano, mes, 1);
@@ -46,6 +49,7 @@ public class DashboardController {
         return categoriaDashboardService.findAllValorTotalCategoria(userId, data, TipoTransacao.RECEITA);
     }
 
+    @Operation(summary = "Informacoes de transacoes feitas por categoria no mes")
     @GetMapping("/categoria/{id}")
     public CategoriaExpandedDTO getExpandedCategoria(@PathVariable Long id, @RequestParam int ano, @RequestParam int mes){
         LocalDate data = LocalDate.of(ano, mes, 1);
@@ -55,6 +59,7 @@ public class DashboardController {
         return categoriaDashboardService.findExpandedCategoria(userId, id, data);
     }
 
+    @Operation(summary = "Dashboard do total de transacoes separado por despesa e receita")
     @GetMapping("transacoes/balanco")
     public List<TransacaoBalancoDTO> getBalancoTransacoes(@RequestParam int anoInicial, @RequestParam int mesInicial, @RequestParam int anoFinal, @RequestParam int mesFinal) {
         try {
@@ -70,6 +75,7 @@ public class DashboardController {
         }
     }
 
+    @Operation(summary = "Dashboard de saldo do usuario por mes")
     @GetMapping("saldo/balanco")
     public List<SaldoBalancoDTO> getBalancoSaldos(@RequestParam int anoInicial, @RequestParam int mesInicial, @RequestParam int anoFinal, @RequestParam int mesFinal) {
         try {

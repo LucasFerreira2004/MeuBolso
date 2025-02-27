@@ -9,13 +9,13 @@ import com.projetointegrado.MeuBolso.globalExceptions.EntidadeNaoEncontradaExcep
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoSaveDTO;
 import com.projetointegrado.MeuBolso.transacao.dto.TransacaoDTO;
 import com.projetointegrado.MeuBolso.repetirTransacao.TransacaoRepeticaoService;
+import com.projetointegrado.MeuBolso.transacao.dto.SumTransacoesDTO;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
 import com.projetointegrado.MeuBolso.usuario.UsuarioValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
@@ -37,11 +37,7 @@ public class TransacaoService implements ITransacaoService {
     @Autowired
     private TransacaoValidateService transacaoValidateService;
 
-    //temporário
-    @Autowired
-    private TransacaoRepeticaoService transacaoRepeticaoService;
-
-    @Transactional(readOnly = true)
+    @Transactional
     public TransacaoDTO findById(String userId, Long id){
         Transacao transacao = transacaoRepository.findById(id).orElse(null);
         if (transacao == null)
@@ -51,36 +47,41 @@ public class TransacaoService implements ITransacaoService {
         return new TransacaoDTO(transacao);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<TransacaoDTO> findAllInRangeByMonth(String userId, LocalDate data) {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;
         List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
+        transacoes.forEach(t -> System.out.println(t.getData())); //implementar iterator?
         List<TransacaoDTO> transacaoDTOs = transacoes.stream().map(transacao -> new TransacaoDTO(transacao)).toList();
         return transacaoDTOs;
     }
 
-    @Transactional(readOnly = true)
-    public BigDecimal findSumDespesasInRangeByMonth(String userId, LocalDate data) {
+    @Transactional
+    public SumTransacoesDTO findSumDespesasInRangeByMonth(String userId, LocalDate data) {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;
-        BigDecimal sumDespesas = transacaoRepository.getSumInRangeByTipo(dataInicio, dataFim, userId, TipoTransacao.DESPESA.name());
+        SumTransacoesDTO sumDespesas = new SumTransacoesDTO(transacaoRepository.getSumInRangeByTipo(dataInicio, dataFim, userId, TipoTransacao.DESPESA.name()));
         return sumDespesas;
     }
 
-    @Transactional(readOnly = true)
-    public BigDecimal findSumReceitasInRangeByMonth(String userId, LocalDate data) {
+    @Transactional
+    public SumTransacoesDTO findSumReceitasInRangeByMonth(String userId, LocalDate data) {
         LocalDate dataInicio = data.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFim = data;
-        List<Transacao> transacoes = transacaoRepository.findAllInRange(dataInicio, dataFim, userId);
-        BigDecimal sumReceitas = transacaoRepository.getSumInRangeByTipo(dataInicio, dataFim, userId, TipoTransacao.RECEITA.name());
+        SumTransacoesDTO sumReceitas = new SumTransacoesDTO(transacaoRepository.getSumInRangeByTipo(dataInicio, dataFim, userId, TipoTransacao.RECEITA.name()));
         return sumReceitas;
     }
 
     @Transactional
     public TransacaoDTO save(String userId, TransacaoSaveDTO dto) {
-        Transacao transacao = saveAndValidate(userId, null, dto);
-        return new TransacaoDTO(transacao);
+        try {
+            Transacao transacao = saveAndValidate(userId, null, dto);
+            return new TransacaoDTO(transacao);
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     @Transactional
@@ -102,8 +103,8 @@ public class TransacaoService implements ITransacaoService {
     System.out.println("TransacaoService -> saveAndValidate : chegou ao fim das checagens");
 
     Transacao transacao = new Transacao(id, dto.getValor(), dto.getData(), dto.getTipoTransacao(),
-                categoria, conta, dto.getComentario(), dto.getDescricao(), usuario);
-    System.out.println(transacao);
+                categoria, conta, dto.getComentario(), dto.getDescricao(), usuario, OrigemTransacao.NORMAL);
+    System.out.println(transacao.getOrigemTransacao().name());
     return transacaoRepository.save(transacao);
     }
 

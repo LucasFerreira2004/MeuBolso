@@ -15,7 +15,6 @@ public class OrcamentoPostDTO {
     private LocalDate periodo;
 
     @NotNull(message = "A categoria selecionada deve ser informada")
-    @Min(value = 17, message = "A categoria selecionada deve ser válida")
     private Long idCategoria;
 
     public OrcamentoPostDTO(BigDecimal valorEstimado, LocalDate periodo, Long idCategoria) {

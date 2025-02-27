@@ -1,6 +1,7 @@
 package com.projetointegrado.MeuBolso.banco;
 
 import com.projetointegrado.MeuBolso.banco.dto.BancoDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +18,13 @@ public class BancoController {
     @Qualifier("bancoService")
     private IBancoService bancoService;
 
+    @Operation(summary = "Retorna todos os bancos registrados pelo usuario")
     @GetMapping
     public List<BancoDTO> findAll(){
         return bancoService.findAll();
     }
+
+    @Operation(summary = "Retorna um banco especifico a partir de um id indicado")
     @GetMapping("/{id}")
     public BancoDTO findById(@PathVariable Long id) {
         return bancoService.findById(id);

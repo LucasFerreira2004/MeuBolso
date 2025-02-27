@@ -2,8 +2,8 @@ import style from "./modal-delete-conta.module.css";
 
 interface ModalDeleteContaProps {
   onClose: () => void;
-  onConfirmDelete: (id: number) => void; // Função que espera um id
-  contaId: number; // ID da conta a ser excluída
+  onConfirmDelete: () => void; // Agora não precisa do ID
+  contaId: number;
 }
 
 const deleteConta = async (id: number) => {
@@ -31,24 +31,24 @@ const deleteConta = async (id: number) => {
       return { success: false, error: errorData };
     }
   } catch (error) {
-    console.error("Erro na requisição", error);
+    console.error("Erro na requisição:", error);
     return { success: false, error: { message: "Erro na conexão com o servidor." } };
   }
 };
 
 function ModalDeleteConta({ onClose, onConfirmDelete, contaId }: ModalDeleteContaProps) {
   const handleConfirmDelete = async () => {
-    if (!contaId) {
-      console.error("Erro ao excluir conta: ID da conta é obrigatório.");
-      alert("ID da conta não foi encontrado. Tente novamente.");
+    if (!contaId || contaId <= 0) {
+      console.error("Erro ao excluir conta: ID da conta inválido.");
+      alert("ID da conta não foi encontrado ou é inválido. Tente novamente.");
       return;
     }
 
     const result = await deleteConta(contaId);
 
     if (result.success) {
-      onConfirmDelete(contaId);  // Passa o ID da conta para a função de confirmação
-      onClose();
+      onClose(); // Fecha o modal
+      onConfirmDelete(); // Apenas avisa que deletou
     } else {
       console.error("Erro ao excluir conta:", result.error?.message || "Erro desconhecido.");
       alert(result.error?.message || "Não foi possível excluir a conta.");
@@ -60,6 +60,10 @@ function ModalDeleteConta({ onClose, onConfirmDelete, contaId }: ModalDeleteCont
       <div className={style.overlay} onClick={onClose}></div>
       <div className={style.containerDelete}>
         <h3>Deseja excluir esta conta?</h3>
+        <span className={style.delete}>
+          <img src="/assets/iconsModalConta/delete.svg"/>
+          Ao deletar esta conta, todas as transaões relacionadas a ela sumirão
+          </span>
         <div className={style.divButton}>
           <button className={style.buttonNao} onClick={onClose}>
             Não

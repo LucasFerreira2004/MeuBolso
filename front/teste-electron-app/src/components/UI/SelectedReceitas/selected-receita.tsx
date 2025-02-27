@@ -9,11 +9,11 @@ interface Categoria {
   cor: string;
 }
 
-interface SelectedDespesasProps {
+interface SelectedReceitaProps {
   setCategoria: (categoriaId: number | null) => void; 
 }
 
-function SelectedDespesas({ setCategoria }: SelectedDespesasProps) {
+function SelectedReceita({ setCategoria }: SelectedReceitaProps) {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
   useEffect(() => {
@@ -85,4 +85,4 @@ function SelectedDespesas({ setCategoria }: SelectedDespesasProps) {
   );
 }
 
-export default SelectedDespesas;
+export default SelectedReceita;

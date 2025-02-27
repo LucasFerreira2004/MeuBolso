@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import style from "./cadastro.module.css";
 
 function Cadastro() {
@@ -10,47 +10,56 @@ function Cadastro() {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const navigate = useNavigate();
-
   const handleCadastro = async () => {
-    if (nome === "" || email === "" || password === "" || repeatPassword === "") {
+    if (
+      nome === "" ||
+      email === "" ||
+      password === "" ||
+      repeatPassword === ""
+    ) {
       toast.error("Por favor, preencha todos os campos.");
       return;
     }
-
+  
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
       toast.error("Por favor, insira um email válido.");
       return;
     }
-
+  
     if (password !== repeatPassword) {
       toast.error("As senhas não correspondem.");
       return;
     }
-
+  
     if (password.length < 6) {
       toast.error("A senha deve ter pelo menos 6 caracteres.");
       return;
     }
-
+  
     try {
       const response = await fetch("http://localhost:8080/auth/cadastro", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ nome, email, senha: password }),
+        body: JSON.stringify({
+          nome,
+          email,
+          senha: password,
+        }),
       });
-
+  
       if (!response.ok) {
-        throw new Error("Erro ao cadastrar o usuário.");
+        const data = await response.json();
+        toast.error(data?.mensagem || "Erro ao cadastrar o usuário.");
+        return;
       }
-
-      // Exibe um toast de sucesso e redireciona
-      toast.success("Usuário cadastrado com sucesso!");
-      setTimeout(() => {
-        navigate("/");
-      }, 2000); // Redireciona após 2 segundos
+  
+      // Redireciona para o Login com a mensagem de sucesso
+      navigate("/", {
+        state: { successMessage: "Usuário cadastrado com sucesso!" },
+      });
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message || "Erro ao realizar o cadastro.");
@@ -59,7 +68,9 @@ function Cadastro() {
       }
     }
   };
-
+  
+  
+  
   return (
     <div className={style.pageBackground}>
       <div className={style.mainContainer}>
@@ -114,9 +125,12 @@ function Cadastro() {
           </div>
         </div>
 
-        <Link to="/" className={style.backToLogin}>
-          Voltar para o login
-        </Link>
+        <div className={style.resgistrar}>
+          <p className={style.texto}>Ja tem uma conta?</p>
+          <Link to="/">
+            <p className={style.link}>Entrar</p>
+          </Link>
+        </div>
 
         <button className={style.buttonC} onClick={handleCadastro}>
           Cadastrar

@@ -4,16 +4,20 @@ import com.projetointegrado.MeuBolso.autorizacao.dto.CadastroDTO;
 import com.projetointegrado.MeuBolso.autorizacao.dto.LoginDTO;
 import com.projetointegrado.MeuBolso.autorizacao.dto.LoginResponseDTO;
 import com.projetointegrado.MeuBolso.autorizacao.token.TokenService;
+import com.projetointegrado.MeuBolso.globalExceptions.ValoresNaoPermitidosException;
 import com.projetointegrado.MeuBolso.usuario.IUsuarioService;
 import com.projetointegrado.MeuBolso.usuario.Usuario;
-import com.projetointegrado.MeuBolso.usuario.UsuarioService;
-import com.projetointegrado.MeuBolso.usuario.dto.UsuarioDTO;
+import com.projetointegrado.MeuBolso.usuario.dto.OnCreate;
+import com.projetointegrado.MeuBolso.usuario.dto.UsuarioSaveDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,21 +36,23 @@ public class AutenticacaoController {
     @Qualifier("usuarioService")
     private IUsuarioService usuarioService;
 
+    @Operation(summary = "Autentica um usuario")
     @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody @Valid LoginDTO data) {
         var usernameSenha = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
-        System.out.println("email: " + data.email() + " senha: " + data.senha());
-        System.out.println(usernameSenha);
         var auth = this.authenticationManager.authenticate(usernameSenha);
         var token = tokenService.gerarToken((Usuario) auth.getPrincipal());
 
         return new LoginResponseDTO(token);
     }
 
+    @Operation(summary = "Cadastra um novo usuario")
     @PostMapping("/cadastro")
-    public ResponseEntity cadastrar(@RequestBody @Valid CadastroDTO data){
-        UsuarioDTO usuarioDTO = new UsuarioDTO(data.nome(), data.email(), data.senha());
-        usuarioService.save(usuarioDTO);
+    public ResponseEntity cadastrar(@RequestBody @Validated(OnCreate.class) UsuarioSaveDTO usuarioSaveDTO, BindingResult bindingResult) throws ValoresNaoPermitidosException {
+        if (bindingResult.hasErrors()){
+            throw new ValoresNaoPermitidosException(bindingResult);
+        }
+        usuarioService.save(usuarioSaveDTO);
 
         return ResponseEntity.ok().build();
     }

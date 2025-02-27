@@ -86,3 +86,20 @@
 .backToLogin:hover {
   text-decoration: underline;
 }
+.texto{
+  font-size:small;
+}
+
+.link{
+  font-size: small;
+}
+
+
+.link:hover {
+  color: rgb(66, 66, 253);
+}
+.resgistrar{
+  display: flex;
+  justify-content: flex-end;
+  gap: 3px;
+}

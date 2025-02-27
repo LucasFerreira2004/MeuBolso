@@ -1,103 +1,57 @@
-.iconLogoArrow {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  margin-left: 10px;
-  transition: transform 0.3s ease; /* Alterado: Adicionada transição suave para rotação */
-}
-
-.rotated {
-  transform: rotate(90deg); /* Alterado: Define rotação de 90 graus para o ícone */
-}
-
-.containerModalEditContas {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
-  background-color: #fff;
-  z-index: 999;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 20px;
-}
-
-.headerModalEditContas {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.2rem;
-  padding-bottom: 10px;
-  font-weight: bold;
-  color: #333;
-}
-
-.headerModalEditContas img {
-  cursor: pointer;
-}
-
-.headerModalEditContas p {
-  margin: 0px;
-}
-
-.divDropContas {
-  display: flex;
-}
-
-.formModalEditContas .inputValor {
-  width: calc(100% - 20px);
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  margin-bottom: 15px;
-  box-sizing: border-box;
-}
-
-.saveButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--main-color);
-  width: 100%;
-  border: none;
-  padding: 12px;
-  border-radius: 5px;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 500;
-  margin-top: 15px;
-  cursor: pointer;
-  transition: background-color 0.3s ease; /* Alterado: Transição adicionada para suavizar o hover */
-}
-
-.saveButton:hover {
-  background-color: var(--main-color-light); /* Alterado: Cor ao passar o mouse */
-}
-
-.overlay {
+.modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 998;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5); 
 }
 
-.formGroup {
+.headerModal {
   display: flex;
-  gap: 8px;
-  margin: 10px;
-  height: 30px;
+  margin-bottom: 20px;
+  justify-content: space-between;
 }
 
-.formGroup input {
+.modalContent {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1010;
+}
+
+.headerModal {
+  display: flex;
+  margin-bottom: 20px;
+  justify-content: space-between;
+}
+
+.closeButton {
+  background: none;
   border: none;
+  cursor: pointer;
+}
+
+.submitButton {
+  background-color: var(--main-color);
+  margin-left: 250px;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.submitButton:hover{
+  background-color: var(--main-color-light);
 }

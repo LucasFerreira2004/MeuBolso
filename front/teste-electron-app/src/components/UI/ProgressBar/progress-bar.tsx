@@ -1,20 +1,19 @@
-import { useState } from "react";
 import style from "./progress-bar.module.css";
 
-function ProgressBar() {
-  const [progress] = useState(40);
+interface ProgressBarProps {
+  value: number;
+}
 
+export const ProgressBar: React.FC<ProgressBarProps> = ({ value }) => {
   return (
     <div className={style.wrapper}>
       <div className={style.barra}>
         <div
           className={style.progresso}
-          style={{ width: `${progress}%` }}
+          style={{ width: `${value}%` }}
         ></div>
       </div>
-      <span className={style.texto}>{progress}% completo</span>
+      <span className={style.texto}>{value}% completo</span>
     </div>
   );
-}
-
-export default ProgressBar;
+};
