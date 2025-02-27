@@ -37,4 +37,5 @@ public interface OrcamentoRepository extends JpaRepository<Orcamento, Long> {
     List<Orcamento> findByUsuarioAndPeriodo(@Param("usuarioId") String usuarioId,
                                             @Param("ano") int ano,
                                             @Param("mes") int mes);
+
 }
