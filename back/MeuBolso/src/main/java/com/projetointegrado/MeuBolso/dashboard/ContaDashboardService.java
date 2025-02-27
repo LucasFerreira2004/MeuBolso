@@ -33,7 +33,7 @@ public class ContaDashboardService {
         System.out.println("dataavanco: "+dataAvanco);
         System.out.println("dataFinal:" + dataFinal);
         while(!dataAvanco.isAfter(dataFinal)) {
-            BigDecimal saldo = contaRepository.getSaldoIntilDate(userId, dataAvanco);
+            BigDecimal saldo = contaRepository.getSaldoUntilDate(userId, dataAvanco);
             dtos.add(new SaldoBalancoDTO(dataAvanco.getYear(), dataAvanco.getMonthValue(), saldo));
             System.out.println("=============================saldo: "+saldo);
             System.out.println("dataavanco: "+dataAvanco);

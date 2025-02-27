@@ -1,6 +1,5 @@
 package com.projetointegrado.MeuBolso.conta;
 
-import com.projetointegrado.MeuBolso.usuario.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -34,5 +33,5 @@ public  interface ContaRepository extends JpaRepository<Conta, Long> {
         and t.tipo = 'RECEITA'
         group by c.saldo_inicial;
     """)
-    public BigDecimal getSaldoIntilDate(String userId, LocalDate dataFim);
+    public BigDecimal getSaldoUntilDate(String userId, LocalDate dataFim);
 }
