@@ -1,5 +1,6 @@
 package com.projetointegrado.MeuBolso.dashboard;
 
+import com.projetointegrado.MeuBolso.conta.ContaRepository;
 import com.projetointegrado.MeuBolso.conta.ContaService;
 import com.projetointegrado.MeuBolso.dashboard.dto.SaldoBalancoDTO;
 import com.projetointegrado.MeuBolso.repetirTransacao.avancarData.AvancoDataFactory;
@@ -20,6 +21,9 @@ public class ContaDashboardService {
     @Autowired
     private ContaService contaService;
 
+    @Autowired
+    private ContaRepository contaRepository;
+
     @Transactional
     public List<SaldoBalancoDTO> findSaldosBalanco(String userId, LocalDate dataInicial, LocalDate dataFinal) {
         System.out.println("==============================> Gerar transacoes Balanco");
@@ -29,8 +33,9 @@ public class ContaDashboardService {
         System.out.println("dataavanco: "+dataAvanco);
         System.out.println("dataFinal:" + dataFinal);
         while(!dataAvanco.isAfter(dataFinal)) {
-            BigDecimal saldo = contaService.findSaldo(userId, dataAvanco).getSaldo();
+            BigDecimal saldo = contaRepository.getSaldoIntilDate(userId, dataAvanco);
             dtos.add(new SaldoBalancoDTO(dataAvanco.getYear(), dataAvanco.getMonthValue(), saldo));
+            System.out.println("=============================saldo: "+saldo);
             System.out.println("dataavanco: "+dataAvanco);
             dataAvanco = avancoMensal.avancarData(dataAvanco, dataInicial, 1);
         }
