@@ -37,7 +37,7 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 
     @Query(nativeQuery = true, value = """
         select * from categoria 
-        where tipo_categoria = 'receita' 
+        where tipo_categoria = 'RECEITA' 
         and ativa = true 
         and usuario_id = :usuario_id 
         and interna_sistema = false
@@ -47,7 +47,7 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 
     @Query(nativeQuery = true, value = """
         select * from categoria 
-        where tipo_categoria = 'despesa' 
+        where tipo_categoria = 'DESPESA' 
         and ativa = true 
         and usuario_id = :usuario_id 
         and interna_sistema = false
