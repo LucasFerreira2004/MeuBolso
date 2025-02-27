@@ -1,20 +1,31 @@
--- Inserção de tipos de conta
-INSERT INTO tipo_conta (id, tipo_conta) VALUES
-    (1, 'CONTA_CORRENTE'),
-    (2, 'CARTEIRA'),
-    (3, 'POUPANCA'),
-    (4, 'INVESTIMENTOS'),
-    (5, 'OUTRO');
-
 -- Inserção de usuário
 INSERT INTO usuario (id, nome, email, senha) VALUES
     ('2ebbc2f1-bf81-470c-a5f2-063723d99d2c', 'Maria do Rosario Oliveira', 'mariarosariooli@gmail.com', 'oi2u243i');
 
--- Inserção de bancos
-INSERT INTO banco (nome, icone_url) VALUES
-    ('Bradesco', 'https://play-lh.googleusercontent.com/ReQEaxm44OuduIlJEVO_-xs9iZXSyRNdzGKrONYoLSgAdOzyhPKTb1xuuoPXK6tABm0'),
-    ('Banco do Brasil', 'https://play-lh.googleusercontent.com/1-aNhsSPNqiVluwNGZar_7F5PbQ4u1zteuJ1jumnArhe8bfYHHaVwu4aVOF5-NAmLaA'),
-    ('Nubank', 'https://t.ctcdn.com.br/DIEw0gGtQl_GNhWXJwgrRmuGpIk=/i624750.png');
+INSERT INTO tipo_conta(id, tipo_conta) VALUES ('1', 'CONTA_CORRENTE');
+INSERT INTO tipo_conta(id, tipo_conta) VALUES ('2', 'CARTEIRA');
+INSERT INTO tipo_conta(id, tipo_conta) VALUES ('3', 'POUPANCA');
+INSERT INTO tipo_conta(id, tipo_conta) VALUES ('4', 'INVESTIMENTOS');
+INSERT INTO tipo_conta(id, tipo_conta) VALUES ('5', 'OUTRO');
+
+INSERT INTO banco (nome, icone_url) VALUES ('Banco do Brasil', 'https://play-lh.googleusercontent.com/1-aNhsSPNqiVluwNGZar_7F5PbQ4u1zteuJ1jumnArhe8bfYHHaVwu4aVOF5-NAmLaA=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Banrisul', 'https://play-lh.googleusercontent.com/EesIfzYxpFnep4xcOBAV7uyhx_L4gvfcCN2eatEDSxW6yjy75Q8MmLQNasQ20J585D4=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Bradesco', 'https://play-lh.googleusercontent.com/ReQEaxm44OuduIlJEVO_-xs9iZXSyRNdzGKrONYoLSgAdOzyhPKTb1xuuoPXK6tABm0=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Banco de Brasília', 'https://play-lh.googleusercontent.com/xFXL9qp0F4yOeMaArR7-yQEFVXFJYfkj-QwidkPRsSMQFdUAhosBfivnxRoBuDWIUZGX=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('C6-Bank', 'https://play-lh.googleusercontent.com/qYXhGgBxFLr5xgnv0AGhqW9v7tyedb_i5AVoebI6pow5pWPNZH1qEHnslmSHNkVpB-g=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Caixa Econômica', 'https://play-lh.googleusercontent.com/ubV0x2kGJIEe10shxuFnH9Cy21OgHARwVUZ89nyE0YOZN9c25ov_dyHdk1rMgbPvoDI=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Inter', 'https://play-lh.googleusercontent.com/DABQ3z4xA93QNsK9wqR2LdnamoDHkaKc-h1AueqJrVE7pP9GkIvZqf_URfxOIiNbFyzK=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Itaú', 'https://play-lh.googleusercontent.com/gRcutACE4XkEHmxcbUdOehxpTbp_LjmwJ6qIEbqfD34oh9feTNhTnlDgf97HEZ9eGKY=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Mercado Pago', 'https://play-lh.googleusercontent.com/998jkBzpuMiCaJeG6nZLB6GFi56DeNNf5iV509W5RueTRp_HBnH5EGyCICmSqGgGXcRt=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Neon', 'https://play-lh.googleusercontent.com/Kik3BeultZtG_GIRRXRPDcenbpVsORTgw6MA9UQMYS1mTI88Z4vlcyBhywUvYj0B2-3m=s48-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Next', 'https://play-lh.googleusercontent.com/H10aAKl4vs91sow3buRJk85cEN58T7onVyNqVQPnWnEpRQmelArjGLdUx05imRQePjCD=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Nubank', 'https://play-lh.googleusercontent.com/NPkx0aiwABB31gBw_CuZO9Rwukhir-BwemxfNlAVjT6smwk6QgUbb3XrmsSSClfzk0dY=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('PagBank', 'https://play-lh.googleusercontent.com/O9GpqGB-9aE8Qt79JM1VXoVA5rRQjLb4LVk7yVwd2cuWeAi0ML6uVbc7aXZEOeyYwg=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Pan', 'https://play-lh.googleusercontent.com/KVoKo2vX9E3ZjwfOL7eXvMWrmqMVAPLz96ePKd3QhKFDABTtPY9laAwTzJELzy7-fqKp=s48-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('PicPay', 'https://play-lh.googleusercontent.com/pTvc9kCumx_24eJDwGUpvcBwljcIBkrsL3qHwhBW2NalMQ-XxTtHRV9YAJanBxkV0Rw=s48-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Santander', 'https://play-lh.googleusercontent.com/g_QDzrOlw8Belx8qb47fUu0MPL6AVFzDdbOz_NJZYQDNLveHYxwiUoe09Wvkxf-_548q=w240-h480-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Will', 'https://play-lh.googleusercontent.com/fazUU0h6BiMpjSxgq1son0-VRhBhkimr6kzCLw6T1Y3ZGZj1Nrnvi-ETM2je3-miRQ=s48-rw');
+INSERT INTO banco (nome, icone_url) VALUES ('Outro', 'https://res.cloudinary.com/dniz7sgoh/image/upload/v1740324476/MeuBolso/aa7nx19ph6mhlijggnkt.png');
 
 -- Inserção de contas
 INSERT INTO conta (tipo_conta_id, banco_id, usuario_id, descricao) VALUES
