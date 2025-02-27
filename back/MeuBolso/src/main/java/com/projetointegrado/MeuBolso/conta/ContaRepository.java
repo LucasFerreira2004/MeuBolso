@@ -19,13 +19,14 @@ public  interface ContaRepository extends JpaRepository<Conta, Long> {
     public Conta findByDescricao(String userId, String descricao);
 
     @Query(nativeQuery = true, value = """
-        select c.saldo_inicial + coalesce(sum(t.valor), 0) - (
-                                                            select coalesce(sum(t.valor), 0) 
-                                                            from transacao t
-                                                            where t.usuario_id = :userId
-                                                            and t.data <= :dataFim
-                                                            and t.tipo = 'DESPESA'
-                                                            )
+        select c.saldo_inicial + coalesce(sum(t.valor), 0) 
+                - (
+                    select coalesce(sum(t.valor), 0) 
+                    from transacao t
+                    where t.usuario_id = :userId
+                    and t.data <= :dataFim
+                    and t.tipo = 'DESPESA'
+                    )
         from transacao t
         join conta c on c.id = t.conta_origem
         where t.usuario_id = :userId
